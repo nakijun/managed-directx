@@ -1,0 +1,1 @@
+The text files here are in Turkish language and belong to the framework developer. You can simply ignore them.
