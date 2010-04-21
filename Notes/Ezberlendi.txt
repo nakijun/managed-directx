@@ -1,6 +1,6 @@
 
 * Sık sık eski versiyonlara yedek al
 
-* MDX de çalışan DX komutundan alınan veriler null ise ilgili parametreye sen de null çıkışı yap.
-* MDX de parametrede Object^ şeklinde olan her yere null kontrolü yap. null ise dx komutuna sen de null ver aynı parametreyi.
+* DX komutundan alınan veriler null ise ilgili parametreye sen de null çıkışı yap.
+* parametrede Object^ şeklinde olan her yere null kontrolü yap. null ise dx komutuna sen de null ver aynı parametreyi.
 

@@ -19,7 +19,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{C09A9DD2-D511-4982-92B4-03D0EE69A7CB}"
 	ProjectSection(SolutionItems) = preProject
 		Notes\_ReadMe.txt = Notes\_ReadMe.txt
-		Notes\Bilgiler.txt = Notes\Bilgiler.txt
 		Notes\Ezberlendi.txt = Notes\Ezberlendi.txt
 		Notes\Hatırlatma.txt = Notes\Hatırlatma.txt
 		Notes\Yapılacaklar.txt = Notes\Yapılacaklar.txt
