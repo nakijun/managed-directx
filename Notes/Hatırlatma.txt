@@ -1,0 +1,54 @@
+----------------------------------------------------------------------
+* Burda ezberlediklerini Ezberlendi.txt ye koy :)
+* Burda bilgi yeralmasýn. kontrol edip bilgileri bilgiler.txt ye koy
+----------------------------------------------------------------------
+
+* Bütün struct parametrelerini ref yap
+
+* doðrudan native fonksiyonlara geçebilecek struclar [StructLayout(LayoutKind::Sequential)] olmalý. bunlarýn native struct karþýlýklarý varsa ToNative ve native'den constructor'u da olmalý.
+
+* MDX PassDescription gibi içinde array olan struclarýn eþitlik kontrolünde array i tek tek içini tarayarak kontrol et.
+
+* Ýsim þeklindeki bool deðiþkenlere Is ekle. ör : Owner yerine IsOwner yap. Ownership olsa sýfat olduðu için Is olmayacaktý.
+
+* Obey the IDisposal contract: if you did not create it with new, it is not yours to
+Dispose(), unless the API granted you explicit ownership via its defined semantics.
+In SlimDX's case, any From* static methods grant you ownership, as well as static
+Create* methods. 
+
+* Description propery leri bi kere oku ondan sonra okuduðundaki Width, Heigh gibi ek bilgileri kullan. yoksa her property okumasýnda GetDesc çalýþýyo
+
+* Mesaj penceresi gibi window message loop yaratan iþlemlerden önce CheckBoxLooping.Checked=false yap. sonra eski deðerine al.
+  Kullanýcýdan gelmeyen tüm eventlerde (Ör : Panel onpaint) CheckBoxLooping.Checked false ise d3d iþlemi yapma.
+
+* new ile SlimDX class create ederken de exceptionlarý kontrol et.
+
+* Parametre kontrol ederken Parametre==null ise exception kaldýrýrken Parametre.GetType() yapma null olduðu için olmaz. typeof(TParametre) yap
+
+* fonksiyondan struct döndürüyosan out parametresi olarak döndür. boþuboþuna struct kopyalamasý yapmasýn. tüm üniteleri düzenle
+
+* float için tüm eþit, küçük, büyük kontrollerini toleranslý yap
+
+* get ve set fonksiyonlarýnýn body si olmayan Property leri kendi ünitelerinde kullanma. Öyle ki, tüm property leri // layýnca unite hata vermesin
+
+* Tip ismlerinde (S)truct, (A)rray, (E)xception, e(N)umarate kullan. Delegate'lerde (O) kullan. diðerlerinde (Class,...) T kullan. Static lerde hiç kullanma.
+
+* mümkün olduunca dinamik array kullanma. list class kullan. (modifiers arrayini buna göre düzelt)
+
+* control kind case lerin hepsine Else koy raise ESF3DGeneral et
+  tüm gereken kontroller larý case ile kontrol et
+
+* // /* */ larý tara
+
+* property set ederken özel bi iþlem yapmýycaksan eskideðer yeniye eþitmi kontrolü yapma
+
+* fonksiyon giriþlerinde parametre kontrol ve aktif mi kontrolü yap (protected-private-internal fonksiyonlarda gerek olmayabilir)
+* giriþte önce hata kontrolü yap, sonra gerekiyosa return yap. ör : void pause() { if (!active) throw ...; if (paused) return; }
+* context'i kullanan objeler context'in aktif olup olmadýðýna baksýn(gereken böyle anne-çocuk olaylarýnýn hepsinde ör : Stage - Obje)
+
+* throw edilen Her hata satýrýný kontrol et, relevant adý, tipi, vb.. uyuyomu diye
+
+* Summary'leri doldur
+* Summary'nin Exception listesinde tüm çýkabilecek hatalar listelensin
+
+* fonksiyonda bi hata olduðunda geri alýnmasý gereken iþlemleri mutlaka finally içersinde yap (ör : yaratýlmýþ bi objeyi dispose)

@@ -1,0 +1,644 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="%28DirectX SDK Includes And Libs%29">
+      <UniqueIdentifier>{4c9e4fa3-a6bd-42f3-8e6d-c6df8293d7cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXGI">
+      <UniqueIdentifier>{d091e878-6461-4854-9aff-a58b51ca092b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXGI\Interfaces">
+      <UniqueIdentifier>{da1663b5-c1a1-48f0-bcdf-810e63b06f0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXGI\Structures">
+      <UniqueIdentifier>{3dbff236-cf6b-48a1-9b6c-27c77e1266ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10">
+      <UniqueIdentifier>{56d58fdf-8807-43fd-ad6a-d55dd32a765c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Core">
+      <UniqueIdentifier>{6866dbeb-95ee-47d8-a285-28e01f280887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Core\Interfaces">
+      <UniqueIdentifier>{54b8d52d-16a1-4098-9b5b-10c558ef59ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Core\Structures">
+      <UniqueIdentifier>{7435abe4-355b-470a-b749-8323143ebbfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Resource">
+      <UniqueIdentifier>{3e25f361-c360-473d-bb09-c4d9a5497804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Resource\Interfaces">
+      <UniqueIdentifier>{7bff8b09-723c-481b-a788-aa8878b9426d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Resource\Structures">
+      <UniqueIdentifier>{63175acf-80ff-4cbd-be1c-de340a920453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Shader">
+      <UniqueIdentifier>{353d1c2e-ec58-4a24-b6c6-56e8cc438d08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Shader\Structures">
+      <UniqueIdentifier>{7e9e3fd6-2bc3-4df1-af5b-057a91c80bf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Effect">
+      <UniqueIdentifier>{b290d7d8-a20a-4736-a023-d17a5e7f1897}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Effect\Structures">
+      <UniqueIdentifier>{78d7eaaf-778e-4a73-9fb5-c440aedbc8db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{ef4e4d56-15ba-453f-8846-9d7288c62858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_NotImplementedYet">
+      <UniqueIdentifier>{b213a698-6dbd-4128-ab1f-e58f54760de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3DX10">
+      <UniqueIdentifier>{d190ea87-4c20-473c-a44b-77fa0a994fe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3DX10\Structures">
+      <UniqueIdentifier>{c4aef020-1d1d-4dad-97bc-64392f673418}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\comdecl.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2D1.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2D1Helper.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2DBaseTypes.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2Derr.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10_1.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10_1shader.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10effect.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d10misc.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d10sdklayers.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10shader.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D11.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D11SDKLayers.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D11Shader.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d9.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d9caps.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d9types.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3Dcommon.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3Dcompiler.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DCSX.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx10async.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10core.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10math.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10mesh.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10tex.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX11.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX11async.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX11core.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX11tex.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9anim.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9core.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9effect.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9math.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9mesh.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9shader.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9shape.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9tex.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9xof.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\Dcommon.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\ddraw.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dinput.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dinputd.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dsconf.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dsetup.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dsound.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dvp.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DWrite.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dxdiag.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DxErr.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dxfile.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DXGI.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DXGIFormat.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DXGIType.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dxsdkver.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\gameux.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\multimon.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\PIXPlugin.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\rmxfguid.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\rmxftmpl.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\rpcsal.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\X3DAudio.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xact3.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xact3d3.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xact3wb.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAPO.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAPOBase.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAPOFX.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAudio2.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAudio2fx.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XDSP.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XInput.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xma2defs.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xnamath.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionsDXGI.h">
+      <Filter>DXGI</Filter>
+    </ClInclude>
+    <ClInclude Include="Factory.h">
+      <Filter>DXGI\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>DXGI\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="AdapterDescription.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeDescription.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputDescription.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Rational.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleDescription.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="SurfaceDescription.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="SwapChainDescription.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="InputElementDescription.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewport.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferDescription.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferRTV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilViewDescription.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTargetViewDescription.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="SubResourceData.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture1D_ArrayDSV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture1D_ArrayRTV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture1D_DSV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture1D_RTV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D_ArrayDSV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D_ArrayRTV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D_Description.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D_DSV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D_MS_ArrayDSV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D_MS_ArrayRTV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D_MS_DSV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D_MS_RTV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D_RTV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture3D_RTV.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderMacro.h">
+      <Filter>Direct3D10\Shader\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="PassDescription.h">
+      <Filter>Direct3D10\Effect\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="TechniqueDescription.h">
+      <Filter>Direct3D10\Effect\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Float4.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="IID_Converter.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Unknown.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="UnmanagedMemory.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Adapter.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Blob.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilView.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceChild.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceD3D10.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceSubObject.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectMatrixVariable.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectPass.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectPool.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectShaderResourceVariable.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectTechnique.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectVariable.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectVariable_ForwardedMethods.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectVectorVariable.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumsD3D10.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumsD3DX10.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumsDXGI.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionsD3D10.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionsD3DX10.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Include.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="InputLayout.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Output.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTargetView.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceD3D10.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceDXGI.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderResourceView.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="SwapChain.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="View.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Float16.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageInfo.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageLoadInfo.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d10.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d10_1.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d11.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d9.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dcompiler.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\D3DCSX.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\D3DCSXd.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx10.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx10d.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx11.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx11d.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx9.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx9d.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dxof.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\ddraw.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dinput8.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dsetup.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dsound.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dwrite.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\DxErr.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dxgi.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dxguid.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\X3DAudio.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\xapobase.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\xapobased.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\XAPOFX.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\XInput.lib">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10math.inl">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </None>
+    <None Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9math.inl">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </None>
+    <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathconvert.inl">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </None>
+    <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathmatrix.inl">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </None>
+    <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathmisc.inl">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </None>
+    <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathvector.inl">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="Stdafx.cpp" />
+    <ClCompile Include="Xtro.MDX.cpp" />
+  </ItemGroup>
+</Project>

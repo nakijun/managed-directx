@@ -1,0 +1,164 @@
+----------------------------------------------------------------------
+* Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
+----------------------------------------------------------------------
+
+* EnumerationDeviceSettingsCombo
+* class EnumerationAdapterInfo
+* class Enumeration
+
+* GetEnumeration
+
+* FindValidDeviceSettings
+
+* Tutorial08'e burdan devam et : wWinMain / DXUTCreateDevice.
+
+* tüm struct larýn contsructorlarýný sil. 
+
+* tüm enumlarý kontrol et. native halinde none olanlara bizde de ekle.
+
+* dx dökümanýnda tüm methodlarý kontrol et.
+    null alabilen struct parametreleri Nullable yap.
+    null alabilen out class parametreleri için ayný methoddan 1 tane daha yap o out parametresi hiç olmayan.
+    ör : Device.CreateTexture2D
+
+* Büyük karakterler arasý _ karakterini kontrol et. ör : DepthStencilViewDescription
+
+* bikaç tutorial daha yap
+
+* enum larý yap
+
+* structure larý yap
+
+----------------------------- SlimDX'den kalma -----------------------------
+
+* formmain de texture ü dene. start ve startfromtexture mesela.
+
+* createtexture'e devam
+  
+* array texture, cube texture, volume texture bunlarýn tek tek parçalarý nasýl outputmerger a veriliyo ? SetForOutput'a array no mu vercez ?
+  
+* texture.savetofile yap. DDS dahil tüm formatlarda kaydetsin parametre ile. Volume ise DDS mecbur galiba.
+  DDS deðilse tüm array parçalarýný ayrý dosyalara kaydetsin   FileName_01.bmp þeklinde.
+  screen.screenshot'ý da Texture.savetofile üzerinden yap.
+
+* bütün dx metodlarýnýn try içinde olmasýný kontrol et. (return value'su olmayan dx komutlarý dýþýnda. dx komutlarý exception vermez)
+
+* Texture'e ekle
+          GenerateMipMaps  (usage  NUsage.RenderTargetWithMipMaps ise çalýþýr)
+
+          Procedure StartFromFile(FileName : String; Filter : TD3DFilter; ColorKey : RD3DColorValue; UseFileSize : Boolean = True; UseFileMipLevelCount : Boolean = True; UseFileKind : Boolean = True); // ColorKey=0 ise þeffaflýk yok, deðilse ColorKey'in alfasý otomatik olarak FF leniyo
+          Procedure StartFromStream(Data : TStream; Filter : TD3DFilter; ColorKey : RD3DColorValue; UseFileSize : Boolean = True; UseFileMipLevelCount : Boolean = True; UseFileKind : Boolean = True); // ColorKey=0 ise þeffaflýk yok, deðilse ColorKey'in alfasý otomatik olarak FF leniyo
+          Procedure StartFromSources(Sources : AXD3DTextureStartSource); // Sources[n].ColorKey=0 ise þeffaflýk yok, deðilse ColorKey'in alfasý otomatik olarak FF leniyo
+                    
+* texture.lock (map) yapýlacak. plot ve point yapýlacak mý ?
+  unlock'a AutoGenerateMipMaps parametresi ekle. unloack dan sonra çaðýrmak için
+
+* Eski delphi dx den Texture e devam
+
+* 8192, 4096 gibi sabit sayýlarý kullanma. Resource Limits için constantlar tanýmla onlarý kullan
+  zaten tanýmlýymýþ D3D10_REQ
+
+* Context e ekle
+          Procedure Draw2DPrimitives(PrimitiveType : TD3DPrimitiveType; Const Plots; PlotCount : TWordItemCount; VertexFormat : TD3DVertexFormats);
+          Procedure DrawSprite(Texture : TXD3DTexture; TextureRect : RRectangle; Center, Scaling, Translation : RDXVector2; RotationAngle : Single; Color : RD3DColorValue);Overload;
+          Procedure DrawSprite(Texture : TXD3DTexture; TextureRect : RRectangle; Matrix : RDXMatrix; Color : RD3DColorValue);Overload;
+
+          Function LoadXFile(FileName : String; PureMesh : Boolean = False) : TXD3DXFile;
+          Function LoadXFileFromStream(Data : TStream; PureMesh : Boolean = False) : TXD3DXFile;
+          Function ProceedXFileFrame(Frame : TD3DFrame; LinkInfos : AXD3DLinkInfo; NameInfos : AXD3DNameInfo) : TXD3DXFileFrame; // Frame'in kardeþlerine bakýlmaz sadece çocuklarýna bakýlýr
+          Function ProceedXFile(Frame : TD3DFrame; AnimationController : TD3DAnimationcontroller; LinkInfos : AXD3DLinkInfo; NameInfos : AXD3DNameInfo) : TXD3DXFile;
+
+* Gereclere referans eden ve edilenleri otomatikleþtiren index class ý ve interface leri yap. referans eden ve edilen bu özelliði property ler ile kolay kullanabilsin.
+  Böyle biþi zaten var mý araþtýr forumlara sor.
+
+----------------------------- .NET Delphi'den kalma -----------------------------
+
+* TEqualizerObject'in tüm torunlarýnda Equals i tanýmla(Equals de class gibi kontrol edilemeyen deðiþkenleri ayrýca kontrol et. ör : TControllerWithKeys.FKeys)
+  Equals kullanýrken Equals(Cart,Curt) þeklinde kullan. Cart.Equals(Curt) þeklinde kullanma. Record'larda 2. þekil çalýþmýyo. Standart olsun
+* TEqualizerObject'in en az bir deðiþkene sahip her torununda Equalize ve clone override et
+* TEqualizerObject'in torunlarýna bi deðiþken ekleyince onu da Equalize ve compare et
+
+* gereçlerde Cosinus yerine cos kullanýmýþ bi yerde. öyle mi kalacak deðiþecek mi ?
+* C++ da yazýlan gereclerdeki güzel þeyleri bizim gereçlere ekle (ör : CoorSystem, Angle)
+
+* modifier yap
+* modifiedmesh yap (en altta basemesh, üstte modifier listesi)
+* referencemanager ý kullanýma geçir
+
+* editmesh modifier'ý ilk ekleniþinde ve etkilediði obje update olduðunda (aslýnda ikisi ayný þey) normav vektörleri ayný olan yüzleri ayný smooth gurubuna koyuyo. daha sonra auto smooth yaparken verilen kýstas açýsýna göre normalleri kontrol edip ayný smooth grubuna koyuyo. yani ilk baþta açýyý default 0 gibi alýyo
+
+* TSFBaseMesh.Equalize da facevertices copy ile kopyalanabiliyomu yoksa iç arrayleri döngü ilemi kopyalýyacaz
+  TPositionRotationScaleTransformController.Update de OldValue ve FValue eþitlenebiliymu ve eþitlik kontrolü yapýlabiliyomu kontrol et
+
+* Random.Char ve Random.Text de 'ABC', '123', 'A1B2' atma seçenekleri koy. büyük küçük harf karýþýk, tümü büyük, tümü küçük, baþý büyük
+
+* kameraya UseRenderTargetAspectRatio : Boolean eklenecek
+  true ise kamera aspect ratio'su otomatik olarak rendertarget aspect ratio'suna eþitlenecek
+  renderarget boyu, o an DX'e atatan render surface'dan alýnacak
+
+* max'de scale controller default 1 boyutlu scale ediyo. istenirse XYZ scale controller atanýyo
+
+* küp, küre jenaratörleri yap, obje ye ekle
+
+* Obje ye instance ve reference copy eklenecek (3DS Max deki gibi)
+
+* hatýrlatmadaki herþeyi kontrol et
+
+----------------------------- Win32 Delphi'den kalma -----------------------------
+
+* Stage yaratýldýðýnda otomatik olarak yaratýlan Default layer'ýn yanýna Kamera, Iþýk gibi hazýr layerlar yaratýlsýn. default olarak kamera ve ýþýklar bu layerlara yaratýlsýn
+
+* Mission Sistemi *
+
+Stage'e görevler verilir. Þu frame'de yada þu kadar frame sonra, þu objeyi yarat yada yoket gibi görevler olur. Görevler tekrarlý yada tek kullanýmlýk olabilir.
+Galiba bu sistemi stage de diil SkyGoddess da yapacaz
+
+* Rendering *
+Görüntüde olmayan cisimler render edilmemeli.
+Cisimleri render etme sýrasý ayarlanmalý.
+Þeffaflýða,Uzaklýða,Kullanýcý sýralamasýna göre
+
+* bunu yap
+
+if (pCaps.AlphaCmpCaps & D3DPCMPCAPS_GREATEREQUAL)
+{
+    dev->SetRenderState(D3DRS_ALPHAREF, (DWORD)0x00000001);
+    dev->SetRenderState(D3DRS_ALPHATESTENABLE, true); 
+    dev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
+}
+
+* max de TrackView de tüm seçim levellarýný düþün
+
+* 256 matrix li DX in kendi skin olayý kullanýlmayacak. Kendi Bone modifierýmýz halledecek
+
+* Obje.Render da ParentalTransform( : Boolean = False) parametresi olacak. true ise ata annesine kadar gidip matrix hesaplayacak. false ise DX de aktif matrix e kendininkini uygulayacak
+  Stage Aðaç sýrasýnda render yaptýðý için bu deðiþkeni false (default) verecek
+
+* Objelerin Görüntüye girme kontrolü render komutunda yapýlacak. Render son DX e verilecek matrix i hesapladýðýnda bunu boru sonu modifierýnýn bounding box bilgisiyle kontrol edecek.
+
+* Meshleri stage sýralamadan render etçek (þeffaflarý sonra)(cameraya giriyosa)
+  þeffaflarý belirlemek için bazý özellikler kotrol edilir+bunun için bi boolean özellik konabilir
+
+* TSF3DMesh de boru baþtan sona kontrol edilecek. Ýlk modified aþama bulunduðunda gerisi baþtan iþlenecek(nerdeyse yaratýlýyomuþ gibi)
+  boru baþý Generator, ortasý Modifier, sonu VertexShader olacak. Her arada TXD3d9Mesh olacak
+  Boru MipMesh in her level'ý için iþlenir
+  Borudaki generator yada her modifier'ýn çýkýþ vertex formatý bellidir
+  Giriþdeki format çýkýþa uyuyosa gerekli deðiþiklikler yapýlýr. Eksikse gerekenler eklenir
+  Generator EditableMesh (Static Vertex Buffer) ise formatý yaratýldýðý yerden alýnýr (Dosya yada Dinamik Boru)
+  Boru sonundaki modifier kendi iþlemlerini yaparken mesh in BoundingBox'ýný da hesaplar (x1,y1,z1, x2,y2,z2) 
+
+* ýþýklarýn setup ýnda tint ve tint power ý çarp
+
+* Her çizim iþlemi(baþka iþlemler de olabilir) kullanacaðý stateleri yedeklemek, ayarlamak ve yedekten geri yüklemek ile yükümlüdür
+  kullandýðýn tüm stateler'i Backup ve Restore yap
+
+* Hiç bi deðiþkeni (istisna olabilir) Controllersýz yapma
+
+* Renderdan sonra kullandýðýn texturestage'leri IDirect3DDevice9::SetTexture(x,Nil) yap
+
+* Cubic yada Küre kaplamasý yaparken localviwer ve normalizenormals önemli
+* Ortogonal view için D3DRS_LOCALVIEWER'ý false yap. View matrix i Ortogonal üreten D3DX fonksiyonundan üret
+
+* Stage'de KameraSeçim kontrolor'ý olacak(eðer render da bi kamera seçilirse(paremetreden filan) ondan, yoksa KameraSeçim controllerdan çizilecek)
+
+* iþlem controller larý yap. birden fazla kontroller ý alsýn, iþlem modu parametresi ile bunlarý iþleyip sonuca koysun
