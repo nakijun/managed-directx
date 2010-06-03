@@ -2,8 +2,9 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* EnumerationDeviceSettingsCombo
-* class EnumerationAdapterInfo
+* tüm list leri tanýmlandýðý satýrda yarat.
+* delete metodlarýnda tüm listeleri null et.
+
 * class Enumeration
 
 * GetEnumeration
