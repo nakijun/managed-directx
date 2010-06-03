@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-
-using Xtro.Gerecler;
-using MessageBox = Xtro.Gerecler.MessageBox;
 using Xtro.MDX;
 using Xtro.MDX.DXGI;
 using Usage = Xtro.MDX.DXGI.Usage;
@@ -29,7 +20,7 @@ namespace TestMDX
             InitializeComponent();
         }
 
-        private void Form1_Shown(object sender, EventArgs e)
+        private void Form1_Shown(object Sender, EventArgs E)
         {
             var OD = new OutputDescription()
                          {

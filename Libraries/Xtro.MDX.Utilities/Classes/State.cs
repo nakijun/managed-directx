@@ -1,6 +1,6 @@
 ﻿namespace Xtro.MDX.Utilities
 {
-    sealed class TState
+    sealed class State
     {
         static readonly object Lock = new object(); // Lock Object
 
@@ -138,17 +138,17 @@
             lock (Lock) { DeviceCreateCalled = Value; }
         }
 
-        public TState()
+        public State()
         {
         }
 
         public void Delete()
         {
-            //SAFE_DELETE(m_state.m_TimerList);
-            //DXUTShutdown();
+            SAFE_DELETE(m_state.m_TimerList);
+            DXUTShutdown();
         }
 
-        ~TState()
+        ~State()
         {
             Delete();
         }

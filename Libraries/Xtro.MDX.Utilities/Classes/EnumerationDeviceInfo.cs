@@ -2,7 +2,7 @@
 
 namespace Xtro.MDX.Utilities
 {
-    class TEnumerationDeviceInfo
+    class EnumerationDeviceInfo
     {
         public uint AdapterOrdinal;
         DriverType DeviceType;

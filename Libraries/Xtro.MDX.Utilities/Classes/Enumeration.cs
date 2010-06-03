@@ -3,7 +3,7 @@ using Xtro.MDX.DXGI;
 
 namespace Xtro.MDX.Utilities
 {
-    public class TEnumeration
+    public class Enumeration
     {
         bool HasEnumerated;
         Callbacks.IsDeviceAcceptable IsDeviceAcceptableFunction;
@@ -20,6 +20,12 @@ namespace Xtro.MDX.Utilities
         uint MultisampleQualityMax;
         bool EnumerateAllAdapterFormats;
 
-        List<TEnumerationAdapterInfo> AdapterInfoList;
+        List<EnumerationAdapterInfo> AdapterInfoList = new List<EnumerationAdapterInfo>();
+
+        void ClearAdapterInfoList()
+        {
+            foreach (var AdapterInfo in AdapterInfoList) AdapterInfo.Delete();
+            AdapterInfoList.Clear();
+        }
     }
 }

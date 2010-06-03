@@ -103,4 +103,9 @@
       <Abbreviation Text="BC" />
     </Naming2>
   </CodeStyleSettings>
+  <Daemon.SolutionSettings>
+    <SkipFilesAndFolders>
+      <Item>F72DB4A7-A57F-4B69-BA49-FE635FCD99E5</Item>
+    </SkipFilesAndFolders>
+  </Daemon.SolutionSettings>
 </Configuration>

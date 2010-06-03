@@ -6,10 +6,10 @@ namespace Xtro.MDX.Utilities
     public static class Functions
 // ReSharper restore InconsistentNaming
     {
-        static TState State;
+        static State State;
         static Timer Timer;
 
-        static TState GetState()
+        static State GetState()
         {
             CreateState();
 
@@ -18,7 +18,7 @@ namespace Xtro.MDX.Utilities
 
         public static void CreateState()
         {
-            if (State == null) State = new TState();
+            if (State == null) State = new State();
         }
 
         public static void DestroyState()
@@ -169,7 +169,7 @@ namespace Xtro.MDX.Utilities
             return Result;
         }
 
-        public static TEnumeration GetEnumeration(bool ForceEnumerate, bool EnumerateAllAdapterFormats)
+        public static Enumeration GetEnumeration(bool ForceEnumerate, bool EnumerateAllAdapterFormats)
         {
         }
     }

@@ -82,7 +82,7 @@
     <Compile Include="Structures\MatchOptions.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Structures\SEnumerationDeviceSettingsCombo.cs" />
+    <Compile Include="Structures\EnumerationDeviceSettingsCombo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
