@@ -2,8 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* tüm list leri tanýmlandýðý satýrda yarat.
-* delete metodlarýnda tüm listeleri null et.
+* DrawText deki gibi String^ olan her yeri marshal try catch yap.
 
 * class Enumeration
 
@@ -13,16 +12,23 @@
 
 * Tutorial08'e burdan devam et : wWinMain / DXUTCreateDevice.
 
-* tüm struct larýn contsructorlarýný sil. 
+* tüm IID leri private yap.
+* tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 
-* tüm enumlarý kontrol et. native halinde none olanlara bizde de ekle.
+* doðal çift yönlü(method yok) : doðrudan native fonksiyonlara geçebilecek (içinde String^gibi þeyler olmayan, basit tipler ve sequential struct içeren) struclar [StructLayout(LayoutKind::Sequential)] olmalý. Ör : ImageLoadInfo
+  çift yönlü(ToNative+FromNative) : Sequential olmayan struct içeren struct'larýn ToNative ve FromNative metodu (internal olarak lazýmsa). Ör : OutputDescription
+  çift yönlü(Marshal+FromNative) : içinde String^ olanlarýn ShaderMacro'daki gibi Marshal/Unmarshal ve FromNative metodlarý olmalý (internal olarak lazýmsa). FontDescription'da marshal yerine tonative var çünkü native versiyondaki FaceName boyu sabit, yeri memory'den alýnmýþ bi string.
+
+* tüm enumlarý kontrol et. native halinde none olanlara bizde de ekle. olmayanlara fazladan ekleme
 
 * dx dökümanýnda tüm methodlarý kontrol et.
-    null alabilen struct parametreleri Nullable yap.
+    null alabilen struct [in] parametreleri Nullable yap. null alamayanlarý % yap
+    null alabilen struct [out] parametreleri Nullable% yap.
     null alabilen out class parametreleri için ayný methoddan 1 tane daha yap o out parametresi hiç olmayan.
     ör : Device.CreateTexture2D
 
 * Büyük karakterler arasý _ karakterini kontrol et. ör : JPG_Loader
+  Küçük olarak kabul edilen kýsaltmalar : Cpu, 
 
 * bikaç tutorial daha yap
 

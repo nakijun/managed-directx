@@ -162,7 +162,11 @@ namespace Tutorial05
             if (Result < 0) throw new Exception("Device.CreateTexture2D has failed : " + Result);
 
             // Create the depth stencil view
-            DepthStencilViewDescription DepthStencilViewDescription = new DepthStencilViewDescription(DepthStencilDescription.Format, DSV_Dimension.Texture2D);
+            DepthStencilViewDescription DepthStencilViewDescription = new DepthStencilViewDescription
+            {
+                Format = DepthStencilDescription.Format,
+                ViewDimension = DSV_Dimension.Texture2D
+            };
             DepthStencilViewDescription.Texture2D.MipSlice = 0;
             Result = Device.CreateDepthStencilView(DepthStencil, DepthStencilViewDescription, out DepthStencilView);
             if (Result < 0) throw new Exception("Device.CreateDepthStencilView has failed : " + Result);
@@ -170,7 +174,15 @@ namespace Tutorial05
             Device.OMSetRenderTargets(new RenderTargetView[] { RenderTargetView }, DepthStencilView);
 
             // Setup the viewport
-            Viewport Viewport = new Viewport(0, 0, (uint)ClientSize.Width, (uint)ClientSize.Height, 0.0f, 1.0f);
+            Viewport Viewport = new Viewport()
+            {
+                TopLeftX = 0,
+                TopLeftY = 0,
+                Width = (uint)ClientSize.Width,
+                Height = (uint)ClientSize.Height,
+                MinDepth = 0.0f,
+                MaxDepth = 1.0f
+            };
             Device.RSSetViewports(new Viewport[] { Viewport });
 
             // Create the effect
@@ -213,8 +225,26 @@ namespace Tutorial05
             // Define the input layout
             InputElementDescription[] Layout = 
             { 
-                new InputElementDescription("POSITION", 0, Format.R32G32B32_Float, 0, 0, InputClassification.InputPerVertexData, 0),
-                new InputElementDescription("COLOR", 0, Format.R32G32B32A32_Float, 0, 12, InputClassification.InputPerVertexData, 0)
+                new InputElementDescription
+                {
+                    SemanticName = "POSITION",
+                    SemanticIndex = 0,
+                    Format = Format.R32G32B32_Float,
+                    InputSlot = 0,
+                    AlignedByteOffset = 0,
+                    InputSlotClass = InputClassification.InputPerVertexData,
+                    InstanceDataStepRate = 0
+                },
+                new InputElementDescription
+                {
+                    SemanticName = "COLOR",
+                    SemanticIndex = 0,
+                    Format = Format.R32G32B32A32_Float,
+                    InputSlot = 0,
+                    AlignedByteOffset = 12,
+                    InputSlotClass = InputClassification.InputPerVertexData,
+                    InstanceDataStepRate = 0
+                }
             };
 
             // Create the input layout
@@ -232,7 +262,7 @@ namespace Tutorial05
 
             // Create vertex buffer
 
-            int VertexCount = 8;
+            var VertexCount = (uint)8;
             int VertexSize = Marshal.SizeOf(typeof(SimpleVertex));
             UnmanagedMemory Vertices = new UnmanagedMemory((uint)(VertexSize * VertexCount));
             Vertices.Write(0, VertexCount, new SimpleVertex[]
@@ -246,10 +276,22 @@ namespace Tutorial05
                 new SimpleVertex(new Vector3(1.0f, -1.0f, 1.0f), new Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
                 new SimpleVertex(new Vector3(-1.0f, -1.0f, 1.0f), new Vector4(0.0f, 0.0f, 0.0f, 1.0f))
             });
-            InitData = new SubResourceData(Vertices, 0, 0);
-            BufferDescription = new BufferDescription((uint)Vertices.Size, D3D10Usage.Default, BindFlag.VertexBuffer, 0, 0);
+            InitData = new SubResourceData
+            {
+                SystemMemory = Vertices,
+                SystemMemoryPitch = 0,
+                SystemMemorySlicePitch = 0
+            };
+            BufferDescription = new BufferDescription
+            {
+                ByteWidth = (uint)Vertices.Size,
+                Usage = D3D10Usage.Default,
+                BindFlags = BindFlag.VertexBuffer,
+                CPU_AccessFlags = 0,
+                MiscFlags = 0
+            };
 
-            Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out VertexBuffer);
+            Result = Device.CreateBuffer(ref BufferDescription, InitData, out VertexBuffer);
             if (Result < 0) throw new Exception("Device.CreateBuffer has failed : " + Result);
 
             // Set vertex buffer
@@ -257,7 +299,7 @@ namespace Tutorial05
 
             // Create index buffer
 
-            int IndexCount = 36;
+            var IndexCount = (uint)36;
             UnmanagedMemory Indices = new UnmanagedMemory((uint)(Marshal.SizeOf(typeof(int)) * IndexCount));
             Indices.Write(0, IndexCount, new int[] 
             {
@@ -274,10 +316,22 @@ namespace Tutorial05
                 6, 4, 5,
                 7, 4, 6
             });
-            InitData = new SubResourceData(Indices, 0, 0);
-            BufferDescription = new BufferDescription((uint)Indices.Size, D3D10Usage.Default, BindFlag.IndexBuffer, 0, 0);
+            InitData = new SubResourceData
+            {
+                SystemMemory = Indices,
+                SystemMemoryPitch = 0,
+                SystemMemorySlicePitch = 0
+            };
+            BufferDescription = new BufferDescription
+            {
+                ByteWidth = (uint)Indices.Size,
+                Usage = D3D10Usage.Default,
+                BindFlags = BindFlag.IndexBuffer,
+                CPU_AccessFlags = 0,
+                MiscFlags = 0
+            };
 
-            Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out IndexBuffer);
+            Result = Device.CreateBuffer(ref BufferDescription, InitData, out IndexBuffer);
             if (Result < 0) throw new Exception("Device.CreateBuffer has failed : " + Result);
 
             // Set index buffer

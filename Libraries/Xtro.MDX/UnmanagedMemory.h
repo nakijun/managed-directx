@@ -1,80 +1,102 @@
-namespace Xtro
+public ref class UnmanagedMemory
 {
-namespace MDX
-{
-	public ref class UnmanagedMemory
+private:
+	bool OwnMemory;
+
+	!UnmanagedMemory()
 	{
-	private:
-		!UnmanagedMemory()
+		if (!OwnMemory) return;
+
+		try
 		{
-			try
-			{
-				delete[] Memory;
-				GC::RemoveMemoryPressure(FSize);
-			}
-			catch (...) { }
+			delete[] pMemory;
+			GC::RemoveMemoryPressure(FSize);
 		}
+		catch (...) { }
+	}
 
-		~UnmanagedMemory()
+	~UnmanagedMemory()
+	{
+		this->!UnmanagedMemory();
+	}
+
+internal:
+	unsigned char* pMemory;
+
+	unsigned int FSize;
+
+public:
+	UnmanagedMemory(unsigned int Size)
+	{
+		if (Size < 1) throw gcnew ArgumentException ("Positive number required.", "Size");
+		
+		FSize = Size;
+
+		pMemory = new unsigned char[FSize];
+		GC::AddMemoryPressure(FSize);
+
+		OwnMemory = true;
+	}
+
+	UnmanagedMemory(IntPtr Pointer, unsigned int Size)
+	{
+		if (Size < 1) throw gcnew ArgumentException ("Positive number required.", "Size");
+		
+		FSize = Size;
+
+		pMemory = (unsigned char*)Pointer.ToPointer();
+
+		OwnMemory = false;
+	}
+
+	property IntPtr Pointer
+	{
+		IntPtr get()
 		{
-			this->!UnmanagedMemory();
+			return IntPtr(pMemory);
 		}
+	}
 
-	internal:
-		Byte* Memory;
+	generic<typename T> where T : value class
+	void Get(unsigned int Index, T% Value)
+	{
+		pin_ptr<T> PinnedValue = &Value;
+		memcpy(PinnedValue, pMemory + Index * sizeof(T), sizeof(T));
+	}
 
-		unsigned int FSize;
+	generic<typename T> where T : value class
+	void Set(unsigned int Index, T% Value)
+	{									 
+		pin_ptr<T> PinnedValue = &Value;
+		memcpy(pMemory + Index * sizeof(T), PinnedValue, sizeof(T));
+	}
 
-	public:
-		UnmanagedMemory(unsigned int Size)
-		{
-			FSize = Size;
+	generic<typename T> where T : value class
+	void Read(unsigned int StartIndex, unsigned int Count, array<T>^% Values)
+	{
+		pin_ptr<T> PinnedValues = &Values[0];
+		memcpy(PinnedValues, pMemory + StartIndex * sizeof(T), Count * sizeof(T));
+	}
 
-			Memory = new Byte[FSize];
-			GC::AddMemoryPressure(FSize);
-		}
+	generic<typename T> where T : value class
+	void Write(unsigned int StartIndex, unsigned int Count, array<T>^ Values)
+	{
+		pin_ptr<T> PinnedValues = &Values[0];
+		memcpy(pMemory + StartIndex * sizeof(T), PinnedValues, Count * sizeof(T));
+	}
 
-		generic<typename T> where T : value class
-		void Get(int Index, T% Value)
-		{
-			pin_ptr<T> PinnedValue = &Value;
-			memcpy(PinnedValue, Memory + Index * sizeof(T), sizeof(T));
-		}
+	property unsigned int Size
+	{
+		unsigned int get() { return FSize; }
+	}
 
-		generic<typename T> where T : value class
-		void Set(int Index, T% Value)
-		{									 
-			pin_ptr<T> PinnedValue = &Value;
-			memcpy(Memory + Index * sizeof(T), PinnedValue, sizeof(T));
-		}
+	bool Equals(UnmanagedMemory^ Value)
+	{
+		if (Value == nullptr) return false;
+		if (FSize != Value->FSize) return false;
+		if (pMemory != Value->pMemory) return true;
 
-		generic<typename T> where T : value class
-		void Read(int StartIndex, int Count, array<T>^ Values)
-		{
-			pin_ptr<T> PinnedValues = &Values[0];
-			memcpy(PinnedValues, Memory + StartIndex * sizeof(T), Count * sizeof(T));
-		}
-
-		generic<typename T> where T : value class
-		void Write(int StartIndex, int Count, array<T>^ Values)
-		{
-			pin_ptr<T> PinnedValues = &Values[0];
-			memcpy(Memory + StartIndex * sizeof(T), PinnedValues, Count * sizeof(T));
-		}
-
-		property int Size
-		{
-			int get() { return FSize; }
-		}
-
-		bool Equals(UnmanagedMemory^ Value)
-		{
-			if (Value == nullptr) return false;
-			if (FSize != Value->FSize) return false;
-
-			try	{ return memcmp(Memory, Value->Memory, FSize) == 0; }
-			catch (...) { return false; }
-		}
-	};
-}
-}
+		try	{ return memcmp(pMemory, Value->pMemory, FSize) == 0; }
+		catch (...) { return false; }
+	}
+};

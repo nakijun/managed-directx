@@ -3,8 +3,15 @@
 * Burda bilgi yeralmasýn. kontrol edip bilgileri bilgiler.txt ye koy
 ----------------------------------------------------------------------
 
-* Bütün struct parametrelerini ref yap
+* [Out] ^% olan parametreler deðer alamadýðý zaman mutlaka nullptr olsun.
 
-* doðrudan native fonksiyonlara geçebilecek struclar [StructLayout(LayoutKind::Sequential)] olmalý. bunlarýn native struct karþýlýklarý varsa ToNative ve native'den constructor'u da olmalý.
+* struct larýn public contsructorlarý olmasýn. DirectX C++ tanýmlarýnda bulunan constructorlar hariç. 
+
+* public olmayan fonksiyonlarý inline yap. constructor, destructor hariç.
+
+* tüm list leri tanýmlandýðý satýrda yarat.
+* delete metodlarýnda tüm listeleri null et.
+
+* Bütün struct parametrelerini ref yap
 
 * PassDescription gibi içinde array olan struclarýn eþitlik kontrolünde array i basit tip ise memcpy ile deðilse tek tek içini tarayarak kontrol et.

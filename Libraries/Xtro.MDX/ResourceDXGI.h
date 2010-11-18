@@ -1,23 +1,14 @@
-namespace Xtro
+public ref class Resource : DeviceSubObject
 {
-namespace MDX
-{
-namespace DXGI
-{
-	public ref class Resource : DeviceSubObject
-	{
-	internal:
-		IDXGIResource* pResource;
+internal:
+	IDXGIResource* pResource;
 
-		static Guid IID = IID_Converter::ToManaged(IID_IDXGIResource);
+	static Guid IID = IID_Converter::ToManaged(IID_IDXGIResource);
 
-		Resource(IntPtr Resource) : DeviceSubObject(Resource)
-		{	
-			pResource = (IDXGIResource*)Resource.ToPointer();
-		}
+	Resource(IntPtr Resource) : DeviceSubObject(Resource)
+	{	
+		pResource = (IDXGIResource*)Resource.ToPointer();
+	}
 
-	public:
-	};
-}
-}
-}
+public:
+};

@@ -1,68 +1,73 @@
-namespace Xtro
+public value class OutputDescription : IEquatable<OutputDescription>
 {
-namespace MDX
-{
-namespace DXGI
-{
-	[StructLayout(LayoutKind::Sequential)]
-	public value class OutputDescription : IEquatable<OutputDescription>
+internal:
+	inline void FromNative(DXGI_OUTPUT_DESC* Native)
 	{
-	public:
-		String^ DeviceName;
-		System::Drawing::Rectangle DesktopCoordinates;
-		bool AttachedToDesktop;
-		ModeRotation Rotation;
-		IntPtr Monitor;
+		DeviceName = gcnew String(Native->DeviceName);
 
-		static bool operator == (OutputDescription Left, OutputDescription Right)
-		{
-			return Equals(Left, Right);
-		}
+		DesktopCoordinates.X = Native->DesktopCoordinates.left;
+		DesktopCoordinates.Width = Native->DesktopCoordinates.right - Native->DesktopCoordinates.left;
+		DesktopCoordinates.Y = Native->DesktopCoordinates.top;
+		DesktopCoordinates.Height = Native->DesktopCoordinates.bottom - Native->DesktopCoordinates.top;
 
-		static bool operator != (OutputDescription Left, OutputDescription Right)
-		{
-			return !Equals(Left, Right);
-		}
+		AttachedToDesktop = Native->AttachedToDesktop != 0;
+		Rotation = (Xtro::MDX::DXGI::ModeRotation)Native->Rotation;
+		Monitor = IntPtr(Native->Monitor);
+	}
 
-		virtual int GetHashCode() override
-		{
-			return
-				DeviceName->GetHashCode() ^
-				DesktopCoordinates.GetHashCode() ^
-				AttachedToDesktop.GetHashCode() ^
-				(int)Rotation ^
-				Monitor.GetHashCode();
-		}
+public:
+	String^ DeviceName;
+	System::Drawing::Rectangle DesktopCoordinates;
+	bool AttachedToDesktop;
+	ModeRotation Rotation;
+	IntPtr Monitor;
 
-		virtual bool Equals(System::Object^ Value) override
-		{
-			if (Value == nullptr) return false;
+	static bool operator == (OutputDescription Left, OutputDescription Right)
+	{
+		return Equals(Left, Right);
+	}
 
-			if (Value->GetType() != GetType()) return false;
+	static bool operator != (OutputDescription Left, OutputDescription Right)
+	{
+		return !Equals(Left, Right);
+	}
 
-			return Equals(Value);
-		}
+	virtual int GetHashCode() override
+	{
+		return
+			DeviceName->GetHashCode() ^
+			DesktopCoordinates.GetHashCode() ^
+			AttachedToDesktop.GetHashCode() ^
+			(int)Rotation ^
+			Monitor.GetHashCode();
+	}
 
-		virtual bool Equals(OutputDescription Value)
-		{
-			return
-				DeviceName == Value.DeviceName &&
-				DesktopCoordinates == Value.DesktopCoordinates &&
-				AttachedToDesktop == Value.AttachedToDesktop &&
-				Rotation == Value.Rotation &&
-				Monitor == Value.Monitor;
-		}
+	virtual bool Equals(System::Object^ Value) override
+	{
+		if (Value == nullptr) return false;
 
-		static bool Equals(OutputDescription% Value1, OutputDescription% Value2)
-		{
-			return
-				Value1.DeviceName == Value2.DeviceName &&
-				Value1.DesktopCoordinates == Value2.DesktopCoordinates &&
-				Value1.AttachedToDesktop == Value2.AttachedToDesktop &&
-				Value1.Rotation == Value2.Rotation &&
-				Value1.Monitor == Value2.Monitor;
-		}
-	};
-}
-}
-}
+		if (Value->GetType() != GetType()) return false;
+
+		return Equals(Value);
+	}
+
+	virtual bool Equals(OutputDescription Value)
+	{
+		return
+			DeviceName == Value.DeviceName &&
+			DesktopCoordinates == Value.DesktopCoordinates &&
+			AttachedToDesktop == Value.AttachedToDesktop &&
+			Rotation == Value.Rotation &&
+			Monitor == Value.Monitor;
+	}
+
+	static bool Equals(OutputDescription% Value1, OutputDescription% Value2)
+	{
+		return
+			Value1.DeviceName == Value2.DeviceName &&
+			Value1.DesktopCoordinates == Value2.DesktopCoordinates &&
+			Value1.AttachedToDesktop == Value2.AttachedToDesktop &&
+			Value1.Rotation == Value2.Rotation &&
+			Value1.Monitor == Value2.Monitor;
+	}
+};

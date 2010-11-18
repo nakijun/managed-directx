@@ -33,6 +33,8 @@
         bool Initialized;
         bool ShowMessageBoxOnError;
 
+        bool IsInGammaCorrectMode;
+
         public void SetIsDeviceAcceptableFunction(Callbacks.IsDeviceAcceptable Callback)
         {
             lock (Lock) { IsDeviceAcceptableFunction += Callback; }
@@ -131,6 +133,11 @@
         public bool GetShowMessageBoxOnError()
         {
             lock (Lock) { return ShowMessageBoxOnError; }
+        }
+
+        public bool GetIsInGammaCorrectMode()
+        {
+            lock (Lock) { return IsInGammaCorrectMode; }
         }
 
         public void SetDeviceCreateCalled(bool Value)

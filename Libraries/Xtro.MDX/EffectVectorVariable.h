@@ -1,38 +1,27 @@
-namespace Xtro
+public ref class EffectVectorVariable : EffectVariable
 {
-namespace MDX
-{
-namespace Direct3D10
-{
-	public ref class EffectVectorVariable : EffectVariable
+internal:
+	ID3D10EffectVectorVariable* pEffectVectorVariable;
+
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectVectorVariable);
+
+	EffectVectorVariable(IntPtr EffectVectorVariable) : EffectVariable(EffectVectorVariable)
+	{	
+		pEffectVectorVariable = (ID3D10EffectVectorVariable*)EffectVectorVariable.ToPointer();
+	}
+
+public:
+	int SetFloatVector(array<float>^ Data)
 	{
-	internal:
-		ID3D10EffectVectorVariable* pEffectVectorVariable;
+		pin_ptr<float> PinnedData = Data == nullptr ? nullptr : &Data[0];
 
-		static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectVectorVariable);
+		return pEffectVectorVariable->SetFloatVector(PinnedData);
+	}
 
-		EffectVectorVariable(IntPtr EffectVectorVariable) : EffectVariable(EffectVectorVariable)
-		{	
-			pEffectVectorVariable = (ID3D10EffectVectorVariable*)EffectVectorVariable.ToPointer();
-		}
+	int SetFloatVectorArray(UnmanagedMemory^ Data, unsigned int Offset, unsigned int Count)
+	{
+		float* pData = Data == nullptr ? 0 : (float*)Data->pMemory;
 
-	public:
-		int SetFloatVector(array<float>^ Data)
-		{
-			pin_ptr<float> PinnedData = nullptr;
-			if (Data != nullptr) PinnedData = &Data[0];
-
-			return pEffectVectorVariable->SetFloatVector(PinnedData);
-		}
-
-		int SetFloatVectorArray(UnmanagedMemory^ Data, unsigned int Offset, unsigned int Count)
-		{
-			float* pData = 0;
-			if (Data != nullptr) pData = (float*)Data->Memory;
-
-			return pEffectVectorVariable->SetFloatVectorArray(pData, Offset, Count);
-		}
-	};
-}
-}
-}
+		return pEffectVectorVariable->SetFloatVectorArray(pData, Offset, Count);
+	}
+};

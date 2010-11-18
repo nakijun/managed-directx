@@ -108,7 +108,15 @@ namespace Tutorial01
             Device.OMSetRenderTargets(new RenderTargetView[] { RenderTargetView }, null);
 
             // Setup the viewport
-            Viewport Viewport = new Viewport(0, 0, (uint)ClientSize.Width, (uint)ClientSize.Height, 0.0f, 1.0f);
+            Viewport Viewport = new Viewport()
+            {
+                TopLeftX = 0,
+                TopLeftY = 0,
+                Width = (uint)ClientSize.Width,
+                Height = (uint)ClientSize.Height,
+                MinDepth = 0.0f,
+                MaxDepth = 1.0f
+            };
             Device.RSSetViewports(new Viewport[] { Viewport });
 
             return true;

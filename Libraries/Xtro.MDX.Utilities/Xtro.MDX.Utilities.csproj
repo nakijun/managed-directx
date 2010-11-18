@@ -68,9 +68,6 @@
   <ItemGroup>
     <Compile Include="Callbacks.cs" />
     <Compile Include="Classes\Enumeration.cs" />
-    <Compile Include="Classes\EnumerationAdapterInfo.cs" />
-    <Compile Include="Classes\EnumerationDeviceInfo.cs" />
-    <Compile Include="Classes\EnumerationOutputInfo.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,7 +79,6 @@
     <Compile Include="Structures\MatchOptions.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Structures\EnumerationDeviceSettingsCombo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

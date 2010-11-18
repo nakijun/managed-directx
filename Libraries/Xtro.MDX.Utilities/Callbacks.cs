@@ -1,5 +1,6 @@
 ﻿using Xtro.MDX.DXGI;
 using Xtro.MDX.Direct3D10;
+using Device = Xtro.MDX.Direct3D10.Device;
 
 namespace Xtro.MDX.Utilities
 {
