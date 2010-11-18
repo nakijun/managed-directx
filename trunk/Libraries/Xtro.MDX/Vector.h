@@ -1,67 +1,51 @@
-namespace Xtro
+[StructLayout(LayoutKind::Sequential)]
+public value class Vector : IEquatable<Vector>
 {
-namespace MDX
-{
-namespace Direct3DX10
-{
-	[StructLayout(LayoutKind::Sequential)]
-	public value class Vector : IEquatable<Vector>
+public:
+	float X;
+	float Y;
+	float Z;
+
+	static bool operator == (Vector Left, Vector Right)
 	{
-	public:
-		float X;
-		float Y;
-		float Z;
+		return Equals(Left, Right);
+	}
 
-		Vector(float X, float Y, float Z)
-		{
-			this->X = X;
-			this->Y = Y;
-			this->Z = Z;
-		}
+	static bool operator != (Vector Left, Vector Right)
+	{
+		return !Equals(Left, Right);
+	}
 
-		static bool operator == (Vector Left, Vector Right)
-		{
-			return Equals(Left, Right);
-		}
+	virtual int GetHashCode() override
+	{
+		return
+			(int)X ^
+			(int)Y ^
+			(int)Z;
+	}
 
-		static bool operator != (Vector Left, Vector Right)
-		{
-			return !Equals(Left, Right);
-		}
+	virtual bool Equals(System::Object^ Value) override
+	{
+		if (Value == nullptr) return false;
 
-		virtual int GetHashCode() override
-		{
-			return
-				(int)X ^
-				(int)Y ^
-				(int)Z;
-		}
+		if (Value->GetType() != GetType()) return false;
 
-		virtual bool Equals(System::Object^ Value) override
-		{
-			if (Value == nullptr) return false;
+		return Equals(Value);
+	}
 
-			if (Value->GetType() != GetType()) return false;
+	virtual bool Equals(Vector Value)
+	{
+		return
+			X == Value.X &&
+			Y == Value.Y &&
+			Z == Value.Z;
+	}
 
-			return Equals(Value);
-		}
-
-		virtual bool Equals(Vector Value)
-		{
-			return
-				X == Value.X &&
-				Y == Value.Y &&
-				Z == Value.Z;
-		}
-
-		static bool Equals(Vector% Value1, Vector% Value2)
-		{
-			return
-				Value1.X == Value2.X && 
-				Value1.Y == Value2.Y && 
-				Value1.Z == Value2.Z;
-		}
-	};
-}
-}
-}
+	static bool Equals(Vector% Value1, Vector% Value2)
+	{
+		return
+			Value1.X == Value2.X && 
+			Value1.Y == Value2.Y && 
+			Value1.Z == Value2.Z;
+	}
+};

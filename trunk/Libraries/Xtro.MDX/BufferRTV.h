@@ -1,62 +1,47 @@
-namespace Xtro
+[StructLayout(LayoutKind::Sequential)]
+public value class BufferRTV : IEquatable<BufferRTV>
 {
-namespace MDX
-{
-namespace Direct3D10
-{
-	[StructLayout(LayoutKind::Sequential)]
-	public value class BufferRTV : IEquatable<BufferRTV>
+public:
+	unsigned int ElementOffset;
+	unsigned int ElementWidth;
+
+	static bool operator == (BufferRTV Left, BufferRTV Right)
 	{
-	public:
-		unsigned int ElementOffset;
-		unsigned int ElementWidth;
+		return Equals(Left, Right);
+	}
 
-		BufferRTV(unsigned int ElementOffset, unsigned int ElementWidth)
-		{
-			this->ElementOffset = ElementOffset;
-			this->ElementWidth = ElementWidth;
-		}
+	static bool operator != (BufferRTV Left, BufferRTV Right)
+	{
+		return !Equals(Left, Right);
+	}
 
-		static bool operator == (BufferRTV Left, BufferRTV Right)
-		{
-			return Equals(Left, Right);
-		}
+	virtual int GetHashCode() override
+	{
+		return
+			ElementOffset ^
+			ElementWidth;
+	}
 
-		static bool operator != (BufferRTV Left, BufferRTV Right)
-		{
-			return !Equals(Left, Right);
-		}
+	virtual bool Equals(System::Object^ Value) override
+	{
+		if (Value == nullptr) return false;
 
-		virtual int GetHashCode() override
-		{
-			return
-				ElementOffset ^
-				ElementWidth;
-		}
+		if (Value->GetType() != GetType()) return false;
 
-		virtual bool Equals(System::Object^ Value) override
-		{
-			if (Value == nullptr) return false;
+		return Equals(Value);
+	}
 
-			if (Value->GetType() != GetType()) return false;
+	virtual bool Equals(BufferRTV Value)
+	{
+		return
+			ElementOffset == Value.ElementOffset &&
+			ElementWidth == Value.ElementWidth;
+	}
 
-			return Equals(Value);
-		}
-
-		virtual bool Equals(BufferRTV Value)
-		{
-			return
-				ElementOffset == Value.ElementOffset &&
-				ElementWidth == Value.ElementWidth;
-		}
-
-		static bool Equals(BufferRTV% Value1, BufferRTV% Value2)
-		{
-			return
-				Value1.ElementOffset == Value2.ElementOffset && 
-				Value1.ElementWidth == Value2.ElementWidth;
-		}
-	};
-}
-}
-}
+	static bool Equals(BufferRTV% Value1, BufferRTV% Value2)
+	{
+		return
+			Value1.ElementOffset == Value2.ElementOffset && 
+			Value1.ElementWidth == Value2.ElementWidth;
+	}
+};

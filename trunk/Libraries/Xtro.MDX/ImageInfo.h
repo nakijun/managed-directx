@@ -1,97 +1,75 @@
-namespace Xtro
+[StructLayout(LayoutKind::Sequential)]
+public value class ImageInfo : IEquatable<ImageInfo>
 {
-namespace MDX
-{
-namespace Direct3DX10
-{
-	[StructLayout(LayoutKind::Sequential)]
-	public value class ImageInfo : IEquatable<ImageInfo>
+public:
+	unsigned int Width;
+	unsigned int Height;
+	unsigned int Depth;
+	unsigned int ArraySize;
+	unsigned int MipLevels;
+	ResourceMiscFlag MiscFlags;
+	Format Format;
+	ResourceDimension ResourceDimension;
+	ImageFileFormat ImageFileFormat;
+
+	static bool operator == (ImageInfo Left, ImageInfo Right)
 	{
-	public:
-		unsigned int Width;
-		unsigned int Height;
-		unsigned int Depth;
-		unsigned int ArraySize;
-		unsigned int MipLevels;
-		ResourceMiscFlag MiscFlags;
-		Format Format;
-		ResourceDimension ResourceDimension;
-		ImageFileFormat ImageFileFormat;
+		return Equals(Left, Right);
+	}
 
-		ImageInfo(unsigned int Width, unsigned int Height, unsigned int Depth, unsigned int ArraySize, unsigned int MipLevels, ResourceMiscFlag MiscFlags, Xtro::MDX::DXGI::Format Format, Xtro::MDX::Direct3D10::ResourceDimension ResourceDimension, Xtro::MDX::Direct3DX10::ImageFileFormat ImageFileFormat)
-		{
-			this->Width = Width;
-			this->Height = Height;
-			this->Depth = Depth;
-			this->ArraySize = ArraySize;
-			this->MipLevels = MipLevels;
-			this->MiscFlags = MiscFlags;
-			this->Format = Format;
-			this->ResourceDimension = ResourceDimension;
-			this->ImageFileFormat = ImageFileFormat;
-		}
+	static bool operator != (ImageInfo Left, ImageInfo Right)
+	{
+		return !Equals(Left, Right);
+	}
 
-		static bool operator == (ImageInfo Left, ImageInfo Right)
-		{
-			return Equals(Left, Right);
-		}
+	virtual int GetHashCode() override
+	{
+		return
+			(int)Width ^
+			(int)Height ^
+			(int)Depth ^
+			(int)ArraySize ^
+			(int)MipLevels ^
+			(int)MiscFlags ^
+			(int)Format ^
+			(int)ResourceDimension ^
+			(int)ImageFileFormat;
+	}
 
-		static bool operator != (ImageInfo Left, ImageInfo Right)
-		{
-			return !Equals(Left, Right);
-		}
+	virtual bool Equals(System::Object^ Value) override
+	{
+		if (Value == nullptr) return false;
 
-		virtual int GetHashCode() override
-		{
-			return
-				(int)Width ^
-				(int)Height ^
-				(int)Depth ^
-				(int)ArraySize ^
-				(int)MipLevels ^
-				(int)MiscFlags ^
-				(int)Format ^
-				(int)ResourceDimension ^
-				(int)ImageFileFormat;
-		}
+		if (Value->GetType() != GetType()) return false;
 
-		virtual bool Equals(System::Object^ Value) override
-		{
-			if (Value == nullptr) return false;
+		return Equals(Value);
+	}
 
-			if (Value->GetType() != GetType()) return false;
+	virtual bool Equals(ImageInfo Value)
+	{
+		return
+			Width == Value.Width &&
+			Height == Value.Height &&
+			Depth == Value.Depth &&
+			ArraySize == Value.ArraySize &&
+			MipLevels == Value.MipLevels &&
+			MiscFlags == Value.MiscFlags &&
+			Format == Value.Format &&
+			ResourceDimension == Value.ResourceDimension &&
+			ImageFileFormat == Value.ImageFileFormat;
+	}
 
-			return Equals(Value);
-		}
-
-		virtual bool Equals(ImageInfo Value)
-		{
-			return
-				Width == Value.Width &&
-				Height == Value.Height &&
-				Depth == Value.Depth &&
-				ArraySize == Value.ArraySize &&
-				MipLevels == Value.MipLevels &&
-				MiscFlags == Value.MiscFlags &&
-				Format == Value.Format &&
-				ResourceDimension == Value.ResourceDimension &&
-				ImageFileFormat == Value.ImageFileFormat;
-		}
-
-		static bool Equals(ImageInfo% Value1, ImageInfo% Value2)
-		{
-			return
-				Value1.Width == Value2.Width &&
-				Value1.Height == Value2.Height &&
-				Value1.Depth == Value2.Depth &&
-				Value1.ArraySize == Value2.ArraySize &&
-				Value1.MipLevels == Value2.MipLevels &&
-				Value1.MiscFlags == Value2.MiscFlags &&
-				Value1.Format == Value2.Format &&
-				Value1.ResourceDimension == Value2.ResourceDimension &&
-				Value1.ImageFileFormat == Value2.ImageFileFormat;
-		}
-	};
-}
-}
-}
+	static bool Equals(ImageInfo% Value1, ImageInfo% Value2)
+	{
+		return
+			Value1.Width == Value2.Width &&
+			Value1.Height == Value2.Height &&
+			Value1.Depth == Value2.Depth &&
+			Value1.ArraySize == Value2.ArraySize &&
+			Value1.MipLevels == Value2.MipLevels &&
+			Value1.MiscFlags == Value2.MiscFlags &&
+			Value1.Format == Value2.Format &&
+			Value1.ResourceDimension == Value2.ResourceDimension &&
+			Value1.ImageFileFormat == Value2.ImageFileFormat;
+	}
+};

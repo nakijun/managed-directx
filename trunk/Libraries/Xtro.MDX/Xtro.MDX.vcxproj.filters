@@ -529,6 +529,33 @@
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
     <ClInclude Include="Stdafx.h" />
+    <ClInclude Include="Color.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="FontDescription.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoadInfo.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceDXGI.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture1D.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture3D.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">

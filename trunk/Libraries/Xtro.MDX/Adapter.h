@@ -1,21 +1,28 @@
-namespace Xtro
+public ref class Adapter : Object
 {
-namespace MDX
-{
-namespace DXGI
-{
-	public ref class Adapter : Object
+internal:
+	IDXGIAdapter* pAdapter;
+
+	static Guid IID = IID_Converter::ToManaged(IID_IDXGIAdapter);
+
+	Adapter(IntPtr Adapter) : Object(Adapter)
 	{
-	internal:
-		IDXGIAdapter* pAdapter;
+		pAdapter = (IDXGIAdapter*)Adapter.ToPointer();
+	}
 
-		static Guid IID = IID_Converter::ToManaged(IID_IDXGIAdapter);
+public:
+	int EnumerateOutputs(unsigned int OutputNo, [Out] Output^% Output)
+	{
+		IDXGIOutput* pOutput = 0;
+		int Result = pAdapter->EnumOutputs(OutputNo, &pOutput);
 
-		Adapter(IntPtr Adapter) : Object(Adapter)
+		if (pOutput)
 		{
-			pAdapter = (IDXGIAdapter*)Adapter.ToPointer();
+			try { Output = (Xtro::MDX::DXGI::Output^)Interfaces[IntPtr(pOutput)]; }
+			catch (KeyNotFoundException^) { Output = gcnew Xtro::MDX::DXGI::Output(IntPtr(pOutput)); }					
 		}
-	};
-}
-}
-}
+		else Output = nullptr;
+
+		return Result;
+	}
+};

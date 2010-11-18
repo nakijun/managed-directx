@@ -1,23 +1,14 @@
-namespace Xtro
+public ref class Surface : DeviceSubObject
 {
-namespace MDX
-{
-namespace DXGI
-{
-	public ref class Surface : DeviceSubObject
-	{
-	internal:
-		IDXGISurface* pSurface;
+internal:
+	IDXGISurface* pSurface;
 
-		static Guid IID = IID_Converter::ToManaged(IID_IDXGISurface);
+	static Guid IID = IID_Converter::ToManaged(IID_IDXGISurface);
 
-		Surface(IntPtr Surface) : DeviceSubObject(Surface)
-		{	
-			pSurface = (IDXGISurface*)Surface.ToPointer();
-		}
+	Surface(IntPtr Surface) : DeviceSubObject(Surface)
+	{	
+		pSurface = (IDXGISurface*)Surface.ToPointer();
+	}
 
-	public:
-	};
-}
-}
-}
+public:
+};

@@ -56,7 +56,7 @@ namespace TestMDX
 
             int Result = 0;
             SwapChain SwapChain;
-            Device Device;
+            Xtro.MDX.Direct3D10.Device Device;
             Result = D3D10Functions.CreateDeviceAndSwapChain(null, DriverType.Hardware, null, CreateDeviceFlag.Debug, ref SwapChainDescription, out SwapChain, out Device);
 
             Effect Effect;
@@ -94,6 +94,12 @@ namespace TestMDX
 
             Adapter Adapter;
             Factory.EnumAdapters(0, out Adapter);
+
+            Output Output;
+            Adapter.EnumerateOutputs(0, out Output);
+
+            OutputDescription D;
+            Output.GetDescription(out D);
 
             b = Adapter.Release();
 

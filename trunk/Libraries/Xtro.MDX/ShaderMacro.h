@@ -1,78 +1,65 @@
-namespace Xtro
+public value class ShaderMacro : IEquatable<ShaderMacro>
 {
-namespace MDX
-{
-namespace Direct3D10
-{
-	public value class ShaderMacro : IEquatable<ShaderMacro>
+internal: 
+	IntPtr pName;
+	IntPtr pDefinition;
+
+	inline void Marshal(D3D10_SHADER_MACRO* Native)
 	{
-	internal:
-		ShaderMacro(D3D10_SHADER_MACRO* Native)
-		{
-			Name = gcnew String(Native->Name);
-			Definition = gcnew String(Native->Definition);
-		}
-		
-		D3D10_SHADER_MACRO ToNative()
-		{
-			D3D10_SHADER_MACRO Result;
-			
-			Result.Name = (LPCSTR)Marshal::StringToHGlobalAnsi(Name).ToPointer();
-			Result.Definition = (LPCSTR)Marshal::StringToHGlobalAnsi(Definition).ToPointer();
-			
-			return Result;
-		}
+		pName = Marshal::StringToHGlobalAnsi(Name);
+		pDefinition = Marshal::StringToHGlobalAnsi(Definition);
 
-	public:
-		String^ Name;
-		String^ Definition;
+		Native->Name = (LPCSTR)pName.ToPointer();
+		Native->Definition = (LPCSTR)pDefinition.ToPointer();
+	}
 
-		ShaderMacro(String^ Name, String^ Definition)
-		{
-			this->Name = Name;
-			this->Definition = Definition;
-		}
+	inline void Unmarshal()
+	{
+		Marshal::FreeHGlobal(pName); 
+		Marshal::FreeHGlobal(pDefinition); 
+	}
 
-		static bool operator == (ShaderMacro Left, ShaderMacro Right)
-		{
-			return Equals(Left, Right);
-		}
+public:
+	String^ Name;
+	String^ Definition;
 
-		static bool operator != (ShaderMacro Left, ShaderMacro Right)
-		{
-			return !Equals(Left, Right);
-		}
+	static bool operator == (ShaderMacro Left, ShaderMacro Right)
+	{
+		return Equals(Left, Right);
+	}
 
-		virtual int GetHashCode() override
-		{
-			return
-				Name->GetHashCode() ^
-				Definition->GetHashCode();
-		}
+	static bool operator != (ShaderMacro Left, ShaderMacro Right)
+	{
+		return !Equals(Left, Right);
+	}
 
-		virtual bool Equals(System::Object^ Value) override
-		{
-			if (Value == nullptr) return false;
+	virtual int GetHashCode() override
+	{
+		return
+			(Name == nullptr ? 1 : Name->GetHashCode()) ^
+			(Definition == nullptr ? 1 : Definition->GetHashCode());
+	}
 
-			if (Value->GetType() != GetType()) return false;
+	virtual bool Equals(System::Object^ Value) override
+	{
+		if (Value == nullptr) return false;
 
-			return Equals(Value);
-		}
+		if (Value->GetType() != GetType()) return false;
 
-		virtual bool Equals(ShaderMacro Value)
-		{
-			return
-				Name == Value.Name &&
-				Definition == Value.Definition;
-		}
+		return Equals(Value);
+	}
 
-		static bool Equals(ShaderMacro% Value1, ShaderMacro% Value2)
-		{
-			return
-				Value1.Name == Value2.Name && 
-				Value1.Definition == Value2.Definition;
-		}
-	};
-}
-}
-}
+	virtual bool Equals(ShaderMacro Value)
+	{
+		return
+			Name == Value.Name &&
+			Definition == Value.Definition;
+	}
+
+	static bool Equals(ShaderMacro% Value1, ShaderMacro% Value2)
+	{
+		return
+			Value1.Name == Value2.Name && 
+			Value1.Definition == Value2.Definition;
+	}
+};

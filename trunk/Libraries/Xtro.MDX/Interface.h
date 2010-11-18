@@ -1,21 +1,15 @@
-namespace Xtro
+public ref class Interface
 {
-namespace MDX
-{
-	public ref class Interface
+protected private:
+	IntPtr InterfacePointer;
+
+	Interface(IntPtr Interface)
 	{
-	internal:
-		IntPtr InterfacePointer;
+		InterfacePointer = Interface;
 
-		static Dictionary<IntPtr, Interface^> Interfaces;
+		Interfaces.Add(Interface, this);
+	}
 
-	protected:
-		Interface(IntPtr Interface)
-		{
-			InterfacePointer = Interface;
-
-			Interfaces.Add(Interface, this);
-		}
-	};
-}
-}
+internal:
+	static Dictionary<IntPtr, Interface^> Interfaces;
+};

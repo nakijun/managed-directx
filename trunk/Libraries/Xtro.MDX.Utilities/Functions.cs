@@ -75,6 +75,11 @@ namespace Xtro.MDX.Utilities
             GetState().SetModifyDeviceSettingsFunctionUserContext(UserContext);
         }
 
+        public static bool IsInGammaCorrectMode()
+        {
+            return GetState().GetIsInGammaCorrectMode();
+        }
+
         public static int Initialize(bool ShowMessageBoxOnError)
         {
             GetState().SetInitializeCalled(true);

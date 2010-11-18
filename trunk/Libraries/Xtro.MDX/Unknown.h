@@ -1,34 +1,29 @@
-namespace Xtro
+public ref class Unknown : Interface
 {
-namespace MDX
-{
-	public ref class Unknown : Interface
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_IUnknown);
+
+protected private:
+	Unknown(IntPtr Unknown) : Interface(Unknown)
 	{
-	internal:
-		IUnknown* pUnknown;
+		pUnknown = (IUnknown*)Unknown.ToPointer();
+	}
 
-		static Guid IID = IID_Converter::ToManaged(IID_IUnknown);
+internal:
+	IUnknown* pUnknown;
 
-	protected:
-		Unknown(IntPtr Unknown) : Interface(Unknown)
-		{
-			pUnknown = (IUnknown*)Unknown.ToPointer();
-		}
+public:
+	unsigned int AddRef()
+	{
+		return pUnknown->AddRef();
+	}
 
-	public:
-		unsigned int AddRef()
-		{
-			return pUnknown->AddRef();
-		}
+	unsigned int Release()
+	{
+		unsigned int Result = pUnknown->Release();
 
-		unsigned int Release()
-		{
-			unsigned int Result = pUnknown->Release();
+		if(Result == 0) Interfaces.Remove(InterfacePointer);
 
-			if(Result == 0) Interfaces.Remove(InterfacePointer);
-
-			return Result;
-		}
-	};
-}
-}
+		return Result;
+	}
+};

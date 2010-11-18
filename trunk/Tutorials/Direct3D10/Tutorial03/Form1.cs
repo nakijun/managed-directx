@@ -122,7 +122,15 @@ namespace Tutorial03
             Device.OMSetRenderTargets(new RenderTargetView[] { RenderTargetView }, null);
 
             // Setup the viewport
-            Viewport Viewport = new Viewport(0, 0, (uint)ClientSize.Width, (uint)ClientSize.Height, 0.0f, 1.0f);
+            Viewport Viewport = new Viewport()
+            {
+                TopLeftX = 0,
+                TopLeftY = 0,
+                Width = (uint)ClientSize.Width,
+                Height = (uint)ClientSize.Height,
+                MinDepth = 0.0f,
+                MaxDepth = 1.0f
+            };
             Device.RSSetViewports(new Viewport[] { Viewport });
 
             // Create the effect
@@ -160,7 +168,16 @@ namespace Tutorial03
             // Define the input layout
             InputElementDescription[] Layout = 
             {
-                new InputElementDescription("POSITION", 0, Format.R32G32B32_Float, 0, 0, InputClassification.InputPerVertexData, 0) 
+                new InputElementDescription
+                {
+                    SemanticName = "POSITION",
+                    SemanticIndex = 0,
+                    Format = Format.R32G32B32_Float,
+                    InputSlot = 0,
+                    AlignedByteOffset = 0,
+                    InputSlotClass = InputClassification.InputPerVertexData,
+                    InstanceDataStepRate = 0
+                }
             };
 
             // Create the input layout
@@ -175,7 +192,7 @@ namespace Tutorial03
 
             // Create vertex buffer
 
-            int VertexCount = 3;
+            var VertexCount = (uint)3;
             int VertexSize = Marshal.SizeOf(typeof(Vector3));
             UnmanagedMemory Vertices = new UnmanagedMemory((uint)(VertexSize * VertexCount));
             Vertices.Write(0, VertexCount, new Vector3[]
@@ -184,10 +201,22 @@ namespace Tutorial03
                 new Vector3(0.5f, -0.5f, 0.5f),
                 new Vector3(-0.5f, -0.5f, 0.5f)
             });
-            SubResourceData InitData = new SubResourceData(Vertices, 0, 0);
-            BufferDescription BufferDescription = new BufferDescription((uint)Vertices.Size, D3D10Usage.Default, BindFlag.VertexBuffer, 0, 0);
+            SubResourceData InitData = new SubResourceData
+            {
+                SystemMemory = Vertices,
+                SystemMemoryPitch = 0,
+                SystemMemorySlicePitch = 0
+            };
+            BufferDescription BufferDescription = new BufferDescription
+            {
+                ByteWidth = (uint)Vertices.Size,
+                Usage = D3D10Usage.Default,
+                BindFlags = BindFlag.VertexBuffer,
+                CPU_AccessFlags = 0,
+                MiscFlags = 0
+            };
 
-            Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out VertexBuffer);
+            Result = Device.CreateBuffer(ref BufferDescription, InitData, out VertexBuffer);
             if (Result < 0) throw new Exception("Device.CreateBuffer has failed : " + Result);
 
             // Set vertex buffer
