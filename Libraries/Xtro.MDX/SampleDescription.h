@@ -2,8 +2,8 @@
 public value class SampleDescription : IEquatable<SampleDescription>
 {
 public:
-	int Count;
-	int Quality;
+	unsigned int Count;
+	unsigned int Quality;
 
 	static bool operator == (SampleDescription Left, SampleDescription Right)
 	{

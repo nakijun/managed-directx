@@ -1,4 +1,4 @@
-public ref class Factory : Object
+public ref class Factory sealed : Object
 {
 internal:
 	IDXGIFactory* pFactory;

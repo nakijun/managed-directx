@@ -1,4 +1,4 @@
-public ref class Functions
+public ref class Functions abstract sealed
 {
 private:
 	inline static Xtro::MDX::Direct3D10::Resource^ CreateTextureByType(ID3D10Resource*	pResource)
@@ -79,6 +79,7 @@ public:
 
 		int Result = 0;
 		ID3D10Resource* pResource = 0;
+	
 		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
 		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), (D3DX10_IMAGE_LOAD_INFO*)PinnedLoadInfo, 0, &pResource, 0); }
 		finally { Marshal::FreeHGlobal(pSourceFile); }

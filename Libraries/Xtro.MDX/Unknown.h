@@ -26,4 +26,23 @@ public:
 
 		return Result;
 	}
+
+	int QueryInterface(Type^ Type, [Out] Object^% Object)
+	{
+		Guid RIID;
+		try { RIID = (Guid)Type->GetField("IID", BindingFlags::DeclaredOnly | BindingFlags::NonPublic | BindingFlags::Static)->GetValue(nullptr); }
+		catch (...) { RIID = Guid::Empty; }
+
+		void* pObject = 0;
+		int Result = pUnknown->QueryInterface(IID_Converter::ToNative(RIID), &pObject);
+
+		if (pObject) 
+		{				
+			try { Object = Interfaces[IntPtr(pObject)]; }
+			catch (KeyNotFoundException^) { Object = Activator::CreateInstance(Type, BindingFlags::NonPublic | BindingFlags::Instance, nullptr, gcnew array<System::Object^>(1) { IntPtr(pObject) }, CultureInfo::CurrentCulture); }
+		}
+		else Object = nullptr;
+
+		return Result;
+	}
 };

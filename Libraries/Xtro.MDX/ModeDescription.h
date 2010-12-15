@@ -2,8 +2,8 @@
 public value class ModeDescription : IEquatable<ModeDescription>
 {
 public:
-	int Width;
-	int Height;
+	unsigned int Width;
+	unsigned int Height;
 	Rational RefreshRate;
 	Format Format;
 	ModeScanlineOrder ScanlineOrdering;

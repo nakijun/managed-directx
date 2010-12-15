@@ -1,4 +1,4 @@
-ref class IID_Converter
+ref class IID_Converter abstract sealed
 {
 public:
 	static Guid ToManaged(const IID &IID)
