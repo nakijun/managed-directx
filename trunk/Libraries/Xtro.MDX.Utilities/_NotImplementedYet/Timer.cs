@@ -2,13 +2,13 @@
 
 namespace Xtro.MDX.Utilities
 {
-    public class Timer
+    public sealed class Timer
     {
         [DllImport("kernel32.dll")]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [System.Security.SuppressUnmanagedCodeSecurity]
         static extern bool QueryPerformanceCounter(out long PerformanceCount);
         [DllImport("kernel32.dll")]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [System.Security.SuppressUnmanagedCodeSecurity]
         static extern void QueryPerformanceFrequency(out long Frequency);
 
         bool TimerStopped;

@@ -2,13 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* DrawText deki gibi String^ olan her yeri marshal try catch yap.
-
-* class Enumeration
-
-* GetEnumeration
-
-* FindValidDeviceSettings
+* state const delete destr bunlarý bitir. hatalar bitsin.
 
 * Tutorial08'e burdan devam et : wWinMain / DXUTCreateDevice.
 
@@ -20,6 +14,8 @@
   çift yönlü(Marshal+FromNative) : içinde String^ olanlarýn ShaderMacro'daki gibi Marshal/Unmarshal ve FromNative metodlarý olmalý (internal olarak lazýmsa). FontDescription'da marshal yerine tonative var çünkü native versiyondaki FaceName boyu sabit, yeri memory'den alýnmýþ bi string.
 
 * tüm enumlarý kontrol et. native halinde none olanlara bizde de ekle. olmayanlara fazladan ekleme
+
+* tüm son classlarý sealed yap : public ref class Factory sealed : Object
 
 * dx dökümanýnda tüm methodlarý kontrol et.
     null alabilen struct [in] parametreleri Nullable yap. null alamayanlarý % yap

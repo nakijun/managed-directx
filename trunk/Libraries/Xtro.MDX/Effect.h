@@ -13,10 +13,11 @@ internal:
 public:
 	EffectTechnique^ GetTechniqueByName(String^ Name)
 	{
-		LPCSTR pName = 0;
-		if (Name != nullptr) pName = (LPCSTR)Marshal::StringToHGlobalAnsi(Name).ToPointer();
+		ID3D10EffectTechnique* pResult;
 
-		ID3D10EffectTechnique* pResult = pEffect->GetTechniqueByName(pName);
+		IntPtr pName = Marshal::StringToHGlobalAnsi(Name);
+		try { pResult = pEffect->GetTechniqueByName((LPCSTR)pName.ToPointer()); }
+		finally { Marshal::FreeHGlobal(pName); }
 
 		EffectTechnique^ Result = nullptr;
 		if (pResult) 
@@ -30,10 +31,11 @@ public:
 	
 	EffectVariable^ GetVariableByName(String^ Name)
 	{
-		LPCSTR pName = 0;
-		if (Name != nullptr) pName = (LPCSTR)Marshal::StringToHGlobalAnsi(Name).ToPointer();
+		ID3D10EffectVariable* pResult;
 
-		ID3D10EffectVariable* pResult = pEffect->GetVariableByName(pName);
+		IntPtr pName = Marshal::StringToHGlobalAnsi(Name);
+		try { pResult = pEffect->GetVariableByName((LPCSTR)pName.ToPointer()); }
+		finally { Marshal::FreeHGlobal(pName); }
 
 		EffectVariable^ Result = nullptr;
 		if (pResult) 

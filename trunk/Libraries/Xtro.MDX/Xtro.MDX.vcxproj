@@ -82,6 +82,7 @@
   <ItemGroup>
     <ClInclude Include="Box.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ConstantsD3D10.h" />
     <ClInclude Include="DeviceDXGI.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FontDescription.h" />

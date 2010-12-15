@@ -5,7 +5,7 @@ public:
 	ModeDescription BufferDescription;
 	SampleDescription SampleDescription;
 	Usage BufferUsage;
-	int BufferCount;
+	unsigned int BufferCount;
 	IntPtr OutputWindow;
 	bool Windowed;
 	SwapEffect SwapEffect;

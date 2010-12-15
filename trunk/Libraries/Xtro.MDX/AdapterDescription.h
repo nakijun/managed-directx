@@ -1,5 +1,20 @@
 public value class AdapterDescription : IEquatable<AdapterDescription>
 {
+internal:
+	void FromNative(DXGI_ADAPTER_DESC* Native)
+	{
+		Description = gcnew String(Native->Description);
+			
+		VendorId = Native->VendorId;
+		DeviceId = Native->DeviceId;
+		SubSystemId = Native->SubSysId;
+		Revision = Native->Revision;
+		DedicatedVideoMemory = Native->DedicatedVideoMemory;
+		DedicatedSystemMemory = Native->DedicatedSystemMemory;
+		SharedSystemMemory = Native->SharedSystemMemory;
+		AdapterLuid = ((Int64)(Native->AdapterLuid.HighPart) << 32) | Native->AdapterLuid.LowPart;
+	}
+
 public:
 	String^ Description;
 	unsigned int VendorId;

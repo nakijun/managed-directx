@@ -1,4 +1,4 @@
-public ref class Functions
+public ref class Functions abstract sealed
 {
 public:
 	static int CreateFactory(Type^ Type, [Out] Factory^% Factory)

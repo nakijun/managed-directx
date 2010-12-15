@@ -3,6 +3,8 @@
 * Burda bilgi yeralmasýn. kontrol edip bilgileri bilgiler.txt ye koy
 ----------------------------------------------------------------------
 
+* String^ olan her yeri marshal/unmarshal try catch yap.
+
 * [Out] ^% olan parametreler deðer alamadýðý zaman mutlaka nullptr olsun.
 
 * struct larýn public contsructorlarý olmasýn. DirectX C++ tanýmlarýnda bulunan constructorlar hariç. 

@@ -30,8 +30,8 @@ namespace DXGI
 	#include "Rational.h"
 	#include "ModeDescription.h"
 	#include "Output.h"
-	#include "Adapter.h"
 	#include "AdapterDescription.h"
+	#include "Adapter.h"
 	#include "SampleDescription.h"
 	#include "SurfaceDescription.h"
 	#include "SwapChainDescription.h"
@@ -45,6 +45,7 @@ namespace Direct3D10
 {
 	using namespace Xtro::MDX::DXGI;
 
+	#include "ConstantsD3D10.h"
 	#include "EnumsD3D10.h"
 	#include "Include.h"
 	#include "ShaderMacro.h"

@@ -70,8 +70,8 @@ namespace Tutorial01
 
             SwapChainDescription SwapChainDescription = new SwapChainDescription();
             SwapChainDescription.BufferCount = 1;
-            SwapChainDescription.BufferDescription.Width = ClientSize.Width;
-            SwapChainDescription.BufferDescription.Height = ClientSize.Height;
+            SwapChainDescription.BufferDescription.Width = (uint)ClientSize.Width;
+            SwapChainDescription.BufferDescription.Height = (uint)ClientSize.Height;
             SwapChainDescription.BufferDescription.Format = Format.R8G8B8A8_UNorm;
             SwapChainDescription.BufferDescription.RefreshRate.Numerator = 60;
             SwapChainDescription.BufferDescription.RefreshRate.Denominator = 1;

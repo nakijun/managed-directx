@@ -2,8 +2,8 @@
 public value class Rational : IEquatable<Rational>
 {
 public:
-	int Numerator;
-	int Denominator;
+	unsigned int Numerator;
+	unsigned int Denominator;
 
 	static bool operator == (Rational Left, Rational Right)
 	{

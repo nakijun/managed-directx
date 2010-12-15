@@ -62,17 +62,18 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Callbacks.cs" />
     <Compile Include="Classes\Enumeration.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="Functions.cs" />
+    <Compile Include="_NotImplementedYet\Enums.cs" />
+    <Compile Include="_NotImplementedYet\Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\Timer.cs" />
-    <Compile Include="Classes\State.cs" />
+    <Compile Include="_NotImplementedYet\Timer.cs" />
+    <Compile Include="_NotImplementedYet\State.cs" />
     <Compile Include="Structures\DeviceSettings.cs">
       <SubType>Code</SubType>
     </Compile>

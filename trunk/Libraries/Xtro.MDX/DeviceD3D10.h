@@ -273,4 +273,11 @@ public:
 	{
 		pDevice->DrawIndexed(IndexCount, StartIndexLocation, BaseVertexLocation);
 	}
+
+	int CheckMultisampleQualityLevels(Format Format, unsigned int SampleCount, [Out] unsigned int% NumberOfQualityLevels)
+	{
+		pin_ptr<unsigned int> PinnedNumberOfQualityLevels = &NumberOfQualityLevels;
+
+		return pDevice->CheckMultisampleQualityLevels((DXGI_FORMAT)Format, SampleCount, (unsigned int*)PinnedNumberOfQualityLevels);
+	}
 };

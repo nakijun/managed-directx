@@ -556,6 +556,9 @@
     <ClInclude Include="Texture3D.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
+    <ClInclude Include="ConstantsD3D10.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">
