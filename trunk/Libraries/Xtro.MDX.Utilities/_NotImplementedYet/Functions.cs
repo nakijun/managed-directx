@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using Xtro.MDX.Direct3D10;
 using Xtro.MDX.DXGI;
+using Device = Xtro.MDX.Direct3D10.Device;
+using DXGI_Device = Xtro.MDX.DXGI.Device;
 using DXGI_Functions = Xtro.MDX.DXGI.Functions;
+using D3D10Functions = Xtro.MDX.Direct3D10.Functions;
 using Usage = Xtro.MDX.DXGI.Usage;
+using D3D10Usage = Xtro.MDX.Direct3D10.Usage;
 
 namespace Xtro.MDX.Utilities
 {
     public static class Functions
     {
         static State State;
-        static Timer Timer;
+        static TimerClass Timer;
 
         static State GetState()
         {
@@ -26,19 +32,19 @@ namespace Xtro.MDX.Utilities
         {
             var State = GetState();
 
-            var Factory = State.GetFactory();
+            var Factory = State.Factory;
             if (Factory == null)
             {
                 DXGI_Functions.CreateFactory(typeof(Factory), out Factory);
-                State.SetFactory(Factory);
+                State.Factory=Factory;
                 if (Factory == null)
                 {
                     // If still NULL, then DXGI is not availible
-                    State.SetDirect3D_Available(false);
+                    State.Direct3D_Available=false;
                     return (int)Error.NoDirect3D;
                 }
 
-                State.SetDirect3D_Available(true);
+                State.Direct3D_Available=true;
             }
 
             return 0;
@@ -57,151 +63,1312 @@ namespace Xtro.MDX.Utilities
 
         internal static void GetCallbackDeviceAcceptable(out Callbacks.IsDeviceAcceptable Callback, out object UserContext)
         {
-            Callback = GetState().GetIsDeviceAcceptableFunction();
-            UserContext = GetState().GetIsDeviceAcceptableFunctionUserContext();
+            Callback = GetState().IsDeviceAcceptableFunction;
+            UserContext = GetState().IsDeviceAcceptableFunctionUserContext;
         }
 
         public static void SetCallbackDeviceAcceptable(Callbacks.IsDeviceAcceptable Callback, object UserContext)
         {
-            GetState().SetIsDeviceAcceptableFunction(Callback);
-            GetState().SetIsDeviceAcceptableFunctionUserContext(UserContext);
+            GetState().IsDeviceAcceptableFunction=Callback;
+            GetState().IsDeviceAcceptableFunctionUserContext=UserContext;
         }
 
         public static void SetCallbackDeviceCreated(Callbacks.DeviceCreated Callback, object UserContext)
         {
-            GetState().SetDeviceCreatedFunction(Callback);
-            GetState().SetDeviceCreatedFunctionUserContext(UserContext);
+            GetState().DeviceCreatedFunction=Callback;
+            GetState().DeviceCreatedFunctionUserContext=UserContext;
         }
 
         public static void SetCallbackDeviceDestroyed(Callbacks.DeviceDestroyed Callback, object UserContext)
         {
-            GetState().SetDeviceDestroyedFunction(Callback);
-            GetState().SetDeviceDestroyedFunctionUserContext(UserContext);
+            GetState().DeviceDestroyedFunction=Callback;
+            GetState().DeviceDestroyedFunctionUserContext=UserContext;
         }
 
         public static void SetCallbackSwapChainResized(Callbacks.SwapChainResized Callback, object UserContext)
         {
-            GetState().SetSwapChainResizedFunction(Callback);
-            GetState().SetSwapChainResizedFunctionUserContext(UserContext);
+            GetState().SwapChainResizedFunction=Callback;
+            GetState().SwapChainResizedFunctionUserContext=UserContext;
         }
 
         public static void SetCallbackSwapChainReleasing(Callbacks.SwapChainReleasing Callback, object UserContext)
         {
-            GetState().SetSwapChainReleasingFunction(Callback);
-            GetState().SetSwapChainReleasingFunctionUserContext(UserContext);
+            GetState().SwapChainReleasingFunction=Callback;
+            GetState().SwapChainReleasingFunctionUserContext=UserContext;
         }
 
         public static void SetCallbackFrameRender(Callbacks.FrameRender Callback, object UserContext)
         {
-            GetState().SetFrameRenderFunction(Callback);
-            GetState().SetFrameRenderFunctionUserContext(UserContext);
+            GetState().FrameRenderFunction=Callback;
+            GetState().FrameRenderFunctionUserContext=UserContext;
         }
 
         public static void SetCallbackFrameMove(Callbacks.FrameMove Callback, object UserContext)
         {
-            GetState().SetFrameMoveFunction(Callback);
-            GetState().SetFrameMoveFunctionUserContext(UserContext);
+            GetState().FrameMoveFunction=Callback;
+            GetState().FrameMoveFunctionUserContext=UserContext;
         }
 
         public static void SetCallbackModifyDeviceSettings(Callbacks.ModifyDeviceSettings Callback, object UserContext)
         {
-            GetState().SetModifyDeviceSettingsFunction(Callback);
-            GetState().SetModifyDeviceSettingsFunctionUserContext(UserContext);
+            GetState().ModifyDeviceSettingsFunction=Callback;
+            GetState().ModifyDeviceSettingsFunctionUserContext=UserContext;
         }
 
-        public static bool IsInGammaCorrectMode()
+        public static Device GetDevice()
         {
-            return GetState().GetIsInGammaCorrectMode();
+            return GetState().Device;
         }
 
-        public static int Initialize(bool ShowMessageBoxOnError)
+static void DisplayErrorMessage( int Result )
+{
+    string Buffer = null;
+
+    int ExitCode;
+    var Found = true;
+    switch( Result )
+    {
+        case (int)Error.NoDirect3D:
+            ExitCode = 2;
+            Buffer = DoesApplicationSupportDirect3D() ? "Could not initialize Direct3D 10. This application requires a Direct3D 10 class\ndevice (hardware or reference rasterizer) running on Windows Vista (or later)." : "Could not initialize Direct3D 9. Check that the latest version of DirectX is correctly installed on your system.  Also make sure that this program was compiled with header files that match the installed DirectX DLLs.";
+            break;
+        case (int)Error.NoCompatibleDevices:
+            ExitCode = 3;
+            Buffer = SystemInformation.TerminalServerSession ? "Direct3D does not work over a remote session." : "Could not find any compatible Direct3D devices.";
+            break;
+        case (int)Error.MediaNotFound:
+            ExitCode = 4; 
+            Buffer="Could not find required media." ;
+            break;
+        case (int)Error.NonZeroRefCount:
+            ExitCode = 5;
+            Buffer="The Direct3D device has a non-zero reference count, meaning some objects were not released.";
+            break;
+        case (int)Error.CreatingDevice:
+            ExitCode = 6; 
+            Buffer="Failed creating the Direct3D device." ;
+            break;
+        case (int)Error.ResettingDevice:
+            ExitCode = 7; 
+            Buffer="Failed resetting the Direct3D device." ;
+            break;
+        case (int)Error.CreatingDeviceObjects:
+            ExitCode = 8;
+            Buffer="An error occurred in the device create callback function." ;
+            break;
+        case (int)Error.ResettingDeviceObjects:
+            ExitCode = 9;
+            Buffer="An error occurred in the device reset callback function." ;
+            break;
+            // ExitCode 10 means the app exited using a REF device 
+        case (int)Error.DeviceRemoved:
+            ExitCode = 11; 
+            Buffer="The Direct3D device was removed." ;
+            break;
+        default:
+            Found = false; 
+            ExitCode = 1; 
+            break; // ExitCode 1 means the API was incorrectly called
+    }
+
+    GetState().ExitCode= ExitCode ;
+
+    var ShowMessageBoxOnError = GetState().ShowMessageBoxOnError;
+    var Form = GetForm();
+    if( Found && ShowMessageBoxOnError ) MessageBox.Show( Form, Buffer, Form.Text,MessageBoxButtons.OK,MessageBoxIcon.Error );
+}
+
+
+
+        //--------------------------------------------------------------------------------------
+        // Cleans up the 3D environment by:
+        //      - Calls the device lost callback 
+        //      - Calls the device destroyed callback 
+        //      - Releases the D3D device
+        //--------------------------------------------------------------------------------------
+        static void CleanupEnvironment(bool ReleaseSettings)
+{
+    var Device = GetDevice();
+
+    if( Device != null )
+    {
+        if (GetState().RasterizerState != null) GetState().RasterizerState.Release();
+        // Call ClearState to avoid tons of messy debug spew telling us that we're deleting bound objects
+        Device.ClearState();
+
+        // Call the app's SwapChain lost callback
+        GetState().InsideDeviceCallback = true;
+        if (GetState().DeviceObjectsReset)
         {
-            GetState().SetInitializeCalled(true);
+            var CallbackSwapChainReleasing = GetState().SwapChainReleasingFunction;
+            if (CallbackSwapChainReleasing != null) CallbackSwapChainReleasing(GetState().SwapChainReleasingFunctionUserContext);
+            GetState().DeviceObjectsReset = false;
+        }
 
-            GetState().SetShowMessageBoxOnError(ShowMessageBoxOnError);
+        // Release our old depth stencil texture and view 
+        var DepthStencil = GetState().DepthStencil;
+        if (DepthStencil != null) DepthStencil.Release();
+        GetState().DepthStencil = null;
+        var DepthStencilView = GetState().DepthStencilView;
+        if (DepthStencilView != null) DepthStencilView.Release();
+        GetState().DepthStencilView = null;
 
-            GetGlobalTimer().Reset();
+        // Release our rasterizer state
+        var RasterizerState = GetState().DefaultRasterizerState;
+        if (RasterizerState != null) RasterizerState.Release();
+        GetState().DefaultRasterizerState = null;
 
-            GetState().SetInitialized(true);
+        // Cleanup the render target view
+        var RenderTargetView = GetState().RenderTargetView;
+        if (RenderTargetView != null) RenderTargetView.Release();
+        GetState().RenderTargetView = null;
+
+        // Call the app's device destroyed callback
+        if (GetState().DeviceObjectsCreated)
+        {
+            var CallbackDeviceDestroyed = GetState().DeviceDestroyedFunction;
+            if (CallbackDeviceDestroyed != null) CallbackDeviceDestroyed(GetState().DeviceDestroyedFunctionUserContext);
+            GetState().DeviceObjectsCreated = false;
+        }
+
+        GetState().InsideDeviceCallback = false;
+
+        // Release the swap chain
+        GetState().ReleasingSwapChain = true;
+        var SwapChain = GetSwapChain();
+        if (SwapChain != null)
+        {
+            SwapChain.SetFullscreenState(false, null);
+            SwapChain.Release();
+        }
+        GetState().SwapChain = null;
+        GetState().ReleasingSwapChain = false;
+
+        // Release the outputs.
+        var Outputs = GetState().Outputs;
+        foreach (var Output in Outputs)
+        {
+            if (Output != null) Output.Release();
+        }
+        GetState().Outputs = null;
+
+        // Release the D3D adapter.
+        var Adapter = GetState().Adapter;
+        if (Adapter != null) Adapter.Release();
+        GetState().Adapter = null;
+
+        // Release the counters
+        DestroyCounters();
+
+        // Release the D3D device and in debug configs, displays a message box if there 
+        // are unrelease objects.
+        var References = Device.Release();
+        if (References > 0) DisplayErrorMessage((int) Error.NonZeroRefCount);
+        GetState().Device = null;
+
+        if (ReleaseSettings) GetState().CurrentDeviceSettings=null;
+
+        GetState().BackBufferSurfaceDescription=new SurfaceDescription();
+
+        GetState().DeviceCreated=false;
+    }
+}
+
+        static void DestroyCounters()
+        {
+            var Counter = GetState().CounterGPU_Idle;
+            if(Counter!=null)Counter.Release();
+            GetState().CounterGPU_Idle=null;
+
+            Counter = GetState().CounterVertexProcessing;
+            if (Counter != null) Counter.Release();
+            GetState().CounterVertexProcessing = null;
+
+            Counter = GetState().CounterGeometryProcessing;
+            if (Counter != null) Counter.Release();
+            GetState().CounterGeometryProcessing = null;
+
+            Counter = GetState().CounterPixelProcessing;
+            if (Counter != null) Counter.Release();
+            GetState().CounterPixelProcessing = null;
+
+            Counter = GetState().CounterOtherGPU_Processing;
+            if (Counter != null) Counter.Release();
+            GetState().CounterOtherGPU_Processing = null;
+
+            Counter = GetState().CounterHostAdapterBandwidthUtilization;
+            if (Counter != null) Counter.Release();
+            GetState().CounterHostAdapterBandwidthUtilization = null;
+
+            Counter = GetState().CounterLocalVidmemBandwidthUtilization;
+            if (Counter != null) Counter.Release();
+            GetState().CounterLocalVidmemBandwidthUtilization = null;
+
+            Counter = GetState().CounterVertexThroughputUtilization;
+            if (Counter != null) Counter.Release();
+            GetState().CounterVertexThroughputUtilization = null;
+
+            Counter = GetState().CounterTriangleSetupThroughputUtilization;
+            if (Counter != null) Counter.Release();
+            GetState().CounterTriangleSetupThroughputUtilization = null;
+
+            Counter = GetState().CounterFillrateThrougputUtilization;
+            if (Counter != null) Counter.Release();
+            GetState().CounterFillrateThrougputUtilization = null;
+
+            Counter = GetState().CounterVSMemoryLimited;
+            if (Counter != null) Counter.Release();
+            GetState().CounterVSMemoryLimited = null;
+
+            Counter = GetState().CounterVSComputationLimited;
+            if (Counter != null) Counter.Release();
+            GetState().CounterVSComputationLimited = null;
+
+            Counter = GetState().CounterGSMemoryLimited;
+            if (Counter != null) Counter.Release();
+            GetState().CounterGSMemoryLimited = null;
+
+            Counter = GetState().CounterGSComputationLimited;
+            if (Counter != null) Counter.Release();
+            GetState().CounterGSComputationLimited = null;
+
+            Counter = GetState().CounterPSMemoryLimited;
+            if (Counter != null) Counter.Release();
+            GetState().CounterPSMemoryLimited = null;
+
+            Counter = GetState().CounterPSComputationLimited;
+            if (Counter != null) Counter.Release();
+            GetState().CounterPSComputationLimited = null;
+
+            Counter = GetState().CounterPostTransformCacheHitRate;
+            if (Counter != null) Counter.Release();
+            GetState().CounterPostTransformCacheHitRate = null;
+
+            Counter = GetState().CounterTextureCacheHitRate;
+            if (Counter != null) Counter.Release();
+            GetState().CounterTextureCacheHitRate = null;
+        }
+
+        public static SwapChain GetSwapChain()
+        {
+            return GetState().SwapChain;
+        }
+
+//--------------------------------------------------------------------------------------
+// Pauses time or rendering.  Keeps a ref count so pausing can be layered
+//--------------------------------------------------------------------------------------
+public static void Pause( bool PauseTime, bool PauseRendering )
+{
+    var PauseTimeCount = GetState().PauseTimeCount;
+    if( PauseTime ) PauseTimeCount++;
+    else PauseTimeCount--;
+    if( PauseTimeCount < 0 ) PauseTimeCount = 0;
+    GetState().PauseTimeCount= PauseTimeCount ;
+
+    var PauseRenderingCount = GetState().PauseRenderingCount;
+    if( PauseRendering ) PauseRenderingCount++;
+    else PauseRenderingCount--;
+    if( PauseRenderingCount < 0 ) PauseRenderingCount = 0;
+    GetState().PauseRenderingCount= PauseRenderingCount ;
+
+    if( PauseTimeCount > 0 )
+    {
+        // Stop the scene from animating
+        GetGlobalTimer().Stop();
+    }
+    else
+    {
+        // Restart the timer
+        GetGlobalTimer().Start();
+    }
+
+    GetState().RenderingPaused= PauseRenderingCount > 0 ;
+    GetState().TimePaused= PauseTimeCount > 0 ;
+}
+
+//--------------------------------------------------------------------------------------
+// Resets the 3D environment by:
+//      - Calls the device lost callback 
+//      - Resets the device
+//      - Stores the back buffer description
+//      - Sets up the full screen Direct3D cursor if requested
+//      - Calls the device reset callback 
+//--------------------------------------------------------------------------------------
+static int ResetEnvironment()
+{
+    int Result;
+
+    GetState().DeviceObjectsReset=false;
+    Pause(true, true);
+
+    var DeferredDXGIAction = false;
+    var DeviceSettings = GetState().CurrentDeviceSettings;
+    var SwapChain = GetSwapChain();
+
+    SwapChainDescription SwapChainDescription;
+    SwapChain.GetDescription(out SwapChainDescription);
+
+    // Resize backbuffer and target of the swapchain in case they have changed.
+    // For windowed mode, use the client rect as the desired size. Unlike D3D9,
+    // we can't use 0 for width or height.  Therefore, fill in the values from
+    // the window size. For fullscreen mode, the width and height should have
+    // already been filled with the desktop resolution, so don't change it.
+    if (DeviceSettings.SwapChainDescription.Windowed && SwapChainDescription.Windowed)
+    {
+        var Rectangle = GetForm().ClientRectangle;
+        DeviceSettings.SwapChainDescription.BufferDescription.Width = (uint)Rectangle.Width;
+        DeviceSettings.SwapChainDescription.BufferDescription.Height = (uint)Rectangle.Height;
+    }
+
+    // If the app wants to switch from windowed to fullscreen or vice versa,
+    // call the swapchain's SetFullscreenState
+    // mode.
+    if (SwapChainDescription.Windowed != DeviceSettings.SwapChainDescription.Windowed)
+    {
+        // Set the fullscreen state
+        if (DeviceSettings.SwapChainDescription.Windowed)
+        {
+            Result=SwapChain.SetFullscreenState(false, null);
+            if (Result < 0) return Result;
+            DeferredDXGIAction = true;
+        }
+        else
+        {
+            // Set fullscreen state by setting the display mode to fullscreen, then changing the resolution
+            // to the desired value.
+
+            // SetFullscreenState causes a WM_SIZE message to be sent to the window.  The WM_SIZE message calls
+            // DXUTCheckForDXGIBufferChange which normally stores the new height and width in 
+            // DeviceSettings->d3d10.sd.BufferDesc.  SetDoNotStoreBufferSize tells DXUTCheckForDXGIBufferChange
+            // not to store the height and width so that we have the correct values when calling ResizeTarget.
+
+            GetState().DoNotStoreBufferSize=true;
+            Result =SwapChain.SetFullscreenState(true, null);
+            if (Result < 0) return Result;
+            GetState().DoNotStoreBufferSize=false;
+
+            Result=SwapChain.ResizeTarget(ref DeviceSettings.SwapChainDescription.BufferDescription);
+            if (Result < 0) return Result;
+            DeferredDXGIAction = true;
+        }
+    }
+    else
+    {
+        if (DeviceSettings.SwapChainDescription.BufferDescription.Width == SwapChainDescription.BufferDescription.Width &&
+            DeviceSettings.SwapChainDescription.BufferDescription.Height == SwapChainDescription.BufferDescription.Height &&
+            DeviceSettings.SwapChainDescription.BufferDescription.Format != SwapChainDescription.BufferDescription.Format)
+        {
+            ResizeBuffers(0, 0, !DeviceSettings.SwapChainDescription.Windowed);
+            DeferredDXGIAction = true;
+        }
+        else if (DeviceSettings.SwapChainDescription.BufferDescription.Width != SwapChainDescription.BufferDescription.Width ||
+                 DeviceSettings.SwapChainDescription.BufferDescription.Height != SwapChainDescription.BufferDescription.Height)
+        {
+            Result=SwapChain.ResizeTarget(ref DeviceSettings.SwapChainDescription.BufferDescription);
+            if (Result < 0) return Result;
+
+            DeferredDXGIAction = true;
+        }
+    }
+
+    // If no deferred DXGI actions are to take place, mark the device as reset.
+    // If there is a deferred DXGI action, then the device isn't reset until DXGI sends us a 
+    // window message.  Only then can we mark the device as reset.
+    if (!DeferredDXGIAction) GetState().DeviceObjectsReset=true;
+    Pause(false, false);
+
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------
+// Stores back buffer surface desc in GetDXUTState().GetBackBufferSurfaceDesc10()
+//--------------------------------------------------------------------------------------
+static void UpdateBackBufferDescription()
+{
+    Unknown Surface;
+    var Result = GetState().SwapChain.GetBuffer(0, typeof(Texture2D), out Surface);
+    var BackBuffer = (Texture2D)Surface;
+    var BackBufferSurfaceDescription = new SurfaceDescription();
+    if (Result >= 0 && BackBuffer != null)
+    {
+        Texture2D_Description TextureDescription;
+        BackBuffer.GetDescription(out TextureDescription);
+        BackBufferSurfaceDescription.Width = TextureDescription.Width;
+        BackBufferSurfaceDescription.Height = TextureDescription.Height;
+        BackBufferSurfaceDescription.Format = TextureDescription.Format;
+        BackBufferSurfaceDescription.SampleDescription = TextureDescription.SampleDescription;
+        BackBuffer.Release();
+    }
+
+    GetState().BackBufferSurfaceDescription = BackBufferSurfaceDescription;
+}
+
+//--------------------------------------------------------------------------------------
+// Updates the static part of the frame stats so it doesn't have be generated every frame
+//--------------------------------------------------------------------------------------
+static void UpdateStaticFrameStats()
+{      
+    if (GetState().NoStats) return;
+
+    var DeviceSettings = GetState().CurrentDeviceSettings;
+    if (DeviceSettings==null)return;
+
+    var Enumeration = GetEnumeration();
+    if (Enumeration==null) return;
+
+    var DeviceSettingsCombo = Enumeration.GetDeviceSettingsCombo(DeviceSettings.AdapterOrdinal, DeviceSettings.SwapChainDescription.BufferDescription.Format, DeviceSettings.SwapChainDescription.Windowed);
+    if (DeviceSettingsCombo==null) return;
+
+    var FormatText=DeviceSettingsCombo.BackBufferFormat.ToString();
+
+    var MultiSampleText = " (MS" + DeviceSettings.SwapChainDescription.SampleDescription.Count + ", Q" + DeviceSettings.SwapChainDescription.SampleDescription.Quality + ")";
+
+    GetState().StaticFrameStats="D3D10 Vsync "+((DeviceSettings.SyncInterval == 0) ? "off" :"on")+" ("+
+        DeviceSettings.SwapChainDescription.BufferDescription.Width+"x"+DeviceSettings.SwapChainDescription.BufferDescription.Height+"), "+
+        FormatText+MultiSampleText;      
+}
+
+//--------------------------------------------------------------------------------------
+// Updates the string which describes the device 
+//--------------------------------------------------------------------------------------
+static void UpdateDeviceStats(DriverType DeviceType, ref AdapterDescription AdapterDescription)
+{
+    if( GetState().NoStats )return;
+
+    // Store device description
+    string DeviceStats=null;
+    switch (DeviceType)
+    {
+    case DriverType.Reference:
+        DeviceStats="REFERENCE";
+        break;
+    case DriverType.Hardware:
+        DeviceStats="HARDWARE";
+        break;
+    }
+
+    if( DeviceType ==DriverType.Hardware)
+    {
+        // Be sure not to overflow m_strDeviceStats when appending the adapter 
+        // description, since it can be long.  
+        DeviceStats+=": ";
+
+        // Try to get a unique description from the CD3D10EnumDeviceSettingsCombo
+        var DeviceSettings = GetState().CurrentDeviceSettings;
+        if( DeviceSettings ==null)return;
+
+        var Enumeration = GetEnumeration();
+        var DeviceSettingsCombo = Enumeration.GetDeviceSettingsCombo(DeviceSettings.AdapterOrdinal, DeviceSettings.SwapChainDescription.BufferDescription.Format, DeviceSettings.SwapChainDescription.Windowed );
+        if( DeviceSettingsCombo!=null )DeviceStats+=DeviceSettingsCombo.AdapterInfo.UniqueDescription;
+        else DeviceStats+=AdapterDescription.Description;
+    }
+
+     GetState().DeviceStats=DeviceStats;
+}
+
+//--------------------------------------------------------------------------------------
+// Sets the viewport, creates a render target view, and depth scencil texture and view.
+//--------------------------------------------------------------------------------------
+static int SetupViews(Device Device, DeviceSettings DeviceSettings)
+{
+    var SwapChain = GetSwapChain();
+    DepthStencilView DepthStencilView;
+    RenderTargetView RenderTargetView;
+
+    // Get the back buffer and desc
+    Unknown Surface;
+    var Result = SwapChain.GetBuffer(0,typeof(Texture2D),out Surface);
+    var BackBuffer = (Texture2D)Surface;
+
+    if (Result<0) return Result;
+    Texture2D_Description BackBufferSurfaceDescription;
+    BackBuffer.GetDescription(out BackBufferSurfaceDescription);
+
+    // Setup the viewport to match the backbuffer
+    Viewport Viewport;
+    Viewport.Width = BackBufferSurfaceDescription.Width;
+    Viewport.Height = BackBufferSurfaceDescription.Height;
+    Viewport.MinDepth = 0;
+    Viewport.MaxDepth = 1;
+    Viewport.TopLeftX = 0;
+    Viewport.TopLeftY = 0;
+    Device.RS_SetViewports(1,new[]{Viewport});
+
+    // Create the render target view
+    Result = Device.CreateRenderTargetView(BackBuffer, out RenderTargetView);
+    BackBuffer.Release();
+    if (Result<0)return Result;
+    GetState().RenderTargetView=RenderTargetView;
+
+    if (DeviceSettings.AutoCreateDepthStencil)
+    {
+        // Create depth stencil texture
+        Texture2D DepthStencil;
+        var DepthStencilDescription = new Texture2D_Description
+        {
+            Width = BackBufferSurfaceDescription.Width,
+            Height = BackBufferSurfaceDescription.Height,
+            MipLevels = 1,
+            ArraySize = 1,
+            Format = DeviceSettings.AutoDepthStencilFormat,
+            SampleDescription =
+            {
+                Count = DeviceSettings.SwapChainDescription.SampleDescription.Count,
+                Quality = DeviceSettings.SwapChainDescription.SampleDescription.Quality
+            },
+            Usage = D3D10Usage.Default,
+            BindFlags = BindFlag.DepthStencil,
+            CPU_AccessFlags = 0,
+            MiscFlags = 0
+        };
+        Result = Device.CreateTexture2D(ref DepthStencilDescription, out DepthStencil);
+        if (Result<0)return Result;
+        GetState().DepthStencil=DepthStencil;
+
+        // Create the depth stencil view
+        var DepthStencilViewDescription = new DepthStencilViewDescription
+        {
+            Format = DepthStencilDescription.Format,
+            ViewDimension = DepthStencilDescription.SampleDescription.Count > 1 ? DepthStencilViewDimension.Texture2DMS : DepthStencilViewDimension.Texture2D,
+            Texture2D =
+            {
+                MipSlice = 0
+            }
+        };
+        Result = Device.CreateDepthStencilView(DepthStencil,ref DepthStencilViewDescription, out DepthStencilView);
+        if (Result<0)return Result;
+        GetState().DepthStencilView=DepthStencilView;
+
+        // Create a default rasterizer state that enables MSAA
+        var RasterizerDescription = new RasterizerDescription
+        {
+            FillMode = FillMode.Solid,
+            CullMode = CullMode.Back,
+            FrontCounterClockwise = false,
+            DepthBias = 0,
+            SlopeScaledDepthBias = 0.0f,
+            DepthBiasClamp = 0,
+            DepthClipEnable = true,
+            ScissorEnable = false,
+            AntialiasedLineEnable = false,
+            MultisampleEnable = DepthStencilDescription.SampleDescription.Count > 1
+        };
+
+        RasterizerState RasterizerState;
+        Result = Device.CreateRasterizerState(ref RasterizerDescription,out RasterizerState);
+        if (Result<0)return Result;
+
+        GetState().DefaultRasterizerState=RasterizerState;
+        Device.RS_SetState(RasterizerState);
+    }
+
+    // Set the render targets
+    DepthStencilView = GetState().DepthStencilView;
+    Device.OM_SetRenderTargets(1, new[] {RenderTargetView}, DepthStencilView);
+
+    return Result;
+}
+
+static bool GetIsWindowedFromDeviceSettings(DeviceSettings NewDeviceSettings)
+{
+    return NewDeviceSettings==null || NewDeviceSettings.SwapChainDescription.Windowed;
+}
+
+public static bool IsWindowed()
+{
+    return GetIsWindowedFromDeviceSettings(GetState().CurrentDeviceSettings);
+}
+
+public static SurfaceDescription GetBackBufferSurfaceDescription() { return GetState().BackBufferSurfaceDescription; }
+
+//--------------------------------------------------------------------------------------
+// Setup cursor based on current settings (window/fullscreen mode, show cursor state, clip cursor state)
+//--------------------------------------------------------------------------------------
+static void SetupCursor()
+{
+    // Clip cursor if requested
+    if (!IsWindowed() && GetState().ClipCursorWhenFullScreen) Cursor.Clip = GetForm().DisplayRectangle;
+    else Cursor.Clip = Rectangle.Empty;
+}
+
+static void ResizeBuffers(uint Width, uint Height, bool FullScreen)
+{
+    var Device = GetDevice();
+    var CurrentClient=GetForm().ClientRectangle;
+
+    var DeviceSettings = GetState().CurrentDeviceSettings;
+
+    var SwapChain = GetSwapChain();
+
+    // Determine if we're fullscreen
+    DeviceSettings.SwapChainDescription.Windowed = !FullScreen;
+
+    // Call releasing
+    GetState().InsideDeviceCallback= true ;
+    var CallbackSwapChainReleasing = GetState().SwapChainReleasingFunction;
+    if( CallbackSwapChainReleasing != null ) CallbackSwapChainReleasing( GetState().SwapChainResizedFunctionUserContext );
+    GetState().InsideDeviceCallback= false ;
+
+    // Release our old depth stencil texture and view 
+    var DepthStencil = GetState().DepthStencil;
+    if( DepthStencil !=null)DepthStencil.Release();
+    GetState().DepthStencil= null ;
+    var DepthStencilView = GetState().DepthStencilView;
+    if( DepthStencilView !=null)DepthStencilView.Release();
+    GetState().DepthStencilView= null ;
+
+    // Release our old render target view
+    var RenderTargetView = GetState().RenderTargetView;
+    if( RenderTargetView !=null)RenderTargetView.Release();
+    GetState().RenderTargetView= null ;
+
+    // Release our rasterizer state
+    var RasterizerState = GetState().DefaultRasterizerState;
+    if( RasterizerState !=null)RasterizerState.Release();
+    GetState().DefaultRasterizerState= null ;
+
+    // Alternate between 0 and DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH when resizing buffers.
+    // When in windowed mode, we want 0 since this allows the app to change to the desktop
+    // resolution from windowed mode during alt+enter.  However, in fullscreen mode, we want
+    // the ability to change display modes from the Device Settings dialog.  Therefore, we
+    // want to set the DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH flag.
+    SwapChainFlag Flags = 0;
+    if( FullScreen )Flags =SwapChainFlag.AllowModeSwitch;
+
+    // ResizeBuffers
+    SwapChain.ResizeBuffers( DeviceSettings.SwapChainDescription.BufferCount,Width,Height,DeviceSettings.SwapChainDescription.BufferDescription.Format,Flags ) ;
+
+    if( !GetState().DoNotStoreBufferSize )
+    {
+        DeviceSettings.SwapChainDescription.BufferDescription.Width = ( uint )CurrentClient.Right;
+        DeviceSettings.SwapChainDescription.BufferDescription.Height = ( uint )CurrentClient.Bottom;
+    }
+
+    // Save off backbuffer desc
+    UpdateBackBufferDescription();
+
+    // Update the device stats text
+    UpdateStaticFrameStats();
+
+    // Setup the render target view and viewport
+    var Result = SetupViews( Device,DeviceSettings );
+    if(  Result <0 ) return;
+
+    // Setup cursor based on current settings (window/fullscreen mode, show cursor state, clip cursor state)
+    SetupCursor();
+
+    // Call the app's SwapChain reset callback
+    GetState().InsideDeviceCallback= true ;
+    var BackBufferSurfaceDescription = GetBackBufferSurfaceDescription();
+    var CallbackSwapChainResized = GetState().SwapChainResizedFunction;
+    Result = 0;
+    if( CallbackSwapChainResized != null ) Result = CallbackSwapChainResized( Device, SwapChain, ref BackBufferSurfaceDescription,GetState().SwapChainResizedFunctionUserContext );
+    GetState().InsideDeviceCallback= false ;
+    if(  Result <0 )
+    {
+        // If callback failed, cleanup
+        // if( Result !=(int)Error.MediaNotFound)Result =(int)Error.ResettingDeviceObjects;
+
+        GetState().InsideDeviceCallback= true ;
+        var CallbackSwapChainReleasing2 =GetState().SwapChainReleasingFunction;
+        if( CallbackSwapChainReleasing2 != null )CallbackSwapChainReleasing2( GetState().SwapChainResizedFunctionUserContext );
+        GetState().InsideDeviceCallback= false ;
+        Pause( false, false );
+        GetForm().Close();
+    }
+    else
+    {
+        GetState().DeviceObjectsReset= true ;
+        Pause( false, false );
+    }
+}
+
+        //--------------------------------------------------------------------------------------
+// Check if the new device is close enough to the old device to simply reset or 
+// resize the back buffer
+//--------------------------------------------------------------------------------------
+static bool CanDeviceBeReset(DeviceSettings OldDeviceSettings, DeviceSettings NewDeviceSettings, Device DeviceFromApplication)
+{
+    if (OldDeviceSettings == null) return false;
+
+    return GetDevice()!=null &&
+           (DeviceFromApplication == null || DeviceFromApplication == GetDevice()) &&
+           (OldDeviceSettings.AdapterOrdinal == NewDeviceSettings.AdapterOrdinal) &&
+           (OldDeviceSettings.DriverType == NewDeviceSettings.DriverType) &&
+           (OldDeviceSettings.CreateFlags == NewDeviceSettings.CreateFlags) &&
+           (OldDeviceSettings.SwapChainDescription.SampleDescription.Count == NewDeviceSettings.SwapChainDescription.SampleDescription.Count) &&
+           (OldDeviceSettings.SwapChainDescription.SampleDescription.Quality == NewDeviceSettings.SwapChainDescription.SampleDescription.Quality);
+}
+
+//--------------------------------------------------------------------------------------
+// Returns the HMONITOR attached to an adapter/output
+//--------------------------------------------------------------------------------------
+static Screen GetMonitorFromAdapter(DeviceSettings DeviceSettings)
+{
+    var Enumeration = GetEnumeration();
+    var OutputInfo = Enumeration.GetOutputInfo(DeviceSettings.AdapterOrdinal,DeviceSettings.Output);
+
+    return OutputInfo==null ? null : Screen.FromRectangle(OutputInfo.Description.DesktopCoordinates);
+}
+
+public static DeviceSettings GetDeviceSettings()
+{
+    // Return a copy of device settings of the current device.  If no device exists yet, then
+    // return a blank device settings struct
+    var DeviceSettings = GetState().CurrentDeviceSettings;
+    return DeviceSettings != null ? DeviceSettings.Copy() : new DeviceSettings();
+}
+
+//--------------------------------------------------------------------------------------
+// Creates the 3D environment
+//--------------------------------------------------------------------------------------
+static int CreateEnvironment(Device DeviceFromApplication)
+{
+    int Result;
+
+    Device Device = null;
+    SwapChain SwapChain = null;
+    var NewDeviceSettings = GetState().CurrentDeviceSettings;
+
+    var Factory = GetFactory();
+    Factory.MakeWindowAssociation( IntPtr.Zero, 0 );
+
+    // Only create a Direct3D device if one hasn't been supplied by the app
+    if( DeviceFromApplication == null )
+    {
+        // Try to create the device with the chosen settings
+        Adapter Adapter = null;
+
+        Result = 0;
+        if( NewDeviceSettings.DriverType ==DriverType.Hardware)Result = Factory.EnumAdapters( NewDeviceSettings.AdapterOrdinal, out Adapter );
+        if( Result>=0 )
+        {
+            Result =D3D10Functions.CreateDevice(Adapter, NewDeviceSettings.DriverType, null,NewDeviceSettings.CreateFlags, out Device);
+
+            if (Result>=0)
+            {
+                if (NewDeviceSettings.DriverType !=DriverType.Hardware)
+                {
+                    object Object;
+                    Result = Device.QueryInterface(typeof(DXGI_Device),out Object);
+                    var DXGI_Device = (DXGI_Device)Object;
+                    if (Result>=0 && DXGI_Device!=null)DXGI_Device.GetAdapter(out Adapter);
+                    if (DXGI_Device != null) DXGI_Device.Release();
+                }
+
+                GetState().Adapter=Adapter;
+            }
+        }
+
+        if( Result <0 ) return (int)Error.CreatingDevice;
+
+        // Enumerate its outputs.
+        var Outputs = new List<Output>();
+        for (uint OutputNo = 0; ; OutputNo++)
+        {
+            Output Output;
+            if( Adapter.EnumerateOutputs( OutputNo, out Output )<0  )break;
+            Outputs.Add(Output);
+        }
+        GetState().Outputs= Outputs ;
+
+        // Create the swapchain
+        Result = Factory.CreateSwapChain( Device,ref NewDeviceSettings.SwapChainDescription, out SwapChain );
+        if( Result <0 ) return (int)Error.CreatingDevice;
+    }
+    else
+    {
+        DeviceFromApplication.AddRef();
+        Device = DeviceFromApplication;
+    }
+
+    GetState().Device= Device ;
+    GetState().SwapChain= SwapChain ;
+
+    // If switching to REF, set the exit code to 10.  If switching to HAL and exit code was 10, then set it back to 0.
+    if( NewDeviceSettings.DriverType == DriverType.Reference && GetState().ExitCode == 0 ) GetState().ExitCode= 10 ;
+    else if( NewDeviceSettings.DriverType == DriverType.Hardware && GetState().ExitCode == 10 ) GetState().ExitCode= 0 ;
+
+    // Update back buffer desc before calling app's device callbacks
+    UpdateBackBufferDescription();
+
+    // Setup cursor based on current settings (window/fullscreen mode, show cursor state, clip cursor state)
+    SetupCursor();
+
+    // Update the device stats text
+    var Enumeration = GetEnumeration();
+    var AdapterInfo = Enumeration.GetAdapterInfo( NewDeviceSettings.AdapterOrdinal );
+    UpdateDeviceStats( NewDeviceSettings.DriverType,ref AdapterInfo.AdapterDescription );
+
+    // Call the app's device created callback if non-NULL
+    var BackBufferSurfaceDescription = GetBackBufferSurfaceDescription();
+    GetState().InsideDeviceCallback= true ;
+    var CallbackDeviceCreated = GetState().DeviceCreatedFunction;
+    Result = 0;
+    if( CallbackDeviceCreated != null )Result = CallbackDeviceCreated( GetDevice(),ref BackBufferSurfaceDescription,GetState().DeviceCreatedFunctionUserContext );
+    GetState().InsideDeviceCallback= false ;
+    if (GetDevice() == null) return (int)Error.Fail; // Handle DXUTShutdown from inside callback
+    if( Result <0 ) return (int)(( Result ==(int)Error.MediaNotFound) ? Error.MediaNotFound:Error.CreatingDeviceObjects);
+    GetState().DeviceObjectsCreated= true ;
+
+    // Setup the render target view and viewport
+    Result = SetupViews( Device, NewDeviceSettings );
+    if( Result <0 )return (int)Error.CreatingDeviceObjects;
+
+    // Create performance counters
+    //DXUTCreateD3D10Counters( pd3d10Device );
+
+    // Call the app's swap chain reset callback if non-NULL
+    GetState().InsideDeviceCallback= true ;
+    var CallbackSwapChainResized = GetState().SwapChainResizedFunction;
+    Result = 0;
+    if( CallbackSwapChainResized != null )
+        Result = CallbackSwapChainResized( GetDevice(), SwapChain, ref BackBufferSurfaceDescription,GetState().SwapChainResizedFunctionUserContext );
+    GetState().InsideDeviceCallback= false ;
+    if (GetDevice() == null) return (int)Error.Fail; // Handle DXUTShutdown from inside callback
+    if( Result <0 ) return (int)(( Result ==(int)Error.MediaNotFound) ? Error.MediaNotFound:Error.ResettingDeviceObjects);
+    GetState().DeviceObjectsReset= true ;
+
+    return 0;
+}
+
+        //--------------------------------------------------------------------------------------
+        // All device changes are sent to this function.  It looks at the current 
+        // device (if any) and the new device and determines the best course of action.  It 
+        // also remembers and restores the window state if toggling between windowed and fullscreen
+        // as well as sets the proper window and system state for switching to the new device.
+        //--------------------------------------------------------------------------------------
+        static int ChangeDevice(DeviceSettings NewDeviceSettings,Device DeviceFromApplication,bool ForceRecreate, bool ClipWindowToSingleAdapter)
+        {
+            var OldDeviceSettings = GetState().CurrentDeviceSettings;
+
+            if (NewDeviceSettings == null) return (int)Error.False;
+
+            var Result = DelayLoad();
+            if (Result < 0) return (int)Error.NoDirect3D;
+
+            // Make a copy of the NewDeviceSettings on the heap
+            NewDeviceSettings = NewDeviceSettings.Copy();
+
+            // If the ModifyDeviceSettings callback is non-NULL, then call it to let the app 
+            // change the settings or reject the device change by returning false.
+            var CallbackModifyDeviceSettings = GetState().ModifyDeviceSettingsFunction;
+            if (CallbackModifyDeviceSettings != null && DeviceFromApplication == null)
+            {
+                var Continue = CallbackModifyDeviceSettings(NewDeviceSettings, GetState().ModifyDeviceSettingsFunctionUserContext);
+                if (!Continue)
+                {
+                    // The app rejected the device change by returning false, so just use the current device if there is one.
+                    if (OldDeviceSettings == null) DisplayErrorMessage((int)Error.NoCompatibleDevices);
+                    return (int)Error.Abort;
+                }
+                if (GetState().Factory == null) return (int)Error.False; // if Shutdown() was called in the modify callback, just return
+            }
+
+            GetState().CurrentDeviceSettings = NewDeviceSettings;
+
+            Pause(true, true);
+
+            // Take note if the backbuffer width & height are 0 now as they will change after Device->Reset()
+            var KeepCurrentWindowSize = false;
+            if (NewDeviceSettings.SwapChainDescription.BufferDescription.Width == 0 && NewDeviceSettings.SwapChainDescription.BufferDescription.Height == 0) KeepCurrentWindowSize = true;
+
+            //////////////////////////
+            // Before reset
+            /////////////////////////
+
+            if (GetIsWindowedFromDeviceSettings(NewDeviceSettings))
+            {
+                // Going to windowed mode
+                if (OldDeviceSettings != null && !GetIsWindowedFromDeviceSettings(OldDeviceSettings))
+                {
+                    // Going from fullscreen -> windowed
+                    GetState().FullScreenBackBufferWidthAtModeChange=OldDeviceSettings.SwapChainDescription.BufferDescription.Width;
+                    GetState().FullScreenBackBufferHeightAtModeChange = OldDeviceSettings.SwapChainDescription.BufferDescription.Height;
+                }
+            }
+            else
+            {
+                // Going to fullscreen mode
+                if (OldDeviceSettings == null || GetIsWindowedFromDeviceSettings(OldDeviceSettings))
+                {
+                    // Transistioning to full screen mode from a standard window so 
+                    if (OldDeviceSettings != null)
+                    {
+                        GetState().WindowBackBufferWidthAtModeChange = OldDeviceSettings.SwapChainDescription.BufferDescription.Width;
+                        GetState().WindowBackBufferHeightAtModeChange = OldDeviceSettings.SwapChainDescription.BufferDescription.Height;
+                    }
+                }
+            }
+
+            // If API version, AdapterOrdinal and DeviceType are the same, we can just do a Reset().
+            // If they've changed, we need to do a complete device tear down/rebuild.
+            // Also only allow a reset if Device is the same as the current device 
+            if (!ForceRecreate && CanDeviceBeReset(OldDeviceSettings, NewDeviceSettings, DeviceFromApplication))
+            {
+                // Reset the Direct3D device and call the app's device callbacks
+                Result = ResetEnvironment();
+                if (Result<0)
+                {
+                    if (Result == (int)Error.ResettingDeviceObjects || Result == (int)Error.MediaNotFound)
+                    {
+                        // Something bad happened in the app callbacks
+                        DisplayErrorMessage(Result);
+                        Shutdown();
+                        return Result;
+                    }
+
+                    // else // DXUTERR_RESETTINGDEVICE
+
+                    // Reset failed and the device wasn't lost and it wasn't the apps fault, 
+                    // so recreate the device to try to recover
+                    GetState().CurrentDeviceSettings = OldDeviceSettings;
+                    if (ChangeDevice(NewDeviceSettings, DeviceFromApplication, true, ClipWindowToSingleAdapter) < 0)
+                    {
+                        // If that fails, then shutdown
+                        Shutdown();
+                        return (int)Error.CreatingDevice;
+                    }
+                    Pause(false, false);
+                    return 0;
+                }
+            }
+            else
+            {
+                // Cleanup if not first device created
+                if (OldDeviceSettings!=null) CleanupEnvironment(false);
+
+                // Create the D3D device and call the app's device callbacks
+                Result = CreateEnvironment(DeviceFromApplication);
+                if (Result<0)
+                {
+                    CleanupEnvironment(true);
+                    DisplayErrorMessage(Result);
+                    Pause(false, false);
+                    GetState().IgnoreSizeChange=false;
+                    return Result;
+                }
+            }
+
+            var AdapterMonitor = GetMonitorFromAdapter(NewDeviceSettings);
+            GetState().AdapterMonitor=AdapterMonitor;
+
+            // Update the device stats text
+            UpdateStaticFrameStats();
+
+            if (OldDeviceSettings!=null && !GetIsWindowedFromDeviceSettings(OldDeviceSettings) && GetIsWindowedFromDeviceSettings(NewDeviceSettings))
+            {
+                // Going from fullscreen -> windowed
+
+                // Restore the show state, and positions/size of the window to what it was
+                // It is important to adjust the window size 
+                // after resetting the device rather than beforehand to ensure 
+                // that the monitor resolution is correct and does not limit the size of the new window.
+                var WindowedPlacement = GetState().WindowedPlacement;
+                WindowedPlacement.Length = Marshal.SizeOf(WindowedPlacement);
+                Windows.SetWindowPlacement(GetForm().Handle, ref WindowedPlacement);
+
+                // Also restore the z-order of window to previous state
+                GetForm().TopMost = GetState().TopmostWhileWindowed;
+            }
+
+            // Check to see if the window needs to be resized.  
+            // Handle cases where the window is minimized and maxmimized as well.
+            var NeedToResize = false;
+            if (GetIsWindowedFromDeviceSettings(NewDeviceSettings) && // only resize if in windowed mode
+                !KeepCurrentWindowSize) // only resize if pp.BackbufferWidth/Height were not 0
+            {
+                var Client=new Rectangle();
+                if (GetForm().WindowState==FormWindowState.Minimized)
+                {
+                    // Window is currently minimized. To tell if it needs to resize, 
+                    // get the client rect of window when its restored the 
+                    // hard way using GetWindowPlacement()
+                    var WindowedPlacement = new Windows.WindowPlacement();
+                    WindowedPlacement.Length = Marshal.SizeOf(WindowedPlacement);
+                    Windows.GetWindowPlacement(GetForm().Handle, ref WindowedPlacement);
+
+                    if ((WindowedPlacement.Flags & Windows.WindowPlacementFlag.RestoreToMaximized) != 0 && WindowedPlacement.ShowCommand == Windows.ShowWindowCommand.ShowMinimized)
+                    {
+                        // WPF_RESTORETOMAXIMIZED means that when the window is restored it will
+                        // be maximized.  So maximize the window temporarily to get the client rect 
+                        // when the window is maximized.  GetSystemMetrics( SM_CXMAXIMIZED ) will give this 
+                        // information if the window is on the primary but this will work on multimon.
+                        Windows.ShowWindow(GetForm().Handle,Windows.ShowWindowCommand.Restore);
+                        Client = GetForm().ClientRectangle;
+                        Windows.ShowWindow(GetForm().Handle,Windows.ShowWindowCommand.Minimize);
+                    }
+                    else
+                    {
+                        // Use wp.rcNormalPosition to get the client rect, but wp.rcNormalPosition 
+                        // includes the window frame so subtract it
+                        var Frame =new Windows.Rect32(); 
+                        Windows.AdjustWindowRect(Frame, 0,false);
+                        var FrameWidth = Frame.Right - Frame.Left;
+                        var FrameHeight = Frame.Bottom - Frame.Top;
+                        Client.Width = WindowedPlacement.NormalPosition.Right - WindowedPlacement.NormalPosition.Left - FrameWidth;
+                        Client.Height = WindowedPlacement.NormalPosition.Bottom - WindowedPlacement.NormalPosition.Top - FrameHeight;
+                    }
+                }
+                else
+                {
+                    // Window is restored or maximized so just get its client rect
+                    Client = GetForm().ClientRectangle;
+                }
+
+                // Now that we know the client rect, compare it against the back buffer size
+                // to see if the client rect is already the right size
+                if (Client.Width != NewDeviceSettings.SwapChainDescription.BufferDescription.Width || Client.Height != NewDeviceSettings.SwapChainDescription.BufferDescription.Height) NeedToResize = true;
+
+                if (ClipWindowToSingleAdapter && GetForm().WindowState!=FormWindowState.Minimized)
+                {
+                    // Get the rect of the monitor attached to the adapter
+                    var AdapterMonitor2 = GetMonitorFromAdapter(NewDeviceSettings);
+                    var WindowMonitor = Screen.FromControl(GetForm());
+
+                    // Get the rect of the window
+                    var Window = GetForm().DisplayRectangle;
+
+                    // Check if the window rect is fully inside the adapter's vitural screen rect
+                    if ((Window.Left < AdapterMonitor2.WorkingArea.Left ||
+                         Window.Right > AdapterMonitor2.WorkingArea.Right ||
+                         Window.Top < AdapterMonitor2.WorkingArea.Top ||
+                         Window.Bottom > AdapterMonitor2.WorkingArea.Bottom))
+                    {
+                        if (WindowMonitor == AdapterMonitor2 && GetForm().WindowState==FormWindowState.Maximized)
+                        {
+                            // If the window is maximized and on the same monitor as the adapter, then 
+                            // no need to clip to single adapter as the window is already clipped 
+                            // even though the rcWindow rect is outside of the miAdapter.rcWork
+                        }
+                        else NeedToResize = true;
+                    }
+                }
+            }
+
+            // Only resize window if needed 
+            if (NeedToResize)
+            {
+                // Need to resize, so if window is maximized or minimized then restore the window
+                if (GetForm().WindowState==FormWindowState.Minimized) Windows.ShowWindow(GetForm().Handle, Windows.ShowWindowCommand.Restore);
+                if (GetForm().WindowState == FormWindowState.Maximized) Windows.ShowWindow(GetForm().Handle, Windows.ShowWindowCommand.Restore); // doing the IsIconic() check first also handles the WPF_RESTORETOMAXIMIZED case
+                // D3D10 software rasterizer don't need an associated monitor and don't need to be clipped to a single adapater
+                if (ClipWindowToSingleAdapter && GetDeviceSettings().DriverType == DriverType.Hardware)
+                {
+                    // Get the rect of the monitor attached to the adapter
+                    var Adapter = GetMonitorFromAdapter(NewDeviceSettings);
+
+                    // Get the rect of the monitor attached to the window
+                    var Monitor=Screen.FromControl(GetForm());
+
+                    // Do something reasonable if the BackBuffer size is greater than the monitor size
+                    var AdapterMonitorWidth = Adapter.WorkingArea.Right - Adapter.WorkingArea.Left;
+                    var AdapterMonitorHeight = Adapter.WorkingArea.Bottom - Adapter.WorkingArea.Top;
+
+                    var ClientWidth = NewDeviceSettings.SwapChainDescription.BufferDescription.Width;
+                    var ClientHeight = NewDeviceSettings.SwapChainDescription.BufferDescription.Height;
+
+                    // Make a window rect with a client rect that is the same size as the backbuffer
+                    var ResizedWindow = new Windows.Rect32
+                    {
+                        Left = 0,
+                        Right = (int)ClientWidth,
+                        Top = 0,
+                        Bottom = (int)ClientHeight
+                    };
+                    Windows.AdjustWindowRect(ResizedWindow, Windows.GetWindowLong(GetForm().Handle,Windows.GetWindowLongConst.Style),false);
+
+                    var WindowWidth = ResizedWindow.Right - ResizedWindow.Left;
+                    var WindowHeight = ResizedWindow.Bottom - ResizedWindow.Top;
+
+                    if (WindowWidth > AdapterMonitorWidth) WindowWidth = AdapterMonitorWidth;
+                    if (WindowHeight > AdapterMonitorHeight) WindowHeight = AdapterMonitorHeight;
+
+                    if (ResizedWindow.Left < Adapter.WorkingArea.Left ||
+                        ResizedWindow.Top < Adapter.WorkingArea.Top ||
+                        ResizedWindow.Right > Adapter.WorkingArea.Right ||
+                        ResizedWindow.Bottom > Adapter.WorkingArea.Bottom)
+                    {
+                        var WindowOffsetX = (AdapterMonitorWidth - WindowWidth)/2;
+                        var WindowOffsetY = (AdapterMonitorHeight - WindowHeight)/2;
+
+                        ResizedWindow.Left = Adapter.WorkingArea.Left + WindowOffsetX;
+                        ResizedWindow.Top = Adapter.WorkingArea.Top + WindowOffsetY;
+                        ResizedWindow.Right = Adapter.WorkingArea.Left + WindowOffsetX + WindowWidth;
+                        ResizedWindow.Bottom = Adapter.WorkingArea.Top + WindowOffsetY + WindowHeight;
+                    }
+
+                    // Resize the window.  It is important to adjust the window size 
+                    // after resetting the device rather than beforehand to ensure 
+                    // that the monitor resolution is correct and does not limit the size of the new window.
+                    GetForm().Bounds = new Rectangle(new Point(ResizedWindow.Left, ResizedWindow.Top), new Size(WindowWidth, WindowHeight));
+                }
+                else
+                {
+                    // Make a window rect with a client rect that is the same size as the backbuffer
+                    var Window2 = new Windows.Rect32
+                    {
+                        Right = (int)NewDeviceSettings.SwapChainDescription.BufferDescription.Width,
+                        Bottom = (int)NewDeviceSettings.SwapChainDescription.BufferDescription.Height
+                    };
+                    Windows.AdjustWindowRect(Window2, Windows.GetWindowLong(GetForm().Handle,Windows.GetWindowLongConst.Style),false);
+
+                    // Resize the window.  It is important to adjust the window size 
+                    // after resetting the device rather than beforehand to ensure 
+                    // that the monitor resolution is correct and does not limit the size of the new window.
+                    var X = Window2.Right - Window2.Left;
+                    var Y = Window2.Bottom - Window2.Top;
+                    GetForm().Size = new Size(X, Y);
+                }
+
+                // Its possible that the new window size is not what we asked for.  
+                // No window can be sized larger than the desktop, so see if the Windows OS resized the 
+                // window to something smaller to fit on the desktop.  Also if WM_GETMINMAXINFO
+                // will put a limit on the smallest/largest window size.
+                var Client=GetForm().ClientRectangle;
+                if (Client.Width != NewDeviceSettings.SwapChainDescription.BufferDescription.Width ||
+                    Client.Height != NewDeviceSettings.SwapChainDescription.BufferDescription.Height)
+                {
+                    // If its different, then resize the backbuffer again.  This time create a backbuffer that matches the 
+                    // client rect of the current window w/o resizing the window.
+                    var DeviceSettings = GetDeviceSettings();
+                    DeviceSettings.SwapChainDescription.BufferDescription.Width = 0;
+                    DeviceSettings.SwapChainDescription.BufferDescription.Height = 0;
+
+                    Result = ChangeDevice(DeviceSettings, null, false, ClipWindowToSingleAdapter);
+                    if (Result<0)
+                    {
+                        CleanupEnvironment(true);
+                        Pause(false, false);
+                        GetState().IgnoreSizeChange=false;
+                        return Result;
+                    }
+                }
+            }
+
+            // Make the window visible
+            if (!GetForm().Visible) Windows.ShowWindow(GetForm().Handle,Windows.ShowWindowCommand.Show);
+
+            // Ensure that the display doesn't power down when fullscreen but does when windowed
+            if (!IsWindowed()) Windows.SetThreadExecutionState(Windows.ExecutionState.DisplayRequired | Windows.ExecutionState.Continuous);
+            else Windows.SetThreadExecutionState(Windows.ExecutionState.Continuous);
+
+            GetState().IgnoreSizeChange=false;
+            Pause(false, false);
+            GetState().DeviceCreated=true;
 
             return 0;
         }
 
-        public static Timer GetGlobalTimer()
-        {
-            if (Timer == null) Timer = new Timer();
+        //--------------------------------------------------------------------------------------
+        // Closes down the window.  When the window closes, it will cleanup everything
+        //--------------------------------------------------------------------------------------
+public static void Shutdown( int ExitCode =0)
+{
+    var Form = GetForm();
+    if (Form != null) Form.Close();
 
-            return Timer;
+    GetState().ExitCode= ExitCode ;
+
+    CleanupEnvironment( true );
+
+    // Shutdown D3D10
+    var Factory = GetState().Factory;
+    if( Factory !=null)Factory.Release();
+    GetState().Factory= null ;
+}
+
+
+        public static bool IsInGammaCorrectMode()
+        {
+            return GetState().IsInGammaCorrectMode;
         }
 
-        public static int CreateDevice(bool Windowed, int SuggestedWidth, int SuggestedHeight)
+        public static int Initialize(bool ShowMessageBoxOnError)
+        {
+            GetState().InitializeCalled=true;
+
+            GetState().ShowMessageBoxOnError=ShowMessageBoxOnError;
+
+            GetGlobalTimer().Reset();
+
+            GetState().Initialized=true;
+
+            return 0;
+        }
+
+        public static TimerClass GetGlobalTimer()
+        {
+            return Timer ?? (Timer = new TimerClass());
+        }
+
+        public static int CreateDevice(bool Windowed = true, int SuggestedWidth = 0, int SuggestedHeight = 0)
         {
             var Result = 0;
 
-            GetState().SetDeviceCreateCalled(true);
+            GetState().DeviceCreateCalled = true;
 
-            MatchOptions MatchOptions;
-            MatchOptions.AdapterOrdinal = MatchType.IgnoreInput;
-            MatchOptions.DeviceType = MatchType.IgnoreInput;
-            MatchOptions.Output = MatchType.IgnoreInput;
-            MatchOptions.Windowed = MatchType.PreserveInput;
-            MatchOptions.AdapterFormat = MatchType.IgnoreInput;
-            MatchOptions.VertexProcessing = MatchType.IgnoreInput;
-            if (Windowed || (SuggestedWidth != 0 && SuggestedHeight != 0))
-                MatchOptions.Resolution = MatchType.ClosestToInput;
-            else
-                MatchOptions.Resolution = MatchType.IgnoreInput;
-            MatchOptions.BackBufferFormat = MatchType.IgnoreInput;
-            MatchOptions.BackBufferCount = MatchType.IgnoreInput;
-            MatchOptions.MultiSample = MatchType.IgnoreInput;
-            MatchOptions.SwapEffect = MatchType.IgnoreInput;
-            MatchOptions.DepthFormat = MatchType.IgnoreInput;
-            MatchOptions.StencilFormat = MatchType.IgnoreInput;
-            MatchOptions.PresentFlags = MatchType.IgnoreInput;
-            MatchOptions.RefreshRate = MatchType.IgnoreInput;
-            MatchOptions.PresentInterval = MatchType.IgnoreInput;
+            var MatchOptions = new MatchOptions
+            {
+                AdapterOrdinal = MatchType.IgnoreInput,
+                DeviceType = MatchType.IgnoreInput,
+                Output = MatchType.IgnoreInput,
+                Windowed = MatchType.PreserveInput,
+                AdapterFormat = MatchType.IgnoreInput,
+                VertexProcessing = MatchType.IgnoreInput,
+                Resolution = (Windowed || (SuggestedWidth != 0 && SuggestedHeight != 0)) ? MatchType.ClosestToInput : MatchType.IgnoreInput,
+                BackBufferFormat = MatchType.IgnoreInput,
+                BackBufferCount = MatchType.IgnoreInput,
+                MultiSample = MatchType.IgnoreInput,
+                SwapEffect = MatchType.IgnoreInput,
+                DepthFormat = MatchType.IgnoreInput,
+                StencilFormat = MatchType.IgnoreInput,
+                PresentFlags = MatchType.IgnoreInput,
+                RefreshRate = MatchType.IgnoreInput,
+                PresentInterval = MatchType.IgnoreInput
+            };
 
-            DeviceSettings DeviceSettings;
-            DeviceSettings.SwapChainDescription.Windowed = Windowed;
-            DeviceSettings.SwapChainDescription.BufferDescription.Width = (uint)SuggestedWidth;
-            DeviceSettings.SwapChainDescription.BufferDescription.Height = (uint)SuggestedHeight;
-
-            //Result = FindValidDeviceSettings
-            /*
-                hr = DXUTFindValidDeviceSettings( &deviceSettings, &deviceSettings, &matchOptions );
-                if( FAILED( hr ) ) // the call will fail if no valid devices were found
+            var DeviceSettings = new DeviceSettings
+            {
+                SwapChainDescription =
                 {
-                    DXUTDisplayErrorMessage( hr );
-                    return DXUT_ERR( L"DXUTFindValidDeviceSettings", hr );
+                    Windowed = Windowed,
+                    BufferDescription =
+                    {
+                        Width = (uint)SuggestedWidth,
+                        Height = (uint)SuggestedHeight
+                    }
                 }
+            };
 
-                // Change to a Direct3D device created from the new device settings.  
-                // If there is an existing device, then either reset or recreated the scene
-                hr = DXUTChangeDevice( &deviceSettings, NULL, NULL, false, true );
-                if( FAILED( hr ) )
-                    return hr;
-            */
-            return Result;
+            Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
+            if (Result < 0) DisplayErrorMessage(Result);
+
+            // Change to a Direct3D device created from the new device settings.  
+            // If there is an existing device, then either reset or recreated the scene
+            Result = ChangeDevice(DeviceSettings, null, false, true);
+
+            return Result < 0 ? Result : 0;
         }
 
         public static bool GetShowMessageBoxOnError()
         {
-            return GetState().GetShowMessageBoxOnError();
+            return GetState().ShowMessageBoxOnError;
         }
 
         public static Form GetForm()
         {
-            return GetState().GetForm();
+            return GetState().Form;
         }
 
         public static Factory GetFactory()
         {
             DelayLoad();
 
-            return GetState().GetFactory();
+            return GetState().Factory;
         }
 
-        public static int Trace(int Result, string Message)
+        public static int ErrorBox(int Result, string Message)
         {
             if (GetShowMessageBoxOnError()) MessageBox.Show("An error has occured with error " + Result + " : " + Message);
 
@@ -216,19 +1383,19 @@ namespace Xtro.MDX.Utilities
         {
             //if (GetState().GetUseD3DVersionOverride()) return GetState().GetAppSupportsD3D10Override();
 
-            return GetState().GetIsDeviceAcceptableFunction() != null ||
-                   GetState().GetDeviceCreatedFunction() != null ||
-                   GetState().GetSwapChainResizedFunction() != null ||
-                   GetState().GetFrameRenderFunction() != null ||
-                   GetState().GetSwapChainReleasingFunction() != null ||
-                   GetState().GetDeviceDestroyedFunction() != null;
+            return GetState().IsDeviceAcceptableFunction != null ||
+                   GetState().DeviceCreatedFunction != null ||
+                   GetState().SwapChainResizedFunction != null ||
+                   GetState().FrameRenderFunction != null ||
+                   GetState().SwapChainReleasingFunction != null ||
+                   GetState().DeviceDestroyedFunction != null;
         }
 
-        public static bool GetDirect3D_Available()
+        public static bool IsDirect3D_Available()
         {
             DelayLoad();
 
-            return GetState().GetDirect3D_Available();
+            return GetState().Direct3D_Available;
         }
 
         //--------------------------------------------------------------------------------------
@@ -266,9 +1433,9 @@ namespace Xtro.MDX.Utilities
         // The default value may not exist on the system, but later this will be taken 
         // into account.
         //--------------------------------------------------------------------------------------
-        static void BuildOptimalDeviceSettings(out DeviceSettings OptimalDeviceSettings, ref DeviceSettings DeviceSettingsIn, ref MatchOptions MatchOptions)
+        static void BuildOptimalDeviceSettings(DeviceSettings OptimalDeviceSettings, DeviceSettings DeviceSettingsIn, MatchOptions MatchOptions)
         {
-            OptimalDeviceSettings = new DeviceSettings();
+            OptimalDeviceSettings.SwapChainDescription = new SwapChainDescription();
 
             // Retrieve the desktop display mode.
             var AdapterDesktopDisplayMode = new ModeDescription {Width= 640,Height= 480,Format=Format.R8G8B8A8_UNorm_SRGB };
@@ -401,7 +1568,7 @@ namespace Xtro.MDX.Utilities
         // Returns false for any CD3D9EnumDeviceSettingsCombo that doesn't meet the preserve 
         // match options against the input DeviceSettingsIn.
         //--------------------------------------------------------------------------------------
-        static bool DoesDeviceComboMatchPreserveOptions(Enumeration.DeviceSettingsCombo DeviceSettingsCombo, ref DeviceSettings DeviceSettingsIn, ref MatchOptions MatchOptions)
+        static bool DoesDeviceComboMatchPreserveOptions(Enumeration.DeviceSettingsCombo DeviceSettingsCombo, DeviceSettings DeviceSettingsIn, MatchOptions MatchOptions)
         {
             //---------------------
             // Adapter ordinal
@@ -575,7 +1742,7 @@ namespace Xtro.MDX.Utilities
         // Returns a ranking number that describes how closely this device 
         // combo matches the optimal combo based on the match options and the optimal device settings
         //--------------------------------------------------------------------------------------
-        static float RankDeviceCombo(Enumeration.DeviceSettingsCombo DeviceSettingsCombo, ref DeviceSettings OptimalDeviceSettings, ref ModeDescription AdapterDisplayMode)
+        static float RankDeviceCombo(Enumeration.DeviceSettingsCombo DeviceSettingsCombo, DeviceSettings OptimalDeviceSettings, ref ModeDescription AdapterDisplayMode)
         {
             var CurrentRanking = 0.0f;
 
@@ -700,27 +1867,6 @@ namespace Xtro.MDX.Utilities
             return CurrentRanking;
         }
 
-        [DllImport("user32")]
-        static extern bool GetMonitorInfo(IntPtr MonitorHandle, [Out] MonitorInfo Info);
-
-        [StructLayout(LayoutKind.Sequential)]
-        struct Rect32
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        sealed class MonitorInfo
-        {
-            public int Size;
-            public Rect32 Monitor;
-            public Rect32 Work;
-            public UInt32 Flags;
-        }
-        
         //--------------------------------------------------------------------------------------
         // Internal helper function to find the closest allowed display mode to the optimal 
         //--------------------------------------------------------------------------------------
@@ -732,26 +1878,24 @@ namespace Xtro.MDX.Utilities
 
                 // If our client rect size is smaller than our backbuffer size, use that size.
                 // This would happen when we specify a windowed resolution larger than the screen.
-                var Info = new MonitorInfo();
                 if (BestDeviceSettingsCombo.OutputInfo != null)
                 {
-                    GetMonitorInfo(BestDeviceSettingsCombo.OutputInfo.Description.Monitor, Info);
+                    var Info = Screen.FromHandle(BestDeviceSettingsCombo.OutputInfo.Description.Monitor);
+                    
+                    var Width = Info.WorkingArea.Width;
+                    var Height = Info.WorkingArea.Height;
 
-                    var Width = Info.Work.Right - Info.Work.Left;
-                    var Height = Info.Work.Bottom - Info.Work.Top;
+                    var Client = new Windows.Rect32
+                    {
+                        Bottom = Info.WorkingArea.Bottom,
+                        Left = Info.WorkingArea.Left,
+                        Right = Info.WorkingArea.Right,
+                        Top = Info.WorkingArea.Top
+                    };
 
-                    var Client = Info.Work;
-
-                    // vvv AdjustWindowRect(&Client, GetWindowLong(DXUTGetHWNDDeviceWindowed(), GWL_STYLE), FALSE);
-                    var Form = GetForm();
-                    var DeltaWidth = Form.Size.Width - Form.ClientSize.Width;
-                    var DeltaHeight = Form.Size.Height - Form.ClientSize.Height;
-                    Client.Right += DeltaWidth;
-                    Client.Bottom += DeltaHeight;
-                    // ^^^
-
-                    Width = Width - (Client.Right - Client.Left - Width);
-                    Height = Height - (Client.Bottom - Client.Top - Height);
+                    Windows.AdjustWindowRect(Client, Windows.GetWindowLong(GetForm().Handle,Windows.GetWindowLongConst.Style), false);
+                    Width = Width - (Client.Right-Client.Left - Width);
+                    Height = Height - (Client.Bottom-Client.Top - Height);
 
                     BestDisplayMode.Width = (uint)Math.Min(BestDisplayMode.Width, Width);
                     BestDisplayMode.Height = (uint)Math.Min(BestDisplayMode.Height, Height);
@@ -781,7 +1925,7 @@ namespace Xtro.MDX.Utilities
                 if (BestDisplayMode.Width == 0)
                 {
                     BestDisplayMode = DisplayModeIn;
-                    return -2147467259;// E_FAIL; // No valid display modes found
+                    return (int)Error.Fail; // No valid display modes found
                 }
 
             }
@@ -793,7 +1937,7 @@ namespace Xtro.MDX.Utilities
         // Builds valid device settings using the match options, the input device settings, and the 
         // best device settings combo found.
         //--------------------------------------------------------------------------------------
-        static void BuildValidDeviceSettings(out DeviceSettings ValidDeviceSettings, Enumeration.DeviceSettingsCombo BestDeviceSettingsCombo, ref DeviceSettings DeviceSettingsIn, ref MatchOptions MatchOptions)
+        static void BuildValidDeviceSettings(DeviceSettings ValidDeviceSettings, Enumeration.DeviceSettingsCombo BestDeviceSettingsCombo, DeviceSettings DeviceSettingsIn, MatchOptions MatchOptions)
         {
             var AdapterDisplayMode = new ModeDescription();
             GetAdapterDisplayMode(BestDeviceSettingsCombo.AdapterOrdinal, BestDeviceSettingsCombo.OutputOrdinal, ref AdapterDisplayMode);
@@ -833,7 +1977,7 @@ namespace Xtro.MDX.Utilities
             else
             {
                 var DisplayModeIn = new ModeDescription();
-                if (MatchOptions.Resolution == MatchType.ClosestToInput)
+                if (MatchOptions.Resolution == MatchType.ClosestToInput && DeviceSettingsIn!=null)
                 {
                     DisplayModeIn.Width = DeviceSettingsIn.SwapChainDescription.BufferDescription.Width;
                     DisplayModeIn.Height = DeviceSettingsIn.SwapChainDescription.BufferDescription.Height;
@@ -872,10 +2016,7 @@ namespace Xtro.MDX.Utilities
             // Back buffer count
             //---------------------
             uint BestBackBufferCount;
-            if (MatchOptions.BackBufferCount == MatchType.PreserveInput)
-            {
-                BestBackBufferCount = DeviceSettingsIn.SwapChainDescription.BufferCount;
-            }
+            if (MatchOptions.BackBufferCount == MatchType.PreserveInput) BestBackBufferCount = DeviceSettingsIn.SwapChainDescription.BufferCount;
             else if (MatchOptions.BackBufferCount == MatchType.IgnoreInput)
             {
                 // The framework defaults to triple buffering 
@@ -893,7 +2034,7 @@ namespace Xtro.MDX.Utilities
             //---------------------
             uint BestMultiSampleCount;
             uint BestMultiSampleQuality;
-            if (DeviceSettingsIn.SwapChainDescription.SwapEffect != SwapEffect.Discard)
+            if (DeviceSettingsIn!=null && DeviceSettingsIn.SwapChainDescription.SwapEffect != SwapEffect.Discard)
             {
                 // Swap effect is not set to discard so multisampling has to off
                 BestMultiSampleCount = 1;
@@ -1045,13 +2186,10 @@ namespace Xtro.MDX.Utilities
             else BestPresentInterval = DeviceSettingsIn.SyncInterval;
 
             // Fill the device settings struct
-            ValidDeviceSettings = new DeviceSettings
-                {
-                    AdapterOrdinal = BestDeviceSettingsCombo.AdapterOrdinal,
-                    Output = BestDeviceSettingsCombo.OutputOrdinal,
-                    DriverType = BestDeviceSettingsCombo.DeviceType
-                };
-
+            ValidDeviceSettings.PresentFlags = 0;
+            ValidDeviceSettings.AdapterOrdinal = BestDeviceSettingsCombo.AdapterOrdinal;
+            ValidDeviceSettings.Output = BestDeviceSettingsCombo.OutputOrdinal;
+            ValidDeviceSettings.DriverType = BestDeviceSettingsCombo.DeviceType;
             ValidDeviceSettings.SwapChainDescription.BufferDescription.Width = BestDisplayMode.Width;
             ValidDeviceSettings.SwapChainDescription.BufferDescription.Height = BestDisplayMode.Height;
             ValidDeviceSettings.SwapChainDescription.BufferDescription.Format = BestDeviceSettingsCombo.BackBufferFormat;
@@ -1070,7 +2208,7 @@ namespace Xtro.MDX.Utilities
             ValidDeviceSettings.CreateFlags = DeviceSettingsIn.CreateFlags;
         }
 
-        public static int FindValidDeviceSettings(out DeviceSettings Out, ref DeviceSettings In, ref MatchOptions MatchOptions, ref DeviceSettings Optimal)
+        static int FindValidDeviceSettings(DeviceSettings Out, DeviceSettings In, MatchOptions MatchOptions, DeviceSettings Optimal)
         {
             // Find the best combination of:
             //      Adapter Ordinal
@@ -1096,10 +2234,10 @@ namespace Xtro.MDX.Utilities
                 foreach (var DeviceSettingsCombo in AdapterInfo.DeviceSettingsCombos)
                 {
                     // Skip any combo that doesn't meet the preserve match options
-                    if (false == DoesDeviceComboMatchPreserveOptions(DeviceSettingsCombo, ref In, ref MatchOptions)) continue;
+                    if (false == DoesDeviceComboMatchPreserveOptions(DeviceSettingsCombo, In, MatchOptions)) continue;
 
                     // Get a ranking number that describes how closely this device combo matches the optimal combo
-                    var CurrentRanking = RankDeviceCombo(DeviceSettingsCombo, ref Optimal, ref AdapterDisplayMode);
+                    var CurrentRanking = RankDeviceCombo(DeviceSettingsCombo, Optimal, ref AdapterDisplayMode);
 
                     // If this combo better matches the input device settings then save it
                     if (CurrentRanking > BestRanking)
@@ -1111,24 +2249,22 @@ namespace Xtro.MDX.Utilities
             }
 
             // If no best device combination was found then fail
-            if (BestDeviceSettingsCombo == null)
-            {
-                Out = new DeviceSettings();
-                return (int)Error.NoCompatibleDevices;
-            }
+            if (BestDeviceSettingsCombo == null) return (int)Error.NoCompatibleDevices;
 
             // Using the best device settings combo found, build valid device settings taking heed of 
             // the match options and the input device settings
-            DeviceSettings ValidDeviceSettings;
-            BuildValidDeviceSettings(out ValidDeviceSettings, BestDeviceSettingsCombo, ref In, ref MatchOptions);
-            Out = ValidDeviceSettings;
+            var ValidDeviceSettings=new DeviceSettings();
+            BuildValidDeviceSettings(ValidDeviceSettings, BestDeviceSettingsCombo, In, MatchOptions);
+            Out.CopyFrom(ValidDeviceSettings);
 
             return 0;
         }
 
-        public static int FindValidDeviceSettings(out DeviceSettings Out, ref DeviceSettings In, ref MatchOptions MatchOptions)
+        public static int FindValidDeviceSettings(DeviceSettings Out, DeviceSettings In = null, MatchOptions MatchOptions = null)
         {
             var Result = 0;
+
+            if (MatchOptions == null) MatchOptions = new MatchOptions();
 
             var ApplicationSupportDirect3D = DoesApplicationSupportDirect3D();
 
@@ -1138,25 +2274,31 @@ namespace Xtro.MDX.Utilities
             // into account.
             var FoundValidDirect3D = false;
 
-            Out=In;
+            var ValidDeviceSettings = In.Copy();
+            var OptimalDeviceSettings = new DeviceSettings();
 
             if (ApplicationSupportDirect3D)
             {
-                if (GetDirect3D_Available())
+                if (IsDirect3D_Available())
                 {
                     // Force an enumeration with the IsDeviceAcceptable callback
                     GetEnumeration();
 
-                    DeviceSettings OptimalDeviceSettings;
-                    BuildOptimalDeviceSettings(out OptimalDeviceSettings, ref In, ref MatchOptions);
+                    BuildOptimalDeviceSettings(OptimalDeviceSettings, In, MatchOptions);
 
-                    Result = FindValidDeviceSettings(out Out, ref In, ref MatchOptions, ref OptimalDeviceSettings);
+                    Result = FindValidDeviceSettings(Out, In, MatchOptions, OptimalDeviceSettings);
                     if (Result>=0) FoundValidDirect3D = true;
                 }
                 else Result =(int)Error.NoDirect3D;
             }
                              
-            return FoundValidDirect3D ? 0 : Result;
+            if (FoundValidDirect3D)
+            {
+                Out.CopyFrom(ValidDeviceSettings);
+                return 0;
+            }
+            
+            return Result;
         }
 
         public static Enumeration GetEnumeration(bool ForceEnumerate = false, bool EnumerateAllAdapterFormats = false)

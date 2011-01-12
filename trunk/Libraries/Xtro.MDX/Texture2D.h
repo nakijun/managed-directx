@@ -11,4 +11,9 @@ internal:
 	}
 
 public:
+	void GetDescription([Out] Texture2D_Description% Description)
+	{
+		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
+		pTexture2D->GetDesc((D3D10_TEXTURE2D_DESC*)PinnedDescription);
+	}
 };

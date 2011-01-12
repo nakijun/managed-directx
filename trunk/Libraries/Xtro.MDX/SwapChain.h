@@ -34,4 +34,29 @@ public:
 	{
 		return pSwapChain->Present(SyncInterval, (unsigned int)Flags);
 	}
+
+	int SetFullscreenState(bool Fullscreen, Output^ Target)
+	{
+		IDXGIOutput* pTarget = Target == nullptr ? 0 : Target->pOutput;
+
+		return pSwapChain->SetFullscreenState(Fullscreen, pTarget);
+	}
+
+	int GetDescription([Out] SwapChainDescription% Description)
+	{
+		pin_ptr<SwapChainDescription> PinnedDescription = &Description;
+		return pSwapChain->GetDesc((DXGI_SWAP_CHAIN_DESC*)PinnedDescription);
+	}
+
+	int ResizeTarget(ModeDescription% NewTargetParameters)
+	{
+		pin_ptr<ModeDescription> PinnedNewTargetParameters = &NewTargetParameters;
+		return pSwapChain->ResizeTarget((DXGI_MODE_DESC*)PinnedNewTargetParameters);
+	}
+
+	int ResizeBuffers(unsigned int BufferCount, unsigned int Width, unsigned int Height, Format NewFormat, SwapChainFlag SwapChainFlags)
+	{
+		return pSwapChain->ResizeBuffers(BufferCount, Width, Height, (DXGI_FORMAT)NewFormat, (unsigned int)SwapChainFlags);
+	}
+
 };

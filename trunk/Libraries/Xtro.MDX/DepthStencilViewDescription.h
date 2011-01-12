@@ -3,7 +3,7 @@ public value class DepthStencilViewDescription : IEquatable<DepthStencilViewDesc
 {
 public:
 	[FieldOffset(0)]Format Format;
-	[FieldOffset(4)]DSV_Dimension ViewDimension;
+	[FieldOffset(4)]DepthStencilViewDimension ViewDimension;
 	[FieldOffset(8)]Texture1D_DSV Texture1D;
 	[FieldOffset(8)]Texture1D_ArrayDSV Texture1DArray;
 	[FieldOffset(8)]Texture2D_DSV Texture2D;

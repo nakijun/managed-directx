@@ -72,10 +72,27 @@ public:
 		return D3DX10GetImageInfoFromMemory(pSourceData, Size, 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0);
 	}
 
-	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, Nullable<ImageLoadInfo> LoadInfo, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
+	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-		pin_ptr<ImageLoadInfo> PinnedLoadInfo = LoadInfo.HasValue ? &LoadInfo.Value : nullptr;
+
+		int Result = 0;
+		ID3D10Resource* pResource = 0;
+	
+		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pResource, 0); }
+		finally { Marshal::FreeHGlobal(pSourceFile); }
+
+		if (pResource) Texture = CreateTextureByType(pResource);
+		else Texture = nullptr;
+
+		return Result;
+	}
+		
+	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		pin_ptr<ImageLoadInfo> PinnedLoadInfo = &LoadInfo;
 
 		int Result = 0;
 		ID3D10Resource* pResource = 0;
@@ -90,12 +107,28 @@ public:
 		return Result;
 	}
 		
-	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, Nullable<ImageLoadInfo> LoadInfo, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
+	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
 		int Size = SourceData == nullptr ? 0 : SourceData->FSize;
-		pin_ptr<ImageLoadInfo> PinnedLoadInfo = LoadInfo.HasValue ? &LoadInfo.Value : nullptr;
+
+		int Result = 0;
+		ID3D10Resource* pResource = 0;
+		Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, Size, 0, 0, &pResource, 0);
+
+		if (pResource) Texture = CreateTextureByType(pResource);
+		else Texture = nullptr;
+
+		return Result;
+	}
+		
+	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, ImageLoadInfo% LoadInfo, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+		int Size = SourceData == nullptr ? 0 : SourceData->FSize;
+		pin_ptr<ImageLoadInfo> PinnedLoadInfo = &LoadInfo;
 
 		int Result = 0;
 		ID3D10Resource* pResource = 0;
@@ -123,10 +156,31 @@ public:
 		return D3DX10LoadTextureFromTexture(pSourceTexture, (D3DX10_TEXTURE_LOAD_INFO*)PinnedLoadInfo, pDestinationTexture);
 	}
 
-	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, Nullable<ImageLoadInfo> LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
+	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] ShaderResourceView^% ShaderResourceView)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-		pin_ptr<ImageLoadInfo> PinnedLoadInfo = LoadInfo.HasValue ? &LoadInfo.Value : nullptr;
+
+		int Result = 0;
+		ID3D10ShaderResourceView* pShaderResourceView = 0;
+
+		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+		try { Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pShaderResourceView, 0); }
+		finally { Marshal::FreeHGlobal(pSourceFile); }
+
+		if (pShaderResourceView)
+		{
+			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+		}
+		else ShaderResourceView = nullptr;
+
+		return Result;
+	}
+		 
+	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		pin_ptr<ImageLoadInfo> PinnedLoadInfo = &LoadInfo;
 
 		int Result = 0;
 		ID3D10ShaderResourceView* pShaderResourceView = 0;

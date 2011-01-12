@@ -31,10 +31,27 @@ public:
 		pDevice->ClearState();
 	}
 
-	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource, Nullable<RenderTargetViewDescription> Description, [Out] RenderTargetView^% RenderTargetView)
+	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource, [Out] RenderTargetView^% RenderTargetView)
 	{
 		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
-		pin_ptr<RenderTargetViewDescription> PinnedDescription = Description.HasValue ? &Description.Value : nullptr;
+
+		ID3D10RenderTargetView* pRenderTargetView = 0;
+		int Result = pDevice->CreateRenderTargetView(pResource, 0, &pRenderTargetView);
+
+		if (pRenderTargetView)
+		{	
+			try { RenderTargetView = (Xtro::MDX::Direct3D10::RenderTargetView^)Interfaces[IntPtr(pRenderTargetView)]; }
+			catch (KeyNotFoundException^) { RenderTargetView = gcnew Xtro::MDX::Direct3D10::RenderTargetView(IntPtr(pRenderTargetView)); }
+		}
+		else RenderTargetView = nullptr;
+
+		return Result;
+	}
+
+	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource, RenderTargetViewDescription% Description, [Out] RenderTargetView^% RenderTargetView)
+	{
+		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
+		pin_ptr<RenderTargetViewDescription> PinnedDescription = &Description;
 
 		ID3D10RenderTargetView* pRenderTargetView = 0;
 		int Result = pDevice->CreateRenderTargetView(pResource, (D3D10_RENDER_TARGET_VIEW_DESC*)PinnedDescription, &pRenderTargetView);
@@ -49,18 +66,42 @@ public:
 		return Result;
 	}
 
-	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource, Nullable<RenderTargetViewDescription> Description)
+	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource)
 	{
 		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
-		pin_ptr<RenderTargetViewDescription> PinnedDescription = Description.HasValue ? &Description.Value : nullptr;
+
+		return pDevice->CreateRenderTargetView(pResource, 0, 0);
+	}
+
+	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource, RenderTargetViewDescription% Description)
+	{
+		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
+		pin_ptr<RenderTargetViewDescription> PinnedDescription = &Description;
 
 		return pDevice->CreateRenderTargetView(pResource, (D3D10_RENDER_TARGET_VIEW_DESC*)PinnedDescription, 0);
 	}
 
-	int CreateDepthStencilView(Xtro::MDX::Direct3D10::Resource^ Resource, Nullable<DepthStencilViewDescription> Description, [Out] DepthStencilView^% DepthStencilView)
+	int CreateDepthStencilView(Xtro::MDX::Direct3D10::Resource^ Resource, [Out] DepthStencilView^% DepthStencilView)
 	{
 		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
-		pin_ptr<DepthStencilViewDescription> PinnedDescription = Description.HasValue ? &Description.Value : nullptr;
+
+		ID3D10DepthStencilView* pDepthStencilView = 0;
+		int Result = pDevice->CreateDepthStencilView(pResource, 0, &pDepthStencilView);
+
+		if (pDepthStencilView)
+		{	
+			try { DepthStencilView = (Xtro::MDX::Direct3D10::DepthStencilView^)Interfaces[IntPtr(pDepthStencilView)]; }
+			catch (KeyNotFoundException^) { DepthStencilView = gcnew Xtro::MDX::Direct3D10::DepthStencilView(IntPtr(pDepthStencilView)); }
+		}
+		else DepthStencilView = nullptr;
+
+		return Result;
+	}
+
+	int CreateDepthStencilView(Xtro::MDX::Direct3D10::Resource^ Resource, DepthStencilViewDescription% Description, [Out] DepthStencilView^% DepthStencilView)
+	{
+		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
+		pin_ptr<DepthStencilViewDescription> PinnedDescription = &Description;
 
 		ID3D10DepthStencilView* pDepthStencilView = 0;
 		int Result = pDevice->CreateDepthStencilView(pResource, (D3D10_DEPTH_STENCIL_VIEW_DESC*)PinnedDescription, &pDepthStencilView);
@@ -75,15 +116,22 @@ public:
 		return Result;
 	}
 
-	int CreateDepthStencilView(Xtro::MDX::Direct3D10::Resource^ Resource, Nullable<DepthStencilViewDescription> Description)
+	int CreateDepthStencilView(Xtro::MDX::Direct3D10::Resource^ Resource)
 	{
 		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
-		pin_ptr<DepthStencilViewDescription> PinnedDescription = Description.HasValue ? &Description.Value : nullptr;
+
+		return pDevice->CreateDepthStencilView(pResource, 0, 0);
+	}
+
+	int CreateDepthStencilView(Xtro::MDX::Direct3D10::Resource^ Resource, DepthStencilViewDescription% Description)
+	{
+		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
+		pin_ptr<DepthStencilViewDescription> PinnedDescription = &Description;
 
 		return pDevice->CreateDepthStencilView(pResource, (D3D10_DEPTH_STENCIL_VIEW_DESC*)PinnedDescription, 0);
 	}
 
-	void OMSetRenderTargets(array<RenderTargetView^>^ RenderTargetViews, DepthStencilView^ DepthStencilView)
+	void OM_SetRenderTargets(unsigned int NumberOfViews, array<RenderTargetView^>^ RenderTargetViews, DepthStencilView^ DepthStencilView)
 	{
 		ID3D10DepthStencilView* pDepthStencilView = DepthStencilView == nullptr ? 0 : DepthStencilView->pDepthStencilView;
 
@@ -96,7 +144,7 @@ public:
 				for (int RenderTargetViewNo = 0; RenderTargetViewNo < RenderTargetViews->Length; RenderTargetViewNo++) ppRenderTargetViews[RenderTargetViewNo] = RenderTargetViews[RenderTargetViewNo] == nullptr ? 0 : RenderTargetViews[RenderTargetViewNo]->pRenderTargetView;
 			}
 
-			pDevice->OMSetRenderTargets(RenderTargetViews->Length, ppRenderTargetViews, pDepthStencilView);
+			pDevice->OMSetRenderTargets(NumberOfViews, ppRenderTargetViews, pDepthStencilView);
 		}
 		finally
 		{
@@ -104,18 +152,40 @@ public:
 		}
 	}
 
-	void RSSetViewports(array<Viewport>^ Viewports)
+	void RS_GetViewports([Out] unsigned int% NumberOfViewports)
+	{
+		pin_ptr<unsigned int> PinnedNumberOfViewports = &NumberOfViewports;
+
+		pDevice->RSGetViewports(PinnedNumberOfViewports, 0);
+	}
+
+	void RS_GetViewports(unsigned int NumberOfViewports, [Out] array<Viewport>^% Viewports)
+	{
+		pin_ptr<unsigned int> PinnedNumberOfViewports = &NumberOfViewports;
+		pin_ptr<Viewport> PinnedViewports = Viewports != nullptr && Viewports->Length > 0 ? &Viewports[0] : nullptr;
+
+		pDevice->RSGetViewports(PinnedNumberOfViewports, (D3D10_VIEWPORT*)PinnedViewports);
+	}
+
+	void RS_SetViewports(unsigned int NumberOfViewports, array<Viewport>^ Viewports)
 	{
 		pin_ptr<Viewport> PinnedViewports = Viewports != nullptr && Viewports->Length > 0 ? &Viewports[0] : nullptr;
 
-		pDevice->RSSetViewports(Viewports->Length, (D3D10_VIEWPORT*)PinnedViewports);
+		pDevice->RSSetViewports(NumberOfViewports, (D3D10_VIEWPORT*)PinnedViewports);
 	}
 
-	void IASetInputLayout(InputLayout^ InputLayout)
+	void IA_SetInputLayout(InputLayout^ InputLayout)
 	{
 		ID3D10InputLayout* pInputLayout = InputLayout == nullptr ? 0 : InputLayout->pInputLayout;
 
 		pDevice->IASetInputLayout(pInputLayout);
+	}
+
+	void RS_SetState(RasterizerState^ RasterizerState)
+	{
+		ID3D10RasterizerState* pRasterizerState = RasterizerState == nullptr ? 0 : RasterizerState->pRasterizerState;
+
+		pDevice->RSSetState(pRasterizerState);
 	}
 
 	int CreateInputLayout(array<InputElementDescription>^ InputElementDescriptions, array<Byte>^ ShaderBytecodeWithInputSignature, [Out] InputLayout^% InputLayout)
@@ -163,17 +233,47 @@ public:
 		return Result;
 	}
 
-	int CreateBuffer(BufferDescription% Description, Nullable<SubResourceData> InitialData, [Out] Buffer^% Buffer)
+	int CreateRasterizerState(RasterizerDescription% Description, [Out] RasterizerState^% RasterizerState)
+	{
+		pin_ptr<RasterizerDescription> PinnedDescription = &Description;
+
+		ID3D10RasterizerState* pRasterizerState = 0;
+		int Result = pDevice->CreateRasterizerState((D3D10_RASTERIZER_DESC*)PinnedDescription, &pRasterizerState);
+
+		if (pRasterizerState)
+		{
+			try { RasterizerState = (Xtro::MDX::Direct3D10::RasterizerState^)Interfaces[IntPtr(pRasterizerState)]; }
+			catch (KeyNotFoundException^) { RasterizerState = gcnew Xtro::MDX::Direct3D10::RasterizerState(IntPtr(pRasterizerState)); }					
+		}
+		else RasterizerState = nullptr;
+
+		return Result;
+	}
+
+	int CreateBuffer(BufferDescription% Description, [Out] Buffer^% Buffer)
+	{
+		pin_ptr<BufferDescription> PinnedDescription = &Description;
+
+		ID3D10Buffer* pBuffer = 0;
+		int Result = pDevice->CreateBuffer((D3D10_BUFFER_DESC*)PinnedDescription, 0, &pBuffer);
+
+		if (pBuffer)
+		{
+			try { Buffer = (Xtro::MDX::Direct3D10::Buffer^)Interfaces[IntPtr(pBuffer)]; }
+			catch (KeyNotFoundException^) { Buffer = gcnew Xtro::MDX::Direct3D10::Buffer(IntPtr(pBuffer)); }					
+		}
+		else Buffer = nullptr;
+
+		return Result;
+	}
+
+	int CreateBuffer(BufferDescription% Description, SubResourceData% InitialData, [Out] Buffer^% Buffer)
 	{
 		pin_ptr<BufferDescription> PinnedDescription = &Description;
 
 		D3D10_SUBRESOURCE_DATA NativeInitialData;
-		D3D10_SUBRESOURCE_DATA* pInitialData = 0;
-		if (InitialData.HasValue)
-		{
-			InitialData.Value.ToNative(&NativeInitialData);
-			pInitialData = &NativeInitialData;
-		}
+		InitialData.ToNative(&NativeInitialData);
+		D3D10_SUBRESOURCE_DATA* pInitialData = &NativeInitialData;
 
 		ID3D10Buffer* pBuffer = 0;
 		int Result = pDevice->CreateBuffer((D3D10_BUFFER_DESC*)PinnedDescription, pInitialData, &pBuffer);
@@ -188,17 +288,30 @@ public:
 		return Result;
 	}
 
-	int CreateTexture2D(Texture2D_Description% Description, Nullable<SubResourceData> InitialData, [Out] Texture2D^% Texture2D)
+	int CreateTexture2D(Texture2D_Description% Description, [Out] Texture2D^% Texture2D)
+	{
+		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
+
+		ID3D10Texture2D* pTexture2D = 0;
+		int Result = pDevice->CreateTexture2D((D3D10_TEXTURE2D_DESC*)PinnedDescription, 0, &pTexture2D);
+
+		if (pTexture2D)
+		{
+			try { Texture2D = (Xtro::MDX::Direct3D10::Texture2D^)Interfaces[IntPtr(pTexture2D)]; }
+			catch (KeyNotFoundException^) { Texture2D = gcnew Xtro::MDX::Direct3D10::Texture2D(IntPtr(pTexture2D)); }					
+		}
+		else Texture2D = nullptr;
+
+		return Result;
+	}
+
+	int CreateTexture2D(Texture2D_Description% Description, SubResourceData% InitialData, [Out] Texture2D^% Texture2D)
 	{
 		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
 
 		D3D10_SUBRESOURCE_DATA NativeInitialData;
-		D3D10_SUBRESOURCE_DATA* pInitialData = 0;
-		if (InitialData.HasValue)
-		{
-			InitialData.Value.ToNative(&NativeInitialData);
-			pInitialData = &NativeInitialData;
-		}
+		InitialData.ToNative(&NativeInitialData);
+		D3D10_SUBRESOURCE_DATA* pInitialData = &NativeInitialData;
 
 		ID3D10Texture2D* pTexture2D = 0;
 		int Result = pDevice->CreateTexture2D((D3D10_TEXTURE2D_DESC*)PinnedDescription, pInitialData, &pTexture2D);
@@ -213,22 +326,25 @@ public:
 		return Result;
 	}
 
-	int CreateTexture2D(Texture2D_Description% Description, Nullable<SubResourceData> InitialData)
+	int CreateTexture2D(Texture2D_Description% Description)
+	{
+		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
+
+		return pDevice->CreateTexture2D((D3D10_TEXTURE2D_DESC*)PinnedDescription, 0, 0);
+	}
+
+	int CreateTexture2D(Texture2D_Description% Description, SubResourceData% InitialData)
 	{
 		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
 
 		D3D10_SUBRESOURCE_DATA NativeInitialData;
-		D3D10_SUBRESOURCE_DATA* pInitialData = 0;
-		if (InitialData.HasValue)
-		{
-			InitialData.Value.ToNative(&NativeInitialData);
-			pInitialData = &NativeInitialData;
-		}
+		InitialData.ToNative(&NativeInitialData);
+		D3D10_SUBRESOURCE_DATA* pInitialData = &NativeInitialData;
 
 		return pDevice->CreateTexture2D((D3D10_TEXTURE2D_DESC*)PinnedDescription, pInitialData, 0);
 	}
 
-	void IASetVertexBuffers(unsigned int StartSlot, array<Buffer^>^ VertexBuffers, array<unsigned int>^ Strides, array<unsigned int>^ Offsets)
+	void IA_SetVertexBuffers(unsigned int StartSlot, unsigned int NumberOfBuffers, array<Buffer^>^ VertexBuffers, array<unsigned int>^ Strides, array<unsigned int>^ Offsets)
 	{
 		pin_ptr<unsigned int> PinnedStrides = Strides != nullptr && Strides->Length > 0 ? &Strides[0] : nullptr;
 		pin_ptr<unsigned int> PinnedOffsets = Offsets != nullptr && Offsets->Length > 0 ? &Offsets[0] : nullptr;
@@ -236,15 +352,14 @@ public:
 		ID3D10Buffer** pVertexBuffers = 0;
 		try
 		{
-			unsigned int VertexBufferCount = 0;
 			if (VertexBuffers != nullptr && VertexBuffers->Length > 0)
 			{
-				VertexBufferCount = VertexBuffers->Length;
+				unsigned int VertexBufferCount = VertexBuffers->Length;
 				pVertexBuffers = new ID3D10Buffer*[VertexBufferCount];
 				for (unsigned int VertexBufferNo = 0; VertexBufferNo < VertexBufferCount; VertexBufferNo++) pVertexBuffers[VertexBufferNo] = VertexBuffers[VertexBufferNo]->pBuffer;
 			}
 
-			pDevice->IASetVertexBuffers(StartSlot, VertexBufferCount, pVertexBuffers, PinnedStrides, PinnedOffsets);
+			pDevice->IASetVertexBuffers(StartSlot, NumberOfBuffers, pVertexBuffers, PinnedStrides, PinnedOffsets);
 		}
 		finally
 		{
@@ -252,14 +367,14 @@ public:
 		}
 	}
 
-	void IASetIndexBuffer(Buffer^ IndexBuffer, Format Format, unsigned int Offset)
+	void IA_SetIndexBuffer(Buffer^ IndexBuffer, Format Format, unsigned int Offset)
 	{
 		ID3D10Buffer* pIndexBuffer = IndexBuffer == nullptr ? 0 : IndexBuffer->pBuffer;
 
 		pDevice->IASetIndexBuffer(pIndexBuffer, (DXGI_FORMAT)Format, Offset);
 	}
 
-	void IASetPrimitiveTopology(PrimitiveTopology Topology)
+	void IA_SetPrimitiveTopology(PrimitiveTopology Topology)
 	{
 		pDevice->IASetPrimitiveTopology((D3D10_PRIMITIVE_TOPOLOGY)Topology);
 	}

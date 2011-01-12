@@ -1,9 +1,6 @@
-﻿using Xtro.MDX.DXGI;
-using Xtro.MDX.Direct3D10;
-
-namespace Xtro.MDX.Utilities
+﻿namespace Xtro.MDX.Utilities
 {
-    public struct MatchOptions
+    public class MatchOptions
     {
         public MatchType AdapterOrdinal;
         public MatchType Output;

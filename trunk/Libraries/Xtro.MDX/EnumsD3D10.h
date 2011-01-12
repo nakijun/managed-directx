@@ -36,7 +36,14 @@ public enum class ClearFlag
 	Stencil = D3D10_CLEAR_STENCIL
 };
 
-public enum class DSV_Dimension
+public enum class CullMode
+{
+	None = 1,
+	Front = 2,
+	Back = 3
+};
+
+public enum class DepthStencilViewDimension
 {
 	Unknown = D3D10_DSV_DIMENSION_UNKNOWN,
 	Texture1D = D3D10_DSV_DIMENSION_TEXTURE1D ,
@@ -73,6 +80,12 @@ public enum class Error
 	TooManyUniqueStateObjects = D3D10_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS,
 	InvalidCall = D3DERR_INVALIDCALL,
 	WasStillDrawing = D3DERR_WASSTILLDRAWING,
+};
+
+public enum class FillMode
+{
+	Wireframe = 2,
+	Solid = 3
 };
 
 public enum class InputClassification
@@ -150,7 +163,6 @@ public enum class ShaderFlag
 	OptimizationLevel2 = D3D10_SHADER_OPTIMIZATION_LEVEL2,
 	OptimizationLevel3 = D3D10_SHADER_OPTIMIZATION_LEVEL3
 };
-
 
 public enum class Usage
 {

@@ -10,7 +10,11 @@
         ResettingDevice = -2147219194,
         CreatingDeviceObjects = -2147219193,
         ResettingDeviceObjects = -2147219192,
-        DeviceRemoved = -2147219190
+        DeviceRemoved = -2147219190,
+
+        Fail = -2147467259,
+        Abort = -2147467260,
+        False = 1
     };
 
     public enum MatchType

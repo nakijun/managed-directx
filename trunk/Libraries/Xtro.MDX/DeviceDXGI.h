@@ -5,6 +5,7 @@ private:
 
 internal:
 	IDXGIDevice* pDevice;
+
 	Device(IntPtr Device) : Object(Device)
 	{	
 		pDevice = (IDXGIDevice*)Device.ToPointer();
