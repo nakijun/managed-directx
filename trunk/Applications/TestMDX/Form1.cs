@@ -85,12 +85,15 @@ namespace TestMDX
             Unknown InterfaceData;
             byte[] MemoryData;
 
-            Factory.GetPrivateData(Name, out MemoryData, out InterfaceData);
+            uint Size = 0;
+            Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
             Factory.SetPrivateDataInterface(Name, Factory);
-            Factory.GetPrivateData(Name, out MemoryData, out InterfaceData);
+            Size = 0;
+            Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
             a = InterfaceData.Release();
-            Factory.SetPrivateData(Name, new byte[4] { 1, 2, 3, 4 });
-            Factory.GetPrivateData(Name, out MemoryData, out InterfaceData);
+            Factory.SetPrivateData(Name, 4, new byte[4] { 1, 2, 3, 4 });
+            Size = 0;
+            Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
 
             Adapter Adapter;
             Factory.EnumAdapters(0, out Adapter);
