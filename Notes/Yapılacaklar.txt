@@ -2,7 +2,9 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* state const delete destr bunlarý bitir. hatalar bitsin.
+* RSSetViewports gibi array alanlar için d3d dökümanýnda olduðu gibi sayý parametrelerini de tanýmla.
+
+* cast için as kullanmaktan vazgeç
 
 * Tutorial08'e burdan devam et : wWinMain / DXUTCreateDevice.
 
@@ -17,11 +19,9 @@
 
 * tüm son classlarý sealed yap : public ref class Factory sealed : Object
 
-* dx dökümanýnda tüm methodlarý kontrol et.
-    null alabilen struct [in] parametreleri Nullable yap. null alamayanlarý % yap
-    null alabilen struct [out] parametreleri Nullable% yap.
-    null alabilen out class parametreleri için ayný methoddan 1 tane daha yap o out parametresi hiç olmayan.
-    ör : Device.CreateTexture2D
+* dx dökümanýnda tüm method parametrelerini kontrol et.
+    struct larý hep ref '%' (gereken durumlarda da out)olarak geçirdiðimiz için null alabilen durumlarda metodun o parametresi olmayan versiyonu yapýlacak.
+    class [out] ise ve null alabiliyosa o parametre olmayan metod versiyonu yap. ör : Device.CreateTexture2D
 
 * Büyük karakterler arasý _ karakterini kontrol et. ör : JPG_Loader
   Küçük olarak kabul edilen kýsaltmalar : Cpu, 

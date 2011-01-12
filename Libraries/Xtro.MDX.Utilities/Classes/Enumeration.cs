@@ -422,7 +422,7 @@ namespace Xtro.MDX.Utilities
         {
             int Result;
             var Factory = Functions.GetFactory();
-            if (Factory == null) return -2147467259;// E_FAIL
+            if (Factory == null) return (int)Error.Fail;
 
             HasEnumerated = true;
             this.IsDeviceAcceptableFunction = IsDeviceAcceptableFunction;

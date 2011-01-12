@@ -72,7 +72,7 @@ public:
 		return Result;
 	}
 
-	int SetWindowAssociation(IntPtr WindowHandle, MakeWindowAssociation Flags)
+	int MakeWindowAssociation(IntPtr WindowHandle, MakeWindowAssociation Flags)
 	{
 		return pFactory->MakeWindowAssociation((HWND)WindowHandle.ToPointer(), (unsigned int)Flags);
 	}

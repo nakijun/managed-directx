@@ -100,12 +100,12 @@ namespace Tutorial01
             Texture2D BackBuffer;
             BackBuffer = (Texture2D)Surface;
 
-            Result = Device.CreateRenderTargetView(BackBuffer, null, out RenderTargetView);
+            Result = Device.CreateRenderTargetView(BackBuffer, out RenderTargetView);
             if (Result < 0) throw new Exception("Device.CreateRenderTargetView has failed");
 
             if (BackBuffer != null) BackBuffer.Release();
 
-            Device.OMSetRenderTargets(new RenderTargetView[] { RenderTargetView }, null);
+            Device.OM_SetRenderTargets(1,new [] { RenderTargetView }, null);
 
             // Setup the viewport
             Viewport Viewport = new Viewport()
@@ -117,7 +117,7 @@ namespace Tutorial01
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             };
-            Device.RSSetViewports(new Viewport[] { Viewport });
+            Device.RS_SetViewports(1, new[] { Viewport });
 
             return true;
         }

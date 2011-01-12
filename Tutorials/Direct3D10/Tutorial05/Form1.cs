@@ -140,7 +140,7 @@ namespace Tutorial05
             Texture2D BackBuffer;
             BackBuffer = (Texture2D)Surface;
 
-            Result = Device.CreateRenderTargetView(BackBuffer, null, out RenderTargetView);
+            Result = Device.CreateRenderTargetView(BackBuffer, out RenderTargetView);
             if (Result < 0) throw new Exception("Device.CreateRenderTargetView has failed : " + Result);
 
             if (BackBuffer != null) BackBuffer.Release();
@@ -158,20 +158,20 @@ namespace Tutorial05
             DepthStencilDescription.BindFlags = BindFlag.DepthStencil;
             DepthStencilDescription.CPU_AccessFlags = 0;
             DepthStencilDescription.MiscFlags = 0;
-            Result = Device.CreateTexture2D(ref DepthStencilDescription, null, out DepthStencil);
+            Result = Device.CreateTexture2D(ref DepthStencilDescription, out DepthStencil);
             if (Result < 0) throw new Exception("Device.CreateTexture2D has failed : " + Result);
 
             // Create the depth stencil view
             DepthStencilViewDescription DepthStencilViewDescription = new DepthStencilViewDescription
             {
                 Format = DepthStencilDescription.Format,
-                ViewDimension = DSV_Dimension.Texture2D
+                ViewDimension = DepthStencilViewDimension.Texture2D
             };
             DepthStencilViewDescription.Texture2D.MipSlice = 0;
-            Result = Device.CreateDepthStencilView(DepthStencil, DepthStencilViewDescription, out DepthStencilView);
+            Result = Device.CreateDepthStencilView(DepthStencil, ref DepthStencilViewDescription, out DepthStencilView);
             if (Result < 0) throw new Exception("Device.CreateDepthStencilView has failed : " + Result);
 
-            Device.OMSetRenderTargets(new RenderTargetView[] { RenderTargetView }, DepthStencilView);
+            Device.OM_SetRenderTargets(1,new [] { RenderTargetView }, DepthStencilView);
 
             // Setup the viewport
             Viewport Viewport = new Viewport()
@@ -183,7 +183,7 @@ namespace Tutorial05
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             };
-            Device.RSSetViewports(new Viewport[] { Viewport });
+            Device.RS_SetViewports(1, new[] { Viewport });
 
             // Create the effect
 
@@ -255,7 +255,7 @@ namespace Tutorial05
             if (Result < 0) throw new Exception("Device.CreateInputLayout has failed : " + Result);
 
             // Set the input layout
-            Device.IASetInputLayout(VertexLayout);
+            Device.IA_SetInputLayout(VertexLayout);
 
             SubResourceData InitData;
             BufferDescription BufferDescription;
@@ -291,11 +291,11 @@ namespace Tutorial05
                 MiscFlags = 0
             };
 
-            Result = Device.CreateBuffer(ref BufferDescription, InitData, out VertexBuffer);
+            Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out VertexBuffer);
             if (Result < 0) throw new Exception("Device.CreateBuffer has failed : " + Result);
 
             // Set vertex buffer
-            Device.IASetVertexBuffers(0, new Buffer[] { VertexBuffer }, new uint[] { (uint)(BufferDescription.ByteWidth / 8) }, new uint[] { 0 });
+            Device.IA_SetVertexBuffers(0,1, new [] { VertexBuffer }, new uint[] { (uint)(BufferDescription.ByteWidth / 8) }, new uint[] { 0 });
 
             // Create index buffer
 
@@ -331,14 +331,14 @@ namespace Tutorial05
                 MiscFlags = 0
             };
 
-            Result = Device.CreateBuffer(ref BufferDescription, InitData, out IndexBuffer);
+            Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out IndexBuffer);
             if (Result < 0) throw new Exception("Device.CreateBuffer has failed : " + Result);
 
             // Set index buffer
-            Device.IASetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
+            Device.IA_SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
 
             // Set primitive topology
-            Device.IASetPrimitiveTopology(PrimitiveTopology.TriangleList);
+            Device.IA_SetPrimitiveTopology(PrimitiveTopology.TriangleList);
 
             // Initialize the world matrix
             D3DX10Functions.MatrixIdentity(out World1);

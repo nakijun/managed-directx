@@ -408,7 +408,7 @@ namespace Tutorial08
         {
         }
 
-        bool OnModifyDeviceSettings(ref DeviceSettings DeviceSettings, object UserContext)
+        bool OnModifyDeviceSettings(DeviceSettings DeviceSettings, object UserContext)
         {
             return true;
         }

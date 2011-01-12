@@ -80,6 +80,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Counter.h" />
+    <ClInclude Include="Asynchronous.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantsD3D10.h" />
@@ -169,6 +171,8 @@
     <ClInclude Include="AdapterDescription.h" />
     <ClInclude Include="ModeDescription.h" />
     <ClInclude Include="OutputDescription.h" />
+    <ClInclude Include="RasterizerDescription.h" />
+    <ClInclude Include="RasterizerState.h" />
     <ClInclude Include="Rational.h" />
     <ClInclude Include="SampleDescription.h" />
     <ClInclude Include="Sprite.h" />

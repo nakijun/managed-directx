@@ -137,12 +137,12 @@ namespace Tutorial04
             Texture2D BackBuffer;
             BackBuffer = (Texture2D)Surface;
 
-            Result = Device.CreateRenderTargetView(BackBuffer, null, out RenderTargetView);
+            Result = Device.CreateRenderTargetView(BackBuffer, out RenderTargetView);
             if (Result < 0) throw new Exception("Device.CreateRenderTargetView has failed : " + Result);
 
             if (BackBuffer != null) BackBuffer.Release();
 
-            Device.OMSetRenderTargets(new RenderTargetView[] { RenderTargetView }, null);
+            Device.OM_SetRenderTargets(1,new [] { RenderTargetView }, null);
 
             // Setup the viewport
             Viewport Viewport = new Viewport()
@@ -154,7 +154,7 @@ namespace Tutorial04
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             };
-            Device.RSSetViewports(new Viewport[] { Viewport });
+            Device.RS_SetViewports(1, new[] { Viewport });
 
             // Create the effect
 
@@ -226,7 +226,7 @@ namespace Tutorial04
             if (Result < 0) throw new Exception("Device.CreateInputLayout has failed : " + Result);
 
             // Set the input layout
-            Device.IASetInputLayout(VertexLayout);
+            Device.IA_SetInputLayout(VertexLayout);
 
             SubResourceData InitData;
             BufferDescription BufferDescription;
@@ -262,11 +262,11 @@ namespace Tutorial04
                 MiscFlags = 0
             };
 
-            Result = Device.CreateBuffer(ref BufferDescription, InitData, out VertexBuffer);
+            Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out VertexBuffer);
             if (Result < 0) throw new Exception("Device.CreateBuffer has failed : " + Result);
 
             // Set vertex buffer
-            Device.IASetVertexBuffers(0, new Buffer[] { VertexBuffer }, new uint[] { (uint)VertexSize }, new uint[] { 0 });
+            Device.IA_SetVertexBuffers(0,1, new [] { VertexBuffer }, new uint[] { (uint)VertexSize }, new uint[] { 0 });
 
             // Create index buffer
 
@@ -302,14 +302,14 @@ namespace Tutorial04
                 MiscFlags = 0
             };
 
-            Result = Device.CreateBuffer(ref BufferDescription, InitData, out IndexBuffer);
+            Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out IndexBuffer);
             if (Result < 0) throw new Exception("Device.CreateBuffer has failed : " + Result);
 
             // Set index buffer
-            Device.IASetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
+            Device.IA_SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
 
             // Set primitive topology
-            Device.IASetPrimitiveTopology(PrimitiveTopology.TriangleList);
+            Device.IA_SetPrimitiveTopology(PrimitiveTopology.TriangleList);
 
             // Initialize the world matrix
             D3DX10Functions.MatrixIdentity(out World);

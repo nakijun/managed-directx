@@ -83,6 +83,8 @@ namespace Direct3D10
 	#include "Texture1D.h"
 	#include "Texture2D.h"
 	#include "Texture3D.h"
+	#include "RasterizerDescription.h"
+	#include "RasterizerState.h"
 	#include "DeviceD3D10.h"
 	#include "FunctionsD3D10.h"
 	#include "EffectPass.h"
@@ -96,6 +98,8 @@ namespace Direct3D10
 	#include "EffectPool.h"
 	#include "Blob.h"
 	#include "Box.h"
+	#include "Asynchronous.h"
+	#include "Counter.h"
 }
 
 namespace Direct3DX10
