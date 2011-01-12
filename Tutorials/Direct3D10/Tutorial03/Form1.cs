@@ -184,7 +184,7 @@ namespace Tutorial03
             PassDescription PassDescription;
             Result = Technique.GetPassByIndex(0).GetDescription(out PassDescription);
             if (Result < 0) throw new Exception("GetDescription has failed : " + Result);
-            Result = Device.CreateInputLayout(Layout, PassDescription.IAInputSignature, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IAInputSignature, (uint)PassDescription.IAInputSignature.Length, out VertexLayout);
             if (Result < 0) throw new Exception("Device.CreateInputLayout has failed : " + Result);
 
             // Set the input layout

@@ -188,15 +188,10 @@ public:
 		pDevice->RSSetState(pRasterizerState);
 	}
 
-	int CreateInputLayout(array<InputElementDescription>^ InputElementDescriptions, array<Byte>^ ShaderBytecodeWithInputSignature, [Out] InputLayout^% InputLayout)
+	int CreateInputLayout(array<InputElementDescription>^ InputElementDescriptions, unsigned int NumberOfElements, array<Byte>^ ShaderBytecodeWithInputSignature, unsigned int BytecodeLength, [Out] InputLayout^% InputLayout)
 	{
 		pin_ptr<Byte> PinnedShaderBytecodeWithInputSignature = nullptr;
-		SIZE_T BytecodeLength = 0;
-		if (ShaderBytecodeWithInputSignature != nullptr && ShaderBytecodeWithInputSignature->Length > 0)
-		{
-			BytecodeLength = ShaderBytecodeWithInputSignature->Length;
-			PinnedShaderBytecodeWithInputSignature = &ShaderBytecodeWithInputSignature[0];
-		}
+		if (ShaderBytecodeWithInputSignature != nullptr && ShaderBytecodeWithInputSignature->Length > 0) PinnedShaderBytecodeWithInputSignature = &ShaderBytecodeWithInputSignature[0];
 
 		int Result = 0;
 		ID3D10InputLayout* pInputLayout = 0;
@@ -212,7 +207,7 @@ public:
 				for (int ElementNo = 0; ElementNo < ElementCount; ElementNo++) InputElementDescriptions[ElementNo].Marshal(&pInputElementDescriptions[ElementNo]);
 			}
 
-			Result = pDevice->CreateInputLayout(pInputElementDescriptions, ElementCount, PinnedShaderBytecodeWithInputSignature, BytecodeLength, &pInputLayout);
+			Result = pDevice->CreateInputLayout(pInputElementDescriptions, NumberOfElements, PinnedShaderBytecodeWithInputSignature, BytecodeLength, &pInputLayout);
 		}
 		finally
 		{
