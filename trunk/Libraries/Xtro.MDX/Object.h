@@ -65,8 +65,7 @@ public:
 
 	int SetPrivateData(Guid Name, unsigned int Size, array<Byte>^ Data)
 	{
-		pin_ptr<unsigned char> PinnedData = nullptr;
-		if (Data != nullptr && Data->Length > 0) PinnedData = &Data[0];
+		pin_ptr<unsigned char> PinnedData = Data != nullptr && Data->Length > 0 ? &Data[0] : nullptr;
 
 		int Result = pObject->SetPrivateData(IID_Converter::ToNative(Name), Size, PinnedData);
 

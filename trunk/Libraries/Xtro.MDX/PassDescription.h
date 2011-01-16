@@ -6,9 +6,9 @@ internal:
 		Name = gcnew String(Native->Name);
 		Annotations = Native->Annotations;
 			
-		IAInputSignature = gcnew array<Byte>(Native->IAInputSignatureSize);
-		pin_ptr<Byte> PinnedIAInputSignature = &IAInputSignature[0];
-		memcpy(PinnedIAInputSignature, Native->pIAInputSignature, IAInputSignature->Length);
+		IA_InputSignature = gcnew array<Byte>(Native->IAInputSignatureSize);
+		pin_ptr<Byte> PinnedIA_InputSignature = &IA_InputSignature[0];
+		memcpy(PinnedIA_InputSignature, Native->pIAInputSignature, IA_InputSignature->Length);
 			
 		StencilRef = Native->StencilRef;
 		SampleMask = Native->SampleMask;
@@ -25,14 +25,14 @@ internal:
 		Result.Name = (LPCSTR)Marshal::StringToHGlobalAnsi(Name).ToPointer();
 		Result.Annotations = Annotations;
 
-		pin_ptr<Byte> PinnedIAInputSignature = nullptr;
-		if (IAInputSignature != nullptr && IAInputSignature->Length > 0)
+		pin_ptr<Byte> PinnedIA_InputSignature = nullptr;
+		if (IA_InputSignature != nullptr && IA_InputSignature->Length > 0)
 		{
-			PinnedIAInputSignature = &IAInputSignature[0];
-			Result.IAInputSignatureSize = IAInputSignature->Length;
+			PinnedIA_InputSignature = &IA_InputSignature[0];
+			Result.IAInputSignatureSize = IA_InputSignature->Length;
 		}
 		else Result.IAInputSignatureSize = 0;
-		Result.pIAInputSignature = PinnedIAInputSignature;
+		Result.pIAInputSignature = PinnedIA_InputSignature;
 
 		Result.StencilRef = StencilRef;
 		Result.SampleMask = SampleMask;
@@ -46,7 +46,7 @@ internal:
 public:
 	String^ Name;
 	unsigned int Annotations;
-	array<Byte>^ IAInputSignature;
+	array<Byte>^ IA_InputSignature;
 	unsigned int StencilRef;
 	unsigned int SampleMask;
 	Float4 BlendFactor;
@@ -66,7 +66,7 @@ public:
 		return
 			Name->GetHashCode() ^
 			Annotations ^
-			IAInputSignature->GetHashCode() ^
+			IA_InputSignature->GetHashCode() ^
 			StencilRef ^
 			SampleMask ^
 			BlendFactor.GetHashCode();
@@ -83,15 +83,15 @@ public:
 
 	virtual bool Equals(PassDescription Value)
 	{
-		if (IAInputSignature == nullptr && Value.IAInputSignature != nullptr) return false;
-		if (IAInputSignature != nullptr && Value.IAInputSignature == nullptr) return false;
-		if (IAInputSignature != nullptr && Value.IAInputSignature != nullptr)
+		if (IA_InputSignature == nullptr && Value.IA_InputSignature != nullptr) return false;
+		if (IA_InputSignature != nullptr && Value.IA_InputSignature == nullptr) return false;
+		if (IA_InputSignature != nullptr && Value.IA_InputSignature != nullptr)
 		{
-			if (IAInputSignature->Length != Value.IAInputSignature->Length) return false;
+			if (IA_InputSignature->Length != Value.IA_InputSignature->Length) return false;
 
-			pin_ptr<Byte> Pinned_IAInputSignature1 = &IAInputSignature[0];
-			pin_ptr<Byte> Pinned_IAInputSignature2 = &Value.IAInputSignature[0];
-			if (memcmp(Pinned_IAInputSignature1, Pinned_IAInputSignature2, IAInputSignature->Length) != 0) return false;
+			pin_ptr<Byte> PinnedIA_InputSignature1 = &IA_InputSignature[0];
+			pin_ptr<Byte> PinnedIA_InputSignature2 = &Value.IA_InputSignature[0];
+			if (memcmp(PinnedIA_InputSignature1, PinnedIA_InputSignature2, IA_InputSignature->Length) != 0) return false;
 		}
 				   
 		return
@@ -104,15 +104,15 @@ public:
 
 	static bool Equals(PassDescription% Value1, PassDescription% Value2)
 	{
-		if (Value1.IAInputSignature == nullptr && Value2.IAInputSignature != nullptr) return false;
-		if (Value1.IAInputSignature != nullptr && Value2.IAInputSignature == nullptr) return false;
-		if (Value1.IAInputSignature != nullptr && Value2.IAInputSignature != nullptr)
+		if (Value1.IA_InputSignature == nullptr && Value2.IA_InputSignature != nullptr) return false;
+		if (Value1.IA_InputSignature != nullptr && Value2.IA_InputSignature == nullptr) return false;
+		if (Value1.IA_InputSignature != nullptr && Value2.IA_InputSignature != nullptr)
 		{
-			if (Value1.IAInputSignature->Length != Value2.IAInputSignature->Length) return false;
+			if (Value1.IA_InputSignature->Length != Value2.IA_InputSignature->Length) return false;
 
-			pin_ptr<Byte> Pinned_IAInputSignature1 = &Value1.IAInputSignature[0];
-			pin_ptr<Byte> Pinned_IAInputSignature2 = &Value2.IAInputSignature[0];
-			if (memcmp(Pinned_IAInputSignature1, Pinned_IAInputSignature2, Value1.IAInputSignature->Length) != 0) return false;
+			pin_ptr<Byte> PinnedIA_InputSignature1 = &Value1.IA_InputSignature[0];
+			pin_ptr<Byte> PinnedIA_InputSignature2 = &Value2.IA_InputSignature[0];
+			if (memcmp(PinnedIA_InputSignature1, PinnedIA_InputSignature2, Value1.IA_InputSignature->Length) != 0) return false;
 		}
 				   
 		return

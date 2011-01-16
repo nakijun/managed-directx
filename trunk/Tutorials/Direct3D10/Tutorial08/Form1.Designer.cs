@@ -38,7 +38,7 @@
             this.Name = "Form1";
             this.Text = "Direct3D 10 Tutorial 7: Texture Mapping and Constant Buffers";
             this.Shown += new System.EventHandler(this.Form1_Shown);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(Form1_FormClosing);
             this.ResumeLayout(false);
 
         }

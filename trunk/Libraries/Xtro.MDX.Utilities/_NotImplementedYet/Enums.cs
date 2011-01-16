@@ -12,6 +12,7 @@
         ResettingDeviceObjects = -2147219192,
         DeviceRemoved = -2147219190,
 
+        InvalidArgument = -2147024809,
         Fail = -2147467259,
         Abort = -2147467260,
         False = 1
