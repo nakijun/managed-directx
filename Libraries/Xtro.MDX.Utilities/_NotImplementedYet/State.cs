@@ -69,18 +69,20 @@ namespace Xtro.MDX.Utilities
         public Counter CounterTriangleSetupThroughputUtilization { get { lock (Lock) return FCounterTriangleSetupThroughputUtilization; } set { lock (Lock) FCounterTriangleSetupThroughputUtilization = value; } }
         Counter FCounterFillrateThrougputUtilization;
         public Counter CounterFillrateThrougputUtilization { get { lock (Lock) return FCounterFillrateThrougputUtilization; } set { lock (Lock) FCounterFillrateThrougputUtilization = value; } }
-        Counter FCounterVSMemoryLimited;
-        public Counter CounterVSMemoryLimited { get { lock (Lock) return FCounterVSMemoryLimited; } set { lock (Lock) FCounterVSMemoryLimited = value; } }
-        Counter FCounterVSComputationLimited;
-        public Counter CounterVSComputationLimited { get { lock (Lock) return FCounterVSComputationLimited; } set { lock (Lock) FCounterVSComputationLimited = value; } }
-        Counter FCounterGSMemoryLimited;
-        public Counter CounterGSMemoryLimited { get { lock (Lock) return FCounterGSMemoryLimited; } set { lock (Lock) FCounterGSMemoryLimited = value; } }
-        Counter FCounterGSComputationLimited;
-        public Counter CounterGSComputationLimited { get { lock (Lock) return FCounterGSComputationLimited; } set { lock (Lock) FCounterGSComputationLimited = value; } }
-        Counter FCounterPSMemoryLimited;
-        public Counter CounterPSMemoryLimited { get { lock (Lock) return FCounterPSMemoryLimited; } set { lock (Lock) FCounterPSMemoryLimited = value; } }
-        Counter FCounterPSComputationLimited;
-        public Counter CounterPSComputationLimited { get { lock (Lock) return FCounterPSComputationLimited; } set { lock (Lock) FCounterPSComputationLimited = value; } }
+        // ReSharper disable InconsistentNaming
+        Counter FCounterVS_MemoryLimited;
+        public Counter CounterVS_MemoryLimited { get { lock (Lock) return FCounterVS_MemoryLimited; } set { lock (Lock) FCounterVS_MemoryLimited = value; } }
+        Counter FCounterVS_ComputationLimited;
+        public Counter CounterVS_ComputationLimited { get { lock (Lock) return FCounterVS_ComputationLimited; } set { lock (Lock) FCounterVS_ComputationLimited = value; } }
+        Counter FCounterGS_MemoryLimited;
+        public Counter CounterGS_MemoryLimited { get { lock (Lock) return FCounterGS_MemoryLimited; } set { lock (Lock) FCounterGS_MemoryLimited = value; } }
+        Counter FCounterGS_ComputationLimited;
+        public Counter CounterGS_ComputationLimited { get { lock (Lock) return FCounterGS_ComputationLimited; } set { lock (Lock) FCounterGS_ComputationLimited = value; } }
+        Counter FCounterPS_MemoryLimited;
+        public Counter CounterPS_MemoryLimited { get { lock (Lock) return FCounterPS_MemoryLimited; } set { lock (Lock) FCounterPS_MemoryLimited = value; } }
+        Counter FCounterPS_ComputationLimited;
+        public Counter CounterPS_ComputationLimited { get { lock (Lock) return FCounterPS_ComputationLimited; } set { lock (Lock) FCounterPS_ComputationLimited = value; } }
+        // ReSharper restore InconsistentNaming
         Counter FCounterPostTransformCacheHitRate;
         public Counter CounterPostTransformCacheHitRate { get { lock (Lock) return FCounterPostTransformCacheHitRate; } set { lock (Lock) FCounterPostTransformCacheHitRate = value; } }
         Counter FCounterTextureCacheHitRate;
@@ -159,6 +161,8 @@ namespace Xtro.MDX.Utilities
 
         bool FInitialized;
         public bool Initialized { get { lock (Lock) return FInitialized; } set { lock (Lock) FInitialized = value; } }
+        bool FWindowCreated;
+        public bool WindowCreated { get { lock (Lock) return FWindowCreated; } set { lock (Lock) FWindowCreated = value; } }
         bool FDeviceCreated;
         public bool DeviceCreated { get { lock (Lock) return FDeviceCreated; } set { lock (Lock) FDeviceCreated = value; } }
         bool FInitializeCalled;
@@ -167,6 +171,8 @@ namespace Xtro.MDX.Utilities
         public bool DeviceCreateCalled { get { lock (Lock) return FDeviceCreateCalled; } set { lock (Lock) FDeviceCreateCalled = value; } }
         bool FInsideDeviceCallback;
         public bool InsideDeviceCallback { get { lock (Lock) return FInsideDeviceCallback; } set { lock (Lock) FInsideDeviceCallback = value; } }
+        bool FInsideMainloop;
+        public bool InsideMainloop { get { lock (Lock) return FInsideMainloop; } set { lock (Lock) FInsideMainloop = value; } }
         bool FDeviceObjectsCreated;
         public bool DeviceObjectsCreated { get { lock (Lock) return FDeviceObjectsCreated; } set { lock (Lock) FDeviceObjectsCreated = value; } }
         bool FDeviceObjectsReset;
@@ -249,8 +255,8 @@ namespace Xtro.MDX.Utilities
         public bool[] MouseButtons { get { lock (Lock) return FMouseButtons; } }
         string FStaticFrameStats;
         public string StaticFrameStats { get { lock (Lock) return FStaticFrameStats; } set { lock (Lock) FStaticFrameStats = value; } }
-        string FFPSStats;
-        public string FPSStats { get { lock (Lock) return FFPSStats; } set { lock (Lock) FFPSStats = value; } }
+        string FFPS_Stats;
+        public string FPS_Stats { get { lock (Lock) return FFPS_Stats; } set { lock (Lock) FFPS_Stats = value; } }
         string FFrameStats;
         public string FrameStats { get { lock (Lock) return FFrameStats; } set { lock (Lock) FFrameStats = value; } }
         string FDeviceStats;
@@ -270,12 +276,12 @@ namespace Xtro.MDX.Utilities
             FCounterData.VertexThroughputUtilization = -1.0f;
             FCounterData.TriangleSetupThroughputUtilization = -1.0f;
             FCounterData.FillrateThroughputUtilization = -1.0f;
-            FCounterData.VSMemoryLimited = -1.0f;
-            FCounterData.VSComputationLimited = -1.0f;
-            FCounterData.GSMemoryLimited = -1.0f;
-            FCounterData.GSComputationLimited = -1.0f;
-            FCounterData.PSMemoryLimited = -1.0f;
-            FCounterData.PSComputationLimited = -1.0f;
+            FCounterData.VS_MemoryLimited = -1.0f;
+            FCounterData.VS_ComputationLimited = -1.0f;
+            FCounterData.GS_MemoryLimited = -1.0f;
+            FCounterData.GS_ComputationLimited = -1.0f;
+            FCounterData.PS_MemoryLimited = -1.0f;
+            FCounterData.PS_ComputationLimited = -1.0f;
             FCounterData.PostTransformCacheHitRate = -1.0f;
             FCounterData.TextureCacheHitRate = -1.0f;
         }

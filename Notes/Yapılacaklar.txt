@@ -2,9 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* cast için as kullanmaktan vazgeç
-
-* Tutorial08'e burdan devam et : wWinMain / DXUTCreateDevice.
+* Tutorial08'e devam et.
 
 * tüm IID leri private yap.
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)

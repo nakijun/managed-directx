@@ -1,4 +1,10 @@
 [System::Flags]
+public enum class AsyncGetDataFlag
+{
+    DoNotFlush = D3D10_ASYNC_GETDATA_DONOTFLUSH
+};
+
+[System::Flags]
 public enum class BindFlag
 {
 	VertexBuffer = D3D10_BIND_VERTEX_BUFFER,
@@ -38,9 +44,9 @@ public enum class ClearFlag
 
 public enum class CullMode
 {
-	None = 1,
-	Front = 2,
-	Back = 3
+	None = D3D10_CULL_NONE,
+	Front = D3D10_CULL_FRONT,
+	Back = D3D10_CULL_BACK
 };
 
 public enum class DepthStencilViewDimension

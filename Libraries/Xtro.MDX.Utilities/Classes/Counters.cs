@@ -1,27 +1,29 @@
 ﻿namespace Xtro.MDX.Utilities
 {
-    class Counters
+    sealed class Counters
     {
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         public float GPU_Idle;
-// ReSharper restore InconsistentNaming
+        // ReSharper restore InconsistentNaming
         public float VertexProcessing;
         public float GeometryProcessing;
         public float PixelProcessing;
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         public float OtherGPU_Processing;
-// ReSharper restore InconsistentNaming
+        // ReSharper restore InconsistentNaming
         public float HostAdapterBandwidthUtilization;
         public float LocalVidmemBandwidthUtilization;
         public float VertexThroughputUtilization;
         public float TriangleSetupThroughputUtilization;
         public float FillrateThroughputUtilization;
-        public float VSMemoryLimited;
-        public float VSComputationLimited;
-        public float GSMemoryLimited;
-        public float GSComputationLimited;
-        public float PSMemoryLimited;
-        public float PSComputationLimited;
+        // ReSharper disable InconsistentNaming
+        public float VS_MemoryLimited;
+        public float VS_ComputationLimited;
+        public float GS_MemoryLimited;
+        public float GS_ComputationLimited;
+        public float PS_MemoryLimited;
+        public float PS_ComputationLimited;
+        // ReSharper restore InconsistentNaming
         public float PostTransformCacheHitRate;
         public float TextureCacheHitRate;
     };

@@ -15,7 +15,7 @@ namespace Xtro.MDX.Utilities
             UserData = -21,
             ID = -12
         }
-
+        [Flags]
         internal enum WindowPlacementFlag
         {
             SetMinPosition = 1,

@@ -12,4 +12,20 @@ internal:
 	}
 
 public:
+	void Begin()
+	{
+		pAsynchronous->Begin();
+	}
+
+	void End()
+	{
+		pAsynchronous->End();
+	}
+
+	int GetData(UnmanagedMemory^ Data, unsigned int DataSize, AsyncGetDataFlag GetDataFlags)
+	{
+		void* pData = Data == nullptr ? 0 : (void*)Data->pMemory;
+
+		return pAsynchronous->GetData(pData, DataSize, (unsigned int)GetDataFlags);
+	}
 };

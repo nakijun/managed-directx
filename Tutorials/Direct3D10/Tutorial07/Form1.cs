@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-
 using Xtro.MDX;
 using Xtro.MDX.DXGI;
 using Usage = Xtro.MDX.DXGI.Usage;
@@ -229,7 +220,7 @@ namespace Tutorial07
             PassDescription PassDescription;
             Result = Technique.GetPassByIndex(0).GetDescription(out PassDescription);
             if (Result < 0) throw new Exception("GetDescription has failed : " + Result);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IAInputSignature, (uint)PassDescription.IAInputSignature.Length, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Length, out VertexLayout);
             if (Result < 0) throw new Exception("Device.CreateInputLayout has failed : " + Result);
 
             // Set the input layout
