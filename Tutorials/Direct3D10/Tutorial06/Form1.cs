@@ -200,21 +200,13 @@ namespace Tutorial06
             ShaderFlags |= ShaderFlag.Debug;
 #endif
 
-            Blob Errors = null;
-            try
+            Result = D3DX10Functions.CreateEffectFromFile("Tutorial06.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
+            if (Result == (int)Error.FileNotFound)
             {
-                Result = D3DX10Functions.CreateEffectFromFile("Tutorial06.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect, out Errors);
-                if (Result == (int)Error.FileNotFound)
-                {
-                    MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
-                    return false;
-                }
-                else if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
+                MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
+                return false;
             }
-            finally
-            {
-                if (Errors != null) Errors.Release();
-            }
+            else if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
 
             // Obtain the techniques
 
@@ -328,7 +320,7 @@ namespace Tutorial06
             // Create index buffer
 
             var IndexCount = (uint)36;
-            UnmanagedMemory Indices = new UnmanagedMemory((uint)(Marshal.SizeOf(typeof(int)) * IndexCount));
+            UnmanagedMemory Indices = new UnmanagedMemory(sizeof(int) * IndexCount);
             Indices.Write(0, IndexCount, new int[] 
             {
                 3, 1, 0,
@@ -443,7 +435,7 @@ namespace Tutorial06
             LightColorVariable.SetFloatVectorArray(LightColors, 0, 2);
 
             // Render the cube
-            for (uint PassNo = 0; PassNo < TechniqueDescriptionRender.Passes; ++PassNo)
+            for (uint PassNo = 0; PassNo < TechniqueDescriptionRender.Passes; PassNo++)
             {
                 TechniqueRender.GetPassByIndex(PassNo).Apply(0);
                 Device.DrawIndexed(36, 0, 0);
@@ -467,7 +459,7 @@ namespace Tutorial06
                 LightColors.Get(M, ref Vector4);
                 OutputColorVariable.SetFloatVector((float[])Vector4);
 
-                for (uint PassNo = 0; PassNo < TechniqueDescriptionRenderLight.Passes; ++PassNo)
+                for (uint PassNo = 0; PassNo < TechniqueDescriptionRenderLight.Passes; PassNo++)
                 {
                     TechniqueRenderLight.GetPassByIndex(PassNo).Apply(0);
                     Device.DrawIndexed(36, 0, 0);

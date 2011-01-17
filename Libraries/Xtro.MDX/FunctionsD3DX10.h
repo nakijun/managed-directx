@@ -251,6 +251,50 @@ public:
 		return Result;
 	}
 	
+	static int CreateEffectFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		ID3D10EffectPool* pEffectPool = EffectPool == nullptr ? 0 : EffectPool->pEffectPool;
+
+		int Result = 0;
+		ID3D10Effect* pEffect = 0;
+
+		IntPtr pFileName = Marshal::StringToHGlobalUni(FileName);
+		IntPtr pProfile = Marshal::StringToHGlobalAnsi(Profile);
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+			}
+
+			Result = D3DX10CreateEffectFromFile((LPCWSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, pEffectPool, 0, &pEffect, 0, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (Defines != nullptr)
+			{
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Unmarshal();
+			}
+			if (pDefines) delete[] pDefines;
+		}
+
+		if (pEffect)
+		{
+			try { Effect = (Xtro::MDX::Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
+			catch (KeyNotFoundException^) { Effect = gcnew Xtro::MDX::Direct3D10::Effect(IntPtr(pEffect)); }
+		}
+		else Effect = nullptr;
+
+		return Result;
+	}
+
 	static int CreateFontIndirect(Xtro::MDX::Direct3D10::Device^ Device, FontDescription% FontDescription, [Out] Font^% Font)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;

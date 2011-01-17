@@ -2,7 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* Tutorial08'e devam et.
+* RasterizerDescription gibi içinde bool olan struclarda marshal ve size bilgisi ver.
 
 * tüm IID leri private yap.
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)

@@ -34,11 +34,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 442);
+            this.ClientSize = new System.Drawing.Size(640, 480);
             this.Name = "Form1";
-            this.Text = "Direct3D 10 Tutorial 7: Texture Mapping and Constant Buffers";
+            this.Text = "Direct3D 10 Tutorial 8: Introduction to DXUT";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(Form1_FormClosing);
             this.ResumeLayout(false);
 
         }

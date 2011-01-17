@@ -90,8 +90,8 @@ public enum class Error
 
 public enum class FillMode
 {
-	Wireframe = 2,
-	Solid = 3
+	Wireframe = D3D10_FILL_WIREFRAME,
+	Solid = D3D10_FILL_SOLID
 };
 
 public enum class InputClassification

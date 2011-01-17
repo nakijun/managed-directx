@@ -60,8 +60,7 @@ namespace TestMDX
             Result = D3D10Functions.CreateDeviceAndSwapChain(null, DriverType.Hardware, null, CreateDeviceFlag.Debug, ref SwapChainDescription, out SwapChain, out Device);
 
             Effect Effect;
-            Blob Errors;
-            Result = D3DX10Functions.CreateEffectFromFile("Tutorial02.fx", null, null, "fx_4_0", ShaderFlag.EnableStrictness | ShaderFlag.Debug, 0, Device, null, out Effect, out Errors);
+            Result = D3DX10Functions.CreateEffectFromFile("Tutorial02.fx", null, null, "fx_4_0", ShaderFlag.EnableStrictness | ShaderFlag.Debug, 0, Device, null, out Effect);
 
             EffectTechnique Technique = Effect.GetTechniqueByName("Render");
 
