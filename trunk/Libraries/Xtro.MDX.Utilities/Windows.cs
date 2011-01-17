@@ -88,9 +88,9 @@ namespace Xtro.MDX.Utilities
         internal static extern bool ShowWindow(IntPtr WindowHandle, ShowWindowCommand ShowCommand);
     
         [DllImport("user32.dll", SetLastError = true)]
-        internal static extern Boolean AdjustWindowRect([Out] Rect32 Rect, uint Style, bool Menu);
+        internal static extern bool AdjustWindowRect(ref Rect32 Rect, uint Style, bool Menu);
 
-        [DllImport("coredll.dll", SetLastError = true)]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern uint GetWindowLong(IntPtr WindowHandle, GetWindowLongConst Index);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto,SetLastError = true)]

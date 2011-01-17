@@ -144,21 +144,13 @@ namespace Tutorial03
             ShaderFlags |= ShaderFlag.Debug;
 #endif
 
-            Blob Errors = null;
-            try
+            Result = D3DX10Functions.CreateEffectFromFile("Tutorial03.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
+            if (Result == (int)Error.FileNotFound)
             {
-                Result = D3DX10Functions.CreateEffectFromFile("Tutorial03.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect, out Errors);
-                if (Result == (int)Error.FileNotFound)
-                {
-                    MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
-                    return false;
-                }
-                else if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
+                MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
+                return false;
             }
-            finally
-            {
-                if (Errors != null) Errors.Release();
-            }
+            else if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
 
             // Obtain the technique
             Technique = Effect.GetTechniqueByName("Render");
@@ -235,7 +227,7 @@ namespace Tutorial03
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
             
             // Render a triangle
-            for (uint PassNo = 0; PassNo < TechniqueDescription.Passes; ++PassNo)
+            for (uint PassNo = 0; PassNo < TechniqueDescription.Passes; PassNo++)
             {
                 Technique.GetPassByIndex(PassNo).Apply(0);
                 Device.Draw(3, 0);

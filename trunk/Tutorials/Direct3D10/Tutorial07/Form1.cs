@@ -162,21 +162,13 @@ namespace Tutorial07
             ShaderFlags |= ShaderFlag.Debug;
 #endif
 
-            Blob Errors = null;
-            try
+            Result = D3DX10Functions.CreateEffectFromFile("Tutorial07.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
+            if (Result == (int)Error.FileNotFound)
             {
-                Result = D3DX10Functions.CreateEffectFromFile("Tutorial07.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect, out Errors);
-                if (Result == (int)Error.FileNotFound)
-                {
-                    MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
-                    return false;
-                }
-                else if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
+                MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
+                return false;
             }
-            finally
-            {
-                if (Errors != null) Errors.Release();
-            }
+            else if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
 
             // Obtain the techniques
 
@@ -285,7 +277,7 @@ namespace Tutorial07
             // Create index buffer
 
             var IndexCount = (uint)36;
-            UnmanagedMemory Indices = new UnmanagedMemory((uint)(Marshal.SizeOf(typeof(int)) * IndexCount));
+            UnmanagedMemory Indices = new UnmanagedMemory(sizeof(int) * IndexCount);
             Indices.Write(0, IndexCount, new int[] 
             {
                 3, 1, 0,
@@ -381,7 +373,7 @@ namespace Tutorial07
             if (Result < 0) throw new Exception("MeshColorVariable.SetFloatVector has failed : " + Result);
 
             // Render the cube
-            for (uint PassNo = 0; PassNo < TechniqueDescription.Passes; ++PassNo)
+            for (uint PassNo = 0; PassNo < TechniqueDescription.Passes; PassNo++)
             {
                 Technique.GetPassByIndex(PassNo).Apply(0);
                 Device.DrawIndexed(36, 0, 0);

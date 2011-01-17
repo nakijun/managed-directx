@@ -1,16 +1,21 @@
-[StructLayout(LayoutKind::Sequential)]
+[StructLayout(LayoutKind::Sequential,Size=40)]
 public value class RasterizerDescription : IEquatable<RasterizerDescription>
 {
 public:
 	FillMode FillMode;
     CullMode CullMode;
+	[MarshalAs(UnmanagedType::Bool, SizeConst=4)]
     bool FrontCounterClockwise;
     int DepthBias;
     float DepthBiasClamp;
     float SlopeScaledDepthBias;
+	[MarshalAs(UnmanagedType::Bool, SizeConst=4)]
     bool DepthClipEnable;
+	[MarshalAs(UnmanagedType::Bool, SizeConst=4)]
     bool ScissorEnable;
+	[MarshalAs(UnmanagedType::Bool, SizeConst=4)]
     bool MultisampleEnable;
+	[MarshalAs(UnmanagedType::Bool, SizeConst=4)]
     bool AntialiasedLineEnable;
 
 	static bool operator == (RasterizerDescription Left, RasterizerDescription Right)

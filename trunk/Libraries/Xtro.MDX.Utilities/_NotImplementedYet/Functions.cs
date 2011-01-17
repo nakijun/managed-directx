@@ -31,21 +31,19 @@ namespace Xtro.MDX.Utilities
 
         static int DelayLoad()
         {
-            var State = GetState();
-
-            var Factory = State.Factory;
+            var Factory = GetState().Factory;
             if (Factory == null)
             {
                 DXGI_Functions.CreateFactory(typeof(Factory), out Factory);
-                State.Factory = Factory;
+                GetState().Factory = Factory;
                 if (Factory == null)
                 {
                     // If still NULL, then DXGI is not availible
-                    State.Direct3D_Available = false;
+                    GetState().Direct3D_Available = false;
                     return (int)Error.NoDirect3D;
                 }
 
-                State.Direct3D_Available = true;
+                GetState().Direct3D_Available = true;
             }
 
             return 0;
@@ -698,7 +696,7 @@ namespace Xtro.MDX.Utilities
         static void SetupCursor()
         {
             // Clip cursor if requested
-            if (!IsWindowed() && GetState().ClipCursorWhenFullScreen) Cursor.Clip = GetForm().DisplayRectangle;
+            if (!IsWindowed() && GetState().ClipCursorWhenFullScreen) Cursor.Clip = GetForm().DesktopBounds;
             else Cursor.Clip = Rectangle.Empty;
         }
 
@@ -820,6 +818,16 @@ namespace Xtro.MDX.Utilities
             var OutputInfo = Enumeration.GetOutputInfo(DeviceSettings.AdapterOrdinal, DeviceSettings.Output);
 
             return OutputInfo == null ? null : Screen.FromRectangle(OutputInfo.Description.DesktopCoordinates);
+        }
+
+        public static RenderTargetView GetRenderTargetView()
+        {
+            return GetState().RenderTargetView;
+        }
+
+        public static DepthStencilView GetDepthStencilView()
+        {
+            return GetState().DepthStencilView;
         }
 
         public static DeviceSettings GetDeviceSettings()
@@ -1114,7 +1122,7 @@ namespace Xtro.MDX.Utilities
                         // Use wp.rcNormalPosition to get the client rect, but wp.rcNormalPosition 
                         // includes the window frame so subtract it
                         var Frame = new Windows.Rect32();
-                        Windows.AdjustWindowRect(Frame, 0, false);
+                        Windows.AdjustWindowRect(ref Frame, 0, false);
                         var FrameWidth = Frame.Right - Frame.Left;
                         var FrameHeight = Frame.Bottom - Frame.Top;
                         Client.Width = WindowedPlacement.NormalPosition.Right - WindowedPlacement.NormalPosition.Left - FrameWidth;
@@ -1138,7 +1146,7 @@ namespace Xtro.MDX.Utilities
                     var WindowMonitor = Screen.FromControl(GetForm());
 
                     // Get the rect of the window
-                    var Window = GetForm().DisplayRectangle;
+                    var Window = GetForm().DesktopBounds;
 
                     // Check if the window rect is fully inside the adapter's vitural screen rect
                     if ((Window.Left < AdapterMonitor2.WorkingArea.Left ||
@@ -1187,7 +1195,7 @@ namespace Xtro.MDX.Utilities
                         Top = 0,
                         Bottom = (int)ClientHeight
                     };
-                    Windows.AdjustWindowRect(ResizedWindow, Windows.GetWindowLong(GetForm().Handle, Windows.GetWindowLongConst.Style), false);
+                    Windows.AdjustWindowRect(ref ResizedWindow, Windows.GetWindowLong(GetForm().Handle, Windows.GetWindowLongConst.Style), false);
 
                     var WindowWidth = ResizedWindow.Right - ResizedWindow.Left;
                     var WindowHeight = ResizedWindow.Bottom - ResizedWindow.Top;
@@ -1222,7 +1230,7 @@ namespace Xtro.MDX.Utilities
                         Right = (int)NewDeviceSettings.SwapChainDescription.BufferDescription.Width,
                         Bottom = (int)NewDeviceSettings.SwapChainDescription.BufferDescription.Height
                     };
-                    Windows.AdjustWindowRect(Window2, Windows.GetWindowLong(GetForm().Handle, Windows.GetWindowLongConst.Style), false);
+                    Windows.AdjustWindowRect(ref Window2, Windows.GetWindowLong(GetForm().Handle, Windows.GetWindowLongConst.Style), false);
 
                     // Resize the window.  It is important to adjust the window size 
                     // after resetting the device rather than beforehand to ensure 
@@ -1347,13 +1355,13 @@ namespace Xtro.MDX.Utilities
                 return ErrorBox((int)Error.Fail, "PreMainLoop");
             }
 
+            GetState().InsideMainloop = false;
+
             return 0;
         }
 
         public static int MainLoopStep()
         {
-            int Result;
-
             // Not allowed to call this from inside the device callbacks or reenter
             if (GetState().InsideDeviceCallback || GetState().InsideMainloop)
             {
@@ -1460,8 +1468,13 @@ namespace Xtro.MDX.Utilities
 
             var DeviceSettings = new DeviceSettings
             {
+#if DEBUG
+                CreateFlags = CreateDeviceFlag.Debug,
+#endif
+                SyncInterval = 1,
                 SwapChainDescription =
                 {
+                    BufferUsage = Usage.RenderTargetOutput,
                     Windowed = Windowed,
                     BufferDescription =
                     {
@@ -1895,7 +1908,7 @@ namespace Xtro.MDX.Utilities
             //---------------------
             if (DeviceSettingsCombo.DeviceType == OptimalDeviceSettings.DriverType) CurrentRanking += DeviceTypeWeight;
             // Slightly prefer HAL 
-            if (DeviceSettingsCombo.DeviceType == DriverType.Hardware) CurrentRanking += 0.1f;
+            if (DeviceSettingsCombo.DeviceType == (DriverType)1 /*D3DDEVTYPE_HAL probably a DXUT bug it should be D3D10_DRIVER_TYPE_HARDWARE*/) CurrentRanking += 0.1f;
 
             //---------------------
             // Windowed
@@ -2000,7 +2013,7 @@ namespace Xtro.MDX.Utilities
                 // This would happen when we specify a windowed resolution larger than the screen.
                 if (BestDeviceSettingsCombo.OutputInfo != null)
                 {
-                    var Info = Screen.FromHandle(BestDeviceSettingsCombo.OutputInfo.Description.Monitor);
+                    var Info = Screen.AllScreens.First(X => X.DeviceName == BestDeviceSettingsCombo.OutputInfo.Description.DeviceName);
 
                     var Width = Info.WorkingArea.Width;
                     var Height = Info.WorkingArea.Height;
@@ -2013,7 +2026,7 @@ namespace Xtro.MDX.Utilities
                         Top = Info.WorkingArea.Top
                     };
 
-                    Windows.AdjustWindowRect(Client, Windows.GetWindowLong(GetForm().Handle, Windows.GetWindowLongConst.Style), false);
+                    Windows.AdjustWindowRect(ref Client, Windows.GetWindowLong(GetForm().Handle, Windows.GetWindowLongConst.Style), false);
                     Width = Width - (Client.Right - Client.Left - Width);
                     Height = Height - (Client.Bottom - Client.Top - Height);
 
@@ -2440,7 +2453,7 @@ namespace Xtro.MDX.Utilities
 
                     BuildOptimalDeviceSettings(OptimalDeviceSettings, In, MatchOptions);
 
-                    Result = FindValidDeviceSettings(Out, In, MatchOptions, OptimalDeviceSettings);
+                    Result = FindValidDeviceSettings(ValidDeviceSettings, In, MatchOptions, OptimalDeviceSettings);
                     if (Result >= 0) FoundValidDirect3D = true;
                 }
                 else Result = (int)Error.NoDirect3D;
@@ -2908,23 +2921,23 @@ namespace Xtro.MDX.Utilities
 
             // plop everything into a string
             const string Format = "GPUIdle: {0}\n" +
-                                  "VertexProcessing: {0}\n" +
-                                  "GeometryProcessing: {0}\n" +
-                                  "PixelProcessing: {0}\n" +
-                                  "OtherGPUProcessing: {0}\n" +
-                                  "HostAdapterBandwidthUtilization: {0}\n" +
-                                  "LocalVidmemBandwidthUtilization: {0}\n" +
-                                  "VertexThroughputUtilization: {0}\n" +
-                                  "TriangleSetupThroughputUtilization: {0}\n" +
-                                  "FillrateThroughputUtilization: {0}\n" +
-                                  "VSMemoryLimited: {0}\n" +
-                                  "VSComputationLimited: {0}\n" +
-                                  "GSMemoryLimited: {0}\n" +
-                                  "GSComputationLimited: {0}\n" +
-                                  "PSMemoryLimited: {0}\n" +
-                                  "PSComputationLimited: {0}\n" +
-                                  "PostTransformCacheHitRate: {0}\n" +
-                                  "TextureCacheHitRate: {0}\n";
+                                  "VertexProcessing: {1}\n" +
+                                  "GeometryProcessing: {2}\n" +
+                                  "PixelProcessing: {3}\n" +
+                                  "OtherGPUProcessing: {4}\n" +
+                                  "HostAdapterBandwidthUtilization: {5}\n" +
+                                  "LocalVidmemBandwidthUtilization: {6}\n" +
+                                  "VertexThroughputUtilization: {7}\n" +
+                                  "TriangleSetupThroughputUtilization: {8}\n" +
+                                  "FillrateThroughputUtilization: {9}\n" +
+                                  "VSMemoryLimited: {10}\n" +
+                                  "VSComputationLimited: {11}\n" +
+                                  "GSMemoryLimited: {12}\n" +
+                                  "GSComputationLimited: {13}\n" +
+                                  "PSMemoryLimited: {14}\n" +
+                                  "PSComputationLimited: {15}\n" +
+                                  "PostTransformCacheHitRate: {16}\n" +
+                                  "TextureCacheHitRate: {17}\n";
 
             GetState().CounterStats = string.Format(Format,
                              CounterData.GPU_Idle,
@@ -3019,7 +3032,9 @@ namespace Xtro.MDX.Utilities
 
             // Show the frame on the primary surface.
             var Result = SwapChain.Present(SyncInterval, Flags);
+            // ReSharper disable ConvertIfStatementToSwitchStatement
             if (Result == (int)Status.Occluded)
+            // ReSharper restore ConvertIfStatementToSwitchStatement
             {
                 // There is a window covering our entire rendering area.
                 // Don't render until we're visible again.
@@ -3047,7 +3062,7 @@ namespace Xtro.MDX.Utilities
                         return;
                     }
 
-                    // TODO:  Handle display orientation changes in full-screen mode.
+                    // xTODO:  Handle display orientation changes in full-screen mode.
                 }
             }
             else if (Result == (int)DXGI_Error.DeviceRemoved)
@@ -3056,7 +3071,7 @@ namespace Xtro.MDX.Utilities
                 // If no device removed callback is set, then look for a new device
                 if (HandleDeviceRemoved() < 0)
                 {
-                    // TODO: use pD3DDevice->GetDeviceRemovedReason()
+                    // xTODO: use pD3DDevice->GetDeviceRemovedReason()
                     DisplayErrorMessage((int)Error.DeviceRemoved);
                     Shutdown();
                     return;
@@ -3073,9 +3088,7 @@ namespace Xtro.MDX.Utilities
             }
 
             // Update current frame #
-            var Frame = GetState().CurrentFrameNumber;
-            Frame++;
-            GetState().CurrentFrameNumber = Frame;
+            GetState().CurrentFrameNumber++;
 
             // Stop performance counters
             StopPerformanceCounters();
