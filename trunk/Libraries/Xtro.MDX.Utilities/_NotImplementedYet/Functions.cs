@@ -850,7 +850,7 @@ namespace Xtro.MDX.Utilities
             var NewDeviceSettings = GetState().CurrentDeviceSettings;
 
             var Factory = GetFactory();
-            Factory.MakeWindowAssociation(IntPtr.Zero, 0);
+            // DXUT bug. this should be called after CreateSwapChain: Factory.MakeWindowAssociation(IntPtr.Zero, 0);
 
             // Only create a Direct3D device if one hasn't been supplied by the app
             if (DeviceFromApplication == null)
@@ -894,6 +894,7 @@ namespace Xtro.MDX.Utilities
                 // Create the swapchain
                 Result = Factory.CreateSwapChain(Device, ref NewDeviceSettings.SwapChainDescription, out SwapChain);
                 if (Result < 0) return (int)Error.CreatingDevice;
+                Factory.MakeWindowAssociation(GetForm().Handle, MakeWindowAssociation.NoWindowChanges | MakeWindowAssociation.NoAltEnter | MakeWindowAssociation.NoPrintScreen);
             }
             else
             {
@@ -3097,6 +3098,424 @@ namespace Xtro.MDX.Utilities
             UpdateCounterStats();
 
             return;
+        }
+
+        public static void HandlePaintEvent()
+        {
+            // Handle paint messages when the app is paused
+            if (IsRenderingPaused() && GetState().DeviceObjectsCreated && GetState().DeviceObjectsReset)
+            {
+                int Result;
+                var Time = GetTime();
+                var ElapsedTime = GetElapsedTime();
+    
+                var Device = GetDevice();
+                if (Device!=null)
+                {
+                    var CallbackFrameRender = GetState().FrameRenderFunction;
+                    if (CallbackFrameRender != null && !GetState().RenderingOccluded)
+                    {
+                        CallbackFrameRender(Device, Time, ElapsedTime, GetState().FrameRenderFunctionUserContext);
+                    }
+
+                    //var Flags = GetState().RenderingOccluded ? PresentFlag.Test : GetState().CurrentDeviceSettings.PresentFlags;
+
+                    var SwapChain = GetSwapChain();
+                    Result = SwapChain.Present(0, GetState().CurrentDeviceSettings.PresentFlags);
+                    if (Result==(int)Status.Occluded)
+                    {
+                        // There is a window covering our entire rendering area.
+                        // Don't render until we're visible again.
+                        GetState().RenderingOccluded=true;
+                    }
+                    else if (Result>=0)
+                    {
+                        if (GetState().RenderingOccluded)
+                        {
+                            // Now that we're no longer occluded
+                            // allow us to render again
+                            GetState().RenderingOccluded=false;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void HandleResizeEvent()
+        {
+            if (GetForm().WindowState==FormWindowState.Minimized)
+            {
+                Pause(true, true); // Pause while we're minimized
+
+                GetState().Minimized=true;
+                GetState().Maximized=false;
+            }
+            else
+            {
+                var CurrentClient=GetForm().DesktopBounds;
+                if (CurrentClient.Top == 0 && CurrentClient.Bottom == 0)
+                {
+                    // Rapidly clicking the task bar to minimize and restore a window
+                    // can cause a WM_SIZE message with SIZE_RESTORED when 
+                    // the window has actually become minimized due to rapid change
+                    // so just ignore this message
+                }
+                else if (GetForm().WindowState==FormWindowState.Maximized)
+                {
+                    if (GetState().Minimized)Pause(false, false); // Unpause since we're no longer minimized
+                    GetState().Minimized=false;
+                    GetState().Maximized=true;
+                    CheckForWindowSizeChange();
+                    CheckForWindowChangingMonitors();
+                }
+                else if (GetForm().WindowState==FormWindowState.Normal)
+                {
+                    //DXUTCheckForDXGIFullScreenSwitch();
+                    if (GetState().Maximized)
+                    {
+                        GetState().Maximized=false;
+                        CheckForWindowSizeChange();
+                        CheckForWindowChangingMonitors();
+                    }
+                    else if (GetState().Minimized)
+                    {
+                        Pause(false, false); // Unpause since we're no longer minimized
+                        GetState().Minimized=false;
+                        CheckForWindowSizeChange();
+                        CheckForWindowChangingMonitors();
+                    }
+                    else if (GetState().InSizeMove)
+                    {
+                        // If we're neither maximized nor minimized, the window size 
+                        // is changing by the user dragging the window edges.  In this 
+                        // case, we don't reset the device yet -- we wait until the 
+                        // user stops dragging, and a WM_EXITSIZEMOVE message comes.
+                    }
+                    else
+                    {
+                        // This WM_SIZE come from resizing the window via an API like SetWindowPos() so 
+                        // resize and reset the device now.
+                        CheckForWindowSizeChange();
+                        CheckForWindowChangingMonitors();
+                    }
+                }
+            }
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Checks if DXGI buffers need to change
+        //--------------------------------------------------------------------------------------
+        static void CheckForBufferChange()
+        {
+            if (GetSwapChain() != null && !GetState().ReleasingSwapChain)
+            {
+                var SwapChain = GetSwapChain();
+
+                // Determine if we're fullscreen
+                bool FullScreen;
+                SwapChain.GetFullscreenState(out FullScreen);
+
+                ResizeBuffers(0, 0, FullScreen);
+
+                GetForm().Show();
+            }
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Checks if the window client rect has changed and if it has, then reset the device
+        //--------------------------------------------------------------------------------------
+        static void CheckForWindowSizeChange()
+        {
+            // Skip the check for various reasons
+            if (GetState().IgnoreSizeChange || !GetState().DeviceCreated) return;
+
+            var DeviceSettings = GetDeviceSettings();
+            CheckForBufferChange();
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Look for an adapter ordinal that is tied to a HMONITOR
+        //--------------------------------------------------------------------------------------
+        static int GetAdapterOrdinalFromMonitor(Screen Monitor, out uint AdapterOrdinal)
+        {
+            AdapterOrdinal = 0;
+
+            // Search for this monitor in our enumeration hierarchy.
+            var Enumeration = GetEnumeration();
+            var Adapters = Enumeration.AdapterInfos;
+            foreach (var AdapterInfo in Adapters)
+            {
+                if (AdapterInfo.OutputInfos.Any(OutputInfo => OutputInfo.Description.DeviceName == Monitor.DeviceName))
+                {
+                    AdapterOrdinal = AdapterInfo.AdapterOrdinal;
+                    return 0;
+                }
+            }
+
+            return (int)Error.Fail;
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Look for a monitor ordinal that is tied to a HMONITOR (D3D10-only)
+        //--------------------------------------------------------------------------------------
+        static int GetOutputOrdinalFromMonitor(Screen Monitor, out uint OutputOrdinal)
+        {
+            // Search for this monitor in our enumeration hierarchy.
+            var Enumeration = GetEnumeration();
+            var Adapters = Enumeration.AdapterInfos;
+            foreach (var AdapterInfo in Adapters)
+            {
+                foreach (var OutputInfo in AdapterInfo.OutputInfos)
+                {
+                    OutputDescription Description;
+                    OutputInfo.Output.GetDescription(out Description);
+
+                    if (Monitor.DeviceName ==Description.DeviceName)
+                    {
+                        OutputOrdinal = OutputInfo.OutputOrdinal;
+                        return 0;
+                    }
+                }
+            }
+
+            OutputOrdinal = 0;
+            return (int)Error.Fail;
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Checks to see if the HWND changed monitors, and if it did it creates a device 
+        // from the monitor's adapter and recreates the scene.
+        //--------------------------------------------------------------------------------------
+        static void CheckForWindowChangingMonitors()
+        {
+            // Skip this check for various reasons
+            if (!GetState().AutoChangeAdapter || GetState().IgnoreSizeChange || !GetState().DeviceCreated || !IsWindowed())return;
+
+            int Result;
+            var WindowMonitor = Screen.FromControl(GetForm());
+            var AdapterMonitor = GetState().AdapterMonitor;
+            if (WindowMonitor != AdapterMonitor)
+            {
+                uint NewOrdinal;
+                if (GetAdapterOrdinalFromMonitor(WindowMonitor, out NewOrdinal)>=0)
+                {
+                    // Find the closest valid device settings with the new ordinal
+                    var DeviceSettings = GetDeviceSettings().Copy();
+                    DeviceSettings.AdapterOrdinal = NewOrdinal;
+                    uint NewOutput;
+                    if (GetOutputOrdinalFromMonitor(WindowMonitor, out NewOutput)>=0) DeviceSettings.Output = NewOutput;
+
+                    var MatchOptions = new MatchOptions
+                    {
+                        AdapterOrdinal =MatchType.PreserveInput,
+                        DeviceType = MatchType.ClosestToInput,
+                        Windowed = MatchType.ClosestToInput,
+                        AdapterFormat = MatchType.ClosestToInput,
+                        VertexProcessing = MatchType.ClosestToInput,
+                        Resolution = MatchType.ClosestToInput,
+                        BackBufferFormat = MatchType.ClosestToInput,
+                        BackBufferCount = MatchType.ClosestToInput,
+                        MultiSample = MatchType.ClosestToInput,
+                        SwapEffect = MatchType.ClosestToInput,
+                        DepthFormat = MatchType.ClosestToInput,
+                        StencilFormat = MatchType.ClosestToInput,
+                        PresentFlags = MatchType.ClosestToInput,
+                        RefreshRate = MatchType.ClosestToInput,
+                        PresentInterval = MatchType.ClosestToInput
+                    };
+
+                    Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
+                    if (Result>=0)
+                    {
+                        // Create a Direct3D device using the new device settings.  
+                        // If there is an existing device, then it will either reset or recreate the scene.
+                        Result = ChangeDevice(DeviceSettings, null, false, false);
+
+                        // If hr == E_ABORT, this means the app rejected the device settings in the ModifySettingsCallback
+                        if (Result ==(int)Error.Abort)
+                        {
+                            // so nothing changed and keep from attempting to switch adapters next time
+                            GetState().AutoChangeAdapter=false;
+                        }
+                        else if (Result<0)
+                        {
+                            Shutdown();
+                            Pause(false, false);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void HandleResizeBeginEvent()
+        {
+            Pause(true, true);
+            GetState().InSizeMove=true;
+        }
+
+        public static void HandleResizeEndEvent()
+        {
+            Pause(false, false);
+            CheckForWindowSizeChange();
+            CheckForWindowChangingMonitors();
+            GetState().InSizeMove=false;
+        }
+
+        public static void HandleCursorChangedEvent()
+        {
+            if (IsActive() && !IsWindowed())
+            {
+                if (!GetState().ShowCursorWhenFullScreen) GetForm().Cursor = null;
+            }
+        }
+
+        public static void HandleActivatedEvent()
+        {
+            if (!IsActive()) // Handle only if previously not active 
+            {
+                GetState().Active=true;
+
+                // Enable controller rumble & input when activating app
+                EnableXInput(true);
+
+                // The GetMinimizedWhileFullscreen() varible is used instead of !DXUTIsWindowed()
+                // to handle the rare case toggling to windowed mode while the fullscreen application 
+                // is minimized and thus making the pause count wrong
+                if (GetState().MinimizedWhileFullscreen)
+                {
+                    GetState().MinimizedWhileFullscreen=false;
+
+                    if (IsApplicationRendering())
+                    {
+                        ToggleFullScreen();
+                    }
+                }
+            }
+        }
+
+        public static int ToggleFullScreen()
+        {
+            // Get the current device settings and flip the windowed state then
+            // find the closest valid device settings with this change
+            var DeviceSettings = GetDeviceSettings().Copy();
+            var OrginalDeviceSettings = DeviceSettings;
+
+            // Togggle windowed/fullscreen bit
+            DeviceSettings.SwapChainDescription.Windowed = !DeviceSettings.SwapChainDescription.Windowed;
+
+            var MatchOptions = new MatchOptions
+            {
+                AdapterOrdinal = MatchType.PreserveInput,
+                DeviceType =MatchType.ClosestToInput,
+                Windowed = MatchType.PreserveInput,
+                AdapterFormat = MatchType.IgnoreInput,
+                VertexProcessing = MatchType.ClosestToInput,
+                BackBufferFormat = MatchType.IgnoreInput,
+                BackBufferCount = MatchType.ClosestToInput,
+                MultiSample = MatchType.ClosestToInput,
+                SwapEffect = MatchType.ClosestToInput,
+                DepthFormat = MatchType.ClosestToInput,
+                StencilFormat = MatchType.ClosestToInput,
+                PresentFlags = MatchType.ClosestToInput,
+                RefreshRate = MatchType.IgnoreInput,
+                PresentInterval = MatchType.ClosestToInput
+            };
+
+            // Go back to previous state
+
+            var IsWindowed = GetIsWindowedFromDeviceSettings(DeviceSettings);
+            var Width = (IsWindowed) ? GetState().WindowBackBufferWidthAtModeChange : GetState().FullScreenBackBufferWidthAtModeChange;
+            var Height = (IsWindowed) ? GetState().WindowBackBufferHeightAtModeChange : GetState().FullScreenBackBufferHeightAtModeChange;
+
+            if (Width > 0 && Height > 0)
+            {
+                MatchOptions.Resolution = MatchType.ClosestToInput;
+                DeviceSettings.SwapChainDescription.BufferDescription.Width = Width;
+                DeviceSettings.SwapChainDescription.BufferDescription.Height = Height;
+            }
+            else
+            {
+                // No previous data, so just switch to defaults
+                MatchOptions.Resolution =MatchType.IgnoreInput;
+            }
+
+            var Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
+            if (Result>=0)
+            {
+                // Create a Direct3D device using the new device settings.  
+                // If there is an existing device, then it will either reset or recreate the scene.
+                Result = ChangeDevice(DeviceSettings, null, false, false);
+
+                // If hr == E_ABORT, this means the app rejected the device settings in the ModifySettingsCallback so nothing changed
+                if (Result<0 && (Result !=(int)Error.Abort))
+                {
+                    // Failed creating device, try to switch back.
+                    var Result2 = ChangeDevice(OrginalDeviceSettings, null, false, false);
+                    if (Result2<0)
+                    {
+                        // If this failed, then shutdown
+                        Shutdown();
+                    }
+                }
+            }
+
+            return Result;
+        }
+
+        public static bool IsApplicationRendering()
+        {
+            return (GetState().Device != null);
+        }
+
+        public static void HandleDeactivateEvent()
+        {
+            if (IsActive()) // Handle only if previously active 
+            {
+                GetState().Active=false;
+
+                // Disable any controller rumble & input when de-activating app
+                EnableXInput(false);
+
+                if (!IsWindowed())
+                {
+                    // Going from full screen to a minimized state 
+                    Cursor.Clip=Rectangle.Empty; // don't limit the cursor anymore
+                    GetState().MinimizedWhileFullscreen=true;
+                }
+            }
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Don't pause the game or deactive the window without first stopping rumble otherwise 
+        // the controller will continue to rumble
+        //--------------------------------------------------------------------------------------
+        static void EnableXInput(bool B)
+        {
+        }
+
+        public static void HandleKeyDownEvent(KeyEventArgs E)
+        {
+            switch (E.KeyCode)
+            {
+            case Keys.Escape:
+                    if (GetState().HandleEscape) GetForm().Close();
+                    break;
+            case Keys.Pause:
+                    if (GetState().HandlePause) Pause(!IsTimePaused(), false);
+                    break;
+            case Keys.F10:
+                    E.SuppressKeyPress = GetForm().Menu == null;
+                    break;
+            case Keys.Enter:
+                    if (E.Alt) ToggleFullScreen();
+                    break;
+            }
+        }
+
+        public static bool IsTimePaused()
+        {
+            return GetState().PauseTimeCount > 0;
         }
     }
 }
