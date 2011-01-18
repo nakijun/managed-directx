@@ -42,6 +42,28 @@ public:
 		return pSwapChain->SetFullscreenState(Fullscreen, pTarget);
 	}
 
+	int GetFullscreenState([Out] bool% Fullscreen, [Out] Output^% Target)
+	{
+		pin_ptr<bool> PinnedFullscreen = &Fullscreen;
+
+		IDXGIOutput* pTarget = 0;
+		return pSwapChain->GetFullscreenState((BOOL*)PinnedFullscreen, &pTarget);
+
+		if (pTarget)
+		{	
+			try { Target = (Output^)Interfaces[IntPtr(pTarget)]; }
+			catch (KeyNotFoundException^) { Target = gcnew Output(IntPtr(pTarget)); }
+		}
+		else Target = nullptr;
+	}
+
+	int GetFullscreenState([Out] bool% Fullscreen)
+	{
+		pin_ptr<bool> PinnedFullscreen = &Fullscreen;
+
+		return pSwapChain->GetFullscreenState((BOOL*)PinnedFullscreen, 0);
+	}
+
 	int GetDescription([Out] SwapChainDescription% Description)
 	{
 		pin_ptr<SwapChainDescription> PinnedDescription = &Description;

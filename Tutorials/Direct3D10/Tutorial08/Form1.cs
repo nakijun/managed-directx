@@ -367,5 +367,45 @@ namespace Tutorial08
         {
             return true;
         }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            UtilitiesFunctions.HandlePaintEvent();
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            UtilitiesFunctions.HandleResizeEvent();
+        }
+
+        private void Form1_ResizeBegin(object sender, EventArgs e)
+        {
+            UtilitiesFunctions.HandleResizeBeginEvent();
+        }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            UtilitiesFunctions.HandleResizeEndEvent();
+        }
+
+        private void Form1_CursorChanged(object sender, EventArgs e)
+        {                                            
+            UtilitiesFunctions.HandleCursorChangedEvent();
+        }
+
+        private void Form1_Activated(object sender, EventArgs e)
+        {
+            UtilitiesFunctions.HandleActivatedEvent();
+        }
+
+        private void Form1_Deactivate(object sender, EventArgs e)
+        {
+            UtilitiesFunctions.HandleDeactivateEvent();
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            UtilitiesFunctions.HandleKeyDownEvent(e);
+        }
     }
 }
