@@ -5,9 +5,17 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -22,7 +30,18 @@
     <CLRSupport>true</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>true</CLRSupport>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>true</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
@@ -33,23 +52,41 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)$(Configuration)\</OutDir>
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -62,6 +99,23 @@
       <AdditionalDependencies>
       </AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,7 +133,22 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BufferSRV.h" />
     <ClInclude Include="Counter.h" />
     <ClInclude Include="Asynchronous.h" />
     <ClInclude Include="Box.h" />
@@ -88,6 +157,8 @@
     <ClInclude Include="DeviceDXGI.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FontDescription.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshBuffer.h" />
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h" />
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\comdecl.h" />
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2D1.h" />
@@ -175,13 +246,23 @@
     <ClInclude Include="RasterizerState.h" />
     <ClInclude Include="Rational.h" />
     <ClInclude Include="SampleDescription.h" />
+    <ClInclude Include="ShaderResourceViewDescription.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SurfaceDescription.h" />
     <ClInclude Include="SwapChainDescription.h" />
     <ClInclude Include="InputElementDescription.h" />
     <ClInclude Include="Texture1D.h" />
+    <ClInclude Include="Texture1D_ArraySRV.h" />
+    <ClInclude Include="Texture1D_SRV.h" />
+    <ClInclude Include="Texture2D_ArraySRV.h" />
+    <ClInclude Include="Texture2D_MS_ArraySRV.h" />
+    <ClInclude Include="Texture2D_MS_SRV.h" />
+    <ClInclude Include="Texture2D_SRV.h" />
     <ClInclude Include="Texture3D.h" />
+    <ClInclude Include="Texture3D_SRV.h" />
+    <ClInclude Include="TextureCubeSRV.h" />
     <ClInclude Include="TextureLoadInfo.h" />
+    <ClInclude Include="UnmanagedMemoryGeneric.h" />
     <ClInclude Include="Viewport.h" />
     <ClInclude Include="BufferDescription.h" />
     <ClInclude Include="BufferRTV.h" />
@@ -253,6 +334,33 @@
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d2d1.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3d10.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3d10_1.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3d11.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3d9.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dcompiler.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\D3DCSX.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\D3DCSXd.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx10.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx10d.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx11.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx11d.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx9.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx9d.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dxof.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\ddraw.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dinput8.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dsound.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dwrite.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\DxErr.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dxgi.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dxguid.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\X3DAudio.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\xapobase.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\xapobased.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\XAPOFX.lib" />
+    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\XInput.lib" />
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib" />
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d10.lib" />
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d10_1.lib" />
@@ -294,7 +402,9 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Xtro.MDX.cpp" />
   </ItemGroup>

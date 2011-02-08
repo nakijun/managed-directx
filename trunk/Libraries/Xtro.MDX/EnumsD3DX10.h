@@ -188,6 +188,13 @@ public enum class ImageFileFormat
 }; 
 
 [System::Flags]
+public enum class MeshFlag
+{
+    x32 = D3DX10_MESH_32_BIT,
+    GS_Adjacency = D3DX10_MESH_GS_ADJACENCY
+};
+
+[System::Flags]
 public enum class SpriteFlag
 {
 	GroupByTexture = D3DX10_SPRITE_SORT_TEXTURE,

@@ -188,10 +188,9 @@ public:
 		pDevice->RSSetState(pRasterizerState);
 	}
 
-	int CreateInputLayout(array<InputElementDescription>^ InputElementDescriptions, unsigned int NumberOfElements, array<Byte>^ ShaderBytecodeWithInputSignature, unsigned int BytecodeLength, [Out] InputLayout^% InputLayout)
+	int CreateInputLayout(array<InputElementDescription>^ InputElementDescriptions, unsigned int NumberOfElements, UnmanagedMemory^ ShaderBytecodeWithInputSignature, SIZE_T BytecodeLength, [Out] InputLayout^% InputLayout)
 	{
-		pin_ptr<Byte> PinnedShaderBytecodeWithInputSignature = nullptr;
-		if (ShaderBytecodeWithInputSignature != nullptr && ShaderBytecodeWithInputSignature->Length > 0) PinnedShaderBytecodeWithInputSignature = &ShaderBytecodeWithInputSignature[0];
+		void* pShaderBytecodeWithInputSignature = ShaderBytecodeWithInputSignature == nullptr ? 0 : ShaderBytecodeWithInputSignature->pMemory;
 
 		int Result = 0;
 		ID3D10InputLayout* pInputLayout = 0;
@@ -207,7 +206,7 @@ public:
 				for (int ElementNo = 0; ElementNo < ElementCount; ElementNo++) InputElementDescriptions[ElementNo].Marshal(&pInputElementDescriptions[ElementNo]);
 			}
 
-			Result = pDevice->CreateInputLayout(pInputElementDescriptions, NumberOfElements, PinnedShaderBytecodeWithInputSignature, BytecodeLength, &pInputLayout);
+			Result = pDevice->CreateInputLayout(pInputElementDescriptions, NumberOfElements, pShaderBytecodeWithInputSignature, BytecodeLength, &pInputLayout);
 		}
 		finally
 		{
@@ -389,5 +388,63 @@ public:
 		pin_ptr<unsigned int> PinnedNumberOfQualityLevels = &NumberOfQualityLevels;
 
 		return pDevice->CheckMultisampleQualityLevels((DXGI_FORMAT)Format, SampleCount, (unsigned int*)PinnedNumberOfQualityLevels);
+	}
+
+	void CopyResource(Resource^ DestinationResource, Resource^ SourceResource)
+	{
+		ID3D10Resource* pDestinationResource = DestinationResource == nullptr ? 0 : DestinationResource->pResource;
+		ID3D10Resource* pSourceResource = SourceResource == nullptr ? 0 : SourceResource->pResource;
+
+		pDevice->CopyResource(pDestinationResource, pSourceResource);
+	}
+
+	int CreateShaderResourceView(Resource^ Resource, ShaderResourceViewDescription% Description, [Out] ShaderResourceView^% ShaderResourceView)
+	{
+		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
+		pin_ptr<ShaderResourceViewDescription> PinnedDescription = &Description;
+
+		ID3D10ShaderResourceView* pShaderResourceView = 0;
+		int Result = pDevice->CreateShaderResourceView(pResource, (D3D10_SHADER_RESOURCE_VIEW_DESC*)PinnedDescription, &pShaderResourceView);
+
+		if (pShaderResourceView)
+		{
+			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }					
+		}
+		else ShaderResourceView = nullptr;
+
+		return Result;
+	}
+
+	int CreateShaderResourceView(Resource^ Resource)
+	{
+		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
+
+		return pDevice->CreateShaderResourceView(pResource, 0, 0);
+	}
+
+	int CreateShaderResourceView(Resource^ Resource, ShaderResourceViewDescription% Description)
+	{
+		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
+		pin_ptr<ShaderResourceViewDescription> PinnedDescription = &Description;
+
+		return pDevice->CreateShaderResourceView(pResource, (D3D10_SHADER_RESOURCE_VIEW_DESC*)PinnedDescription, 0);
+	}
+
+	int CreateShaderResourceView(Resource^ Resource, [Out] ShaderResourceView^% ShaderResourceView)
+	{
+		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
+
+		ID3D10ShaderResourceView* pShaderResourceView = 0;
+		int Result = pDevice->CreateShaderResourceView(pResource, 0, &pShaderResourceView);
+
+		if (pShaderResourceView)
+		{
+			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }					
+		}
+		else ShaderResourceView = nullptr;
+
+		return Result;
 	}
 };

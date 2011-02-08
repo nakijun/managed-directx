@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
 using Xtro.MDX;
+using Xtro.MDX.Generic;
 using Xtro.MDX.DXGI;
 using Usage = Xtro.MDX.DXGI.Usage;
 using Xtro.MDX.Direct3D10;
@@ -212,7 +213,7 @@ namespace Tutorial07
             PassDescription PassDescription;
             Result = Technique.GetPassByIndex(0).GetDescription(out PassDescription);
             if (Result < 0) throw new Exception("GetDescription has failed : " + Result);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Length, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Size, out VertexLayout);
             if (Result < 0) throw new Exception("Device.CreateInputLayout has failed : " + Result);
 
             // Set the input layout
@@ -225,8 +226,8 @@ namespace Tutorial07
 
             var VertexCount = (uint)24;
             int VertexSize = Marshal.SizeOf(typeof(SimpleVertex));
-            UnmanagedMemory Vertices = new UnmanagedMemory((uint)(VertexSize * VertexCount));
-            Vertices.Write(0, VertexCount, new SimpleVertex[]
+            var Vertices = new UnmanagedMemory<SimpleVertex>((uint)(VertexSize * VertexCount));
+            Vertices.Write(new SimpleVertex[]
             {
                 new SimpleVertex(new Vector3(-1.0f, 1.0f, -1.0f), new Vector2(0.0f, 0.0f)),
                 new SimpleVertex(new Vector3(1.0f, 1.0f, -1.0f), new Vector2(1.0f, 0.0f)),
@@ -277,8 +278,8 @@ namespace Tutorial07
             // Create index buffer
 
             var IndexCount = (uint)36;
-            UnmanagedMemory Indices = new UnmanagedMemory(sizeof(int) * IndexCount);
-            Indices.Write(0, IndexCount, new int[] 
+            var Indices = new UnmanagedMemory<int>(sizeof(int) * IndexCount);
+            Indices.Write(new int[] 
             {
                 3, 1, 0,
                 2, 1, 3,

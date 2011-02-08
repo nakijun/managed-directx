@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 using Xtro.MDX;
+using Xtro.MDX.Generic;
 using Xtro.MDX.DXGI;
 using Usage = Xtro.MDX.DXGI.Usage;
 using Xtro.MDX.Direct3D10;
@@ -169,7 +170,7 @@ namespace Tutorial06
             DepthStencilViewDescription DepthStencilViewDescription = new DepthStencilViewDescription
             {
                 Format = DepthStencilDescription.Format,
-                ViewDimension = DepthStencilViewDimension.Texture2D
+                ViewDimension = DSV_Dimension.Texture2D
             };
             DepthStencilViewDescription.Texture2D.MipSlice = 0;
             Result = Device.CreateDepthStencilView(DepthStencil, ref DepthStencilViewDescription, out DepthStencilView);
@@ -255,7 +256,7 @@ namespace Tutorial06
             PassDescription PassDescription;
             Result = TechniqueRender.GetPassByIndex(0).GetDescription(out PassDescription);
             if (Result < 0) throw new Exception("GetDescription has failed : " + Result);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Length, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Size, out VertexLayout);
             if (Result < 0) throw new Exception("Device.CreateInputLayout has failed : " + Result);
 
             // Set the input layout
@@ -268,8 +269,8 @@ namespace Tutorial06
 
             var VertexCount = (uint)24;
             int VertexSize = Marshal.SizeOf(typeof(SimpleVertex));
-            UnmanagedMemory Vertices = new UnmanagedMemory((uint)(VertexSize * VertexCount));
-            Vertices.Write(0, VertexCount, new SimpleVertex[]
+            var Vertices = new UnmanagedMemory<SimpleVertex>((uint)(VertexSize * VertexCount));
+            Vertices.Write(new SimpleVertex[]
             {
                 new SimpleVertex(new Vector3(-1.0f, 1.0f, -1.0f), new Vector3(0.0f, 1.0f, 0.0f)),
                 new SimpleVertex(new Vector3(1.0f, 1.0f, -1.0f), new Vector3(0.0f, 1.0f, 0.0f)),
@@ -320,8 +321,8 @@ namespace Tutorial06
             // Create index buffer
 
             var IndexCount = (uint)36;
-            UnmanagedMemory Indices = new UnmanagedMemory(sizeof(int) * IndexCount);
-            Indices.Write(0, IndexCount, new int[] 
+            var Indices = new UnmanagedMemory<int>(sizeof(int) * IndexCount);
+            Indices.Write(new int[] 
             {
                 3, 1, 0,
                 2, 1, 3,
@@ -393,13 +394,13 @@ namespace Tutorial06
 
             Vector4 Vector4;
 
-            UnmanagedMemory LightDirections = new UnmanagedMemory((uint)Marshal.SizeOf(typeof(Vector4)) * 2);
+            var LightDirections = new UnmanagedMemory<Vector4>((uint)Marshal.SizeOf(typeof(Vector4)) * 2);
             Vector4 = new Vector4(-0.577f, 0.577f, -0.577f, 1.0f);
             LightDirections.Set(0, ref Vector4);
             Vector4 = new Vector4(0.0f, 0.0f, -1.0f, 1.0f);
             LightDirections.Set(1, ref Vector4);
 
-            UnmanagedMemory LightColors = new UnmanagedMemory((uint)Marshal.SizeOf(typeof(Vector4)) * 2);
+            var LightColors = new UnmanagedMemory<Vector4>((uint)Marshal.SizeOf(typeof(Vector4)) * 2);
             Vector4 = new Vector4(0.5f, 0.5f, 0.5f, 1.0f);
             LightColors.Set(0, ref Vector4);
             Vector4 = new Vector4(0.5f, 0.0f, 0.0f, 1.0f);
@@ -408,7 +409,7 @@ namespace Tutorial06
             // Rotate the second light around the origin
             Matrix Rotate;
             D3DX10Functions.MatrixRotationY(out Rotate, -2.0f * Time);
-            LightDirections.Get(1, ref Vector4);
+            LightDirections.Get(1, out Vector4);
             Vector3 Vector3 = new Vector3((float[])Vector4);
             D3DX10Functions.Vector3Transform(out Vector4, ref Vector3, ref Rotate);
             LightDirections.Set(1, ref Vector4);
@@ -448,7 +449,7 @@ namespace Tutorial06
                 Matrix Light;
                 Matrix LightScale;
                 Vector4 LightPosition = new Vector4();
-                LightDirections.Get(M, ref LightPosition);
+                LightDirections.Get(M, out LightPosition);
                 LightPosition *= 5.0f;
                 D3DX10Functions.MatrixTranslation(out Light, LightPosition.X, LightPosition.Y, LightPosition.Z);
                 D3DX10Functions.MatrixScaling(out LightScale, 0.2f, 0.2f, 0.2f);
@@ -456,7 +457,7 @@ namespace Tutorial06
 
                 // Update the world variable to reflect the current light
                 WorldVariable.SetMatrix((float[])Light);
-                LightColors.Get(M, ref Vector4);
+                LightColors.Get(M, out Vector4);
                 OutputColorVariable.SetFloatVector((float[])Vector4);
 
                 for (uint PassNo = 0; PassNo < TechniqueDescriptionRenderLight.Passes; PassNo++)

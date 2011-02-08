@@ -3,6 +3,7 @@
 #include "Microsoft DirectX SDK (August 2009)/Include/D3DX10.h"
 
 using namespace System;
+using namespace System::IO;
 using namespace System::Collections::Generic;
 using namespace System::Globalization;
 using namespace System::Reflection;
@@ -18,6 +19,10 @@ namespace MDX
 	#include "Unknown.h"
 	#include "Float4.h"
 	#include "UnmanagedMemory.h"
+namespace Generic
+{
+	#include "UnmanagedMemoryGeneric.h"
+}
 
 namespace DXGI
 {
@@ -57,6 +62,15 @@ namespace Direct3D10
 	#include "Texture2D_MS_RTV.h"
 	#include "Texture2D_MS_ArrayRTV.h"
 	#include "Texture3D_RTV.h"
+	#include "BufferSRV.h"
+	#include "Texture1D_SRV.h"
+	#include "Texture1D_ArraySRV.h"
+	#include "Texture2D_SRV.h"
+	#include "Texture2D_ArraySRV.h"
+	#include "Texture2D_MS_SRV.h"
+	#include "Texture2D_MS_ArraySRV.h"
+	#include "Texture3D_SRV.h"
+	#include "TextureCubeSRV.h"
 	#include "Texture1D_DSV.h"
 	#include "Texture1D_ArrayDSV.h"
 	#include "Texture2D_DSV.h"
@@ -65,6 +79,7 @@ namespace Direct3D10
 	#include "Texture2D_MS_ArrayDSV.h"
 	#include "RenderTargetViewDescription.h"
 	#include "DepthStencilViewDescription.h"
+	#include "ShaderResourceViewDescription.h"
 	#include "DeviceChild.h"
 	#include "View.h"
 	#include "Viewport.h"
@@ -116,6 +131,8 @@ namespace Direct3DX10
 	#include "Matrix.h"
 	#include "Sprite.h"
 	#include "Font.h"
+	#include "MeshBuffer.h"
+	#include "Mesh.h"
 	#include "FontDescription.h"
 	#include "ImageInfo.h"
 	#include "ImageLoadInfo.h"

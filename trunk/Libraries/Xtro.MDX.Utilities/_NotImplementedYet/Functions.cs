@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using Xtro.MDX.Generic;
 using Xtro.MDX.Direct3D10;
 using Xtro.MDX.DXGI;
 using Device = Xtro.MDX.Direct3D10.Device;
@@ -638,7 +640,7 @@ namespace Xtro.MDX.Utilities
                 var DepthStencilViewDescription = new DepthStencilViewDescription
                 {
                     Format = DepthStencilDescription.Format,
-                    ViewDimension = DepthStencilDescription.SampleDescription.Count > 1 ? DepthStencilViewDimension.Texture2DMS : DepthStencilViewDimension.Texture2D,
+                    ViewDimension = DepthStencilDescription.SampleDescription.Count > 1 ? DSV_Dimension.Texture2DMS : DSV_Dimension.Texture2D,
                     Texture2D =
                     {
                         MipSlice = 0
@@ -2737,7 +2739,7 @@ namespace Xtro.MDX.Utilities
 
             var CounterData = GetState().CounterData;
 
-            var Data = new UnmanagedMemory(sizeof(float));
+            var Data = new UnmanagedMemory<float>(sizeof(float));
             var F = 0f;
 
             var Counter = GetState().CounterGPU_Idle;
@@ -2745,7 +2747,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.GPU_Idle = F;
                 }
             }
@@ -2755,7 +2757,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.VertexProcessing = F;
                 }
             }
@@ -2765,7 +2767,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.GeometryProcessing = F;
                 }
             }
@@ -2775,7 +2777,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.PixelProcessing = F;
                 }
             }
@@ -2785,7 +2787,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.OtherGPU_Processing = F;
                 }
             }
@@ -2795,7 +2797,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.HostAdapterBandwidthUtilization = F;
                 }
             }
@@ -2805,7 +2807,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.LocalVidmemBandwidthUtilization = F;
                 }
             }
@@ -2815,7 +2817,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.VertexThroughputUtilization = F;
                 }
             }
@@ -2825,7 +2827,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.TriangleSetupThroughputUtilization = F;
                 }
             }
@@ -2835,7 +2837,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.FillrateThroughputUtilization = F;
                 }
             }
@@ -2845,7 +2847,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.VS_MemoryLimited = F;
                 }
             }
@@ -2855,7 +2857,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.VS_ComputationLimited = F;
                 }
             }
@@ -2865,7 +2867,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.GS_MemoryLimited = F;
                 }
             }
@@ -2875,7 +2877,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.GS_ComputationLimited = F;
                 }
             }
@@ -2885,7 +2887,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.PS_MemoryLimited = F;
                 }
             }
@@ -2895,7 +2897,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.PS_ComputationLimited = F;
                 }
             }
@@ -2905,7 +2907,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.PostTransformCacheHitRate = F;
                 }
             }
@@ -2915,7 +2917,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (Counter.GetData(Data, sizeof(float), AsyncGetDataFlag.DoNotFlush) >= 0)
                 {
-                    Data.Get(0, ref F);
+                    Data.Get(out F);
                     CounterData.TextureCacheHitRate = F;
                 }
             }
@@ -3108,9 +3110,9 @@ namespace Xtro.MDX.Utilities
                 int Result;
                 var Time = GetTime();
                 var ElapsedTime = GetElapsedTime();
-    
+
                 var Device = GetDevice();
-                if (Device!=null)
+                if (Device != null)
                 {
                     var CallbackFrameRender = GetState().FrameRenderFunction;
                     if (CallbackFrameRender != null && !GetState().RenderingOccluded)
@@ -3122,19 +3124,19 @@ namespace Xtro.MDX.Utilities
 
                     var SwapChain = GetSwapChain();
                     Result = SwapChain.Present(0, GetState().CurrentDeviceSettings.PresentFlags);
-                    if (Result==(int)Status.Occluded)
+                    if (Result == (int)Status.Occluded)
                     {
                         // There is a window covering our entire rendering area.
                         // Don't render until we're visible again.
-                        GetState().RenderingOccluded=true;
+                        GetState().RenderingOccluded = true;
                     }
-                    else if (Result>=0)
+                    else if (Result >= 0)
                     {
                         if (GetState().RenderingOccluded)
                         {
                             // Now that we're no longer occluded
                             // allow us to render again
-                            GetState().RenderingOccluded=false;
+                            GetState().RenderingOccluded = false;
                         }
                     }
                 }
@@ -3143,16 +3145,16 @@ namespace Xtro.MDX.Utilities
 
         public static void HandleResizeEvent()
         {
-            if (GetForm().WindowState==FormWindowState.Minimized)
+            if (GetForm().WindowState == FormWindowState.Minimized)
             {
                 Pause(true, true); // Pause while we're minimized
 
-                GetState().Minimized=true;
-                GetState().Maximized=false;
+                GetState().Minimized = true;
+                GetState().Maximized = false;
             }
             else
             {
-                var CurrentClient=GetForm().DesktopBounds;
+                var CurrentClient = GetForm().DesktopBounds;
                 if (CurrentClient.Top == 0 && CurrentClient.Bottom == 0)
                 {
                     // Rapidly clicking the task bar to minimize and restore a window
@@ -3160,27 +3162,27 @@ namespace Xtro.MDX.Utilities
                     // the window has actually become minimized due to rapid change
                     // so just ignore this message
                 }
-                else if (GetForm().WindowState==FormWindowState.Maximized)
+                else if (GetForm().WindowState == FormWindowState.Maximized)
                 {
-                    if (GetState().Minimized)Pause(false, false); // Unpause since we're no longer minimized
-                    GetState().Minimized=false;
-                    GetState().Maximized=true;
+                    if (GetState().Minimized) Pause(false, false); // Unpause since we're no longer minimized
+                    GetState().Minimized = false;
+                    GetState().Maximized = true;
                     CheckForWindowSizeChange();
                     CheckForWindowChangingMonitors();
                 }
-                else if (GetForm().WindowState==FormWindowState.Normal)
+                else if (GetForm().WindowState == FormWindowState.Normal)
                 {
                     //DXUTCheckForDXGIFullScreenSwitch();
                     if (GetState().Maximized)
                     {
-                        GetState().Maximized=false;
+                        GetState().Maximized = false;
                         CheckForWindowSizeChange();
                         CheckForWindowChangingMonitors();
                     }
                     else if (GetState().Minimized)
                     {
                         Pause(false, false); // Unpause since we're no longer minimized
-                        GetState().Minimized=false;
+                        GetState().Minimized = false;
                         CheckForWindowSizeChange();
                         CheckForWindowChangingMonitors();
                     }
@@ -3270,7 +3272,7 @@ namespace Xtro.MDX.Utilities
                     OutputDescription Description;
                     OutputInfo.Output.GetDescription(out Description);
 
-                    if (Monitor.DeviceName ==Description.DeviceName)
+                    if (Monitor.DeviceName == Description.DeviceName)
                     {
                         OutputOrdinal = OutputInfo.OutputOrdinal;
                         return 0;
@@ -3289,7 +3291,7 @@ namespace Xtro.MDX.Utilities
         static void CheckForWindowChangingMonitors()
         {
             // Skip this check for various reasons
-            if (!GetState().AutoChangeAdapter || GetState().IgnoreSizeChange || !GetState().DeviceCreated || !IsWindowed())return;
+            if (!GetState().AutoChangeAdapter || GetState().IgnoreSizeChange || !GetState().DeviceCreated || !IsWindowed()) return;
 
             int Result;
             var WindowMonitor = Screen.FromControl(GetForm());
@@ -3297,17 +3299,17 @@ namespace Xtro.MDX.Utilities
             if (WindowMonitor != AdapterMonitor)
             {
                 uint NewOrdinal;
-                if (GetAdapterOrdinalFromMonitor(WindowMonitor, out NewOrdinal)>=0)
+                if (GetAdapterOrdinalFromMonitor(WindowMonitor, out NewOrdinal) >= 0)
                 {
                     // Find the closest valid device settings with the new ordinal
                     var DeviceSettings = GetDeviceSettings().Copy();
                     DeviceSettings.AdapterOrdinal = NewOrdinal;
                     uint NewOutput;
-                    if (GetOutputOrdinalFromMonitor(WindowMonitor, out NewOutput)>=0) DeviceSettings.Output = NewOutput;
+                    if (GetOutputOrdinalFromMonitor(WindowMonitor, out NewOutput) >= 0) DeviceSettings.Output = NewOutput;
 
                     var MatchOptions = new MatchOptions
                     {
-                        AdapterOrdinal =MatchType.PreserveInput,
+                        AdapterOrdinal = MatchType.PreserveInput,
                         DeviceType = MatchType.ClosestToInput,
                         Windowed = MatchType.ClosestToInput,
                         AdapterFormat = MatchType.ClosestToInput,
@@ -3325,19 +3327,19 @@ namespace Xtro.MDX.Utilities
                     };
 
                     Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
-                    if (Result>=0)
+                    if (Result >= 0)
                     {
                         // Create a Direct3D device using the new device settings.  
                         // If there is an existing device, then it will either reset or recreate the scene.
                         Result = ChangeDevice(DeviceSettings, null, false, false);
 
                         // If hr == E_ABORT, this means the app rejected the device settings in the ModifySettingsCallback
-                        if (Result ==(int)Error.Abort)
+                        if (Result == (int)Error.Abort)
                         {
                             // so nothing changed and keep from attempting to switch adapters next time
-                            GetState().AutoChangeAdapter=false;
+                            GetState().AutoChangeAdapter = false;
                         }
-                        else if (Result<0)
+                        else if (Result < 0)
                         {
                             Shutdown();
                             Pause(false, false);
@@ -3351,7 +3353,7 @@ namespace Xtro.MDX.Utilities
         public static void HandleResizeBeginEvent()
         {
             Pause(true, true);
-            GetState().InSizeMove=true;
+            GetState().InSizeMove = true;
         }
 
         public static void HandleResizeEndEvent()
@@ -3359,7 +3361,7 @@ namespace Xtro.MDX.Utilities
             Pause(false, false);
             CheckForWindowSizeChange();
             CheckForWindowChangingMonitors();
-            GetState().InSizeMove=false;
+            GetState().InSizeMove = false;
         }
 
         public static void HandleCursorChangedEvent()
@@ -3374,7 +3376,7 @@ namespace Xtro.MDX.Utilities
         {
             if (!IsActive()) // Handle only if previously not active 
             {
-                GetState().Active=true;
+                GetState().Active = true;
 
                 // Enable controller rumble & input when activating app
                 EnableXInput(true);
@@ -3384,7 +3386,7 @@ namespace Xtro.MDX.Utilities
                 // is minimized and thus making the pause count wrong
                 if (GetState().MinimizedWhileFullscreen)
                 {
-                    GetState().MinimizedWhileFullscreen=false;
+                    GetState().MinimizedWhileFullscreen = false;
 
                     if (IsApplicationRendering())
                     {
@@ -3407,7 +3409,7 @@ namespace Xtro.MDX.Utilities
             var MatchOptions = new MatchOptions
             {
                 AdapterOrdinal = MatchType.PreserveInput,
-                DeviceType =MatchType.ClosestToInput,
+                DeviceType = MatchType.ClosestToInput,
                 Windowed = MatchType.PreserveInput,
                 AdapterFormat = MatchType.IgnoreInput,
                 VertexProcessing = MatchType.ClosestToInput,
@@ -3437,22 +3439,22 @@ namespace Xtro.MDX.Utilities
             else
             {
                 // No previous data, so just switch to defaults
-                MatchOptions.Resolution =MatchType.IgnoreInput;
+                MatchOptions.Resolution = MatchType.IgnoreInput;
             }
 
             var Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
-            if (Result>=0)
+            if (Result >= 0)
             {
                 // Create a Direct3D device using the new device settings.  
                 // If there is an existing device, then it will either reset or recreate the scene.
                 Result = ChangeDevice(DeviceSettings, null, false, false);
 
                 // If hr == E_ABORT, this means the app rejected the device settings in the ModifySettingsCallback so nothing changed
-                if (Result<0 && (Result !=(int)Error.Abort))
+                if (Result < 0 && (Result != (int)Error.Abort))
                 {
                     // Failed creating device, try to switch back.
                     var Result2 = ChangeDevice(OrginalDeviceSettings, null, false, false);
-                    if (Result2<0)
+                    if (Result2 < 0)
                     {
                         // If this failed, then shutdown
                         Shutdown();
@@ -3472,7 +3474,7 @@ namespace Xtro.MDX.Utilities
         {
             if (IsActive()) // Handle only if previously active 
             {
-                GetState().Active=false;
+                GetState().Active = false;
 
                 // Disable any controller rumble & input when de-activating app
                 EnableXInput(false);
@@ -3480,8 +3482,8 @@ namespace Xtro.MDX.Utilities
                 if (!IsWindowed())
                 {
                     // Going from full screen to a minimized state 
-                    Cursor.Clip=Rectangle.Empty; // don't limit the cursor anymore
-                    GetState().MinimizedWhileFullscreen=true;
+                    Cursor.Clip = Rectangle.Empty; // don't limit the cursor anymore
+                    GetState().MinimizedWhileFullscreen = true;
                 }
             }
         }
@@ -3499,23 +3501,241 @@ namespace Xtro.MDX.Utilities
             switch (E.KeyCode)
             {
             case Keys.Escape:
-                    if (GetState().HandleEscape) GetForm().Close();
-                    break;
+                if (GetState().HandleEscape) GetForm().Close();
+                break;
             case Keys.Pause:
-                    if (GetState().HandlePause) Pause(!IsTimePaused(), false);
-                    break;
+                if (GetState().HandlePause) Pause(!IsTimePaused(), false);
+                break;
             case Keys.F10:
-                    E.SuppressKeyPress = GetForm().Menu == null;
-                    break;
+                E.SuppressKeyPress = GetForm().Menu == null;
+                break;
             case Keys.Enter:
-                    if (E.Alt) ToggleFullScreen();
-                    break;
+                if (E.Alt) ToggleFullScreen();
+                break;
             }
         }
 
         public static bool IsTimePaused()
         {
             return GetState().PauseTimeCount > 0;
+        }
+
+        public static ResourceCache GetGlobalResourceCache()
+        {
+            if (ResourceCache.Singular == null) new ResourceCache();
+
+            return ResourceCache.Singular;
+        }
+
+        public static Format MakeTypeless(Format Format)
+        {
+            if (!IsInGammaCorrectMode()) return Format;
+
+            switch (Format)
+            {
+            case Format.R8G8B8A8_UNorm_SRGB:
+            case Format.R8G8B8A8_UNorm:
+            case Format.R8G8B8A8_UInt:
+            case Format.R8G8B8A8_SNorm:
+            case Format.R8G8B8A8_SInt:
+                return Format.R8G8B8A8_Typeless;
+
+            case Format.BC1_UNorm_SRGB:
+            case Format.BC1_UNorm:
+                return Format.BC1_Typeless;
+            case Format.BC2_UNorm_SRGB:
+            case Format.BC2_UNorm:
+                return Format.BC2_Typeless;
+            case Format.BC3_UNorm_SRGB:
+            case Format.BC3_UNorm:
+                return Format.BC3_Typeless;
+            };
+
+            return Format;
+        }
+
+        public static Format MakeSRGB(Format Format)
+        {
+            if (!IsInGammaCorrectMode()) return Format;
+
+            switch (Format)
+            {
+            case Format.R8G8B8A8_Typeless:
+            case Format.R8G8B8A8_UNorm:
+            case Format.R8G8B8A8_UInt:
+            case Format.R8G8B8A8_SNorm:
+            case Format.R8G8B8A8_SInt:
+                return Format.R8G8B8A8_UNorm_SRGB;
+
+            case Format.BC1_Typeless:
+            case Format.BC1_UNorm:
+                return Format.BC1_UNorm_SRGB;
+            case Format.BC2_Typeless:
+            case Format.BC2_UNorm:
+                return Format.BC2_UNorm_SRGB;
+            case Format.BC3_Typeless:
+            case Format.BC3_UNorm:
+                return Format.BC3_UNorm_SRGB;
+            };
+
+            return Format;
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Tries to find the location of a SDK media file
+        //--------------------------------------------------------------------------------------
+        public static int FindSDK_MediaFileCch(out string DestinationPath, string Filename)
+        {
+            DestinationPath = null;
+
+            if (string.IsNullOrEmpty(Filename)) return (int)Error.InvalidArgument;
+
+            // Get the exe name, and exe path
+            var ExePath = System.Reflection.Assembly.GetEntryAssembly().Location;
+            var LastSlashIndex = ExePath.LastIndexOf('\\');
+
+            var ExeName = ExePath.Substring(LastSlashIndex + 1);
+            ExeName = ExeName.Substring(0, ExeName.LastIndexOf('.'));
+
+            ExePath = ExePath.Substring(0, LastSlashIndex);
+
+            // Typical directories:
+            //      .\
+            //      ..\
+            //      ..\..\
+            //      %EXE_DIR%\
+            //      %EXE_DIR%\..\
+            //      %EXE_DIR%\..\..\
+            //      %EXE_DIR%\..\%EXE_NAME%
+            //      %EXE_DIR%\..\..\%EXE_NAME%
+
+            // Typical directory search
+            var Found = FindMediaSearchTypicalDirs(out DestinationPath, Filename, ExePath, ExeName);
+            if (Found) return 0;
+
+            // Typical directory search again, but also look in a subdir called "\media\" 
+            var SearchFor = "media\\" + Filename;
+            Found = FindMediaSearchTypicalDirs(out DestinationPath, SearchFor, ExePath, ExeName);
+            if (Found) return 0;
+
+            // Search all parent directories starting at .\ and using Filename as the leaf name
+            var LeafName = Filename;
+            Found = FindMediaSearchParentDirs(out DestinationPath, ".", LeafName);
+            if (Found) return 0;
+
+            // Search all parent directories starting at the exe's dir and using Filename as the leaf name
+            Found = FindMediaSearchParentDirs(out DestinationPath, ExePath, LeafName);
+            if (Found) return 0;
+
+            // Search all parent directories starting at .\ and using "media\Filename" as the leaf name
+            LeafName = "media\\" + Filename;
+            Found = FindMediaSearchParentDirs(out DestinationPath, ".", LeafName);
+            if (Found) return 0;
+
+            // Search all parent directories starting at the exe's dir and using "media\Filename" as the leaf name
+            Found = FindMediaSearchParentDirs(out DestinationPath, ExePath, LeafName);
+            if (Found) return 0;
+
+            // On failure, return the file as the path but also return an error code
+            DestinationPath = Filename;
+
+            return (int)Error.MediaNotFound;
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Search a set of typical directories
+        //--------------------------------------------------------------------------------------
+        static bool FindMediaSearchTypicalDirs(out string SearchPath, string Leaf, string ExePath, string ExeName)
+        {
+            // Typical directories:
+            //      .\
+            //      ..\
+            //      ..\..\
+            //      %EXE_DIR%\
+            //      %EXE_DIR%\..\
+            //      %EXE_DIR%\..\..\
+            //      %EXE_DIR%\..\%EXE_NAME%
+            //      %EXE_DIR%\..\..\%EXE_NAME%
+            //      DXSDK media path
+
+            // Search in .\  
+            SearchPath = Leaf;
+            if (File.Exists(SearchPath)) return true;
+
+            // Search in ..\  
+            SearchPath = "..\\" + Leaf;
+            if (File.Exists(SearchPath)) return true;
+
+            // Search in ..\..\ 
+            SearchPath = "..\\..\\" + Leaf;
+            if (File.Exists(SearchPath)) return true;
+
+            // Search in ..\..\ 
+            SearchPath = "..\\..\\" + Leaf;
+            if (File.Exists(SearchPath)) return true;
+
+            // Search in the %EXE_DIR%\ 
+            SearchPath = ExePath + "\\" + Leaf;
+            if (File.Exists(SearchPath)) return true;
+
+            // Search in the %EXE_DIR%\..\ 
+            SearchPath = ExePath + "\\..\\" + Leaf;
+            if (File.Exists(SearchPath)) return true;
+
+            // Search in the %EXE_DIR%\..\..\ 
+            SearchPath = ExePath + "\\..\\..\\" + Leaf;
+            if (File.Exists(SearchPath)) return true;
+
+            // Search in "%EXE_DIR%\..\%EXE_NAME%\".  This matches the DirectX SDK layout
+            SearchPath = ExePath + "\\..\\" + ExeName + "\\" + Leaf;
+            if (File.Exists(SearchPath)) return true;
+
+            // Search in "%EXE_DIR%\..\..\%EXE_NAME%\".  This matches the DirectX SDK layout
+            SearchPath = ExePath + "\\..\\..\\" + ExeName + "\\" + Leaf;
+            if (File.Exists(SearchPath)) return true;
+
+            // Search in media search dir 
+            var SearchPath2 = MediaSearchPath;
+            if (!string.IsNullOrEmpty(SearchPath2))
+            {
+                SearchPath = SearchPath2 + Leaf;
+                if (File.Exists(SearchPath)) return true;
+            }
+
+            return false;
+        }
+
+        public static string MediaSearchPath { get; set; }
+
+        //--------------------------------------------------------------------------------------
+        // Search parent directories starting at strStartAt, and appending strLeafName
+        // at each parent directory.  It stops at the root directory.
+        //--------------------------------------------------------------------------------------
+        static bool FindMediaSearchParentDirs(out string SearchPath, string StartAt, string LeafName)
+        {
+            SearchPath = null;
+
+            var FullPath = Path.GetFullPath(StartAt);
+            var LastSlashIndex = FullPath.LastIndexOf('\\');
+            if (LastSlashIndex == -1) return false;
+            var FilePart = FullPath.Substring(LastSlashIndex + 1);
+
+            while (!string.IsNullOrEmpty(FilePart))
+            {
+                var FullFileName = FullPath + "\\" + LeafName;
+                if (File.Exists(FullFileName))
+                {
+                    SearchPath = FullFileName;
+                    return true;
+                }
+
+                var Search = FullPath + "\\..";
+                FullPath = Path.GetFullPath(Search);
+                LastSlashIndex = FullPath.LastIndexOf('\\');
+                FilePart = FullPath.Substring(LastSlashIndex + 1);
+            }
+
+            return false;
         }
     }
 }

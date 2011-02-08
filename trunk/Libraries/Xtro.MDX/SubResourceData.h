@@ -16,9 +16,7 @@ internal:
 		
 	inline void ToNative(D3D10_SUBRESOURCE_DATA* Native)
 	{
-		Native->pSysMem = 0;
-		if (SystemMemory != nullptr && SystemMemory->Size > 0) Native->pSysMem = SystemMemory->pMemory;
-
+		Native->pSysMem = (SystemMemory != nullptr && SystemMemory->Size > 0) ? SystemMemory->pMemory : 0;
 		Native->SysMemPitch = SystemMemoryPitch;
 		Native->SysMemSlicePitch = SystemMemorySlicePitch;
 	}
@@ -57,28 +55,16 @@ public:
 
 	virtual bool Equals(SubResourceData Value)
 	{
-		if (SystemMemory == nullptr && Value.SystemMemory != nullptr) return false;
-		if (SystemMemory != nullptr && Value.SystemMemory == nullptr) return false;
-		if (SystemMemory != nullptr && Value.SystemMemory != nullptr)
-		{
-			if (!SystemMemory->Equals(Value.SystemMemory)) return false;
-		}
-				   
 		return
+			SystemMemory == Value.SystemMemory &&
 			SystemMemoryPitch == Value.SystemMemoryPitch &&
 			SystemMemorySlicePitch == Value.SystemMemorySlicePitch;
 	}
 
 	static bool Equals(SubResourceData% Value1, SubResourceData% Value2)
 	{
-		if (Value1.SystemMemory == nullptr && Value2.SystemMemory != nullptr) return false;
-		if (Value1.SystemMemory != nullptr && Value2.SystemMemory == nullptr) return false;
-		if (Value1.SystemMemory != nullptr && Value2.SystemMemory != nullptr)
-		{
-			if (!Value1.SystemMemory->Equals(Value2.SystemMemory)) return false;
-		}
-
 		return
+			Value1.SystemMemory == Value2.SystemMemory &&
 			Value1.SystemMemoryPitch == Value2.SystemMemoryPitch &&
 			Value1.SystemMemorySlicePitch == Value2.SystemMemorySlicePitch;
 	}

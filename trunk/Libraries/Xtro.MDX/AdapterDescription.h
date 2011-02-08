@@ -12,7 +12,7 @@ internal:
 		DedicatedVideoMemory = Native->DedicatedVideoMemory;
 		DedicatedSystemMemory = Native->DedicatedSystemMemory;
 		SharedSystemMemory = Native->SharedSystemMemory;
-		AdapterLuid = ((Int64)(Native->AdapterLuid.HighPart) << 32) | Native->AdapterLuid.LowPart;
+		AdapterLuid = ((long long)(Native->AdapterLuid.HighPart) << 32) | Native->AdapterLuid.LowPart;
 	}
 
 public:
@@ -24,7 +24,7 @@ public:
 	SIZE_T DedicatedVideoMemory;
 	SIZE_T DedicatedSystemMemory;
 	SIZE_T SharedSystemMemory;
-	Int64 AdapterLuid;
+	long long AdapterLuid;
 
 	static bool operator == (AdapterDescription Left, AdapterDescription Right)
 	{

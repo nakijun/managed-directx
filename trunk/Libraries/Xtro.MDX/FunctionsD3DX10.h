@@ -66,7 +66,7 @@ public:
 	static int GetImageInfoFromMemory(UnmanagedMemory^ SourceData, [Out] ImageInfo% SourceInfo)
 	{
 		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-		int Size = SourceData == nullptr ? 0 : SourceData->FSize;
+		SIZE_T Size = SourceData == nullptr ? 0 : SourceData->FSize;
 		pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo;
 
 		return D3DX10GetImageInfoFromMemory(pSourceData, Size, 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0);
@@ -83,8 +83,7 @@ public:
 		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pResource, 0); }
 		finally { Marshal::FreeHGlobal(pSourceFile); }
 
-		if (pResource) Texture = CreateTextureByType(pResource);
-		else Texture = nullptr;
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
 
 		return Result;
 	}
@@ -92,17 +91,21 @@ public:
 	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-		pin_ptr<ImageLoadInfo> PinnedLoadInfo = &LoadInfo;
 
 		int Result = 0;
 		ID3D10Resource* pResource = 0;
 	
+		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+		LoadInfo.Marshal(&NativeLoadInfo);
 		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), (D3DX10_IMAGE_LOAD_INFO*)PinnedLoadInfo, 0, &pResource, 0); }
-		finally { Marshal::FreeHGlobal(pSourceFile); }
+		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pResource, 0); }
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceFile); 
+			LoadInfo.Unmarshal();
+		}
 
-		if (pResource) Texture = CreateTextureByType(pResource);
-		else Texture = nullptr;
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
 
 		return Result;
 	}
@@ -111,14 +114,13 @@ public:
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-		int Size = SourceData == nullptr ? 0 : SourceData->FSize;
+		SIZE_T Size = SourceData == nullptr ? 0 : SourceData->FSize;
 
 		int Result = 0;
 		ID3D10Resource* pResource = 0;
 		Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, Size, 0, 0, &pResource, 0);
 
-		if (pResource) Texture = CreateTextureByType(pResource);
-		else Texture = nullptr;
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
 
 		return Result;
 	}
@@ -127,15 +129,17 @@ public:
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-		int Size = SourceData == nullptr ? 0 : SourceData->FSize;
-		pin_ptr<ImageLoadInfo> PinnedLoadInfo = &LoadInfo;
+		SIZE_T Size = SourceData == nullptr ? 0 : SourceData->FSize;
 
 		int Result = 0;
 		ID3D10Resource* pResource = 0;
-		Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, Size, (D3DX10_IMAGE_LOAD_INFO*)PinnedLoadInfo, 0, &pResource, 0);
 
-		if (pResource) Texture = CreateTextureByType(pResource);
-		else Texture = nullptr;
+		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+		LoadInfo.Marshal(&NativeLoadInfo);
+		try { Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, Size, &NativeLoadInfo, 0, &pResource, 0); }
+		finally { LoadInfo.Unmarshal(); }
+			  
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
 
 		return Result;
 	}
@@ -151,9 +155,15 @@ public:
 	{
 		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
 		ID3D10Resource* pDestinationTexture = DestinationTexture == nullptr ? 0 : DestinationTexture->pResource;
-		pin_ptr<TextureLoadInfo> PinnedLoadInfo = &LoadInfo;
 
-		return D3DX10LoadTextureFromTexture(pSourceTexture, (D3DX10_TEXTURE_LOAD_INFO*)PinnedLoadInfo, pDestinationTexture);
+		int Result;
+
+		D3DX10_TEXTURE_LOAD_INFO NativeLoadInfo;
+		LoadInfo.Marshal(&NativeLoadInfo);
+		try { Result = D3DX10LoadTextureFromTexture(pSourceTexture, &NativeLoadInfo, pDestinationTexture); }
+		finally { LoadInfo.Unmarshal(); }
+
+		return Result;
 	}
 
 	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] ShaderResourceView^% ShaderResourceView)
@@ -180,14 +190,19 @@ public:
 	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-		pin_ptr<ImageLoadInfo> PinnedLoadInfo = &LoadInfo;
 
 		int Result = 0;
 		ID3D10ShaderResourceView* pShaderResourceView = 0;
 
+		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+		LoadInfo.Marshal(&NativeLoadInfo);
 		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), (D3DX10_IMAGE_LOAD_INFO*)PinnedLoadInfo, 0, &pShaderResourceView, 0); }
-		finally { Marshal::FreeHGlobal(pSourceFile); }
+		try { Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pShaderResourceView, 0); }
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceFile); 
+			LoadInfo.Unmarshal();
+		}
 
 		if (pShaderResourceView)
 		{
@@ -295,15 +310,15 @@ public:
 		return Result;
 	}
 
-	static int CreateFontIndirect(Xtro::MDX::Direct3D10::Device^ Device, FontDescription% FontDescription, [Out] Font^% Font)
+	static int CreateFontIndirect(Xtro::MDX::Direct3D10::Device^ Device, FontDescription% Description, [Out] Font^% Font)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
-		D3DX10_FONT_DESC NativeFontDescription;
-		FontDescription.ToNative(&NativeFontDescription);
+		D3DX10_FONT_DESC NativeDescription;
+		Description.ToNative(&NativeDescription);
 
 		ID3DX10Font* pFont = 0;
-		int Result = D3DX10CreateFontIndirect(pDevice, &NativeFontDescription, &pFont);
+		int Result = D3DX10CreateFontIndirect(pDevice, &NativeDescription, &pFont);
 
 		if (pFont)
 		{
@@ -328,6 +343,46 @@ public:
 			catch (KeyNotFoundException^) { Sprite = gcnew Xtro::MDX::Direct3DX10::Sprite(IntPtr(pSprite)); }
 		}
 		else Sprite = nullptr;
+
+		return Result;
+	}
+
+	static int CreateMesh(Xtro::MDX::Direct3D10::Device^ Device, array<InputElementDescription>^ Declaration, unsigned int DeclarationCount, String^ PositionSemantic, unsigned int VertexCount, unsigned int FaceCount, MeshFlag Options, [Out] Mesh^% Mesh)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result;
+		ID3DX10Mesh* pMesh = 0;
+
+		IntPtr pPositionSemantic = Marshal::StringToHGlobalAnsi(PositionSemantic);
+		D3D10_INPUT_ELEMENT_DESC* pDeclaration = 0;
+		try 
+		{
+			if (Declaration != nullptr && Declaration->Length > 0)
+			{
+				pDeclaration = new D3D10_INPUT_ELEMENT_DESC[Declaration->Length];
+				for (int DeclarationNo = 0; DeclarationNo < Declaration->Length; DeclarationNo++) Declaration[DeclarationNo].Marshal(&pDeclaration[DeclarationNo]);
+			}
+
+			Result = D3DX10CreateMesh(pDevice, pDeclaration, DeclarationCount, (LPCSTR)pPositionSemantic.ToPointer(), VertexCount, FaceCount, (unsigned int)Options, &pMesh);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pPositionSemantic); 
+
+			if (Declaration != nullptr)
+			{
+				for (int DeclarationNo = 0; DeclarationNo < Declaration->Length; DeclarationNo++) Declaration[DeclarationNo].Unmarshal();
+			}
+			if (pDeclaration) delete[] pDeclaration;
+		}
+
+		if (pMesh)
+		{
+			try { Mesh = (Xtro::MDX::Direct3DX10::Mesh^)Interface::Interfaces[IntPtr(pMesh)]; }
+			catch (KeyNotFoundException^) { Mesh = gcnew Xtro::MDX::Direct3DX10::Mesh(IntPtr(pMesh)); }
+		}
+		else Mesh = nullptr;
 
 		return Result;
 	}

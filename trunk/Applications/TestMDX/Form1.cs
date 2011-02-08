@@ -8,8 +8,9 @@ using Object = Xtro.MDX.DXGI.Object;
 using Xtro.MDX.Direct3DX10;
 using D3D10Functions = Xtro.MDX.Direct3D10.Functions;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
-
 using Xtro.MDX.Direct3D10;
+using System.Runtime.InteropServices;
+using System.IO;
 
 namespace TestMDX
 {
@@ -56,7 +57,7 @@ namespace TestMDX
 
             int Result = 0;
             SwapChain SwapChain;
-            Xtro.MDX.Direct3D10.Device Device;
+            Xtro.MDX.Direct3D10.Device Device;            
             Result = D3D10Functions.CreateDeviceAndSwapChain(null, DriverType.Hardware, null, CreateDeviceFlag.Debug, ref SwapChainDescription, out SwapChain, out Device);
 
             Effect Effect;
@@ -82,7 +83,7 @@ namespace TestMDX
             Guid Name = Guid.NewGuid();
 
             Unknown InterfaceData;
-            byte[] MemoryData;
+            UnmanagedMemory MemoryData;
 
             uint Size = 0;
             Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
@@ -90,7 +91,7 @@ namespace TestMDX
             Size = 0;
             Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
             a = InterfaceData.Release();
-            Factory.SetPrivateData(Name, 4, new byte[4] { 1, 2, 3, 4 });
+        //    Factory.SetPrivateData(Name, 4, new byte[4] { 1, 2, 3, 4 });
             Size = 0;
             Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
 

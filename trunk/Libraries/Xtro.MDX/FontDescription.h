@@ -17,8 +17,7 @@ internal:
 		int Length = FaceName == nullptr ? 0 : FaceName->Length;
 		for(int A = 0; A < LF_FACESIZE; A++)
 		{
-			if (A < Length) Native->FaceName[A] = FaceName[A];
-			else Native->FaceName[A] = 0;
+			Native->FaceName[A] = A < Length ? FaceName[A] : 0;
 		}
 	}
 
