@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 using Xtro.MDX;
+using Xtro.MDX.Generic;
 using Xtro.MDX.DXGI;
 using Usage = Xtro.MDX.DXGI.Usage;
 using Xtro.MDX.Direct3D10;
@@ -176,7 +177,7 @@ namespace Tutorial03
             PassDescription PassDescription;
             Result = Technique.GetPassByIndex(0).GetDescription(out PassDescription);
             if (Result < 0) throw new Exception("GetDescription has failed : " + Result);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Length, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Size, out VertexLayout);
             if (Result < 0) throw new Exception("Device.CreateInputLayout has failed : " + Result);
 
             // Set the input layout
@@ -186,8 +187,8 @@ namespace Tutorial03
 
             var VertexCount = (uint)3;
             int VertexSize = Marshal.SizeOf(typeof(Vector3));
-            UnmanagedMemory Vertices = new UnmanagedMemory((uint)(VertexSize * VertexCount));
-            Vertices.Write(0, VertexCount, new Vector3[]
+            var Vertices = new UnmanagedMemory<Vector3>((uint)(VertexSize * VertexCount));
+            Vertices.Write(new Vector3[]
             {
                 new Vector3(0.0f, 0.5f, 0.5f),
                 new Vector3(0.5f, -0.5f, 0.5f),

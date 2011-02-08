@@ -17,5 +17,9 @@ namespace Xtro.MDX.Utilities
         public delegate void FrameRender(Device Device, double Time, float ElapsedTime, object UserContext);
         public delegate void SwapChainReleasing(object UserContext);
         public delegate void DeviceDestroyed(object UserContext);
-    }
+
+        public delegate void CreateTextureFromFile(Device Device, string FileName, out ShaderResourceView ResourceView, object Context);
+        public delegate void CreateVertexBuffer(Device Device, out Buffer Buffer, BufferDescription BufferDescription, UnmanagedMemory Data, object Context);
+        public delegate void CreateIndexBuffer(Device Device, out Buffer Buffer, BufferDescription BufferDescription, UnmanagedMemory Data, object Context);
+}
 }

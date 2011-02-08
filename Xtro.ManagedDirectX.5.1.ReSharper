@@ -117,6 +117,7 @@
       <Abbreviation Text="MCE" />
       <Abbreviation Text="QPF" />
       <Abbreviation Text="NA" />
+      <Abbreviation Text="SRGB" />
     </Naming2>
   </CodeStyleSettings>
   <Daemon.SolutionSettings>

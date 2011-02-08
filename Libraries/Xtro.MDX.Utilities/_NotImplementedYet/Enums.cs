@@ -12,6 +12,8 @@
         ResettingDeviceObjects = -2147219192,
         DeviceRemoved = -2147219190,
 
+        NoInterface = -2147467262,
+        OutOfMemory = -2147024882,
         InvalidArgument = -2147024809,
         Fail = -2147467259,
         Abort = -2147467260,

@@ -3,6 +3,8 @@
 * Burda bilgi yeralmasýn. kontrol edip bilgileri bilgiler.txt ye koy
 ----------------------------------------------------------------------
 
+* mdx(c++) deki tüm if leri tara gerekeni "? :" yap
+
 * cast için as kullanmaktan vazgeç
 
 * String^ olan her yeri marshal/unmarshal try catch yap.

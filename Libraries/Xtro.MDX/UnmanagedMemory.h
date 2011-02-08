@@ -3,6 +3,8 @@ public ref class UnmanagedMemory
 private:
 	bool OwnMemory;
 
+	UnmanagedMemoryStream^ Stream;
+	
 	!UnmanagedMemory()
 	{
 		if (!OwnMemory) return;
@@ -14,12 +16,12 @@ private:
 		}
 		catch (...) { }
 	}
-
+	  
 	~UnmanagedMemory()
 	{
 		this->!UnmanagedMemory();
 	}
-
+	  	
 internal:
 	unsigned char* pMemory;
 
@@ -28,7 +30,7 @@ internal:
 public:
 	UnmanagedMemory(unsigned int Size)
 	{
-		if (Size < 1) throw gcnew ArgumentException ("Positive number required.", "Size");
+		if (Size < 1) throw gcnew ArgumentException("Positive number required.", "Size");
 		
 		FSize = Size;
 
@@ -40,7 +42,7 @@ public:
 
 	UnmanagedMemory(IntPtr Pointer, unsigned int Size)
 	{
-		if (Size < 1) throw gcnew ArgumentException ("Positive number required.", "Size");
+		if (Size < 1) throw gcnew ArgumentException("Positive number required.", "Size");
 		
 		FSize = Size;
 
@@ -57,32 +59,69 @@ public:
 		}
 	}
 
-	generic<typename T> where T : value class
-	void Get(unsigned int Index, T% Value)
+	UnmanagedMemoryStream^ GetStream()
 	{
-		pin_ptr<T> PinnedValue = &Value;
-		memcpy(PinnedValue, pMemory + Index * sizeof(T), sizeof(T));
+		return Stream == nullptr ? Stream = gcnew UnmanagedMemoryStream(pMemory, FSize, FSize, FileAccess::ReadWrite) : Stream;
 	}
 
 	generic<typename T> where T : value class
-	void Set(unsigned int Index, T% Value)
+	void Get(unsigned int MemoryOffset, unsigned int Index, [Out] T% Value)
+	{
+		pin_ptr<T> PinnedValue = &Value;
+		memcpy(PinnedValue, pMemory + MemoryOffset + Index * sizeof(T), sizeof(T));
+	}
+
+	generic<typename T> where T : value class
+	void Get(unsigned int MemoryOffset, [Out] T% Value)
+	{
+		Get(MemoryOffset, 0, Value);
+	}
+
+	generic<typename T> where T : value class
+	void Set(unsigned int MemoryOffset, unsigned int Index, T% Value)
 	{									 
 		pin_ptr<T> PinnedValue = &Value;
-		memcpy(pMemory + Index * sizeof(T), PinnedValue, sizeof(T));
+		memcpy(pMemory + MemoryOffset + Index * sizeof(T), PinnedValue, sizeof(T));
 	}
 
 	generic<typename T> where T : value class
-	void Read(unsigned int StartIndex, unsigned int Count, array<T>^% Values)
+	void Set(unsigned int MemoryOffset, T% Value)
 	{
-		pin_ptr<T> PinnedValues = &Values[0];
-		memcpy(PinnedValues, pMemory + StartIndex * sizeof(T), Count * sizeof(T));
+		Set(MemoryOffset, 0, Value);
 	}
 
 	generic<typename T> where T : value class
-	void Write(unsigned int StartIndex, unsigned int Count, array<T>^ Values)
+	void Read(unsigned int MemoryOffset, unsigned int MemoryIndex, array<T>^ Values, unsigned int ValuesCount, unsigned int ValuesStartIndex)
 	{
-		pin_ptr<T> PinnedValues = &Values[0];
-		memcpy(pMemory + StartIndex * sizeof(T), PinnedValues, Count * sizeof(T));
+		if (Values == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Values");
+
+		pin_ptr<T> PinnedValues = &Values[ValuesStartIndex];
+		memcpy(PinnedValues, pMemory + MemoryOffset + MemoryIndex * sizeof(T), ValuesCount * sizeof(T));
+	}
+
+	generic<typename T> where T : value class
+	void Read(unsigned int MemoryOffset, array<T>^ Values)
+	{
+		if (Values == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Values");
+
+		Read(MemoryOffset, 0, Values, Values->Length, 0);
+	}
+		
+	generic<typename T> where T : value class
+	void Write(unsigned int MemoryOffset, unsigned int MemoryIndex, array<T>^ Values, unsigned int ValuesCount, unsigned int ValuesStartIndex)
+	{
+		if (Values == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Values");
+
+		pin_ptr<T> PinnedValues = &Values[ValuesStartIndex];
+		memcpy(pMemory + MemoryOffset + MemoryIndex * sizeof(T), PinnedValues, ValuesCount * sizeof(T));
+	}
+
+	generic<typename T> where T : value class
+	void Write(unsigned int MemoryOffset, array<T>^ Values)
+	{
+		if (Values == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Values");
+
+		Write(MemoryOffset, 0, Values, Values->Length, 0);
 	}
 
 	property unsigned int Size

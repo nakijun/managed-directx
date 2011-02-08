@@ -31,7 +31,7 @@ public:
 		return Result;
 	}
 
-	int GetPrivateData(Guid Name, [Out] array<Byte>^% Data, unsigned int% Size, [Out] Unknown^% Unknown)
+	int GetPrivateData(Guid Name, [Out] UnmanagedMemory^% Data, unsigned int% Size, [Out] Unknown^% Unknown)
 	{
 		pin_ptr<unsigned int> PinnedSize = &Size;
 
@@ -42,14 +42,13 @@ public:
 
 		if (Size > 0)
 		{
-			Data = gcnew array<Byte>(Size);
-			pin_ptr<unsigned char> PinnedData = &Data[0];
-			Result = pObject->GetPrivateData(IID_Converter::ToNative(Name), PinnedSize, PinnedData);
+			Data = gcnew UnmanagedMemory(Size);
+			Result = pObject->GetPrivateData(IID_Converter::ToNative(Name), PinnedSize, Data->pMemory);
 
 			if (Size == 4)
 			{
 				void* pData = 0;
-				memcpy(&pData, PinnedData, 4);
+				memcpy(&pData, Data->pMemory, 4);
 
 				try
 				{
@@ -63,11 +62,11 @@ public:
 		return Result;
 	}
 
-	int SetPrivateData(Guid Name, unsigned int Size, array<Byte>^ Data)
+	int SetPrivateData(Guid Name, unsigned int Size, UnmanagedMemory^ Data)
 	{
-		pin_ptr<unsigned char> PinnedData = Data != nullptr && Data->Length > 0 ? &Data[0] : nullptr;
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
 
-		int Result = pObject->SetPrivateData(IID_Converter::ToNative(Name), Size, PinnedData);
+		int Result = pObject->SetPrivateData(IID_Converter::ToNative(Name), Size, pData);
 
 		return Result;
 	}
