@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using Xtro.MDX;
 using Xtro.MDX.DXGI;
-using Usage = Xtro.MDX.DXGI.Usage;
 using Functions = Xtro.MDX.DXGI.Functions;
 using Object = Xtro.MDX.DXGI.Object;
 using Xtro.MDX.Direct3DX10;
@@ -49,7 +48,7 @@ namespace TestMDX
             SwapChainDescription.BufferDescription.Format = Format.R8G8B8A8_UNorm;
             SwapChainDescription.BufferDescription.RefreshRate.Numerator = 60;
             SwapChainDescription.BufferDescription.RefreshRate.Denominator = 1;
-            SwapChainDescription.BufferUsage = Usage.RenderTargetOutput;
+            SwapChainDescription.BufferUsage = UsageFlag.RenderTargetOutput;
             SwapChainDescription.OutputWindow = Handle;
             SwapChainDescription.SampleDescription.Count = 1;
             SwapChainDescription.SampleDescription.Quality = 0;

@@ -447,4 +447,39 @@ public:
 		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 		D3DXVec3Transform((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
 	}
+
+	static void QuaternionMultiply([Out] Quaternion% Out, Quaternion% Quaternion1, Quaternion% Quaternion2)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		pin_ptr<Quaternion> PinnedQuaternion1 = &Quaternion1;
+		pin_ptr<Quaternion> PinnedQuaternion2 = &Quaternion2;
+		D3DXQuaternionMultiply((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion1, (D3DXQUATERNION*)PinnedQuaternion2);
+	}
+
+	static void QuaternionIdentity([Out] Quaternion% Out)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		D3DXQuaternionIdentity((D3DXQUATERNION*)PinnedOut);
+	}
+
+	static void QuaternionNormalize([Out] Quaternion% Out, Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+		D3DXQuaternionNormalize((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static void QuaternionInverse([Out] Quaternion% Out, Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+		D3DXQuaternionInverse((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static void MatrixRotationQuaternion([Out] Matrix% Out, Quaternion% Quaternion)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+		D3DXMatrixRotationQuaternion((D3DXMATRIX*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
 };

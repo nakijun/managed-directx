@@ -127,6 +127,7 @@ namespace Direct3DX10
 	#include "Vector2.h"
 	#include "Vector3.h"
 	#include "Vector4.h"
+	#include "Quaternion.h"
 	#include "Color.h"
 	#include "Matrix.h"
 	#include "Sprite.h"
@@ -138,6 +139,7 @@ namespace Direct3DX10
 	#include "ImageLoadInfo.h"
 	#include "TextureLoadInfo.h"
 	#include "FunctionsD3DX10.h"
+	#include "Quaternion_ForwardedMethods.h"
 }
 }
 }

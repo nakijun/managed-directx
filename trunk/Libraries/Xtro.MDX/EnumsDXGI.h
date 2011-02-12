@@ -1,3 +1,18 @@
+[System::Flags]
+public enum class AdapterFlag
+{
+    None = DXGI_ADAPTER_FLAG_NONE,
+    Remote = DXGI_ADAPTER_FLAG_REMOTE,
+    ForceDwordDXGI_ADAPTER_FLAG_FORCE_DWORD,
+};
+
+[System::Flags]
+public enum class EnumerationModeFlag 
+{
+	Interlaced = DXGI_ENUM_MODES_INTERLACED,
+	Scaling = DXGI_ENUM_MODES_SCALING
+};
+
 public enum class Error
 {
 	InvalidCall = DXGI_ERROR_INVALID_CALL,
@@ -111,14 +126,7 @@ public enum class Format
 };
 
 [System::Flags]
-public enum class EnumerationMode 
-{
-	Interlaced = DXGI_ENUM_MODES_INTERLACED,
-	Scaling = DXGI_ENUM_MODES_SCALING
-};
-
-[System::Flags]
-public enum class MakeWindowAssociation
+public enum class MakeWindowAssociationFlag
 {
 	NoWindowChanges = DXGI_MWA_NO_WINDOW_CHANGES,
 	NoAltEnter = DXGI_MWA_NO_ALT_ENTER,
@@ -158,6 +166,14 @@ public enum class PresentFlag
 };
 
 [System::Flags]
+public enum class Residency
+{
+    Resident = DXGI_RESIDENCY_FULLY_RESIDENT,
+    ResidentInsharedMemory = DXGI_RESIDENCY_RESIDENT_IN_SHARED_MEMORY,
+    EvictedToDisk = DXGI_RESIDENCY_EVICTED_TO_DISK,
+};				  
+
+[System::Flags]
 public enum class SwapChainFlag
 {
 	NonPrerotated = DXGI_SWAP_CHAIN_FLAG_NONPREROTATED,
@@ -182,7 +198,7 @@ public enum class Status
 };
 
 [System::Flags]
-public enum class Usage
+public enum class UsageFlag
 {
 	ShaderInput = DXGI_USAGE_SHADER_INPUT,
 	RenderTargetOutput = DXGI_USAGE_RENDER_TARGET_OUTPUT,

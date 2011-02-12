@@ -325,12 +325,12 @@ namespace Xtro.MDX.Utilities
             for (var F = 0; F < AllowedAdapterFormatArrayCount; F++)
             {
                 uint ModeCount = 0;
-                var Result = OutputInfo.Output.GetDisplayModeList(AllowedAdapterFormats[F], EnumerationMode.Scaling, ref ModeCount, null);
+                var Result = OutputInfo.Output.GetDisplayModeList(AllowedAdapterFormats[F], EnumerationModeFlag.Scaling, ref ModeCount, null);
                 if (Result < 0) break;
 
                 var ModeDescriptions = new ModeDescription[ModeCount];
 
-                Result = OutputInfo.Output.GetDisplayModeList(AllowedAdapterFormats[F], EnumerationMode.Scaling, ref ModeCount, ModeDescriptions);
+                Result = OutputInfo.Output.GetDisplayModeList(AllowedAdapterFormats[F], EnumerationModeFlag.Scaling, ref ModeCount, ModeDescriptions);
                 if (Result == (int)DXGI_Error.NotFound) break;
                 if (Result < 0) continue;
 

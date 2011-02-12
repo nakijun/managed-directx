@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 
 using Xtro.MDX;
 using Xtro.MDX.DXGI;
-using Usage = Xtro.MDX.DXGI.Usage;
 using Xtro.MDX.Direct3D10;
 using Device = Xtro.MDX.Direct3D10.Device;
 using Functions = Xtro.MDX.Direct3D10.Functions;
@@ -75,7 +74,7 @@ namespace Tutorial01
             SwapChainDescription.BufferDescription.Format = Format.R8G8B8A8_UNorm;
             SwapChainDescription.BufferDescription.RefreshRate.Numerator = 60;
             SwapChainDescription.BufferDescription.RefreshRate.Denominator = 1;
-            SwapChainDescription.BufferUsage = Usage.RenderTargetOutput;
+            SwapChainDescription.BufferUsage = UsageFlag.RenderTargetOutput;
             SwapChainDescription.OutputWindow = Handle;
             SwapChainDescription.SampleDescription.Count = 1;
             SwapChainDescription.SampleDescription.Quality = 0;
