@@ -22,6 +22,14 @@ using SizeT = System.Int64;
 namespace Xtro.MDX.Utilities
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct AnimationData
+    {
+        public Vector3 Translation;
+        public Vector4 Orientation;
+        public Vector3 Scaling;
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct AnimationFrameData
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = SDK_Mesh.MaxFrameName)]
@@ -29,17 +37,9 @@ namespace Xtro.MDX.Utilities
         public ulong DataOffset;
     };
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct AnimationData
+    public struct AnimationFrameDataPair
     {
-        Vector3 Translation;
-        Vector4 Orientation;
-        Vector3 Scaling;
-    };
-
-    public struct AnimationDataPair
-    {
-        AnimationData[] AnimationData;
+        public AnimationData[] AnimationData;
     }
 
     public class SDK_Mesh
@@ -259,10 +259,8 @@ namespace Xtro.MDX.Utilities
         UnmanagedMemory StaticMeshData;
         UnmanagedMemory HeapData;
         UnmanagedMemory AnimationData;
-        List<UnmanagedMemory> Vertices;
-        VertexBufferHeaderPair[] VerticesPair;
-        List<UnmanagedMemory> Indices;
-        IndexBufferHeaderPair[] IndicesPair;
+        List<UnmanagedMemory> VerticesList;
+        List<UnmanagedMemory> IndicesList;
 
         //Keep track of the path
         string Path;
@@ -270,6 +268,7 @@ namespace Xtro.MDX.Utilities
         //General mesh info
         UnmanagedMemory<Header> MeshHeader;
         UnmanagedMemory<VertexBufferHeader> VertexBufferArray;
+        VertexBufferHeaderPair[] VertexBufferPairArray;
         UnmanagedMemory<IndexBufferHeader> IndexBufferArray;
         IndexBufferHeaderPair[] IndexBufferPairArray;
         UnmanagedMemory<Mesh> MeshArray;
@@ -286,6 +285,7 @@ namespace Xtro.MDX.Utilities
         //Animation (TODO: Add ability to load/track multiple animation sets)
         AnimationFileHeader[] AnimationHeader;
         AnimationFrameData[] AnimationFrameData;
+        AnimationFrameDataPair[] AnimationFrameDataPair;
         Matrix[] BindPoseFrameMatrices;
         Matrix[] TransformedFrameMatrices;
 
@@ -470,10 +470,12 @@ namespace Xtro.MDX.Utilities
 
             // Pointer fixup
             MeshHeader = new UnmanagedMemory<Header>(StaticMeshData.Pointer, (uint)Marshal.SizeOf(typeof(Header)));
-            var MeshHeaderData = new Header();
+            Header MeshHeaderData;
             MeshHeader.Get(out MeshHeaderData);
             VertexBufferArray = new UnmanagedMemory<VertexBufferHeader>(new IntPtr(StaticMeshData.Pointer.ToInt64() + (long)MeshHeaderData.VertexStreamHeadersOffset), MeshHeaderData.NumberOfVertexBuffers * (uint)Marshal.SizeOf(typeof(VertexBufferHeader)));
+            VertexBufferPairArray = new VertexBufferHeaderPair[MeshHeaderData.NumberOfVertexBuffers];
             IndexBufferArray = new UnmanagedMemory<IndexBufferHeader>(new IntPtr(StaticMeshData.Pointer.ToInt64() + (long)MeshHeaderData.IndexStreamHeadersOffset), MeshHeaderData.NumberOfIndexBuffers * (uint)Marshal.SizeOf(typeof(IndexBufferHeader)));
+            IndexBufferPairArray = new IndexBufferHeaderPair[MeshHeaderData.NumberOfIndexBuffers];
             MeshArray = new UnmanagedMemory<Mesh>(new IntPtr(StaticMeshData.Pointer.ToInt64() + (long)MeshHeaderData.MeshDataOffset), MeshHeaderData.NumberOfMeshes * (uint)Marshal.SizeOf(typeof(Mesh)));
             MeshPairArray = new MeshPair[MeshHeaderData.NumberOfMeshes];
             SubsetArray = new UnmanagedMemory<Subset>(new IntPtr(StaticMeshData.Pointer.ToInt64() + (long)MeshHeaderData.SubsetDataOffset), MeshHeaderData.NumberOfTotalSubsets * (uint)Marshal.SizeOf(typeof(Subset)));
@@ -507,33 +509,25 @@ namespace Xtro.MDX.Utilities
             if (Device != null && CreateAdjacencyIndices) this.CreateAdjacencyIndices(Device, 0.001f, Data);
 
             // Create VBs
-            Vertices = new List<UnmanagedMemory>((int)MeshHeaderData.NumberOfVertexBuffers);
-            VerticesPair = new VertexBufferHeaderPair[MeshHeaderData.NumberOfVertexBuffers];
-            var VertexBufferHeaderPair = new VertexBufferHeaderPair();
+            VerticesList = new List<UnmanagedMemory>((int)MeshHeaderData.NumberOfVertexBuffers);
             for (var I = 0; I < MeshHeaderData.NumberOfVertexBuffers; I++)
             {
                 VertexBufferHeader VertexBufferHeader;
                 VertexBufferArray.Get((uint)I, out VertexBufferHeader);
-                Vertices[I] = new UnmanagedMemory(new IntPtr(BufferData.Pointer.ToInt64() + (long)(VertexBufferHeader.DataOffset - BufferDataStart)), (uint)VertexBufferHeader.SizeBytes);
+                VerticesList[I] = new UnmanagedMemory(new IntPtr(BufferData.Pointer.ToInt64() + (long)(VertexBufferHeader.DataOffset - BufferDataStart)), (uint)VertexBufferHeader.SizeBytes);
 
-                if (Device != null) CreateVertexBuffer(Device, ref VertexBufferHeader, ref VertexBufferHeaderPair, Vertices[I], LoaderCallbacks);
-
-                VerticesPair[I] = VertexBufferHeaderPair;
+                if (Device != null) CreateVertexBuffer(Device, ref VertexBufferHeader, ref VertexBufferPairArray[I], VerticesList[I], LoaderCallbacks);
             }
 
             // Create IBs
-            Indices = new List<UnmanagedMemory>((int)MeshHeaderData.NumberOfIndexBuffers);
-            IndicesPair = new IndexBufferHeaderPair[(int)MeshHeaderData.NumberOfIndexBuffers];
-            var IndexBufferHeaderPair = new IndexBufferHeaderPair();
+            IndicesList = new List<UnmanagedMemory>((int)MeshHeaderData.NumberOfIndexBuffers);
             for (var I = 0; I < MeshHeaderData.NumberOfIndexBuffers; I++)
             {
                 IndexBufferHeader IndexBufferHeader;
                 IndexBufferArray.Get((uint)I, out IndexBufferHeader);
-                Indices[I] = new UnmanagedMemory(new IntPtr(BufferData.Pointer.ToInt64() + (long)(IndexBufferHeader.DataOffset - BufferDataStart)), (uint)IndexBufferHeader.SizeBytes);
+                IndicesList[I] = new UnmanagedMemory(new IntPtr(BufferData.Pointer.ToInt64() + (long)(IndexBufferHeader.DataOffset - BufferDataStart)), (uint)IndexBufferHeader.SizeBytes);
 
-                if (Device != null) CreateIndexBuffer(Device, ref IndexBufferHeader, ref IndexBufferHeaderPair, Indices[I], LoaderCallbacks);
-
-                IndicesPair[I] = IndexBufferHeaderPair;
+                if (Device != null) CreateIndexBuffer(Device, ref IndexBufferHeader, ref IndexBufferPairArray[I], IndicesList[I], LoaderCallbacks);
             }
 
             // Load Materials
@@ -571,7 +565,7 @@ namespace Xtro.MDX.Utilities
                     var IndexCount = (uint)Subset.IndexCount;
                     var IndexStart = (uint)Subset.IndexStart;
 
-                    /*if( bAdjacent )
+                    /*if( Adjacent )
                     {
                         IndexCount *= 2;
                         IndexStart *= 2;
@@ -579,8 +573,8 @@ namespace Xtro.MDX.Utilities
 
                     //BYTE* pIndices = NULL;
                     //m_ppIndices[i]
-                    var IndicesMemory = Indices[(int)CurrentMesh.IndexBuffer];
-                    var VerticesMemory = Vertices[(int)CurrentMesh.VertexBuffers[0]];
+                    var Indices = IndicesList[(int)CurrentMesh.IndexBuffer];
+                    var Vertices = VerticesList[(int)CurrentMesh.VertexBuffers[0]];
                     VertexBufferHeader VertexBufferHeader;
                     VertexBufferArray.Get(CurrentMesh.VertexBuffers[0], out VertexBufferHeader);
                     var Stride = (uint)VertexBufferHeader.StrideBytes;
@@ -591,7 +585,7 @@ namespace Xtro.MDX.Utilities
                         if (Indsize == 2)
                         {
                             var IndexDiv2 = VertexIndex / 2;
-                            IndicesMemory.Get(IndexDiv2, out CurrentIndex);
+                            Indices.Get(IndexDiv2, out CurrentIndex);
                             if (VertexIndex % 2 == 0)
                             {
                                 CurrentIndex = CurrentIndex << 16;
@@ -599,9 +593,9 @@ namespace Xtro.MDX.Utilities
                             }
                             else CurrentIndex = CurrentIndex >> 16;
                         }
-                        else IndicesMemory.Get(VertexIndex, out CurrentIndex);
+                        else Indices.Get(VertexIndex, out CurrentIndex);
                         Vector3 Pt;
-                        VerticesMemory.Get(Stride * CurrentIndex, out Pt);
+                        Vertices.Get(Stride * CurrentIndex, out Pt);
                         if (Pt.X < Lower.X) Lower.X = Pt.X;
                         if (Pt.Y < Lower.Y) Lower.Y = Pt.Y;
                         if (Pt.Z < Lower.Z) Lower.Z = Pt.Z;
@@ -628,6 +622,221 @@ namespace Xtro.MDX.Utilities
             if (LoaderCallbacks == null) CheckLoadDone();
 
             return Result;
+        }
+
+        //--------------------------------------------------------------------------------------
+        // transform bind pose frame using a recursive traversal
+        //--------------------------------------------------------------------------------------
+        void TransformBindPoseFrame(uint Frame, ref Matrix ParentWorld)
+        {
+            if (BindPoseFrameMatrices == null) return;
+
+            // Transform ourselves
+            Matrix LocalWorld;
+            Frame FrameData;
+            FrameArray.Get(Frame, out FrameData);
+            D3DX10Functions.MatrixMultiply(out LocalWorld, ref FrameData.Matrix, ref ParentWorld);
+            BindPoseFrameMatrices[Frame] = LocalWorld;
+
+            // Transform our siblings
+            if (FrameData.SiblingFrame != InvalidFrame) TransformBindPoseFrame(FrameData.SiblingFrame, ref ParentWorld);
+
+            // Transform our children
+            if (FrameData.ChildFrame != InvalidFrame) TransformBindPoseFrame(FrameData.ChildFrame, ref LocalWorld);
+        }
+
+        //--------------------------------------------------------------------------------------
+        // transform frame using a recursive traversal
+        //--------------------------------------------------------------------------------------
+        void TransformFrame(uint Frame, ref Matrix ParentWorld, double Time)
+        {
+            // Get the tick data
+            Matrix LocalTransform;
+            var Tick = GetAnimationKeyFromTime(Time);
+
+            Frame FrameHeaderData;
+            FrameArray.Get(Frame, out FrameHeaderData);
+            if (FrameHeaderData.AnimationDataIndex != InvalidAnimationData)
+            {
+                var FrameDataPair = AnimationFrameDataPair[FrameHeaderData.AnimationDataIndex];
+                var Data = FrameDataPair.AnimationData[Tick];
+
+                // turn it into a matrix (Ignore scaling for now)
+                var ParentPosition = Data.Translation;
+                Matrix Translate;
+                D3DX10Functions.MatrixTranslation(out Translate, ParentPosition.X, ParentPosition.Y, ParentPosition.Z);
+
+                Quaternion Quaternion;
+                Matrix QuaternionMatrix;
+                Quaternion.W = Data.Orientation.W;
+                Quaternion.X = Data.Orientation.X;
+                Quaternion.Y = Data.Orientation.Y;
+                Quaternion.Z = Data.Orientation.Z;
+                if (Quaternion.W == 0 && Quaternion.X == 0 && Quaternion.Y == 0 && Quaternion.Z == 0) D3DX10Functions.QuaternionIdentity(out Quaternion);
+                D3DX10Functions.QuaternionNormalize(out Quaternion, ref Quaternion);
+                D3DX10Functions.MatrixRotationQuaternion(out QuaternionMatrix, ref Quaternion);
+                LocalTransform = (QuaternionMatrix * Translate);
+            }
+            else LocalTransform = FrameHeaderData.Matrix;
+
+            // Transform ourselves
+            Matrix LocalWorld;
+            D3DX10Functions.MatrixMultiply(out LocalWorld, ref LocalTransform, ref ParentWorld);
+            TransformedFrameMatrices[Frame] = LocalWorld;
+
+            // Transform our siblings
+            if (FrameHeaderData.SiblingFrame != InvalidFrame) TransformFrame(FrameHeaderData.SiblingFrame, ref ParentWorld, Time);
+
+            // Transform our children
+            if (FrameHeaderData.ChildFrame != InvalidFrame) TransformFrame(FrameHeaderData.ChildFrame, ref LocalWorld, Time);
+        }
+
+        //--------------------------------------------------------------------------------------
+        // transform frame assuming that it is an absolute transformation
+        //--------------------------------------------------------------------------------------
+        void TransformFrameAbsolute(uint Frame, double Time)
+        {
+            Matrix Transform1;
+            Matrix Transform2;
+            Matrix Rotation1;
+            Matrix Rotation2;
+            Quaternion Quaternion1;
+            Quaternion Quaternion2;
+            Matrix MatrixTo;
+            Matrix MatrixInvTo;
+            Matrix MatrixFrom;
+
+            var Tick = GetAnimationKeyFromTime(Time);
+
+            Frame FrameHeaderData;
+            FrameArray.Get(Frame, out FrameHeaderData);
+            if (FrameHeaderData.AnimationDataIndex != InvalidAnimationData)
+            {
+                var Data = AnimationFrameDataPair[FrameHeaderData.AnimationDataIndex].AnimationData[Tick];
+                var DataOriginal = AnimationFrameDataPair[FrameHeaderData.AnimationDataIndex].AnimationData[0];
+
+                D3DX10Functions.MatrixTranslation(out Transform1, -DataOriginal.Translation.X, -DataOriginal.Translation.Y, -DataOriginal.Translation.Z);
+                D3DX10Functions.MatrixTranslation(out Transform2, Data.Translation.X, Data.Translation.Y, Data.Translation.Z);
+
+                Quaternion1.X = DataOriginal.Orientation.X;
+                Quaternion1.Y = DataOriginal.Orientation.Y;
+                Quaternion1.Z = DataOriginal.Orientation.Z;
+                Quaternion1.W = DataOriginal.Orientation.W;
+                D3DX10Functions.QuaternionInverse(out Quaternion1, ref Quaternion1);
+                D3DX10Functions.MatrixRotationQuaternion(out Rotation1, ref Quaternion1);
+                MatrixInvTo = Transform1 * Rotation1;
+
+                Quaternion2.X = Data.Orientation.X;
+                Quaternion2.Y = Data.Orientation.Y;
+                Quaternion2.Z = Data.Orientation.Z;
+                Quaternion2.W = Data.Orientation.W;
+                D3DX10Functions.MatrixRotationQuaternion(out Rotation2, ref Quaternion2);
+                MatrixFrom = Rotation2 * Transform2;
+
+                var Output = MatrixInvTo * MatrixFrom;
+                TransformedFrameMatrices[Frame] = Output;
+            }
+        }
+
+        void RenderMesh(uint Mesh, bool Adjacent, Device Device, EffectTechnique Technique, EffectShaderResourceVariable Diffuse, EffectShaderResourceVariable Normal, EffectShaderResourceVariable Specular, EffectVectorVariable DiffuseVector, EffectVectorVariable SpecularVector)
+        {
+            Mesh MeshData;
+            MeshArray.Get(Mesh, out MeshData);
+            var MeshDataPair = MeshPairArray[Mesh];
+
+            var Strides = new uint[(int)IA.VertexInputResourceSlotCount];
+            var Offsets = new uint[(int)IA.VertexInputResourceSlotCount];
+            var VertexBuffers = new Buffer[(int)IA.VertexInputResourceSlotCount];
+
+            if (MeshData.NumberOfVertexBuffers > (int)IA.VertexInputResourceSlotCount) return;
+
+            for (var I = 0; I < MeshData.NumberOfVertexBuffers; I++)
+            {
+                VertexBufferHeader VertexBufferHeader;
+                VertexBufferArray.Get(MeshData.VertexBuffers[I], out VertexBufferHeader);
+                VertexBuffers[I] = VertexBufferPairArray[MeshData.VertexBuffers[I]].VertexBuffer;
+                Strides[I] = (uint)VertexBufferHeader.StrideBytes;
+                Offsets[I] = 0;
+            }
+
+            var IndexBuffers = Adjacent ? AdjacencyIndexBufferArray : IndexBufferArray;
+            var IndexBufferPairs = Adjacent ? AdjacencyIndexBufferPairArray : IndexBufferPairArray;
+
+            var IndexBuffer = IndexBufferPairs[MeshData.IndexBuffer].IndexBuffer;
+            IndexBufferHeader IndexBufferHeader;
+            IndexBuffers.Get(MeshData.IndexBuffer, out IndexBufferHeader);
+            var IndexBufferFormat = (IndexType)IndexBufferHeader.IndexType == IndexType.x32 ? Format.R32_UInt : Format.R16_UInt;
+
+            Device.IA_SetVertexBuffers(0, MeshData.NumberOfVertexBuffers, VertexBuffers, Strides, Offsets);
+            Device.IA_SetIndexBuffer(IndexBuffer, IndexBufferFormat, 0);
+
+            TechniqueDescription TechniqueDescription;
+            Technique.GetDescription(out TechniqueDescription);
+
+
+            for (uint P = 0; P < TechniqueDescription.Passes; P++)
+            {
+                for (uint S = 0; S < MeshData.NumberOfSubsets; S++)
+                {
+                    uint SubsetIndex;
+                    MeshDataPair.Subsets.Get(S, out SubsetIndex);
+                    Subset Subset;
+                    SubsetArray.Get(SubsetIndex, out Subset);
+
+                    var PrimitiveType = GetPrimitiveType((PrimitiveType)Subset.PrimitiveType);
+                    if (Adjacent)
+                    {
+                        switch (PrimitiveType)
+                        {
+                        case PrimitiveTopology.TriangleList:
+                            PrimitiveType = PrimitiveTopology.TriangleListAdjacency;
+                            break;
+                        case PrimitiveTopology.TriangleStrip:
+                            PrimitiveType = PrimitiveTopology.TriangleStripAdjacency;
+                            break;
+                        case PrimitiveTopology.LineList:
+                            PrimitiveType = PrimitiveTopology.LineListAdjacency;
+                            break;
+                        case PrimitiveTopology.LineStrip:
+                            PrimitiveType = PrimitiveTopology.LineStripAdjacency;
+                            break;
+                        }
+                    }
+
+                    Device.IA_SetPrimitiveTopology(PrimitiveType);
+
+                    Material Material;
+                    MaterialArray.Get(Subset.MaterialID, out Material);
+                    var MaterialPair = MaterialPairArray[Subset.MaterialID];
+                    if (Diffuse != null && MaterialPair.DiffuseResourceView != null) Diffuse.SetResource(MaterialPair.DiffuseResourceView);
+                    if (Normal != null && MaterialPair.NormalResourceView != null) Normal.SetResource(MaterialPair.NormalResourceView);
+                    if (Specular != null && MaterialPair.SpecularResourceView != null) Specular.SetResource(MaterialPair.SpecularResourceView);
+                    if (DiffuseVector != null) DiffuseVector.SetFloatVector((float[])Material.Diffuse);
+                    if (SpecularVector != null) SpecularVector.SetFloatVector((float[])Material.Specular);
+
+                    Technique.GetPassByIndex(P).Apply(0);
+
+                    var IndexCount = (uint)Subset.IndexCount;
+                    var IndexStart = (uint)Subset.IndexStart;
+                    var VertexStart = (int)Subset.VertexStart;
+                    if (Adjacent)
+                    {
+                        IndexCount *= 2;
+                        IndexStart *= 2;
+                    }
+                    Device.DrawIndexed(IndexCount, IndexStart, VertexStart);
+                }
+            }
+        }
+
+        public uint GetAnimationKeyFromTime(double Time)
+        {
+            var Tick = (uint)(AnimationHeader[0].AnimationFPS * Time);
+
+            Tick = Tick % (AnimationHeader[0].NumAnimationKeys - 1);
+            Tick++;
+
+            return Tick;
         }
 
         public ulong GetNumberOfVertices(uint Mesh, uint VertexBuffer)
@@ -811,16 +1020,16 @@ namespace Xtro.MDX.Utilities
                 Result = PrimitiveTopology.PointList;
                 break;
             case PrimitiveType.TriangleListAdjacency:
-                Result = PrimitiveTopology.TriangleListWithAdjacency;
+                Result = PrimitiveTopology.TriangleListAdjacency;
                 break;
             case PrimitiveType.TriangleStripAdjacency:
-                Result = PrimitiveTopology.TriangleStripWithAdjacency;
+                Result = PrimitiveTopology.TriangleStripAdjacency;
                 break;
             case PrimitiveType.LineListAdjacency:
-                Result = PrimitiveTopology.LineListWithAdjacency;
+                Result = PrimitiveTopology.LineListAdjacency;
                 break;
             case PrimitiveType.LineStripAdjacency:
-                Result = PrimitiveTopology.LineStripWithAdjacency;
+                Result = PrimitiveTopology.LineStripAdjacency;
                 break;
             };
 

@@ -21,7 +21,7 @@ public:
 		return Result;
 	}
 
-	int GetDisplayModeList(Format EnumerationFormat, EnumerationMode Flags, unsigned int% NumberOfModes, array<ModeDescription>^ Descriptions)
+	int GetDisplayModeList(Format EnumerationFormat, EnumerationModeFlag Flags, unsigned int% NumberOfModes, array<ModeDescription>^ Descriptions)
 	{
 		pin_ptr<unsigned int> PinnedNumberOfModes = &NumberOfModes;
 		pin_ptr<ModeDescription> PinnedDescriptions = Descriptions != nullptr && Descriptions->Length > 0 ? PinnedDescriptions = &Descriptions[0] : nullptr;

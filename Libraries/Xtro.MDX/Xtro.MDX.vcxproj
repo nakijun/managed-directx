@@ -242,6 +242,8 @@
     <ClInclude Include="AdapterDescription.h" />
     <ClInclude Include="ModeDescription.h" />
     <ClInclude Include="OutputDescription.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Quaternion_ForwardedMethods.h" />
     <ClInclude Include="RasterizerDescription.h" />
     <ClInclude Include="RasterizerState.h" />
     <ClInclude Include="Rational.h" />

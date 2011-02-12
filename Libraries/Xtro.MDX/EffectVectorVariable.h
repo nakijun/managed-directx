@@ -13,7 +13,7 @@ internal:
 public:
 	int SetFloatVector(array<float>^ Data)
 	{
-		pin_ptr<float> PinnedData = Data == nullptr ? nullptr : &Data[0];
+		pin_ptr<float> PinnedData = Data != nullptr && Data->Length > 0 ? &Data[0] : nullptr;
 
 		return pEffectVectorVariable->SetFloatVector(PinnedData);
 	}

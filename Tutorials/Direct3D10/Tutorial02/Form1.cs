@@ -14,9 +14,7 @@ using System.IO;
 using Xtro.MDX;
 using Xtro.MDX.Generic;
 using Xtro.MDX.DXGI;
-using Usage = Xtro.MDX.DXGI.Usage;
 using Xtro.MDX.Direct3D10;
-using D3D10Usage = Xtro.MDX.Direct3D10.Usage;
 using Device = Xtro.MDX.Direct3D10.Device;
 using Functions = Xtro.MDX.Direct3D10.Functions;
 using Buffer = Xtro.MDX.Direct3D10.Buffer;
@@ -90,7 +88,7 @@ namespace Tutorial02
             SwapChainDescription.BufferDescription.Format = Format.R8G8B8A8_UNorm;
             SwapChainDescription.BufferDescription.RefreshRate.Numerator = 60;
             SwapChainDescription.BufferDescription.RefreshRate.Denominator = 1;
-            SwapChainDescription.BufferUsage = Usage.RenderTargetOutput;
+            SwapChainDescription.BufferUsage = UsageFlag.RenderTargetOutput;
             SwapChainDescription.OutputWindow = Handle;
             SwapChainDescription.SampleDescription.Count = 1;
             SwapChainDescription.SampleDescription.Quality = 0;
@@ -203,7 +201,7 @@ namespace Tutorial02
             BufferDescription BufferDescription = new BufferDescription
             {
                 ByteWidth = (uint)Vertices.Size,
-                Usage = D3D10Usage.Default,
+                Usage = Usage.Default,
                 BindFlags = BindFlag.VertexBuffer,
                 CPU_AccessFlags = 0,
                 MiscFlags = 0

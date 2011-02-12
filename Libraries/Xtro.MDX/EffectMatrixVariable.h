@@ -12,8 +12,8 @@ internal:
 
 public:
 	int SetMatrix(array<float>^ Data)
-	{
-		pin_ptr<float> PinnedData = Data == nullptr ? nullptr : &Data[0];
+	{											   
+		pin_ptr<float> PinnedData = Data != nullptr && Data->Length > 0 ? &Data[0] : nullptr;
 
 		return pEffectMatrixVariable->SetMatrix(PinnedData);
 	}

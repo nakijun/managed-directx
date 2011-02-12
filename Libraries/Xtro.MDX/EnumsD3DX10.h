@@ -1,61 +1,61 @@
 /// <summary>
 /// Error codes that can be returned by Direct3DX
 /// </summary>
-public enum class ErrorCode
+public enum class Error
 {
     /// <summary>
     /// The index buffer cannot be modified.
     /// <para>(Also see DirectX SDK:  D3DX10_ERR_CANNOT_MODIFY_INDEX_BUFFER )</para>
     /// </summary>
-    Direct3DX10ErrorCannotModifyIndexBuffer = D3DX10_ERR_CANNOT_MODIFY_INDEX_BUFFER,
+    CannotModifyIndexBuffer = D3DX10_ERR_CANNOT_MODIFY_INDEX_BUFFER,
 
     /// <summary>
     /// The mesh is invalid. 
     /// <para>(Also see DirectX SDK:  D3DX10_ERR_INVALID_MESH )</para>
     /// </summary>
-	Direct3DX10ErrorInvalidMesh = D3DX10_ERR_INVALID_MESH, 
+	InvalidMesh = D3DX10_ERR_INVALID_MESH, 
 	
     /// <summary>
     /// Attribute sort (D3DXMESHOPT_ATTRSORT) is not supported as an optimization technique. 
     /// <para>(Also see DirectX SDK:  D3DX10_ERR_CANNOT_ATTR_SORT )</para>
     /// </summary>
-	Direct3DX10ErrorCannotAttributeSort = D3DX10_ERR_CANNOT_ATTR_SORT, 
+	CannotAttributeSort = D3DX10_ERR_CANNOT_ATTR_SORT, 
 	
     /// <summary>
     /// Skinning is not supported. 
     /// <para>(Also see DirectX SDK:  D3DX10_ERR_SKINNING_NOT_SUPPORTED )</para>
     /// </summary>
-	Direct3DX10ErrorSkinningNotSupported = D3DX10_ERR_SKINNING_NOT_SUPPORTED, 
+	SkinningNotSupported = D3DX10_ERR_SKINNING_NOT_SUPPORTED, 
 	
     /// <summary>
     /// Too many influences specified. 
     /// <para>(Also see DirectX SDK:  D3DX10_ERR_TOO_MANY_INFLUENCES )</para>
     /// </summary>
-	Direct3DX10ErrorTooManyInfluences = D3DX10_ERR_TOO_MANY_INFLUENCES, 
+	TooManyInfluences = D3DX10_ERR_TOO_MANY_INFLUENCES, 
 	
     /// <summary>
     /// The data is invalid. 
     /// <para>(Also see DirectX SDK:  D3DX10_ERR_INVALID_DATA )</para>
     /// </summary>
-	Direct3DX10ErrorInvalidData = D3DX10_ERR_INVALID_DATA, 
+	InvalidData = D3DX10_ERR_INVALID_DATA, 
 	
     /// <summary>
     /// The mesh has no data. 
     /// <para>(Also see DirectX SDK:  D3DX10_ERR_LOADED_MESH_HAS_NO_DATA )</para>
     /// </summary>
-	Direct3DX10ErrorMeshHasNoData = D3DX10_ERR_LOADED_MESH_HAS_NO_DATA, 
+	MeshHasNoData = D3DX10_ERR_LOADED_MESH_HAS_NO_DATA, 
 	
     /// <summary>
     /// A fragment with that name already exists. 
     /// <para>(Also see DirectX SDK:  D3DX10_ERR_DUPLICATE_NAMED_FRAGMENT )</para>
     /// </summary>
-	Direct3DX10ErrorDuplicateNamedFragment = D3DX10_ERR_DUPLICATE_NAMED_FRAGMENT, 
+	DuplicateNamedFragment = D3DX10_ERR_DUPLICATE_NAMED_FRAGMENT, 
 	
     /// <summary>
     /// The last item cannot be deleted. 
     /// <para>(Also see DirectX SDK:  D3DX10_ERR_CANNOT_REMOVE_LAST_ITEM )</para>
     /// </summary>
-	Direct3DX10ErrorCannotRemoveLastItem = D3DX10_ERR_CANNOT_REMOVE_LAST_ITEM, 
+	CannotRemoveLastItem = D3DX10_ERR_CANNOT_REMOVE_LAST_ITEM, 
 };
 
 [System::Flags]

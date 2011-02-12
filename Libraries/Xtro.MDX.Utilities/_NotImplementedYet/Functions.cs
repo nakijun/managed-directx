@@ -14,8 +14,6 @@ using DXGI_Error = Xtro.MDX.DXGI.Error;
 using DXGI_Device = Xtro.MDX.DXGI.Device;
 using DXGI_Functions = Xtro.MDX.DXGI.Functions;
 using D3D10Functions = Xtro.MDX.Direct3D10.Functions;
-using Usage = Xtro.MDX.DXGI.Usage;
-using D3D10Usage = Xtro.MDX.Direct3D10.Usage;
 
 namespace Xtro.MDX.Utilities
 {
@@ -627,7 +625,7 @@ namespace Xtro.MDX.Utilities
                         Count = DeviceSettings.SwapChainDescription.SampleDescription.Count,
                         Quality = DeviceSettings.SwapChainDescription.SampleDescription.Quality
                     },
-                    Usage = D3D10Usage.Default,
+                    Usage = Usage.Default,
                     BindFlags = BindFlag.DepthStencil,
                     CPU_AccessFlags = 0,
                     MiscFlags = 0
@@ -896,7 +894,7 @@ namespace Xtro.MDX.Utilities
                 // Create the swapchain
                 Result = Factory.CreateSwapChain(Device, ref NewDeviceSettings.SwapChainDescription, out SwapChain);
                 if (Result < 0) return (int)Error.CreatingDevice;
-                Factory.MakeWindowAssociation(GetForm().Handle, MakeWindowAssociation.NoWindowChanges | MakeWindowAssociation.NoAltEnter | MakeWindowAssociation.NoPrintScreen);
+                Factory.MakeWindowAssociation(GetForm().Handle, MakeWindowAssociationFlag.NoWindowChanges | MakeWindowAssociationFlag.NoAltEnter | MakeWindowAssociationFlag.NoPrintScreen);
             }
             else
             {
@@ -1477,7 +1475,7 @@ namespace Xtro.MDX.Utilities
                 SyncInterval = 1,
                 SwapChainDescription =
                 {
-                    BufferUsage = Usage.RenderTargetOutput,
+                    BufferUsage = UsageFlag.RenderTargetOutput,
                     Windowed = Windowed,
                     BufferDescription =
                     {
@@ -1646,7 +1644,7 @@ namespace Xtro.MDX.Utilities
             //---------------------
             // Back buffer usage
             //---------------------
-            OptimalDeviceSettings.SwapChainDescription.BufferUsage = Usage.RenderTargetOutput;
+            OptimalDeviceSettings.SwapChainDescription.BufferUsage = UsageFlag.RenderTargetOutput;
 
             //---------------------
             // Back buffer count
@@ -2358,7 +2356,7 @@ namespace Xtro.MDX.Utilities
             ValidDeviceSettings.SwapChainDescription.BufferDescription.Height = BestDisplayMode.Height;
             ValidDeviceSettings.SwapChainDescription.BufferDescription.Format = BestDeviceSettingsCombo.BackBufferFormat;
             // ReSharper disable PossibleNullReferenceException
-            ValidDeviceSettings.SwapChainDescription.BufferUsage = DeviceSettingsIn.SwapChainDescription.BufferUsage | Usage.RenderTargetOutput;
+            ValidDeviceSettings.SwapChainDescription.BufferUsage = DeviceSettingsIn.SwapChainDescription.BufferUsage | UsageFlag.RenderTargetOutput;
             // ReSharper restore PossibleNullReferenceException
             ValidDeviceSettings.SwapChainDescription.BufferCount = BestBackBufferCount;
             ValidDeviceSettings.SwapChainDescription.SampleDescription.Count = BestMultiSampleCount;

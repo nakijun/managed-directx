@@ -4,7 +4,7 @@ public value class SwapChainDescription : IEquatable<SwapChainDescription>
 public:
 	ModeDescription BufferDescription;
 	SampleDescription SampleDescription;
-	Usage BufferUsage;
+	UsageFlag BufferUsage;
 	unsigned int BufferCount;
 	IntPtr OutputWindow;
 	bool Windowed;
