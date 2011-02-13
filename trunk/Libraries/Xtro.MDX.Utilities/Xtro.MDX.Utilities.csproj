@@ -107,12 +107,12 @@
     <Compile Include="Structures\Timer.cs" />
     <Compile Include="Structures\VertexElement.cs" />
     <Compile Include="Windows.cs" />
-    <Compile Include="_NotImplementedYet\Enums.cs" />
-    <Compile Include="_NotImplementedYet\Functions.cs" />
+    <Compile Include="Classes\Enums.cs" />
+    <Compile Include="Classes\Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="_NotImplementedYet\ResourceCache.cs" />
-    <Compile Include="_NotImplementedYet\SDK_Mesh.cs" />
-    <Compile Include="_NotImplementedYet\TimerClass.cs" />
+    <Compile Include="Classes\ResourceCache.cs" />
+    <Compile Include="Classes\SDK_Mesh.cs" />
+    <Compile Include="Classes\TimerClass.cs" />
     <Compile Include="Classes\State.cs" />
     <Compile Include="Classes\DeviceSettings.cs">
       <SubType>Code</SubType>

@@ -393,6 +393,21 @@ public:
 		D3DXMatrixIdentity((D3DXMATRIX*)PinnedOut);
 	}
 
+	static void MatrixInverse([Out] Matrix% Out, [Out] float% Determinant, Matrix% Matrix)
+	{
+		pin_ptr<Direct3DX10::Matrix> PinnedOut = &Out;
+		pin_ptr<float> PinnedDeterminant = &Determinant;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		D3DXMatrixInverse((D3DXMATRIX*)PinnedOut, PinnedDeterminant, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void MatrixInverse([Out] Matrix% Out, Matrix% Matrix)
+	{
+		pin_ptr<Direct3DX10::Matrix> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		D3DXMatrixInverse((D3DXMATRIX*)PinnedOut, 0, (D3DXMATRIX*)PinnedMatrix);
+	}
+
 	static void MatrixLookAtLH([Out] Matrix% Out, Vector3% Eye, Vector3% At, Vector3% Up)
 	{
 		pin_ptr<Matrix> PinnedOut = &Out;
