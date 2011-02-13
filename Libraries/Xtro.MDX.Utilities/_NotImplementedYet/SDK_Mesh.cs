@@ -13,6 +13,7 @@ using D3D10X_Mesh = Xtro.MDX.Direct3DX10.Mesh;
 using Device = Xtro.MDX.Direct3D10.Device;
 using Usage = Xtro.MDX.Direct3D10.Usage;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
+using Resource = Xtro.MDX.Direct3D10.Resource;
 #if WIN64
 using SizeT = System.Int32;
 #else
@@ -36,11 +37,6 @@ namespace Xtro.MDX.Utilities
         public byte[] FrameName;
         public ulong DataOffset;
     };
-
-    public struct AnimationFrameDataPair
-    {
-        public AnimationData[] AnimationData;
-    }
 
     public class SDK_Mesh
     {
@@ -233,8 +229,8 @@ namespace Xtro.MDX.Utilities
             public uint Version;
             public byte IsBigEndian;
             public uint FrameTransformType;
-            public uint NumFrames;
-            public uint NumAnimationKeys;
+            public uint NumberOfFrames;
+            public uint NumberOfAnimationKeys;
             public uint AnimationFPS;
             public ulong AnimationDataSize;
             public ulong AnimationDataOffset;
@@ -282,10 +278,9 @@ namespace Xtro.MDX.Utilities
         UnmanagedMemory<IndexBufferHeader> AdjacencyIndexBufferArray;
         IndexBufferHeaderPair[] AdjacencyIndexBufferPairArray;
 
-        //Animation (TODO: Add ability to load/track multiple animation sets)
-        AnimationFileHeader[] AnimationHeader;
-        AnimationFrameData[] AnimationFrameData;
-        AnimationFrameDataPair[] AnimationFrameDataPair;
+        //Animation (xTODO: Add ability to load/track multiple animation sets)
+        UnmanagedMemory<AnimationFileHeader> AnimationHeader;
+        UnmanagedMemory<AnimationFrameData> AnimationFrameData;
         Matrix[] BindPoseFrameMatrices;
         Matrix[] TransformedFrameMatrices;
 
@@ -411,11 +406,8 @@ namespace Xtro.MDX.Utilities
             var LastSlashIndex = Path.LastIndexOf('\\');
             Path = LastSlashIndex > -1 ? Path.Substring(0, LastSlashIndex + 1) : "";
 
-            // Get the file size
-            var FileSize = (uint)File.Length;
-
             // Allocate memory
-            try { StaticMeshData = new UnmanagedMemory(FileSize); }
+            try { StaticMeshData = new UnmanagedMemory((uint)File.Length); }
             catch
             {
                 File.Close();
@@ -633,16 +625,16 @@ namespace Xtro.MDX.Utilities
 
             // Transform ourselves
             Matrix LocalWorld;
-            Frame FrameData;
-            FrameArray.Get(Frame, out FrameData);
-            D3DX10Functions.MatrixMultiply(out LocalWorld, ref FrameData.Matrix, ref ParentWorld);
+            Frame FrameHeaderData;
+            FrameArray.Get(Frame, out FrameHeaderData);
+            D3DX10Functions.MatrixMultiply(out LocalWorld, ref FrameHeaderData.Matrix, ref ParentWorld);
             BindPoseFrameMatrices[Frame] = LocalWorld;
 
             // Transform our siblings
-            if (FrameData.SiblingFrame != InvalidFrame) TransformBindPoseFrame(FrameData.SiblingFrame, ref ParentWorld);
+            if (FrameHeaderData.SiblingFrame != InvalidFrame) TransformBindPoseFrame(FrameHeaderData.SiblingFrame, ref ParentWorld);
 
             // Transform our children
-            if (FrameData.ChildFrame != InvalidFrame) TransformBindPoseFrame(FrameData.ChildFrame, ref LocalWorld);
+            if (FrameHeaderData.ChildFrame != InvalidFrame) TransformBindPoseFrame(FrameHeaderData.ChildFrame, ref LocalWorld);
         }
 
         //--------------------------------------------------------------------------------------
@@ -658,8 +650,10 @@ namespace Xtro.MDX.Utilities
             FrameArray.Get(Frame, out FrameHeaderData);
             if (FrameHeaderData.AnimationDataIndex != InvalidAnimationData)
             {
-                var FrameDataPair = AnimationFrameDataPair[FrameHeaderData.AnimationDataIndex];
-                var Data = FrameDataPair.AnimationData[Tick];
+                AnimationFrameData AnimationFrame;
+                AnimationFrameData.Get(FrameHeaderData.AnimationDataIndex, out AnimationFrame);
+                AnimationData Data;
+                AnimationData.Get((uint)AnimationFrame.DataOffset, Tick, out Data);
 
                 // turn it into a matrix (Ignore scaling for now)
                 var ParentPosition = Data.Translation;
@@ -712,8 +706,12 @@ namespace Xtro.MDX.Utilities
             FrameArray.Get(Frame, out FrameHeaderData);
             if (FrameHeaderData.AnimationDataIndex != InvalidAnimationData)
             {
-                var Data = AnimationFrameDataPair[FrameHeaderData.AnimationDataIndex].AnimationData[Tick];
-                var DataOriginal = AnimationFrameDataPair[FrameHeaderData.AnimationDataIndex].AnimationData[0];
+                AnimationFrameData AnimationFrame;
+                AnimationFrameData.Get(FrameHeaderData.AnimationDataIndex, out AnimationFrame);
+                AnimationData Data;
+                AnimationData.Get((uint)AnimationFrame.DataOffset, Tick, out Data);
+                AnimationData DataOriginal;
+                AnimationData.Get((uint)AnimationFrame.DataOffset, out DataOriginal);
 
                 D3DX10Functions.MatrixTranslation(out Transform1, -DataOriginal.Translation.X, -DataOriginal.Translation.Y, -DataOriginal.Translation.Z);
                 D3DX10Functions.MatrixTranslation(out Transform2, Data.Translation.X, Data.Translation.Y, Data.Translation.Z);
@@ -773,7 +771,6 @@ namespace Xtro.MDX.Utilities
             TechniqueDescription TechniqueDescription;
             Technique.GetDescription(out TechniqueDescription);
 
-
             for (uint P = 0; P < TechniqueDescription.Passes; P++)
             {
                 for (uint S = 0; S < MeshData.NumberOfSubsets; S++)
@@ -829,11 +826,214 @@ namespace Xtro.MDX.Utilities
             }
         }
 
+        void RenderMesh(uint Mesh, bool Adjacent, Device Device, uint DiffuseSlot, uint NormalSlot, uint SpecularSlot)
+        {
+            Mesh MeshData;
+            MeshArray.Get(Mesh, out MeshData);
+            var MeshDataPair = MeshPairArray[Mesh];
+
+            var Strides = new uint[(int)IA.VertexInputResourceSlotCount];
+            var Offsets = new uint[(int)IA.VertexInputResourceSlotCount];
+            var VertexBuffers = new Buffer[(int)IA.VertexInputResourceSlotCount];
+
+            if (MeshData.NumberOfVertexBuffers > (int)IA.VertexInputResourceSlotCount) return;
+
+            for (var I = 0; I < MeshData.NumberOfVertexBuffers; I++)
+            {
+                VertexBufferHeader VertexBufferHeader;
+                VertexBufferArray.Get(MeshData.VertexBuffers[I], out VertexBufferHeader);
+                VertexBuffers[I] = VertexBufferPairArray[MeshData.VertexBuffers[I]].VertexBuffer;
+                Strides[I] = (uint)VertexBufferHeader.StrideBytes;
+                Offsets[I] = 0;
+            }
+
+            var IndexBuffers = Adjacent ? AdjacencyIndexBufferArray : IndexBufferArray;
+            var IndexBufferPairs = Adjacent ? AdjacencyIndexBufferPairArray : IndexBufferPairArray;
+
+            var IndexBuffer = IndexBufferPairs[MeshData.IndexBuffer].IndexBuffer;
+            IndexBufferHeader IndexBufferHeader;
+            IndexBuffers.Get(MeshData.IndexBuffer, out IndexBufferHeader);
+            var IndexBufferFormat = (IndexType)IndexBufferHeader.IndexType == IndexType.x32 ? Format.R32_UInt : Format.R16_UInt;
+
+            Device.IA_SetVertexBuffers(0, MeshData.NumberOfVertexBuffers, VertexBuffers, Strides, Offsets);
+            Device.IA_SetIndexBuffer(IndexBuffer, IndexBufferFormat, 0);
+
+
+            for (uint S = 0; S < MeshData.NumberOfSubsets; S++)
+            {
+                uint SubsetIndex;
+                MeshDataPair.Subsets.Get(S, out SubsetIndex);
+                Subset Subset;
+                SubsetArray.Get(SubsetIndex, out Subset);
+
+                var PrimitiveType = GetPrimitiveType((PrimitiveType)Subset.PrimitiveType);
+                if (Adjacent)
+                {
+                    switch (PrimitiveType)
+                    {
+                    case PrimitiveTopology.TriangleList:
+                        PrimitiveType = PrimitiveTopology.TriangleListAdjacency;
+                        break;
+                    case PrimitiveTopology.TriangleStrip:
+                        PrimitiveType = PrimitiveTopology.TriangleStripAdjacency;
+                        break;
+                    case PrimitiveTopology.LineList:
+                        PrimitiveType = PrimitiveTopology.LineListAdjacency;
+                        break;
+                    case PrimitiveTopology.LineStrip:
+                        PrimitiveType = PrimitiveTopology.LineStripAdjacency;
+                        break;
+                    }
+                }
+
+                Device.IA_SetPrimitiveTopology(PrimitiveType);
+
+                Material Material;
+                MaterialArray.Get(Subset.MaterialID, out Material);
+                var MaterialPair = MaterialPairArray[Subset.MaterialID];
+                if (DiffuseSlot != InvalidSamplerSlot && MaterialPair.DiffuseResourceView != null) Device.PS_SetShaderResources(DiffuseSlot, 1, new[] { MaterialPair.DiffuseResourceView });
+                if (NormalSlot != InvalidSamplerSlot && MaterialPair.NormalResourceView != null) Device.PS_SetShaderResources(NormalSlot, 1, new[] { MaterialPair.NormalResourceView });
+                if (SpecularSlot != InvalidSamplerSlot && MaterialPair.SpecularResourceView != null) Device.PS_SetShaderResources(SpecularSlot, 1, new[] { MaterialPair.SpecularResourceView });
+
+                var IndexCount = (uint)Subset.IndexCount;
+                var IndexStart = (uint)Subset.IndexStart;
+                var VertexStart = (int)Subset.VertexStart;
+                if (Adjacent)
+                {
+                    IndexCount *= 2;
+                    IndexStart *= 2;
+                }
+                Device.DrawIndexed(IndexCount, IndexStart, VertexStart);
+            }
+        }
+
+        void RenderFrame(uint Frame, bool Adjacent, Device Device, EffectTechnique Technique, EffectShaderResourceVariable Diffuse, EffectShaderResourceVariable Normal, EffectShaderResourceVariable Specular, EffectVectorVariable DiffuseVector, EffectVectorVariable SpecularVector)
+        {
+            if (StaticMeshData == null || FrameArray == null) return;
+
+            Frame FrameHeaderData;
+            FrameArray.Get(Frame, out FrameHeaderData);
+            if (FrameHeaderData.Mesh != InvalidMesh) RenderMesh(FrameHeaderData.Mesh, Adjacent, Device, Technique, Diffuse, Normal, Specular, DiffuseVector, SpecularVector);
+
+            // Render our children
+            if (FrameHeaderData.ChildFrame != InvalidFrame) RenderFrame(FrameHeaderData.ChildFrame, Adjacent, Device, Technique, Diffuse, Normal, Specular, DiffuseVector, SpecularVector);
+
+            // Render our siblings
+            if (FrameHeaderData.SiblingFrame != InvalidFrame) RenderFrame(FrameHeaderData.SiblingFrame, Adjacent, Device, Technique, Diffuse, Normal, Specular, DiffuseVector, SpecularVector);
+        }
+
+        void RenderFrame(uint Frame, bool Adjacent, Device Device, uint DiffuseSlot, uint NormalSlot, uint SpecularSlot)
+        {
+            if (StaticMeshData == null || FrameArray == null) return;
+
+            Frame FrameHeaderData;
+            FrameArray.Get(Frame, out FrameHeaderData);
+            if (FrameHeaderData.Mesh != InvalidMesh) RenderMesh(FrameHeaderData.Mesh, Adjacent, Device, DiffuseSlot, NormalSlot, SpecularSlot);
+
+            // Render our children
+            if (FrameHeaderData.ChildFrame != InvalidFrame) RenderFrame(FrameHeaderData.ChildFrame, Adjacent, Device, DiffuseSlot, NormalSlot, SpecularSlot);
+
+            // Render our siblings
+            if (FrameHeaderData.SiblingFrame != InvalidFrame) RenderFrame(FrameHeaderData.SiblingFrame, Adjacent, Device, DiffuseSlot, NormalSlot, SpecularSlot);
+        }
+
+        public int Create(Device Device, string FileName, bool CreateAdjacencyIndices = false, CallbacksStruct[] LoaderCallbacks = null)
+        {
+            return CreateFromFile(Device, FileName, CreateAdjacencyIndices, LoaderCallbacks);
+        }
+
+        public int Create(Device Device, UnmanagedMemory Data, uint DataBytes, bool CreateAdjacencyIndices = false, bool CopyStatic = false, CallbacksStruct[] LoaderCallbacks = null)
+        {
+            return CreateFromMemory(Device, Data, DataBytes, CreateAdjacencyIndices, CopyStatic, LoaderCallbacks);
+        }
+
+        public int LoadAnimation(string FileName)
+        {
+            uint BytesRead = 0;
+            string Path;
+
+            // Find the path for the file
+            var Result = Functions.FindSDK_MediaFileCch(out Path, FileName);
+            if (Result < 0) return Result;
+
+            // Open the file
+            FileStream File;
+            try { File = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read); }
+            catch { return (int)Error.MediaNotFound; }
+
+            try
+            {
+                /////////////////////////
+                // Header
+
+                var AnimationFileHeaderSize = Marshal.SizeOf(typeof(AnimationFileHeader));
+                var Buffer = new byte[AnimationFileHeaderSize];
+                File.Read(Buffer, 0, AnimationFileHeaderSize);
+
+                var FileHeader = new AnimationFileHeader();
+                var FileHeaderHandle = GCHandle.Alloc(FileHeader, GCHandleType.Pinned);
+                try { Marshal.Copy(Buffer, 0, FileHeaderHandle.AddrOfPinnedObject(), AnimationFileHeaderSize); }
+                finally { FileHeaderHandle.Free(); }
+
+                //allocate
+                try { AnimationData = new UnmanagedMemory((uint)AnimationFileHeaderSize + (uint)FileHeader.AnimationDataSize); }
+                catch { return (int)Error.OutOfMemory; }
+
+                // read it all in
+                Buffer = new byte[AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize];
+                File.Seek(0, SeekOrigin.Begin);
+                File.Read(Buffer, 0, AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize);
+                AnimationData.GetStream().Write(Buffer, 0, AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize);
+
+                // pointer fixup
+                AnimationHeader = new UnmanagedMemory<AnimationFileHeader>(AnimationData.Pointer, (uint)AnimationFileHeaderSize);
+                AnimationFrameData = new UnmanagedMemory<AnimationFrameData>(new IntPtr(AnimationData.Pointer.ToInt64() + (long)FileHeader.AnimationDataOffset), (uint)(FileHeader.NumberOfFrames * Marshal.SizeOf(typeof(AnimationFrameData))));
+
+                for (uint I = 0; I < FileHeader.NumberOfFrames; I++)
+                {
+                    AnimationFrameData AnimationFrame;
+                    AnimationFrameData.Get(I, out AnimationFrame);
+                    var FrameIndex = FindFrameIndex(AnimationFrame.FrameName);
+                    if (FrameIndex>=0)
+                    {
+                        Frame Frame;
+                        FrameArray.Get((uint)FrameIndex, out Frame);
+                        Frame.AnimationDataIndex = I;
+                        FrameArray.Set((uint)FrameIndex, ref Frame);
+                    }
+                }
+
+                Result = 0;
+            }
+            finally
+            {
+                File.Close();
+            }
+
+            return Result;
+        }
+
+        public int FindFrameIndex(byte[] Name)
+        {
+            Header Header;
+            MeshHeader.Get(out Header);
+            for (uint I = 0; I < Header.NumberOfFrames; I++)
+            {
+                Frame Frame;
+                FrameArray.Get(I, out Frame);
+                if (Frame.Name.SequenceEqual(Name)) return (int)I;
+            }
+         
+            return -1;
+        }
+
         public uint GetAnimationKeyFromTime(double Time)
         {
-            var Tick = (uint)(AnimationHeader[0].AnimationFPS * Time);
+            AnimationFileHeader Header;
+            AnimationHeader.Get(out Header);
+            var Tick = (uint)(Header.AnimationFPS * Time);
 
-            Tick = Tick % (AnimationHeader[0].NumAnimationKeys - 1);
+            Tick = Tick % (Header.NumberOfAnimationKeys - 1);
             Tick++;
 
             return Tick;
@@ -913,10 +1113,11 @@ namespace Xtro.MDX.Utilities
 
                 var Stride = VertexBufferHeader.StrideBytes;
 
-                var Layout = new[]{
-                new InputElementDescription{SemanticName= "POSITION", Format=Format.R32G32B32_Float,InputSlotClass=InputClassification.InputPerVertexData },
-                new InputElementDescription{SemanticName= "END",Format=Format.R8_UInt, InputSlotClass=InputClassification.InputPerVertexData },
-            };
+                var Layout = new[]
+                {
+                    new InputElementDescription{ SemanticName = "POSITION", Format = Format.R32G32B32_Float, InputSlotClass = InputClassification.InputPerVertexData },
+                    new InputElementDescription{ SemanticName = "END", Format = Format.R8_UInt, InputSlotClass = InputClassification.InputPerVertexData },
+                };
 
                 Layout[1].AlignedByteOffset = (uint)(Stride - 1);
 
@@ -1078,6 +1279,108 @@ namespace Xtro.MDX.Utilities
             }
 
             return OutstandingResources;
+        }
+
+        public void Delete()
+        {
+            if (!CheckLoadDone()) return;
+
+            Header Header;
+            MeshHeader.Get(out Header);
+
+            if (StaticMeshData != null)
+            {
+                if (MaterialArray != null)
+                {
+                    for (var M = 0; M < Header.NumberOfMaterials; M++)
+                    {
+                        Resource Resource;
+                        if (MaterialPairArray[M].DiffuseResourceView != null)
+                        {
+                            MaterialPairArray[M].DiffuseResourceView.GetResource(out Resource);
+                            if (Resource != null)
+                            {
+                                Resource.Release();
+                                Resource.Release(); // do this twice, because GetResource adds a ref
+                            }
+
+                            MaterialPairArray[M].DiffuseResourceView.Release();
+                        }
+                        if (MaterialPairArray[M].NormalResourceView != null)
+                        {
+                            MaterialPairArray[M].NormalResourceView.GetResource(out Resource);
+                            if (Resource != null)
+                            {
+                                Resource.Release();
+                                Resource.Release(); // do this twice, because GetResource adds a ref
+                            }
+
+                            MaterialPairArray[M].NormalResourceView.Release();
+                        }
+                        if (MaterialPairArray[M].SpecularResourceView != null)
+                        {
+                            MaterialPairArray[M].SpecularResourceView.GetResource(out Resource);
+                            if (Resource != null)
+                            {
+                                Resource.Release();
+                                Resource.Release(); // do this twice, because GetResource adds a ref
+                            }
+
+                            MaterialPairArray[M].SpecularResourceView.Release();
+                        }
+                    }
+                }
+
+                for (var I = 0; I < Header.NumberOfVertexBuffers; I++)
+                {
+                    if (VertexBufferPairArray[I].VertexBuffer != null) VertexBufferPairArray[I].VertexBuffer.Release();
+                }
+
+                for (var I = 0; I < Header.NumberOfIndexBuffers; I++)
+                {
+                    if (IndexBufferPairArray[I].IndexBuffer != null) IndexBufferPairArray[I].IndexBuffer.Release();
+                }
+            }
+
+            if (AdjacencyIndexBufferArray != null)
+            {
+                for (var I = 0; I < Header.NumberOfIndexBuffers; I++)
+                {
+                    if (AdjacencyIndexBufferPairArray[I].IndexBuffer != null) AdjacencyIndexBufferPairArray[I].IndexBuffer.Release();
+                }
+            }
+
+            AdjacencyIndexBufferArray = null;
+            AdjacencyIndexBufferPairArray = null;
+
+            HeapData = null;
+            StaticMeshData = null;
+            AnimationData = null;
+            BindPoseFrameMatrices = null;
+            TransformedFrameMatrices = null;
+
+            VerticesList = null;
+            IndicesList = null;
+
+            MeshHeader = null;
+            VertexBufferArray = null;
+            VertexBufferPairArray = null;
+            IndexBufferArray = null;
+            IndexBufferPairArray = null;
+            MeshArray = null;
+            MeshPairArray = null;
+            SubsetArray = null;
+            FrameArray = null;
+            MaterialArray = null;
+            MaterialPairArray = null;
+
+            AnimationHeader = null;
+            AnimationFrameData = null;
+        }
+
+        ~SDK_Mesh()
+        {
+            Delete();
         }
     }
 }

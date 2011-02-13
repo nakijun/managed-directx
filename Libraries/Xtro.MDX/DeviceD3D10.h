@@ -188,6 +188,25 @@ public:
 		pDevice->RSSetState(pRasterizerState);
 	}
 
+	void PS_SetShaderResources(unsigned int StartSlot, unsigned int NumberOfViews, array<ShaderResourceView^>^ ShaderResourceViews)
+	{
+		ID3D10ShaderResourceView** ppShaderResourceViews = 0;
+		try
+		{
+			if (ShaderResourceViews != nullptr && ShaderResourceViews->Length > 0)
+			{
+				ppShaderResourceViews = new ID3D10ShaderResourceView*[ShaderResourceViews->Length];
+				for (int ShaderResourceViewNo = 0; ShaderResourceViewNo < ShaderResourceViews->Length; ShaderResourceViewNo++) ppShaderResourceViews[ShaderResourceViewNo] = ShaderResourceViews[ShaderResourceViewNo] == nullptr ? 0 : ShaderResourceViews[ShaderResourceViewNo]->pShaderResourceView;
+			}
+
+			pDevice->PSSetShaderResources(StartSlot, NumberOfViews, ppShaderResourceViews);
+		}
+		finally
+		{
+			if (ppShaderResourceViews) delete[] ppShaderResourceViews;
+		}
+	}
+
 	int CreateInputLayout(array<InputElementDescription>^ InputElementDescriptions, unsigned int NumberOfElements, UnmanagedMemory^ ShaderBytecodeWithInputSignature, SIZE_T BytecodeLength, [Out] InputLayout^% InputLayout)
 	{
 		void* pShaderBytecodeWithInputSignature = ShaderBytecodeWithInputSignature == nullptr ? 0 : ShaderBytecodeWithInputSignature->pMemory;
