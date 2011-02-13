@@ -37,7 +37,7 @@ public:
 
 	int GetIndexBuffer([Out] MeshBuffer^% IndexBuffer)
 	{
-		ID3DX10MeshBuffer *pIndexBuffer = 0;
+		ID3DX10MeshBuffer* pIndexBuffer = 0;
 		int Result = pMesh->GetIndexBuffer(&pIndexBuffer);
 
 		if (pIndexBuffer)

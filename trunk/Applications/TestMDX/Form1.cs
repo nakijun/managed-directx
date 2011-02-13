@@ -10,6 +10,7 @@ using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 using Xtro.MDX.Direct3D10;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Linq;
 
 namespace TestMDX
 {
@@ -22,6 +23,11 @@ namespace TestMDX
 
         private void Form1_Shown(object Sender, EventArgs E)
         {
+            var b1 = new byte[] { 1, 2, 3 };
+            var b2 = new byte[] { 1, 2, 3 };
+            var c = b1.SequenceEqual(b2);
+            var d = b1 == b2;
+
             var OD = new OutputDescription()
                          {
                              AttachedToDesktop = false
