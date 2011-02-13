@@ -11,11 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Application
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMDX", "Applications\TestMDX\TestMDX.csproj", "{F72DB4A7-A57F-4B69-BA49-FE635FCD99E5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{6E9A9D47-9A00-4F00-A8C9-B0DDCD520442}"
-	ProjectSection(SolutionItems) = preProject
-		Externals\Xtro.Gerecler.dll = Externals\Xtro.Gerecler.dll
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{C09A9DD2-D511-4982-92B4-03D0EE69A7CB}"
 	ProjectSection(SolutionItems) = preProject
 		Notes\_ReadMe.txt = Notes\_ReadMe.txt
