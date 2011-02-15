@@ -622,6 +622,9 @@
     <ClInclude Include="EnumsDXGI.h">
       <Filter>DXGI</Filter>
     </ClInclude>
+    <ClInclude Include="ConstantsD3DX10.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">

@@ -36,7 +36,7 @@ namespace Tutorial09
         Effect Effect;
         InputLayout VertexLayout;
         EffectTechnique Technique;
-        SDK_Mesh Mesh=new SDK_Mesh();
+        SDK_Mesh Mesh = new SDK_Mesh();
         EffectShaderResourceVariable DiffuseVariable = null;
         EffectMatrixVariable WorldVariable = null;
         EffectMatrixVariable ViewVariable = null;
@@ -119,8 +119,8 @@ namespace Tutorial09
 
             // Find the D3DX effect file
             string DestinationPath;
-            var Result =UtilitiesFunctions.FindSDK_MediaFileCch( out DestinationPath, "Tutorial09.fx"  );
-            if (Result<0) return Result;
+            var Result = UtilitiesFunctions.FindSDK_MediaFileCch(out DestinationPath, "Tutorial09.fx");
+            if (Result < 0) return Result;
             var ShaderFlags = ShaderFlag.EnableStrictness;
 #if DEBUG
             // Set the D3D10_SHADER_DEBUG flag to embed debug information in the shaders.
@@ -131,7 +131,7 @@ namespace Tutorial09
 #endif
 
             Result = D3DX10Functions.CreateEffectFromFile(DestinationPath, null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
-            if (Result < 0)return Result;
+            if (Result < 0) return Result;
 
             Technique = Effect.GetTechniqueByName("Render");
             DiffuseVariable = Effect.GetVariableByName("g_txDiffuse").AsShaderResource();
@@ -184,8 +184,8 @@ namespace Tutorial09
             Device.IA_SetInputLayout(VertexLayout);
 
             // Load the mesh
-            Result =  Mesh.Create( Device, "Tiny\\tiny.sdkmesh", true ) ;
-            if (Result<0)return Result;
+            Result = Mesh.Create(Device, "Tiny\\tiny.sdkmesh", true);
+            if (Result < 0) return Result;
 
             // Initialize the world matrices
             D3DX10Functions.MatrixIdentity(out World);
@@ -215,7 +215,7 @@ namespace Tutorial09
             // Setup the projection parameters again
             var Aspect = (float)BackBufferSurfaceDescription.Width / BackBufferSurfaceDescription.Height;
             D3DX10Functions.MatrixPerspectiveFovLH(out Projection, (float)Math.PI * 0.25f, Aspect, 0.5f, 1000.0f);
-            ProjectionVariable.SetMatrix((float[])Projection); 
+            ProjectionVariable.SetMatrix((float[])Projection);
 
             return 0;
         }
@@ -242,48 +242,48 @@ namespace Tutorial09
             //
             // Update variables that change once per frame
             //
-    WorldVariable.SetMatrix( (float[])World );
+            WorldVariable.SetMatrix((float[])World);
 
-    //
-    // Set the Vertex Layout
-    //
-    Device.IA_SetInputLayout( VertexLayout );
+            //
+            // Set the Vertex Layout
+            //
+            Device.IA_SetInputLayout(VertexLayout);
 
-    //
-    // Render the mesh
-    //
-            var VertexBuffer = Mesh.GetVertexBuffer( 0, 0 );
-    var Strides = Mesh.GetVertexStride( 0, 0 );
-    Device.IA_SetVertexBuffers( 0, 1,new[]{ VertexBuffer}, new[]{Strides}, new uint[]{0} );
-    Device.IA_SetIndexBuffer( Mesh.GetIndexBuffer( 0 ), Mesh.GetIndexBufferFormat( 0 ), 0 );
+            //
+            // Render the mesh
+            //
+            var VertexBuffer = Mesh.GetVertexBuffer(0, 0);
+            var Strides = Mesh.GetVertexStride(0, 0);
+            Device.IA_SetVertexBuffers(0, 1, new[] { VertexBuffer }, new[] { Strides }, new uint[] { 0 });
+            Device.IA_SetIndexBuffer(Mesh.GetIndexBuffer(0), Mesh.GetIndexBufferFormat(0), 0);
 
-    TechniqueDescription TechniqueDescription;
-    Technique.GetDescription( out TechniqueDescription );
+            TechniqueDescription TechniqueDescription;
+            Technique.GetDescription(out TechniqueDescription);
 
-            for( uint P = 0; P < TechniqueDescription.Passes; P++ )
-    {
-        for( uint S = 0; S < Mesh.GetNumberOfSubsets( 0 ); S++ )
-        {
-            uint SubsetIndex;
-            Mesh.MeshPairArray[0].Subsets.Get(S, out SubsetIndex);
+            for (uint P = 0; P < TechniqueDescription.Passes; P++)
+            {
+                for (uint S = 0; S < Mesh.GetNumberOfSubsets(0); S++)
+                {
+                    uint SubsetIndex;
+                    Mesh.MeshPairArray[0].Subsets.Get(S, out SubsetIndex);
 
-            // UnmanagedMemory.Get is not working for MarshalAs structs
-            var Size = Marshal.SizeOf(typeof(SDK_Mesh.Subset));
-            var Subset = (SDK_Mesh.Subset)Marshal.PtrToStructure(new IntPtr(Mesh.SubsetArray.Pointer.ToInt64() + SubsetIndex * Size), typeof(SDK_Mesh.Subset));
+                    // UnmanagedMemory.Get is not working for MarshalAs structs
+                    var Size = Marshal.SizeOf(typeof(SDK_Mesh.Subset));
+                    var Subset = (SDK_Mesh.Subset)Marshal.PtrToStructure(new IntPtr(Mesh.SubsetArray.Pointer.ToInt64() + SubsetIndex * Size), typeof(SDK_Mesh.Subset));
 
-            var PrimitiveType = SDK_Mesh.GetPrimitiveType((SDK_Mesh.PrimitiveType)Subset.PrimitiveType);
-            Device.IA_SetPrimitiveTopology( PrimitiveType );
+                    var PrimitiveType = SDK_Mesh.GetPrimitiveType((SDK_Mesh.PrimitiveType)Subset.PrimitiveType);
+                    Device.IA_SetPrimitiveTopology(PrimitiveType);
 
-            var DiffuseResourceView = Mesh.MaterialPairArray[Subset.MaterialID ].DiffuseResourceView;
-            DiffuseVariable.SetResource( DiffuseResourceView );
+                    var DiffuseResourceView = Mesh.MaterialPairArray[Subset.MaterialID].DiffuseResourceView;
+                    DiffuseVariable.SetResource(DiffuseResourceView);
 
-            Technique.GetPassByIndex( P ).Apply( 0 );
-            Device.DrawIndexed( ( uint )Subset.IndexCount, 0, (int)Subset.VertexStart );
-        }
-    }
+                    Technique.GetPassByIndex(P).Apply(0);
+                    Device.DrawIndexed((uint)Subset.IndexCount, 0, (int)Subset.VertexStart);
+                }
+            }
 
-    //the mesh class also had a render method that allows rendering the mesh with the most common options
-    //g_Mesh.Render( pd3dDevice, g_pTechnique, g_ptxDiffuseVariable );
+            //the mesh class also had a render method that allows rendering the mesh with the most common options
+            //g_Mesh.Render( pd3dDevice, g_pTechnique, g_ptxDiffuseVariable );
         }
 
         void OnFrameMove(double Time, float ElapsedTime, object UserContext)
@@ -318,7 +318,7 @@ namespace Tutorial09
         }
 
         private void Form1_CursorChanged(object sender, EventArgs e)
-        {                                            
+        {
             UtilitiesFunctions.HandleCursorChangedEvent();
         }
 
