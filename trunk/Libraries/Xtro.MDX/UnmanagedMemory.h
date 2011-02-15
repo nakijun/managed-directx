@@ -31,7 +31,7 @@ public:
 	UnmanagedMemory(unsigned int Size)
 	{
 		if (Size < 1) throw gcnew ArgumentException("Positive number required.", "Size");
-		
+
 		FSize = Size;
 
 		pMemory = new unsigned char[FSize];
@@ -68,7 +68,8 @@ public:
 	void Get(unsigned int MemoryOffset, unsigned int Index, [Out] T% Value)
 	{
 		pin_ptr<T> PinnedValue = &Value;
-		memcpy(PinnedValue, pMemory + MemoryOffset + Index * sizeof(T), sizeof(T));
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+		memcpy(PinnedValue, pMemory + MemoryOffset + Index * Size, Size);
 	}
 
 	generic<typename T> where T : value class
@@ -81,7 +82,8 @@ public:
 	void Set(unsigned int MemoryOffset, unsigned int Index, T% Value)
 	{									 
 		pin_ptr<T> PinnedValue = &Value;
-		memcpy(pMemory + MemoryOffset + Index * sizeof(T), PinnedValue, sizeof(T));
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+		memcpy(pMemory + MemoryOffset + Index * Size, PinnedValue, Size);
 	}
 
 	generic<typename T> where T : value class
@@ -96,7 +98,8 @@ public:
 		if (Values == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Values");
 
 		pin_ptr<T> PinnedValues = &Values[ValuesStartIndex];
-		memcpy(PinnedValues, pMemory + MemoryOffset + MemoryIndex * sizeof(T), ValuesCount * sizeof(T));
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+		memcpy(PinnedValues, pMemory + MemoryOffset + MemoryIndex * Size, ValuesCount * Size);
 	}
 
 	generic<typename T> where T : value class
@@ -113,7 +116,8 @@ public:
 		if (Values == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Values");
 
 		pin_ptr<T> PinnedValues = &Values[ValuesStartIndex];
-		memcpy(pMemory + MemoryOffset + MemoryIndex * sizeof(T), PinnedValues, ValuesCount * sizeof(T));
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+		memcpy(pMemory + MemoryOffset + MemoryIndex * Size, PinnedValues, ValuesCount * Size);
 	}
 
 	generic<typename T> where T : value class

@@ -26,7 +26,7 @@ namespace Xtro.MDX.Utilities
             public ShaderResourceView ShaderResourceView;
         };
 
-        List<TextureStruct> TextureCache;
+        List<TextureStruct> TextureCache = new List<TextureStruct>();
 
         internal static ResourceCache Singular;
 

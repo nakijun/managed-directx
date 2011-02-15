@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 using Xtro.MDX.DXGI;
 using Xtro.MDX.Generic;
 using Xtro.MDX.Direct3D10;
@@ -28,7 +29,6 @@ namespace Xtro.MDX.Utilities
         Absolute,		//This is not currently used but is here to support absolute transformations in the future
     };
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct AnimationData
     {
         public Vector3 Translation;
@@ -36,7 +36,6 @@ namespace Xtro.MDX.Utilities
         public Vector3 Scaling;
     };
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct AnimationFrameData
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = SDK_Mesh.MaxFrameName)]
@@ -83,7 +82,6 @@ namespace Xtro.MDX.Utilities
         public const uint InvalidAnimationData = uint.MaxValue;
         public const uint InvalidSamplerSlot = uint.MaxValue;
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct Header
         {
             //Basic Info and sizes
@@ -110,14 +108,13 @@ namespace Xtro.MDX.Utilities
             public ulong MaterialDataOffset;
         };
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct VertexBufferHeader
         {
             public ulong NumberOfVertices;
             public ulong SizeBytes;
             public ulong StrideBytes;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxVertexElements)]
-            public VertexElement[] Decl;
+            public VertexElement[] Declaration;
             public ulong DataOffset;
         };
 
@@ -126,7 +123,6 @@ namespace Xtro.MDX.Utilities
             public Buffer VertexBuffer;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct IndexBufferHeader
         {
             public ulong NumberOfIndices;
@@ -134,11 +130,12 @@ namespace Xtro.MDX.Utilities
             public uint IndexType;
             public ulong DataOffset;
         };
+        
         public struct IndexBufferHeaderPair
         {
             public Buffer IndexBuffer;
         }
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+
         public struct Mesh
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxMeshName)]
@@ -162,7 +159,6 @@ namespace Xtro.MDX.Utilities
             public UnmanagedMemory<uint> FrameInfluences;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct Subset
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxSubsetName)]
@@ -175,7 +171,6 @@ namespace Xtro.MDX.Utilities
             public ulong VertexCount;
         };
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct Frame
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxFrameName)]
@@ -188,7 +183,6 @@ namespace Xtro.MDX.Utilities
             public uint AnimationDataIndex;		//Used to index which set of keyframes transforms this frame
         };
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct Material
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxMaterialName)]
@@ -228,7 +222,6 @@ namespace Xtro.MDX.Utilities
             public ShaderResourceView NormalResourceView;
             public ShaderResourceView SpecularResourceView;
         };
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct AnimationFileHeader
         {
             public uint Version;
@@ -257,8 +250,8 @@ namespace Xtro.MDX.Utilities
         UnmanagedMemory StaticMeshData;
         UnmanagedMemory HeapData;
         UnmanagedMemory AnimationData;
-        List<UnmanagedMemory> VerticesList;
-        List<UnmanagedMemory> IndicesList;
+        UnmanagedMemory[] VerticesList;
+        UnmanagedMemory[] IndicesList;
 
         //Keep track of the path
         public string Path { get; private set; }
@@ -271,10 +264,10 @@ namespace Xtro.MDX.Utilities
         IndexBufferHeaderPair[] IndexBufferPairArray;
         public UnmanagedMemory<Mesh> MeshArray { get; private set; }
         public MeshPair[] MeshPairArray { get; private set; }
-        UnmanagedMemory<Subset> SubsetArray;
-        UnmanagedMemory<Frame> FrameArray;
+        public UnmanagedMemory<Subset> SubsetArray;
+        public UnmanagedMemory<Frame> FrameArray;
         public UnmanagedMemory<Material> MaterialArray { get; private set; }
-        MaterialPair[] MaterialPairArray;
+        public MaterialPair[] MaterialPairArray { get; private set; }
 
         // Adjacency information (not part of the m_pStaticMeshData, so it must be created and destroyed separately )
         UnmanagedMemory<IndexBufferHeader> AdjacencyIndexBufferArray;
@@ -288,8 +281,6 @@ namespace Xtro.MDX.Utilities
 
         void LoadMaterials(Device Device, UnmanagedMemory<Material> Materials, MaterialPair[] MaterialPairs, uint NumberOfMaterials, CallbacksStruct[] LoaderCallbacks = null)
         {
-            Material Material;
-
             if (LoaderCallbacks != null && LoaderCallbacks.Length > 0 && LoaderCallbacks[0].CreateTextureFromFile != null)
             {
                 for (uint M = 0; M < NumberOfMaterials; M++)
@@ -302,7 +293,10 @@ namespace Xtro.MDX.Utilities
                     MaterialPairs[M].SpecularResourceView = null;
 
                     // load textures
-                    Materials.Get(M, out Material);
+
+                    // UnmanagedMemory.Get is not working for MarshalAs structs
+                    var Size = Marshal.SizeOf(typeof(Material));
+                    var Material = (Material)Marshal.PtrToStructure(new IntPtr(Materials.Pointer.ToInt64() + M * Size), typeof(Material));
 
                     if (Material.DiffuseTexture[0] != 0) LoaderCallbacks[0].CreateTextureFromFile(Device, Encoding.Default.GetString(Material.DiffuseTexture), out MaterialPairs[M].DiffuseResourceView, LoaderCallbacks[0].Context);
                     if (Material.NormalTexture[0] != 0) LoaderCallbacks[0].CreateTextureFromFile(Device, Encoding.Default.GetString(Material.NormalTexture), out MaterialPairs[M].NormalResourceView, LoaderCallbacks[0].Context);
@@ -321,7 +315,10 @@ namespace Xtro.MDX.Utilities
                     MaterialPairs[M].SpecularResourceView = null;
 
                     // load textures
-                    Materials.Get(M, out Material);
+
+                    // UnmanagedMemory.Get is not working for MarshalAs structs
+                    var Size = Marshal.SizeOf(typeof(Material));
+                    var Material = (Material)Marshal.PtrToStructure(new IntPtr(Materials.Pointer.ToInt64() + M * Size), typeof(Material));
 
                     string TexturePath;
                     if (Material.DiffuseTexture[0] != 0)
@@ -474,12 +471,15 @@ namespace Xtro.MDX.Utilities
             MaterialPairArray = new MaterialPair[MeshHeaderData.NumberOfMaterials];
 
             // Setup subsets
-            Mesh Mesh;
             for (uint I = 0; I < MeshHeaderData.NumberOfMeshes; I++)
             {
-                MeshArray.Get(I, out Mesh);
-                MeshPairArray[I].Subsets = new UnmanagedMemory<uint>(new IntPtr(StaticMeshData.Pointer.ToInt64() + (long)Mesh.SubsetOffset), Mesh.NumberOfSubsets * sizeof(int));
-                MeshPairArray[I].FrameInfluences = new UnmanagedMemory<uint>(new IntPtr(StaticMeshData.Pointer.ToInt64() + (long)Mesh.FrameInfluenceOffset), Mesh.NumberOfFrameInfluences * sizeof(int));
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                var Size=Marshal.SizeOf(typeof(Mesh));
+                var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + I * Size), typeof(Mesh));
+
+                MeshPairArray[I].Subsets = new UnmanagedMemory<uint>(new IntPtr(StaticMeshData.Pointer.ToInt64() + (long)MeshData.SubsetOffset), MeshData.NumberOfSubsets * sizeof(int));
+                var NumberOfFrameInfluences = MeshData.NumberOfFrameInfluences == 0 ? 1 : MeshData.NumberOfFrameInfluences;
+                MeshPairArray[I].FrameInfluences = new UnmanagedMemory<uint>(new IntPtr(StaticMeshData.Pointer.ToInt64() + (long)MeshData.FrameInfluenceOffset), NumberOfFrameInfluences * sizeof(int));
             }
 
             // error condition
@@ -499,18 +499,20 @@ namespace Xtro.MDX.Utilities
             if (Device != null && CreateAdjacencyIndices) this.CreateAdjacencyIndices(Device, 0.001f, Data);
 
             // Create VBs
-            VerticesList = new List<UnmanagedMemory>((int)MeshHeaderData.NumberOfVertexBuffers);
+            VerticesList = new UnmanagedMemory[MeshHeaderData.NumberOfVertexBuffers];
             for (var I = 0; I < MeshHeaderData.NumberOfVertexBuffers; I++)
             {
-                VertexBufferHeader VertexBufferHeader;
-                VertexBufferArray.Get((uint)I, out VertexBufferHeader);
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                var Size = Marshal.SizeOf(typeof(VertexBufferHeader));
+                var VertexBufferHeader = (VertexBufferHeader)Marshal.PtrToStructure(new IntPtr(VertexBufferArray.Pointer.ToInt64() + I * Size), typeof(VertexBufferHeader));
+
                 VerticesList[I] = new UnmanagedMemory(new IntPtr(BufferData.Pointer.ToInt64() + (long)(VertexBufferHeader.DataOffset - BufferDataStart)), (uint)VertexBufferHeader.SizeBytes);
 
                 if (Device != null) CreateVertexBuffer(Device, ref VertexBufferHeader, ref VertexBufferPairArray[I], VerticesList[I], LoaderCallbacks);
             }
 
             // Create IBs
-            IndicesList = new List<UnmanagedMemory>((int)MeshHeaderData.NumberOfIndexBuffers);
+            IndicesList = new UnmanagedMemory[MeshHeaderData.NumberOfIndexBuffers];
             for (var I = 0; I < MeshHeaderData.NumberOfIndexBuffers; I++)
             {
                 IndexBufferHeader IndexBufferHeader;
@@ -534,21 +536,27 @@ namespace Xtro.MDX.Utilities
             Result = 0;
 
             // update bounding volume 
-            Mesh CurrentMesh;
-            MeshArray.Get(out CurrentMesh);
             for (uint I = 0; I < MeshHeaderData.NumberOfMeshes; I++)
             {
                 Lower.X = float.MaxValue; Lower.Y = float.MaxValue; Lower.Z = float.MaxValue;
                 Upper.X = -float.MaxValue; Upper.Y = -float.MaxValue; Upper.Z = -float.MaxValue;
-                MeshArray.Get(I, out CurrentMesh);
+
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                var Size = Marshal.SizeOf(typeof(Mesh));
+                var CurrentMesh = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + I * Size), typeof(Mesh));
+
                 IndexBufferHeader CurrentMeshHeader;
                 IndexBufferArray.Get(CurrentMesh.IndexBuffer, out CurrentMeshHeader);
-                var Indsize = CurrentMeshHeader.IndexType == (uint)IndexType.x16 ? 2 : 4;
+                var IndexSize = CurrentMeshHeader.IndexType == (uint)IndexType.x16 ? 2 : 4;
 
-                for (uint A = 0; A < CurrentMesh.NumberOfSubsets; A++)
+                for (uint S = 0; S < CurrentMesh.NumberOfSubsets; S++)
                 {
-                    Subset Subset;
-                    MeshPairArray[I].Subsets.Get(A, out Subset);
+                    uint SubsetIndex;
+                    MeshPairArray[I].Subsets.Get(S, out SubsetIndex);
+
+                    // UnmanagedMemory.Get is not working for MarshalAs structs
+                    Size = Marshal.SizeOf(typeof(Subset));
+                    var Subset = (Subset)Marshal.PtrToStructure(new IntPtr(SubsetArray.Pointer.ToInt64() + SubsetIndex * Size), typeof(Subset));
 
                     //var PrimitiveType = GetPrimitiveType((PrimitiveType)Subset.PrimitiveType);
 
@@ -565,17 +573,20 @@ namespace Xtro.MDX.Utilities
                     //m_ppIndices[i]
                     var Indices = IndicesList[(int)CurrentMesh.IndexBuffer];
                     var Vertices = VerticesList[(int)CurrentMesh.VertexBuffers[0]];
-                    VertexBufferHeader VertexBufferHeader;
-                    VertexBufferArray.Get(CurrentMesh.VertexBuffers[0], out VertexBufferHeader);
+
+                    // UnmanagedMemory.Get is not working for MarshalAs structs
+                    Size = Marshal.SizeOf(typeof(VertexBufferHeader));
+                    var VertexBufferHeader = (VertexBufferHeader)Marshal.PtrToStructure(new IntPtr(VertexBufferArray.Pointer.ToInt64() + CurrentMesh.VertexBuffers[0] * Size), typeof(VertexBufferHeader));
+
                     var Stride = (uint)VertexBufferHeader.StrideBytes;
                     Stride /= 4;
                     for (var VertexIndex = IndexStart; VertexIndex < IndexStart + IndexCount; VertexIndex++)
                     { //xTODO: test 16 bit and 32 bit
                         uint CurrentIndex;
-                        if (Indsize == 2)
+                        if (IndexSize == 2)
                         {
                             var IndexDiv2 = VertexIndex / 2;
-                            Indices.Get(IndexDiv2, out CurrentIndex);
+                            Indices.Get(0, IndexDiv2, out CurrentIndex);
                             if (VertexIndex % 2 == 0)
                             {
                                 CurrentIndex = CurrentIndex << 16;
@@ -583,9 +594,9 @@ namespace Xtro.MDX.Utilities
                             }
                             else CurrentIndex = CurrentIndex >> 16;
                         }
-                        else Indices.Get(VertexIndex, out CurrentIndex);
+                        else Indices.Get(0, VertexIndex, out CurrentIndex);
                         Vector3 Pt;
-                        Vertices.Get(Stride * CurrentIndex, out Pt);
+                        Vertices.Get(sizeof(float) * Stride * CurrentIndex, out Pt);
                         if (Pt.X < Lower.X) Lower.X = Pt.X;
                         if (Pt.Y < Lower.Y) Lower.Y = Pt.Y;
                         if (Pt.Z < Lower.Z) Lower.Z = Pt.Z;
@@ -621,12 +632,16 @@ namespace Xtro.MDX.Utilities
             Matrix LocalTransform;
             var Tick = GetAnimationKeyFromTime(Time);
 
-            Frame FrameHeaderData;
-            FrameArray.Get(Frame, out FrameHeaderData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Frame));
+            var FrameHeaderData = (Frame)Marshal.PtrToStructure(new IntPtr(FrameArray.Pointer.ToInt64() + Frame * Size), typeof(Frame));
+
             if (FrameHeaderData.AnimationDataIndex != InvalidAnimationData)
             {
-                AnimationFrameData AnimationFrame;
-                AnimationFrameData.Get(FrameHeaderData.AnimationDataIndex, out AnimationFrame);
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                Size = Marshal.SizeOf(typeof(AnimationFrameData));
+                var AnimationFrame = (AnimationFrameData)Marshal.PtrToStructure(new IntPtr(AnimationFrameData.Pointer.ToInt64() + FrameHeaderData.AnimationDataIndex * Size), typeof(AnimationFrameData));
+
                 AnimationData Data;
                 AnimationData.Get((uint)AnimationFrame.DataOffset, Tick, out Data);
 
@@ -674,12 +689,16 @@ namespace Xtro.MDX.Utilities
 
             var Tick = GetAnimationKeyFromTime(Time);
 
-            Frame FrameHeaderData;
-            FrameArray.Get(Frame, out FrameHeaderData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Frame));
+            var FrameHeaderData = (Frame)Marshal.PtrToStructure(new IntPtr(FrameArray.Pointer.ToInt64() + Frame * Size), typeof(Frame));
+
             if (FrameHeaderData.AnimationDataIndex != InvalidAnimationData)
             {
-                AnimationFrameData AnimationFrame;
-                AnimationFrameData.Get(FrameHeaderData.AnimationDataIndex, out AnimationFrame);
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                Size = Marshal.SizeOf(typeof(AnimationFrameData));
+                var AnimationFrame = (AnimationFrameData)Marshal.PtrToStructure(new IntPtr(AnimationFrameData.Pointer.ToInt64() + FrameHeaderData.AnimationDataIndex * Size), typeof(AnimationFrameData));
+
                 AnimationData Data;
                 AnimationData.Get((uint)AnimationFrame.DataOffset, Tick, out Data);
                 AnimationData DataOriginal;
@@ -710,8 +729,10 @@ namespace Xtro.MDX.Utilities
 
         void RenderMesh(uint Mesh, bool Adjacent, Device Device, EffectTechnique Technique, EffectShaderResourceVariable Diffuse, EffectShaderResourceVariable Normal, EffectShaderResourceVariable Specular, EffectVectorVariable DiffuseVector, EffectVectorVariable SpecularVector)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             var MeshDataPair = MeshPairArray[Mesh];
 
             var Strides = new uint[(int)IA.VertexInputResourceSlotCount];
@@ -722,8 +743,10 @@ namespace Xtro.MDX.Utilities
 
             for (var I = 0; I < MeshData.NumberOfVertexBuffers; I++)
             {
-                VertexBufferHeader VertexBufferHeader;
-                VertexBufferArray.Get(MeshData.VertexBuffers[I], out VertexBufferHeader);
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                Size = Marshal.SizeOf(typeof(VertexBufferHeader));
+                var VertexBufferHeader = (VertexBufferHeader)Marshal.PtrToStructure(new IntPtr(VertexBufferArray.Pointer.ToInt64() + MeshData.VertexBuffers[I] * Size), typeof(VertexBufferHeader));
+
                 VertexBuffers[I] = VertexBufferPairArray[MeshData.VertexBuffers[I]].VertexBuffer;
                 Strides[I] = (uint)VertexBufferHeader.StrideBytes;
                 Offsets[I] = 0;
@@ -749,8 +772,10 @@ namespace Xtro.MDX.Utilities
                 {
                     uint SubsetIndex;
                     MeshDataPair.Subsets.Get(S, out SubsetIndex);
-                    Subset Subset;
-                    SubsetArray.Get(SubsetIndex, out Subset);
+
+                    // UnmanagedMemory.Get is not working for MarshalAs structs
+                    Size = Marshal.SizeOf(typeof(Subset));
+                    var Subset = (Subset)Marshal.PtrToStructure(new IntPtr(SubsetArray.Pointer.ToInt64() + SubsetIndex * Size), typeof(Subset));
 
                     var PrimitiveType = GetPrimitiveType((PrimitiveType)Subset.PrimitiveType);
                     if (Adjacent)
@@ -774,8 +799,10 @@ namespace Xtro.MDX.Utilities
 
                     Device.IA_SetPrimitiveTopology(PrimitiveType);
 
-                    Material Material;
-                    MaterialArray.Get(Subset.MaterialID, out Material);
+                    // UnmanagedMemory.Get is not working for MarshalAs structs
+                    Size = Marshal.SizeOf(typeof(Material));
+                    var Material = (Material)Marshal.PtrToStructure(new IntPtr(MaterialArray.Pointer.ToInt64() + Subset.MaterialID * Size), typeof(Material));
+
                     var MaterialPair = MaterialPairArray[Subset.MaterialID];
                     if (Diffuse != null && MaterialPair.DiffuseResourceView != null) Diffuse.SetResource(MaterialPair.DiffuseResourceView);
                     if (Normal != null && MaterialPair.NormalResourceView != null) Normal.SetResource(MaterialPair.NormalResourceView);
@@ -800,8 +827,10 @@ namespace Xtro.MDX.Utilities
 
         void RenderMesh(uint Mesh, bool Adjacent, Device Device, uint DiffuseSlot, uint NormalSlot, uint SpecularSlot)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             var MeshDataPair = MeshPairArray[Mesh];
 
             var Strides = new uint[(int)IA.VertexInputResourceSlotCount];
@@ -812,8 +841,10 @@ namespace Xtro.MDX.Utilities
 
             for (var I = 0; I < MeshData.NumberOfVertexBuffers; I++)
             {
-                VertexBufferHeader VertexBufferHeader;
-                VertexBufferArray.Get(MeshData.VertexBuffers[I], out VertexBufferHeader);
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                Size = Marshal.SizeOf(typeof(VertexBufferHeader));
+                var VertexBufferHeader = (VertexBufferHeader)Marshal.PtrToStructure(new IntPtr(VertexBufferArray.Pointer.ToInt64() + MeshData.VertexBuffers[I] * Size), typeof(VertexBufferHeader));
+
                 VertexBuffers[I] = VertexBufferPairArray[MeshData.VertexBuffers[I]].VertexBuffer;
                 Strides[I] = (uint)VertexBufferHeader.StrideBytes;
                 Offsets[I] = 0;
@@ -835,8 +866,10 @@ namespace Xtro.MDX.Utilities
             {
                 uint SubsetIndex;
                 MeshDataPair.Subsets.Get(S, out SubsetIndex);
-                Subset Subset;
-                SubsetArray.Get(SubsetIndex, out Subset);
+
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                Size = Marshal.SizeOf(typeof(Subset));
+                var Subset = (Subset)Marshal.PtrToStructure(new IntPtr(SubsetArray.Pointer.ToInt64() + SubsetIndex * Size), typeof(Subset));
 
                 var PrimitiveType = GetPrimitiveType((PrimitiveType)Subset.PrimitiveType);
                 if (Adjacent)
@@ -860,8 +893,6 @@ namespace Xtro.MDX.Utilities
 
                 Device.IA_SetPrimitiveTopology(PrimitiveType);
 
-                Material Material;
-                MaterialArray.Get(Subset.MaterialID, out Material);
                 var MaterialPair = MaterialPairArray[Subset.MaterialID];
                 if (DiffuseSlot != InvalidSamplerSlot && MaterialPair.DiffuseResourceView != null) Device.PS_SetShaderResources(DiffuseSlot, 1, new[] { MaterialPair.DiffuseResourceView });
                 if (NormalSlot != InvalidSamplerSlot && MaterialPair.NormalResourceView != null) Device.PS_SetShaderResources(NormalSlot, 1, new[] { MaterialPair.NormalResourceView });
@@ -883,8 +914,10 @@ namespace Xtro.MDX.Utilities
         {
             if (StaticMeshData == null || FrameArray == null) return;
 
-            Frame FrameHeaderData;
-            FrameArray.Get(Frame, out FrameHeaderData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Frame));
+            var FrameHeaderData = (Frame)Marshal.PtrToStructure(new IntPtr(FrameArray.Pointer.ToInt64() + Frame * Size), typeof(Frame));
+
             if (FrameHeaderData.Mesh != InvalidMesh) RenderMesh(FrameHeaderData.Mesh, Adjacent, Device, Technique, Diffuse, Normal, Specular, DiffuseVector, SpecularVector);
 
             // Render our children
@@ -898,8 +931,10 @@ namespace Xtro.MDX.Utilities
         {
             if (StaticMeshData == null || FrameArray == null) return;
 
-            Frame FrameHeaderData;
-            FrameArray.Get(Frame, out FrameHeaderData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Frame));
+            var FrameHeaderData = (Frame)Marshal.PtrToStructure(new IntPtr(FrameArray.Pointer.ToInt64() + Frame * Size), typeof(Frame));
+
             if (FrameHeaderData.Mesh != InvalidMesh) RenderMesh(FrameHeaderData.Mesh, Adjacent, Device, DiffuseSlot, NormalSlot, SpecularSlot);
 
             // Render our children
@@ -967,15 +1002,19 @@ namespace Xtro.MDX.Utilities
 
                 for (uint I = 0; I < FileHeader.NumberOfFrames; I++)
                 {
-                    AnimationFrameData AnimationFrame;
-                    AnimationFrameData.Get(I, out AnimationFrame);
+                    // UnmanagedMemory.Get is not working for MarshalAs structs
+                    var Size = Marshal.SizeOf(typeof(AnimationFrameData));
+                    var AnimationFrame = (AnimationFrameData)Marshal.PtrToStructure(new IntPtr(AnimationFrameData.Pointer.ToInt64() + I * Size), typeof(AnimationFrameData));
+
                     var FrameIndex = FindFrameIndex(AnimationFrame.FrameName);
                     if (FrameIndex >= 0)
                     {
-                        Frame Frame;
-                        FrameArray.Get((uint)FrameIndex, out Frame);
-                        Frame.AnimationDataIndex = I;
-                        FrameArray.Set((uint)FrameIndex, ref Frame);
+                        // UnmanagedMemory.Get is not working for MarshalAs structs
+                        Size = Marshal.SizeOf(typeof(Frame));
+                        var FrameHeaderData = (Frame)Marshal.PtrToStructure(new IntPtr(FrameArray.Pointer.ToInt64() + FrameIndex * Size), typeof(Frame));
+                        FrameHeaderData.AnimationDataIndex = I;
+                        // UnmanagedMemory.Set is not working for MarshalAs structs
+                        Marshal.StructureToPtr(FrameHeaderData, new IntPtr(FrameArray.Pointer.ToInt64() + FrameIndex * Size), false);
                     }
                 }
 
@@ -1093,8 +1132,11 @@ namespace Xtro.MDX.Utilities
 
             // Transform ourselves
             Matrix LocalWorld;
-            Frame FrameHeaderData;
-            FrameArray.Get(Frame, out FrameHeaderData);
+
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Frame));
+            var FrameHeaderData = (Frame)Marshal.PtrToStructure(new IntPtr(FrameArray.Pointer.ToInt64() + Frame * Size), typeof(Frame));
+
             D3DX10Functions.MatrixMultiply(out LocalWorld, ref FrameHeaderData.Matrix, ref ParentWorld);
             BindPoseFrameMatrices[Frame] = LocalWorld;
 
@@ -1147,23 +1189,27 @@ namespace Xtro.MDX.Utilities
             MeshHeader.Get(out MeshHeaderData);
             try
             {
-                AdjacencyIndexBufferArray = new UnmanagedMemory<IndexBufferHeader>(MeshHeaderData.NumberOfIndexBuffers);
+                AdjacencyIndexBufferArray = new UnmanagedMemory<IndexBufferHeader>((uint)(MeshHeaderData.NumberOfIndexBuffers * Marshal.SizeOf(typeof(IndexBufferHeader))));
                 AdjacencyIndexBufferPairArray = new IndexBufferHeaderPair[MeshHeaderData.NumberOfIndexBuffers];
             }
             catch { return (int)Error.OutOfMemory; }
 
-            Mesh Mesh;
-            VertexBufferHeader VertexBufferHeader;
             IndexBufferHeader IndexBufferHeader;
             for (uint I = 0; I < MeshHeaderData.NumberOfMeshes; I++)
             {
-                MeshArray.Get(I, out Mesh);
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                var Size = Marshal.SizeOf(typeof(Mesh));
+                var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + I * Size), typeof(Mesh));
+
                 // ReSharper disable InconsistentNaming
-                var VB_Index = Mesh.VertexBuffers[0];
-                var IB_Index = Mesh.IndexBuffer;
+                var VB_Index = MeshData.VertexBuffers[0];
+                var IB_Index = MeshData.IndexBuffer;
                 // ReSharper restore InconsistentNaming
 
-                VertexBufferArray.Get(VB_Index, out VertexBufferHeader);
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                Size = Marshal.SizeOf(typeof(VertexBufferHeader));
+                var VertexBufferHeader = (VertexBufferHeader)Marshal.PtrToStructure(new IntPtr(VertexBufferArray.Pointer.ToInt64() + VB_Index * Size), typeof(VertexBufferHeader));
+
                 IndexBufferArray.Get(IB_Index, out IndexBufferHeader);
                 var VertexData = new UnmanagedMemory(new IntPtr(BufferData.Pointer.ToInt64() + (long)VertexBufferHeader.DataOffset), (uint)VertexBufferHeader.SizeBytes);
                 var IndexData = new UnmanagedMemory(new IntPtr(BufferData.Pointer.ToInt64() + (long)IndexBufferHeader.DataOffset), (uint)IndexBufferHeader.SizeBytes);
@@ -1292,8 +1338,9 @@ namespace Xtro.MDX.Utilities
 
         public Format GetIndexBufferFormat(uint Mesh)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
 
             IndexBufferHeader IndexBufferHeader;
             IndexBufferArray.Get(MeshData.IndexBuffer, out IndexBufferHeader);
@@ -1310,29 +1357,37 @@ namespace Xtro.MDX.Utilities
 
         public Buffer GetVertexBuffer(uint Mesh, uint VertexBuffer)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             return VertexBufferPairArray[MeshData.VertexBuffers[VertexBuffer]].VertexBuffer;
         }
 
         public Buffer GetIndexBuffer(uint Mesh)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             return IndexBufferPairArray[MeshData.IndexBuffer].IndexBuffer;
         }
 
         public Buffer GetAdjacencyIndexBuffer(uint Mesh)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             return AdjacencyIndexBufferPairArray[MeshData.IndexBuffer].IndexBuffer;
         }
 
         public IndexType GetIndexType(uint Mesh)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             IndexBufferHeader IndexBufferHeader;
             IndexBufferArray.Get(MeshData.IndexBuffer, out IndexBufferHeader);
             return (IndexType)IndexBufferHeader.IndexType;
@@ -1392,17 +1447,23 @@ namespace Xtro.MDX.Utilities
 
         public uint GetNumberOfSubsets(uint Mesh)
         {
-            Mesh MeshHeader;
-            MeshArray.Get(Mesh, out MeshHeader);
-            return MeshHeader.NumberOfSubsets;
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
+            return MeshData.NumberOfSubsets;
         }
 
         public uint GetVertexStride(uint Mesh, uint VertexBuffer)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
-            VertexBufferHeader VertexBufferHeader;
-            VertexBufferArray.Get(MeshData.VertexBuffers[VertexBuffer], out VertexBufferHeader);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            Size = Marshal.SizeOf(typeof(VertexBufferHeader));
+            var VertexBufferHeader = (VertexBufferHeader)Marshal.PtrToStructure(new IntPtr(VertexBufferArray.Pointer.ToInt64() + MeshData.VertexBuffers[VertexBuffer] * Size), typeof(VertexBufferHeader));
+
             return (uint)VertexBufferHeader.StrideBytes;
         }
 
@@ -1412,9 +1473,11 @@ namespace Xtro.MDX.Utilities
             MeshHeader.Get(out Header);
             for (uint I = 0; I < Header.NumberOfFrames; I++)
             {
-                Frame Frame;
-                FrameArray.Get(I, out Frame);
-                if (Frame.Name.SequenceEqual(Name)) return (int)I;
+                // UnmanagedMemory.Get is not working for MarshalAs structs
+                var Size = Marshal.SizeOf(typeof(Frame));
+                var FrameHeaderData = (Frame)Marshal.PtrToStructure(new IntPtr(FrameArray.Pointer.ToInt64() + I * Size), typeof(Frame));
+
+                if (FrameHeaderData.Name.SequenceEqual(Name)) return (int)I;
             }
 
             return -1;
@@ -1422,18 +1485,24 @@ namespace Xtro.MDX.Utilities
 
         public ulong GetNumberOfVertices(uint Mesh, uint VertexBuffer)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
-            VertexBufferHeader VertexBufferHeader;
-            VertexBufferArray.Get(MeshData.VertexBuffers[VertexBuffer], out VertexBufferHeader);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
+
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            Size = Marshal.SizeOf(typeof(VertexBufferHeader));
+            var VertexBufferHeader = (VertexBufferHeader)Marshal.PtrToStructure(new IntPtr(VertexBufferArray.Pointer.ToInt64() + MeshData.VertexBuffers[VertexBuffer] * Size), typeof(VertexBufferHeader));
 
             return VertexBufferHeader.NumberOfVertices;
         }
 
         public ulong GetNumberOfIndices(uint Mesh)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             IndexBufferHeader IndexBufferHeader;
             IndexBufferArray.Get(MeshData.IndexBuffer, out IndexBufferHeader);
 
@@ -1442,15 +1511,19 @@ namespace Xtro.MDX.Utilities
 
         public Vector3 GetMeshBBoxCenter(uint Mesh)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             return MeshData.BoundingBoxCenter;
         }
 
         public Vector3 GetMeshBBoxExtents(uint Mesh)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             return MeshData.BoundingBoxExtents;
         }
 
@@ -1459,14 +1532,16 @@ namespace Xtro.MDX.Utilities
             uint OutstandingResources = 0;
             if (MeshHeader == null) return 1;
 
-            Header MeshHeaderData;
-            MeshHeader.Get(out MeshHeaderData);
-            Material Material;
+            Header Header;
+            MeshHeader.Get(out Header);
             if (Device != null)
             {
-                for (uint I = 0; I < MeshHeaderData.NumberOfMaterials; I++)
+                for (uint I = 0; I < Header.NumberOfMaterials; I++)
                 {
-                    MaterialArray.Get(I, out Material);
+                    // UnmanagedMemory.Get is not working for MarshalAs structs
+                    var Size = Marshal.SizeOf(typeof(Material));
+                    var Material = (Material)Marshal.PtrToStructure(new IntPtr(MaterialArray.Pointer.ToInt64() + I * Size), typeof(Material));
+
                     if (Material.DiffuseTexture[0] != 0)
                     {
                         if (MaterialPairArray[I].DiffuseResourceView == null) OutstandingResources++;
@@ -1525,8 +1600,10 @@ namespace Xtro.MDX.Utilities
 
         public uint GetNumberOfInfluences(uint Mesh)
         {
-            Mesh MeshData;
-            MeshArray.Get(Mesh, out MeshData);
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(Mesh));
+            var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + Mesh * Size), typeof(Mesh));
+
             return MeshData.NumberOfFrameInfluences;
         }
 

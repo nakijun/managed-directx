@@ -2,10 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* SDK_Mesh
-
-* Derleme listesinde tutorial09'u aktif yap configuration manager'da
-
 * tüm E_OUTOFMEMORY leri implement et. C++ da tara. C#'a ekle try içinde
 
 * RasterizerDescription gibi kendisi [StructLayout] olan ve içinde bool barýndýran struclarda marshal ve size bilgisi ver.

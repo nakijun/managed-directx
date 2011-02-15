@@ -13,7 +13,8 @@ public:
 	void Get(unsigned int Index, [Out] T% Value)
 	{
 		pin_ptr<T> PinnedValue = &Value;
-		memcpy(PinnedValue, pMemory + Index * sizeof(T), sizeof(T));
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+		memcpy(PinnedValue, pMemory + Index * Size, Size);
 	}
 
 	void Get([Out] T% Value)
@@ -24,7 +25,8 @@ public:
 	void Set(unsigned int Index, T% Value)
 	{									 
 		pin_ptr<T> PinnedValue = &Value;
-		memcpy(pMemory + Index * sizeof(T), PinnedValue, sizeof(T));
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+		memcpy(pMemory + Index * Size, PinnedValue, Size);
 	}
 
 	void Set(T% Value)
@@ -37,7 +39,8 @@ public:
 		if (Values == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Values");
 
 		pin_ptr<T> PinnedValues = &Values[ValuesStartIndex];
-		memcpy(PinnedValues, pMemory + MemoryIndex * sizeof(T), ValuesCount * sizeof(T));
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+		memcpy(PinnedValues, pMemory + MemoryIndex * Size, ValuesCount * Size);
 	}
 
 	void Read(array<T>^ Values)
@@ -52,7 +55,8 @@ public:
 		if (Values == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Values");
 
 		pin_ptr<T> PinnedValues = &Values[ValuesStartIndex];
-		memcpy(pMemory + MemoryIndex * sizeof(T), PinnedValues, ValuesCount * sizeof(T));
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+		memcpy(pMemory + MemoryIndex * Size, PinnedValues, ValuesCount * Size);
 	}
 
 	void Write(array<T>^ Values)
