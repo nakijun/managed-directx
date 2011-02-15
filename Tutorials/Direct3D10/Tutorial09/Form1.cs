@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using Xtro.MDX;
 using Xtro.MDX.Generic;
 using Xtro.MDX.DXGI;
-using Usage = Xtro.MDX.DXGI.Usage;
 using Xtro.MDX.Direct3D10;
 using D3D10Usage = Xtro.MDX.Direct3D10.Usage;
 using Device = Xtro.MDX.Direct3D10.Device;
@@ -34,12 +33,11 @@ namespace Tutorial09
             return Degree * Math.PI / 180.0f;
         }
 
-        Effect Effect = null;
-        InputLayout VertexLayout = null;
-        EffectTechnique Technique = null;
-        SDK_Mesh Mesh = null;
+        Effect Effect;
+        InputLayout VertexLayout;
+        EffectTechnique Technique;
+        SDK_Mesh Mesh=new SDK_Mesh();
         EffectShaderResourceVariable DiffuseVariable = null;
-        ShaderResourceView TextureResourceView = null;
         EffectMatrixVariable WorldVariable = null;
         EffectMatrixVariable ViewVariable = null;
         EffectMatrixVariable ProjectionVariable = null;
@@ -117,7 +115,12 @@ namespace Tutorial09
 
         int OnDeviceCreated(Device Device, ref SurfaceDescription BackBufferSurfaceDescription, object UserContext)
         {
-            // Read the D3DX effect file
+            UtilitiesFunctions.MediaSearchPath = @"C:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Samples\Media\";
+
+            // Find the D3DX effect file
+            string DestinationPath;
+            var Result =UtilitiesFunctions.FindSDK_MediaFileCch( out DestinationPath, "Tutorial09.fx"  );
+            if (Result<0) return Result;
             var ShaderFlags = ShaderFlag.EnableStrictness;
 #if DEBUG
             // Set the D3D10_SHADER_DEBUG flag to embed debug information in the shaders.
@@ -127,19 +130,14 @@ namespace Tutorial09
             ShaderFlags |= ShaderFlag.Debug;
 #endif
 
-            var Result = D3DX10Functions.CreateEffectFromFile("Tutorial09.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
-            if (Result < 0)
-            {
-                MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
-                return Result;
-            }
+            Result = D3DX10Functions.CreateEffectFromFile(DestinationPath, null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
+            if (Result < 0)return Result;
 
             Technique = Effect.GetTechniqueByName("Render");
+            DiffuseVariable = Effect.GetVariableByName("g_txDiffuse").AsShaderResource();
             WorldVariable = Effect.GetVariableByName("World").AsMatrix();
             ViewVariable = Effect.GetVariableByName("View").AsMatrix();
             ProjectionVariable = Effect.GetVariableByName("Projection").AsMatrix();
-            MeshColorVariable = Effect.GetVariableByName("vMeshColor").AsVector();
-            DiffuseVariable = Effect.GetVariableByName("txDiffuse").AsShaderResource();
 
             // Define the input layout
             InputElementDescription[] Layout = 
@@ -156,11 +154,21 @@ namespace Tutorial09
                 },
                 new InputElementDescription
                 {
+                            SemanticName = "NORMAL",
+                            SemanticIndex = 0,
+                            Format = Format.R32G32B32_Float,
+                            InputSlot = 0,
+                            AlignedByteOffset = 12,
+                            InputSlotClass = InputClassification.InputPerVertexData,
+                            InstanceDataStepRate = 0
+                },
+                new InputElementDescription
+                {
                     SemanticName = "TEXCOORD",
                     SemanticIndex = 0,
                     Format = Format.R32G32_Float,
                     InputSlot = 0,
-                    AlignedByteOffset = 12,
+                    AlignedByteOffset = 24,
                     InputSlotClass = InputClassification.InputPerVertexData,
                     InstanceDataStepRate = 0
                 }
@@ -169,139 +177,44 @@ namespace Tutorial09
             // Create the input layout
             PassDescription PassDescription;
             Technique.GetPassByIndex(0).GetDescription(out PassDescription);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Length, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Size, out VertexLayout);
             if (Result < 0) return Result;
 
             // Set the input layout
             Device.IA_SetInputLayout(VertexLayout);
 
-            // Create vertex buffer
-            var VertexCount = (uint)24;
-            int VertexSize = Marshal.SizeOf(typeof(SimpleVertex));
-            var Vertices = new UnmanagedMemory<SimpleVertex>((uint)(VertexSize * VertexCount));
-            Vertices.Write(0, VertexCount, new SimpleVertex[]
-            {
-                new SimpleVertex{Position= new Vector3(-1.0f, 1.0f, -1.0f),Texture= new Vector2(0.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, 1.0f, -1.0f),Texture= new Vector2(1.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, 1.0f, 1.0f),Texture= new Vector2(1.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, 1.0f, 1.0f),Texture= new Vector2(0.0f, 1.0f)}, 
-                new SimpleVertex{Position= new Vector3(-1.0f, -1.0f, -1.0f),Texture= new Vector2(0.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, -1.0f, -1.0f),Texture= new Vector2(1.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, -1.0f, 1.0f),Texture= new Vector2(1.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, -1.0f, 1.0f),Texture= new Vector2(0.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, -1.0f, 1.0f),Texture= new Vector2(0.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, -1.0f, -1.0f),Texture= new Vector2(1.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, 1.0f, -1.0f),Texture= new Vector2(1.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, 1.0f, 1.0f),Texture= new Vector2(0.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, -1.0f, 1.0f),Texture= new Vector2(0.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, -1.0f, -1.0f),Texture= new Vector2(1.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, 1.0f, -1.0f),Texture= new Vector2(1.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, 1.0f, 1.0f),Texture= new Vector2(0.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, -1.0f, -1.0f),Texture= new Vector2(0.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, -1.0f, -1.0f),Texture= new Vector2(1.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, 1.0f, -1.0f),Texture= new Vector2(1.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, 1.0f, -1.0f),Texture= new Vector2(0.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, -1.0f, 1.0f),Texture= new Vector2(0.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, -1.0f, 1.0f),Texture= new Vector2(1.0f, 0.0f)},
-                new SimpleVertex{Position= new Vector3(1.0f, 1.0f, 1.0f),Texture= new Vector2(1.0f, 1.0f)},
-                new SimpleVertex{Position= new Vector3(-1.0f, 1.0f, 1.0f),Texture= new Vector2(0.0f, 1.0f)} 
-            });
-
-            var BufferDescription = new BufferDescription
-            {
-                ByteWidth = (uint)Vertices.Size,
-                Usage = D3D10Usage.Default,
-                BindFlags = BindFlag.VertexBuffer,
-                CPU_AccessFlags = 0,
-                MiscFlags = 0
-            };
-            var InitData = new SubResourceData
-            {
-                SystemMemory = Vertices,
-                SystemMemoryPitch = 0,
-                SystemMemorySlicePitch = 0
-            };
-            Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out VertexBuffer);
-            if (Result < 0) return Result;
-
-            // Set vertex buffer
-            Device.IA_SetVertexBuffers(0, 1, new[] { VertexBuffer }, new uint[] { (uint)(BufferDescription.ByteWidth / 24) }, new uint[] { 0 });
-
-            // Create index buffer
-            var IndexCount = (uint)36;
-            var Indices = new UnmanagedMemory<int>(sizeof(int) * IndexCount);
-            Indices.Write(IndexCount, new int[] 
-            {
-                3, 1, 0,
-                2, 1, 3,
-                6, 4, 5,
-                7, 4, 6,
-                11, 9, 8,
-                10, 9, 11,
-                14, 12, 13,
-                15, 12, 14,
-                19, 17, 16,
-                18, 17, 19,
-                22, 20, 21,
-                23, 20, 22
-            });
-
-            BufferDescription = new BufferDescription
-            {
-                ByteWidth = (uint)Indices.Size,
-                Usage = D3D10Usage.Default,
-                BindFlags = BindFlag.IndexBuffer,
-                CPU_AccessFlags = 0,
-                MiscFlags = 0
-            };
-            InitData = new SubResourceData
-            {
-                SystemMemory = Indices,
-                SystemMemoryPitch = 0,
-                SystemMemorySlicePitch = 0
-            };
-            Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out IndexBuffer);
-            if (Result < 0) return Result;
-
-            // Set index buffer
-            Device.IA_SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
-
-            // Set primitive topology
-            Device.IA_SetPrimitiveTopology(PrimitiveTopology.TriangleList);
-
-            // Load the Texture
-            D3DX10Functions.CreateShaderResourceViewFromFile(Device, "seafloor.dds", out TextureResourceView);
+            // Load the mesh
+            Result =  Mesh.Create( Device, "Tiny\\tiny.sdkmesh", true ) ;
+            if (Result<0)return Result;
 
             // Initialize the world matrices
             D3DX10Functions.MatrixIdentity(out World);
 
             // Initialize the view matrix
-            Vector3 Eye = new Vector3(0.0f, 3.0f, -6.0f);
+            Vector3 Eye = new Vector3(0.0f, 3.0f, -500.0f);
             Vector3 At = new Vector3(0.0f, 1.0f, 0.0f);
             Vector3 Up = new Vector3(0.0f, 1.0f, 0.0f);
             D3DX10Functions.MatrixLookAtLH(out View, ref Eye, ref At, ref Up);
 
             // Update Variables that never change
             ViewVariable.SetMatrix((float[])View);
-            DiffuseVariable.SetResource(TextureResourceView);
 
             return 0;
         }
 
         void OnDeviceDestroyed(object UserContext)
         {
-            if (VertexBuffer != null) VertexBuffer.Release();
-            if (IndexBuffer != null) IndexBuffer.Release();
+            UtilitiesFunctions.GetGlobalResourceCache().OnDestroyDevice();
             if (VertexLayout != null) VertexLayout.Release();
-            if (TextureResourceView != null) TextureResourceView.Release();
             if (Effect != null) Effect.Release();
+            Mesh.Delete();
         }
 
         int OnSwapChainResized(Device Device, SwapChain SwapChain, ref SurfaceDescription BackBufferSurfaceDescription, object UserContext)
         {
             // Setup the projection parameters again
             var Aspect = (float)BackBufferSurfaceDescription.Width / BackBufferSurfaceDescription.Height;
-            D3DX10Functions.MatrixPerspectiveFovLH(out Projection, (float)Math.PI * 0.25f, Aspect, 0.1f, 100.0f);
+            D3DX10Functions.MatrixPerspectiveFovLH(out Projection, (float)Math.PI * 0.25f, Aspect, 0.5f, 1000.0f);
             ProjectionVariable.SetMatrix((float[])Projection); 
 
             return 0;
@@ -329,30 +242,54 @@ namespace Tutorial09
             //
             // Update variables that change once per frame
             //
-            WorldVariable.SetMatrix((float[])World);//StructToFloatArray(World));
-            MeshColorVariable.SetFloatVector((float[])MeshColor);
+    WorldVariable.SetMatrix( (float[])World );
 
-            //
-            // Render the cube
-            //
-            TechniqueDescription TechniqueDescription;
-            Technique.GetDescription(out TechniqueDescription);
-            for (uint PassNo = 0; PassNo < TechniqueDescription.Passes; PassNo++)
-            {
-                Technique.GetPassByIndex(PassNo).Apply(0);
-                Device.DrawIndexed(36, 0, 0);
-            }
+    //
+    // Set the Vertex Layout
+    //
+    Device.IA_SetInputLayout( VertexLayout );
+
+    //
+    // Render the mesh
+    //
+            var VertexBuffer = Mesh.GetVertexBuffer( 0, 0 );
+    var Strides = Mesh.GetVertexStride( 0, 0 );
+    Device.IA_SetVertexBuffers( 0, 1,new[]{ VertexBuffer}, new[]{Strides}, new uint[]{0} );
+    Device.IA_SetIndexBuffer( Mesh.GetIndexBuffer( 0 ), Mesh.GetIndexBufferFormat( 0 ), 0 );
+
+    TechniqueDescription TechniqueDescription;
+    Technique.GetDescription( out TechniqueDescription );
+
+            for( uint P = 0; P < TechniqueDescription.Passes; P++ )
+    {
+        for( uint S = 0; S < Mesh.GetNumberOfSubsets( 0 ); S++ )
+        {
+            uint SubsetIndex;
+            Mesh.MeshPairArray[0].Subsets.Get(S, out SubsetIndex);
+
+            // UnmanagedMemory.Get is not working for MarshalAs structs
+            var Size = Marshal.SizeOf(typeof(SDK_Mesh.Subset));
+            var Subset = (SDK_Mesh.Subset)Marshal.PtrToStructure(new IntPtr(Mesh.SubsetArray.Pointer.ToInt64() + SubsetIndex * Size), typeof(SDK_Mesh.Subset));
+
+            var PrimitiveType = SDK_Mesh.GetPrimitiveType((SDK_Mesh.PrimitiveType)Subset.PrimitiveType);
+            Device.IA_SetPrimitiveTopology( PrimitiveType );
+
+            var DiffuseResourceView = Mesh.MaterialPairArray[Subset.MaterialID ].DiffuseResourceView;
+            DiffuseVariable.SetResource( DiffuseResourceView );
+
+            Technique.GetPassByIndex( P ).Apply( 0 );
+            Device.DrawIndexed( ( uint )Subset.IndexCount, 0, (int)Subset.VertexStart );
+        }
+    }
+
+    //the mesh class also had a render method that allows rendering the mesh with the most common options
+    //g_Mesh.Render( pd3dDevice, g_pTechnique, g_ptxDiffuseVariable );
         }
 
         void OnFrameMove(double Time, float ElapsedTime, object UserContext)
         {
             // Rotate cube around the origin
             D3DX10Functions.MatrixRotationY(out World, (float)(60 * DegreeToRadian(Time)));
-
-            // Modify the color
-            MeshColor.X = (float)Math.Sin(Time * 1.0f) + 1.0f * 0.5f;
-            MeshColor.Y = (float)Math.Cos(Time * 3.0f) + 1.0f * 0.5f;
-            MeshColor.Z = (float)Math.Sin(Time * 5.0f) + 1.0f * 0.5f;
         }
 
         bool OnModifyDeviceSettings(DeviceSettings DeviceSettings, object UserContext)

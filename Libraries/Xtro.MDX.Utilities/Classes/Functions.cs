@@ -184,7 +184,7 @@ namespace Xtro.MDX.Utilities
 
             var ShowMessageBoxOnError = GetState().ShowMessageBoxOnError;
             var Form = GetForm();
-            if (Found && ShowMessageBoxOnError) MessageBox.Show(Form, Buffer, Form.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (Found && ShowMessageBoxOnError) MessageBox.Show(Buffer, Form.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
 
@@ -3693,10 +3693,9 @@ namespace Xtro.MDX.Utilities
             if (File.Exists(SearchPath)) return true;
 
             // Search in media search dir 
-            var SearchPath2 = MediaSearchPath;
-            if (!string.IsNullOrEmpty(SearchPath2))
+            if (!string.IsNullOrEmpty(MediaSearchPath))
             {
-                SearchPath = SearchPath2 + Leaf;
+                SearchPath = MediaSearchPath + Leaf;
                 if (File.Exists(SearchPath)) return true;
             }
 

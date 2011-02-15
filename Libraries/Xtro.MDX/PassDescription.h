@@ -13,7 +13,7 @@ internal:
 		SampleMask = Native->SampleMask;
 			
 		pin_ptr<Float4> PinnedBlendFactor = &BlendFactor;
-		memcpy(PinnedBlendFactor, Native->BlendFactor, sizeof(Float4));
+		memcpy(PinnedBlendFactor, Native->BlendFactor, Marshal::SizeOf(Float4::typeid));
 	}
 
 	/* When needed this method will be converted to Marshal/Unmarshal pair	
@@ -37,7 +37,7 @@ internal:
 		Result.SampleMask = SampleMask;
 
 		pin_ptr<Float4> PinnedBlendFactor = &BlendFactor;
-		memcpy(Result.BlendFactor, PinnedBlendFactor, sizeof(Float4));
+		memcpy(Result.BlendFactor, PinnedBlendFactor, Marshal::SizeOf(Float4::typeid));
 			
 		return Result;
 	}
