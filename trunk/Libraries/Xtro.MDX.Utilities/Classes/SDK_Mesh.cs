@@ -38,8 +38,8 @@ namespace Xtro.MDX.Utilities
 
     public struct AnimationFrameData
     {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = SDK_Mesh.MaxFrameName)]
-        public byte[] FrameName;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = SDK_Mesh.MaxFrameName)]
+        public string FrameName;
         public ulong DataOffset;
     };
 
@@ -75,8 +75,8 @@ namespace Xtro.MDX.Utilities
         public const int MaxMeshName = 100;
         public const int MaxSubsetName = 100;
         public const int MaxMaterialName = 100;
-        public const int MaxTextureName = 20;
-        public const int MaxMaterialPath = 20;
+        public const int MaxTextureName = 260;
+        public const int MaxMaterialPath = 260;
         public const uint InvalidFrame = uint.MaxValue;
         public const uint InvalidMesh = uint.MaxValue;
         public const uint InvalidAnimationData = uint.MaxValue;
@@ -130,7 +130,7 @@ namespace Xtro.MDX.Utilities
             public uint IndexType;
             public ulong DataOffset;
         };
-        
+
         public struct IndexBufferHeaderPair
         {
             public Buffer IndexBuffer;
@@ -138,8 +138,8 @@ namespace Xtro.MDX.Utilities
 
         public struct Mesh
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxMeshName)]
-            public byte[] Name;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxMeshName)]
+            public string Name;
             public byte NumberOfVertexBuffers;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxVertexStreams)]
             public uint[] VertexBuffers;
@@ -161,8 +161,8 @@ namespace Xtro.MDX.Utilities
 
         public struct Subset
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxSubsetName)]
-            public byte[] Name;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxSubsetName)]
+            public string Name;
             public uint MaterialID;
             public uint PrimitiveType;
             public ulong IndexStart;
@@ -173,8 +173,8 @@ namespace Xtro.MDX.Utilities
 
         public struct Frame
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxFrameName)]
-            public byte[] Name;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxFrameName)]
+            public string Name;
             public uint Mesh;
             public uint ParentFrame;
             public uint ChildFrame;
@@ -183,22 +183,23 @@ namespace Xtro.MDX.Utilities
             public uint AnimationDataIndex;		//Used to index which set of keyframes transforms this frame
         };
 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct Material
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxMaterialName)]
-            public byte[] Name;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxMaterialName)]
+            public string Name;
 
             // Use MaterialInstancePath
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxMaterialPath)]
-            public byte[] MaterialInstancePath;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxMaterialPath)]
+            public string MaterialInstancePath;
 
             // Or fall back to d3d8-type materials
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxTextureName)]
-            public byte[] DiffuseTexture;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxTextureName)]
-            public byte[] NormalTexture;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxTextureName)]
-            public byte[] SpecularTexture;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxTextureName)]
+            public string DiffuseTexture;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxTextureName)]
+            public string NormalTexture;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxTextureName)]
+            public string SpecularTexture;
 
             public Vector4 Diffuse;
             public Vector4 Ambient;
@@ -279,7 +280,7 @@ namespace Xtro.MDX.Utilities
         Matrix[] BindPoseFrameMatrices;
         Matrix[] TransformedFrameMatrices;
 
-        void LoadMaterials(Device Device, UnmanagedMemory<Material> Materials, MaterialPair[] MaterialPairs, uint NumberOfMaterials, CallbacksStruct[] LoaderCallbacks = null)
+        void LoadMaterials(Device Device, UnmanagedMemory Materials, MaterialPair[] MaterialPairs, uint NumberOfMaterials, CallbacksStruct[] LoaderCallbacks = null)
         {
             if (LoaderCallbacks != null && LoaderCallbacks.Length > 0 && LoaderCallbacks[0].CreateTextureFromFile != null)
             {
@@ -298,9 +299,9 @@ namespace Xtro.MDX.Utilities
                     var Size = Marshal.SizeOf(typeof(Material));
                     var Material = (Material)Marshal.PtrToStructure(new IntPtr(Materials.Pointer.ToInt64() + M * Size), typeof(Material));
 
-                    if (Material.DiffuseTexture[0] != 0) LoaderCallbacks[0].CreateTextureFromFile(Device, Encoding.Default.GetString(Material.DiffuseTexture), out MaterialPairs[M].DiffuseResourceView, LoaderCallbacks[0].Context);
-                    if (Material.NormalTexture[0] != 0) LoaderCallbacks[0].CreateTextureFromFile(Device, Encoding.Default.GetString(Material.NormalTexture), out MaterialPairs[M].NormalResourceView, LoaderCallbacks[0].Context);
-                    if (Material.SpecularTexture[0] != 0) LoaderCallbacks[0].CreateTextureFromFile(Device, Encoding.Default.GetString(Material.SpecularTexture), out MaterialPairs[M].SpecularResourceView, LoaderCallbacks[0].Context);
+                    if (!string.IsNullOrEmpty(Material.DiffuseTexture)) LoaderCallbacks[0].CreateTextureFromFile(Device, Material.DiffuseTexture, out MaterialPairs[M].DiffuseResourceView, LoaderCallbacks[0].Context);
+                    if (!string.IsNullOrEmpty(Material.NormalTexture)) LoaderCallbacks[0].CreateTextureFromFile(Device, Material.NormalTexture, out MaterialPairs[M].NormalResourceView, LoaderCallbacks[0].Context);
+                    if (!string.IsNullOrEmpty(Material.SpecularTexture)) LoaderCallbacks[0].CreateTextureFromFile(Device, Material.SpecularTexture, out MaterialPairs[M].SpecularResourceView, LoaderCallbacks[0].Context);
                 }
             }
             else
@@ -321,17 +322,17 @@ namespace Xtro.MDX.Utilities
                     var Material = (Material)Marshal.PtrToStructure(new IntPtr(Materials.Pointer.ToInt64() + M * Size), typeof(Material));
 
                     string TexturePath;
-                    if (Material.DiffuseTexture[0] != 0)
+                    if (!string.IsNullOrEmpty(Material.DiffuseTexture))
                     {
                         TexturePath = Path + Material.DiffuseTexture;
                         if (Functions.GetGlobalResourceCache().CreateTextureFromFile(Device, TexturePath, null, out MaterialPairs[M].DiffuseResourceView, true) < 0) MaterialPairs[M].DiffuseResourceView = null;// ERROR_RESOURCE_VALUE;
                     }
-                    if (Material.NormalTexture[0] != 0)
+                    if (!string.IsNullOrEmpty(Material.NormalTexture))
                     {
                         TexturePath = Path + Material.NormalTexture;
                         if (Functions.GetGlobalResourceCache().CreateTextureFromFile(Device, TexturePath, null, out MaterialPairs[M].NormalResourceView, true) < 0) MaterialPairs[M].NormalResourceView = null;// ERROR_RESOURCE_VALUE;
                     }
-                    if (Material.SpecularTexture[0] != 0)
+                    if (!string.IsNullOrEmpty(Material.SpecularTexture))
                     {
                         TexturePath = Path + Material.SpecularTexture;
                         if (Functions.GetGlobalResourceCache().CreateTextureFromFile(Device, TexturePath, null, out MaterialPairs[M].SpecularResourceView, true) < 0) MaterialPairs[M].SpecularResourceView = null;// ERROR_RESOURCE_VALUE;
@@ -474,7 +475,7 @@ namespace Xtro.MDX.Utilities
             for (uint I = 0; I < MeshHeaderData.NumberOfMeshes; I++)
             {
                 // UnmanagedMemory.Get is not working for MarshalAs structs
-                var Size=Marshal.SizeOf(typeof(Mesh));
+                var Size = Marshal.SizeOf(typeof(Mesh));
                 var MeshData = (Mesh)Marshal.PtrToStructure(new IntPtr(MeshArray.Pointer.ToInt64() + I * Size), typeof(Mesh));
 
                 MeshPairArray[I].Subsets = new UnmanagedMemory<uint>(new IntPtr(StaticMeshData.Pointer.ToInt64() + (long)MeshData.SubsetOffset), MeshData.NumberOfSubsets * sizeof(int));
@@ -1467,7 +1468,7 @@ namespace Xtro.MDX.Utilities
             return (uint)VertexBufferHeader.StrideBytes;
         }
 
-        public int FindFrameIndex(byte[] Name)
+        public int FindFrameIndex(string Name)
         {
             Header Header;
             MeshHeader.Get(out Header);
@@ -1542,17 +1543,17 @@ namespace Xtro.MDX.Utilities
                     var Size = Marshal.SizeOf(typeof(Material));
                     var Material = (Material)Marshal.PtrToStructure(new IntPtr(MaterialArray.Pointer.ToInt64() + I * Size), typeof(Material));
 
-                    if (Material.DiffuseTexture[0] != 0)
+                    if (!string.IsNullOrEmpty(Material.DiffuseTexture))
                     {
                         if (MaterialPairArray[I].DiffuseResourceView == null) OutstandingResources++;
                     }
 
-                    if (Material.NormalTexture[0] != 0)
+                    if (!string.IsNullOrEmpty(Material.NormalTexture))
                     {
                         if (MaterialPairArray[I].NormalResourceView == null) OutstandingResources++;
                     }
 
-                    if (Material.SpecularTexture[0] != 0)
+                    if (!string.IsNullOrEmpty(Material.SpecularTexture))
                     {
                         if (MaterialPairArray[I].SpecularResourceView == null) OutstandingResources++;
                     }

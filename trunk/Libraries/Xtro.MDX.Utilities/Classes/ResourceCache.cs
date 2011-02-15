@@ -47,7 +47,7 @@ namespace Xtro.MDX.Utilities
             int Result;
             OutputResourceView = null;
 
-            var ZeroInfo = new[] { new ImageLoadInfo() };
+            var ZeroInfo = new[] { ImageLoadInfo.Default };
             var SourceInfo = new[] { new ImageInfo() };
 
             if (LoadInfo == null || LoadInfo.Length < 1) LoadInfo = ZeroInfo;

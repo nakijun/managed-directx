@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BufferSRV.h" />
+    <ClInclude Include="ConstantsD3DX10.h" />
     <ClInclude Include="Counter.h" />
     <ClInclude Include="Asynchronous.h" />
     <ClInclude Include="Box.h" />

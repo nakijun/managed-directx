@@ -40,7 +40,7 @@ public:
 	unsigned int Depth;
 	unsigned int FirstMipLevel;
 	unsigned int MipLevels;
-	Xtro::MDX::Direct3D10::Usage Usage;
+	Direct3D10::Usage Usage;
 	BindFlag BindFlags;
 	CPU_AccessFlag CPU_AccessFlags;
 	ResourceMiscFlag MiscFlags;
@@ -48,6 +48,28 @@ public:
 	FilterFlag Filter;
 	FilterFlag MipFilter;
 	Nullable<ImageInfo> SourceInfo;
+
+	static property ImageLoadInfo Default
+	{
+		ImageLoadInfo get()
+		{
+			ImageLoadInfo Result;
+			Result.Width = D3DX10_DEFAULT;
+			Result.Height = D3DX10_DEFAULT;
+			Result.Depth = D3DX10_DEFAULT;
+			Result.FirstMipLevel = D3DX10_DEFAULT;
+			Result.MipLevels = D3DX10_DEFAULT;
+			Result.Usage = (Direct3D10::Usage) D3DX10_DEFAULT;
+			Result.BindFlags = (BindFlag)D3DX10_DEFAULT;
+			Result.CPU_AccessFlags = (CPU_AccessFlag)D3DX10_DEFAULT;
+			Result.MiscFlags = (ResourceMiscFlag)D3DX10_DEFAULT;
+			Result.Format = (Direct3D10::Format)DXGI_FORMAT_FROM_FILE;
+			Result.Filter = (FilterFlag)D3DX10_DEFAULT;
+			Result.MipFilter = (FilterFlag)D3DX10_DEFAULT;	
+
+			return Result;
+		}
+	}
 
 	static bool operator == (ImageLoadInfo Left, ImageLoadInfo Right)
 	{
