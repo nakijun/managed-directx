@@ -2,6 +2,8 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
+* ModelViewerCamera
+
 * tüm E_OUTOFMEMORY leri implement et. C++ da tara. C#'a ekle try içinde
 
 * RasterizerDescription gibi kendisi [StructLayout] olan ve içinde bool barýndýran struclarda marshal ve size bilgisi ver.
