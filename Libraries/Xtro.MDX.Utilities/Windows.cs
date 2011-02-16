@@ -76,7 +76,15 @@ namespace Xtro.MDX.Utilities
             // ES_USER_PRESENT   = 0x00000004,
             Continuous = 0x80000000
         }
-        
+
+        [DllImport("kernel32.dll")]
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        internal static extern bool QueryPerformanceCounter(out long PerformanceCount);
+        [DllImport("kernel32.dll")]
+
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        internal static extern void QueryPerformanceFrequency(out long Frequency);
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool GetWindowPlacement(IntPtr WindowHandle, ref WindowPlacement WindowPlacement);

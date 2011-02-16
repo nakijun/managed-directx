@@ -4,13 +4,6 @@ namespace Xtro.MDX.Utilities
 {
     public sealed class TimerClass
     {
-        [DllImport("kernel32.dll")]
-        [System.Security.SuppressUnmanagedCodeSecurity]
-        static extern bool QueryPerformanceCounter(out long PerformanceCount);
-        [DllImport("kernel32.dll")]
-        [System.Security.SuppressUnmanagedCodeSecurity]
-        static extern void QueryPerformanceFrequency(out long Frequency);
-
         bool TimerStopped = true;
         readonly long QPFTicksPerSecond;
 
@@ -22,7 +15,7 @@ namespace Xtro.MDX.Utilities
         {
             long Time;
 
-            if (StopTime == 0) QueryPerformanceCounter(out Time);
+            if (StopTime == 0) Windows.QueryPerformanceCounter(out Time);
             else Time = StopTime;
 
             return Time;
@@ -32,7 +25,7 @@ namespace Xtro.MDX.Utilities
         {
             // Use QueryPerformanceFrequency to get the frequency of the counter
             long TicksPerSecond;
-            QueryPerformanceFrequency(out TicksPerSecond);
+            Windows.QueryPerformanceFrequency(out TicksPerSecond);
             QPFTicksPerSecond = TicksPerSecond;
         }
 
@@ -50,7 +43,7 @@ namespace Xtro.MDX.Utilities
         {
             // Get the current time
             long Time;
-            QueryPerformanceCounter(out Time);
+            Windows.QueryPerformanceCounter(out Time);
 
             if (TimerStopped) BaseTime += Time - StopTime;
             StopTime = 0;
@@ -63,7 +56,7 @@ namespace Xtro.MDX.Utilities
             if (!TimerStopped)
             {
                 long Time;
-                QueryPerformanceCounter(out Time);
+                Windows.QueryPerformanceCounter(out Time);
                 StopTime = Time;
                 LastElapsedTime = Time;
                 TimerStopped = true;
@@ -78,7 +71,7 @@ namespace Xtro.MDX.Utilities
         public double GetAbsoluteTime()
         {
             long Time;
-            QueryPerformanceCounter(out Time);
+            Windows.QueryPerformanceCounter(out Time);
 
             var Result = Time / (double)QPFTicksPerSecond;
 

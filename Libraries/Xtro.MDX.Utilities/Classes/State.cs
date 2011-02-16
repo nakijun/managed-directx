@@ -9,6 +9,16 @@ namespace Xtro.MDX.Utilities
 {
     sealed class State
     {
+        internal struct Timer
+        {
+            public Callbacks.Timer CallbackTimer;
+            public object CallbackUserContext;
+            public float TimeoutInSecs;
+            public float Countdown;
+            public bool Enabled;
+            public uint ID;
+        }
+
         static readonly object Lock = new object(); // Lock Object
 
         DeviceSettings FCurrentDeviceSettings;

@@ -16,7 +16,7 @@ using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 using Xtro.MDX.Utilities;
 using UtilitiesFunctions = Xtro.MDX.Utilities.Functions;
 
-namespace Tutorial09
+namespace Tutorial10
 {
     public partial class Form1 : Form
     {
@@ -119,7 +119,7 @@ namespace Tutorial09
 
             // Find the D3DX effect file
             string DestinationPath;
-            var Result = UtilitiesFunctions.FindSDK_MediaFileCch(out DestinationPath, "Tutorial09.fx");
+            var Result = UtilitiesFunctions.FindSDK_MediaFileCch(out DestinationPath, "Tutorial10.fx");
             if (Result < 0) return Result;
             var ShaderFlags = ShaderFlag.EnableStrictness;
 #if DEBUG

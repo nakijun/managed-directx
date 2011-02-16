@@ -23,51 +23,10 @@ using SizeT = System.Int64;
 
 namespace Xtro.MDX.Utilities
 {
-    enum FrameTransformType
-    {
-        Relative = 0,
-        Absolute,		//This is not currently used but is here to support absolute transformations in the future
-    };
-
-    public struct AnimationData
-    {
-        public Vector3 Translation;
-        public Vector4 Orientation;
-        public Vector3 Scaling;
-    };
-
-    public struct AnimationFrameData
-    {
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = SDK_Mesh.MaxFrameName)]
-        public string FrameName;
-        public ulong DataOffset;
-    };
-
     // ReSharper disable InconsistentNaming
     public class SDK_Mesh
     // ReSharper restore InconsistentNaming
     {
-        public enum IndexType
-        {
-            // ReSharper disable InconsistentNaming
-            x16 = 0,
-            x32,
-            // ReSharper restore InconsistentNaming
-        };
-
-        public enum PrimitiveType
-        {
-            TriangleList = 0,
-            TriangleStrip,
-            LineList,
-            LineStrip,
-            PointList,
-            TriangleListAdjacency,
-            TriangleStripAdjacency,
-            LineListAdjacency,
-            LineStripAdjacency
-        };
-
         public const int FileVersion = 101;
         public const int MaxVertexElements = 32;
         public const int MaxVertexStreams = 16;
@@ -81,6 +40,30 @@ namespace Xtro.MDX.Utilities
         public const uint InvalidMesh = uint.MaxValue;
         public const uint InvalidAnimationData = uint.MaxValue;
         public const uint InvalidSamplerSlot = uint.MaxValue;
+
+        public struct AnimationData
+        {
+            public Vector3 Translation;
+            public Vector4 Orientation;
+            public Vector3 Scaling;
+        };
+
+        public struct AnimationFrameData
+        {
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = SDK_Mesh.MaxFrameName)]
+            public string FrameName;
+            public ulong DataOffset;
+        };
+
+        public struct VertexElement
+        {
+            ushort Stream;     // Stream index
+            ushort Offset;     // Offset in the stream in bytes
+            byte Type;       // Data type
+            byte Method;     // Processing method
+            byte Usage;      // Semantics
+            byte UsageIndex; // Semantic index
+        }
 
         public struct Header
         {
@@ -250,7 +233,7 @@ namespace Xtro.MDX.Utilities
         //These are the pointers to the two chunks of data loaded in from the mesh file
         UnmanagedMemory StaticMeshData;
         UnmanagedMemory HeapData;
-        UnmanagedMemory AnimationData;
+        UnmanagedMemory AnimationDataMemory;
         UnmanagedMemory[] VerticesList;
         UnmanagedMemory[] IndicesList;
 
@@ -276,7 +259,7 @@ namespace Xtro.MDX.Utilities
 
         //Animation (xTODO: Add ability to load/track multiple animation sets)
         UnmanagedMemory<AnimationFileHeader> AnimationHeader;
-        UnmanagedMemory<AnimationFrameData> AnimationFrameData;
+        UnmanagedMemory<AnimationFrameData> AnimationFrameDataMemory;
         Matrix[] BindPoseFrameMatrices;
         Matrix[] TransformedFrameMatrices;
 
@@ -641,10 +624,10 @@ namespace Xtro.MDX.Utilities
             {
                 // UnmanagedMemory.Get is not working for MarshalAs structs
                 Size = Marshal.SizeOf(typeof(AnimationFrameData));
-                var AnimationFrame = (AnimationFrameData)Marshal.PtrToStructure(new IntPtr(AnimationFrameData.Pointer.ToInt64() + FrameHeaderData.AnimationDataIndex * Size), typeof(AnimationFrameData));
+                var AnimationFrame = (AnimationFrameData)Marshal.PtrToStructure(new IntPtr(AnimationFrameDataMemory.Pointer.ToInt64() + FrameHeaderData.AnimationDataIndex * Size), typeof(AnimationFrameData));
 
                 AnimationData Data;
-                AnimationData.Get((uint)AnimationFrame.DataOffset, Tick, out Data);
+                AnimationDataMemory.Get((uint)AnimationFrame.DataOffset, Tick, out Data);
 
                 // turn it into a matrix (Ignore scaling for now)
                 var ParentPosition = Data.Translation;
@@ -698,12 +681,12 @@ namespace Xtro.MDX.Utilities
             {
                 // UnmanagedMemory.Get is not working for MarshalAs structs
                 Size = Marshal.SizeOf(typeof(AnimationFrameData));
-                var AnimationFrame = (AnimationFrameData)Marshal.PtrToStructure(new IntPtr(AnimationFrameData.Pointer.ToInt64() + FrameHeaderData.AnimationDataIndex * Size), typeof(AnimationFrameData));
+                var AnimationFrame = (AnimationFrameData)Marshal.PtrToStructure(new IntPtr(AnimationFrameDataMemory.Pointer.ToInt64() + FrameHeaderData.AnimationDataIndex * Size), typeof(AnimationFrameData));
 
                 AnimationData Data;
-                AnimationData.Get((uint)AnimationFrame.DataOffset, Tick, out Data);
+                AnimationDataMemory.Get((uint)AnimationFrame.DataOffset, Tick, out Data);
                 AnimationData DataOriginal;
-                AnimationData.Get((uint)AnimationFrame.DataOffset, out DataOriginal);
+                AnimationDataMemory.Get((uint)AnimationFrame.DataOffset, out DataOriginal);
 
                 D3DX10Functions.MatrixTranslation(out Transform1, -DataOriginal.Translation.X, -DataOriginal.Translation.Y, -DataOriginal.Translation.Z);
                 D3DX10Functions.MatrixTranslation(out Transform2, Data.Translation.X, Data.Translation.Y, Data.Translation.Z);
@@ -988,24 +971,24 @@ namespace Xtro.MDX.Utilities
                 finally { FileHeaderHandle.Free(); }
 
                 //allocate
-                try { AnimationData = new UnmanagedMemory((uint)AnimationFileHeaderSize + (uint)FileHeader.AnimationDataSize); }
+                try { AnimationDataMemory = new UnmanagedMemory((uint)AnimationFileHeaderSize + (uint)FileHeader.AnimationDataSize); }
                 catch { return (int)Error.OutOfMemory; }
 
                 // read it all in
                 Buffer = new byte[AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize];
                 File.Seek(0, SeekOrigin.Begin);
                 File.Read(Buffer, 0, AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize);
-                AnimationData.GetStream().Write(Buffer, 0, AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize);
+                AnimationDataMemory.GetStream().Write(Buffer, 0, AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize);
 
                 // pointer fixup
-                AnimationHeader = new UnmanagedMemory<AnimationFileHeader>(AnimationData.Pointer, (uint)AnimationFileHeaderSize);
-                AnimationFrameData = new UnmanagedMemory<AnimationFrameData>(new IntPtr(AnimationData.Pointer.ToInt64() + (long)FileHeader.AnimationDataOffset), (uint)(FileHeader.NumberOfFrames * Marshal.SizeOf(typeof(AnimationFrameData))));
+                AnimationHeader = new UnmanagedMemory<AnimationFileHeader>(AnimationDataMemory.Pointer, (uint)AnimationFileHeaderSize);
+                AnimationFrameDataMemory = new UnmanagedMemory<AnimationFrameData>(new IntPtr(AnimationDataMemory.Pointer.ToInt64() + (long)FileHeader.AnimationDataOffset), (uint)(FileHeader.NumberOfFrames * Marshal.SizeOf(typeof(AnimationFrameData))));
 
                 for (uint I = 0; I < FileHeader.NumberOfFrames; I++)
                 {
                     // UnmanagedMemory.Get is not working for MarshalAs structs
                     var Size = Marshal.SizeOf(typeof(AnimationFrameData));
-                    var AnimationFrame = (AnimationFrameData)Marshal.PtrToStructure(new IntPtr(AnimationFrameData.Pointer.ToInt64() + I * Size), typeof(AnimationFrameData));
+                    var AnimationFrame = (AnimationFrameData)Marshal.PtrToStructure(new IntPtr(AnimationFrameDataMemory.Pointer.ToInt64() + I * Size), typeof(AnimationFrameData));
 
                     var FrameIndex = FindFrameIndex(AnimationFrame.FrameName);
                     if (FrameIndex >= 0)
@@ -1103,7 +1086,7 @@ namespace Xtro.MDX.Utilities
 
             HeapData = null;
             StaticMeshData = null;
-            AnimationData = null;
+            AnimationDataMemory = null;
             BindPoseFrameMatrices = null;
             TransformedFrameMatrices = null;
 
@@ -1123,7 +1106,7 @@ namespace Xtro.MDX.Utilities
             MaterialPairArray = null;
 
             AnimationHeader = null;
-            AnimationFrameData = null;
+            AnimationFrameDataMemory = null;
         }
 
         // transform bind pose frame using a recursive traversal

@@ -20,6 +20,33 @@
         False = 1
     };
 
+    public enum IndexType
+    {
+        // ReSharper disable InconsistentNaming
+        x16 = 0,
+        x32,
+        // ReSharper restore InconsistentNaming
+    };
+
+    public enum PrimitiveType
+    {
+        TriangleList = 0,
+        TriangleStrip,
+        LineList,
+        LineStrip,
+        PointList,
+        TriangleListAdjacency,
+        TriangleStripAdjacency,
+        LineListAdjacency,
+        LineStripAdjacency
+    };
+
+    enum FrameTransformType
+    {
+        Relative = 0,
+        Absolute,		//This is not currently used but is here to support absolute transformations in the future
+    };
+
     public enum MatchType
     {
         IgnoreInput = 0,  // Use the closest valid value to a default 
