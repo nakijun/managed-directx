@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class SurfaceDescription : IEquatable<SurfaceDescription>
 {
 public:

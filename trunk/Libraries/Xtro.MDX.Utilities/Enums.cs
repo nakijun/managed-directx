@@ -1,5 +1,36 @@
-﻿namespace Xtro.MDX.Utilities
+﻿using System;
+
+namespace Xtro.MDX.Utilities
 {
+    public enum CameraKeys
+    {
+        StrafeLeft = 0,
+        StrafeRight,
+        MoveForward,
+        MoveBackward,
+        MoveUp,
+        MoveDown,
+        Reset,
+        ControlDown,
+        MaximumKeys,
+        Unknown = 0xFF
+    };
+
+    public enum MouseKeys
+    {
+        LeftButton = 0x01,
+        Middle = 0x02,
+        Right = 0x04,
+        Wheel = 0x08,
+    };
+
+    [Flags]
+    public enum KeyMaskFlag
+    {
+        WasDown = 0x80,
+        IsDown = 0x01
+    };
+
     public enum Error
     {
         NoDirect3D = -2147219199,

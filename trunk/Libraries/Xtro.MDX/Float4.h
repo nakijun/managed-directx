@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class Float4 : IEquatable<Float4>
 {
 internal:

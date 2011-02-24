@@ -21,6 +21,7 @@ using Buffer = Xtro.MDX.Direct3D10.Buffer;
 using Error = Xtro.MDX.Direct3D10.Error;
 using Xtro.MDX.Direct3DX10;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
+using Font = System.Drawing.Font;
 
 namespace Tutorial02
 {
@@ -52,7 +53,11 @@ namespace Tutorial02
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            CleanupDevice();
+            Application.Idle -= Application_Idle;
+
+            try { CleanupDevice(); }
+            // if FormClosing event throws an exception, Closing gets canceled. So we handle the exception.
+            catch (Exception Ex) { MessageBox.Show(Ex.ToString()); }
         }
 
         void Application_Idle(object Sender, EventArgs E)
@@ -74,6 +79,8 @@ namespace Tutorial02
 
         bool InitDevice()
         {
+            var ClientSize = this.ClientSize;
+
             CreateDeviceFlag CreateDeviceFlags = 0;
 #if DEBUG
             CreateDeviceFlags |= CreateDeviceFlag.Debug;
@@ -224,7 +231,7 @@ namespace Tutorial02
             // Clear the backbuffer
             Float4 ClearColor = new Float4(0.0f, 0.125f, 0.3f, 1.0f); //red,green,blue,alpha
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
-            
+
             // Render a triangle
             for (uint PassNo = 0; PassNo < TechniqueDescription.Passes; PassNo++)
             {
@@ -244,7 +251,7 @@ namespace Tutorial02
             if (VertexLayout != null) VertexLayout.Release();
             if (Effect != null) Effect.Release();
             if (RenderTargetView != null) RenderTargetView.Release();
-            if (SwapChain != null) SwapChain.Release();
+            // DX tutorial bug. if (SwapChain != null) SwapChain.Release();
             if (Device != null) Device.Release();
         }
     }

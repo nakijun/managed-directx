@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class Texture1D_SRV : IEquatable<Texture1D_SRV>
 {
 public:

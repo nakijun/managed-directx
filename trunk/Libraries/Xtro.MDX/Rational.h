@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class Rational : IEquatable<Rational>
 {
 public:

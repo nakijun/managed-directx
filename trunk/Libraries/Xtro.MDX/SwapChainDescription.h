@@ -1,4 +1,4 @@
-[StructLayout(LayoutKind::Sequential)]
+[StructLayout(LayoutKind::Sequential, Size = 60)]
 public value class SwapChainDescription : IEquatable<SwapChainDescription>
 {
 public:

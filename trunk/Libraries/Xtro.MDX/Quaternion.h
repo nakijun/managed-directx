@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class Quaternion : IEquatable<Quaternion>
 {
 public:

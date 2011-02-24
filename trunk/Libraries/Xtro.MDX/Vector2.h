@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class Vector2 : IEquatable<Vector2>
 {
 public:

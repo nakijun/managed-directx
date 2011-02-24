@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class TextureCubeSRV : IEquatable<TextureCubeSRV>
 {
 public:

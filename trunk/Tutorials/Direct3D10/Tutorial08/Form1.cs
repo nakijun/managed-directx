@@ -89,15 +89,15 @@ namespace Tutorial08
 
         private void Form1_FormClosing(object Sender, FormClosingEventArgs E)
         {
+            Application.ThreadException -= Application_Exception;
+            Application.Idle -= Application_Idle;
+
             try
             {
                 // do something
-
-                Application.ThreadException -= Application_Exception;
-                Application.Idle -= Application_Idle;
             }
-            // if FormClosing event throws an exception, Closing gets canceled. So we call Application_Exception.
-            catch (Exception Ex) { Application_Exception(null, new ThreadExceptionEventArgs(Ex)); }
+            // if FormClosing event throws an exception, Closing gets canceled. So we handle the exception.
+            catch (Exception Ex) { MessageBox.Show(Ex.ToString()); }
         }
 
         void Application_Idle(object Sender, EventArgs E)
