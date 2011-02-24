@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class BufferRTV : IEquatable<BufferRTV>
 {
 public:

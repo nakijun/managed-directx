@@ -3,6 +3,8 @@
 * Burda bilgi yeralmasýn. kontrol edip bilgileri bilgiler.txt ye koy
 ----------------------------------------------------------------------
 
+* RasterizerDescription gibi içinde bool barýndýran ve FromNative/ToNative/Marshal iþlemine girmeyen struclarda StructLayout ve Size bilgisi ver.
+
 * mdx(c++) deki tüm if leri tara gerekeni "? :" yap
 
 * cast için as kullanmaktan vazgeç
@@ -10,8 +12,6 @@
 * String^ olan her yeri marshal/unmarshal try catch yap.
 
 * [Out] ^% olan parametreler deðer alamadýðý zaman mutlaka nullptr olsun.
-
-* struct larýn public contsructorlarý olmasýn. DirectX C++ tanýmlarýnda bulunan constructorlar hariç. 
 
 * public olmayan fonksiyonlarý inline yap. constructor, destructor hariç.
 

@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class SampleDescription : IEquatable<SampleDescription>
 {
 public:

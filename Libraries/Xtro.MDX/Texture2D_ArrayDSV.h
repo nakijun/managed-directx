@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class Texture2DArrayDSV : IEquatable<Texture2DArrayDSV>
 {
 public:

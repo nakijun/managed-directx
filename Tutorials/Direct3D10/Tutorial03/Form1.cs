@@ -52,7 +52,11 @@ namespace Tutorial03
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            CleanupDevice();
+            Application.Idle -= Application_Idle;
+
+            try { CleanupDevice(); }
+            // if FormClosing event throws an exception, Closing gets canceled. So we handle the exception.
+            catch (Exception Ex) { MessageBox.Show(Ex.ToString()); }
         }
 
         void Application_Idle(object Sender, EventArgs E)
@@ -74,6 +78,8 @@ namespace Tutorial03
 
         bool InitDevice()
         {
+            var ClientSize = this.ClientSize;
+
             CreateDeviceFlag CreateDeviceFlags = 0;
 #if DEBUG
             CreateDeviceFlags |= CreateDeviceFlag.Debug;
@@ -244,7 +250,7 @@ namespace Tutorial03
             if (VertexLayout != null) VertexLayout.Release();
             if (Effect != null) Effect.Release();
             if (RenderTargetView != null) RenderTargetView.Release();
-            if (SwapChain != null) SwapChain.Release();
+            // DX tutorial bug. if (SwapChain != null) SwapChain.Release();
             if (Device != null) Device.Release();
         }
     }

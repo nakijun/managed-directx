@@ -1,6 +1,9 @@
 
 * Sýk sýk eski versiyonlara yedek al
 
+* struct larýn public contsructorlarý olmasýn. DirectX C++ tanýmlarýnda bulunan constructorlar hariç. 
+
 * DX komutundan alýnan veriler null ise ilgili parametreye sen de null çýkýþý yap.
+
 * parametrede Object^ þeklinde olan her yere null kontrolü yap. null ise dx komutuna sen de null ver ayný parametreyi.
 

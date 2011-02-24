@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential)]
 public value class Texture2D_RTV : IEquatable<Texture2D_RTV>
 {
 public:
