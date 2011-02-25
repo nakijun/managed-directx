@@ -462,6 +462,19 @@ public:
 		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 		D3DXVec3Transform((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
 	}
+	
+	static void Vector3Normalize([Out] Vector3% Out, Vector3% Vector)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		D3DXVec3Normalize((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector);
+	}
+
+	static float Vector3LengthSquare(Vector3% Vector)
+	{
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		return D3DXVec3LengthSq((D3DXVECTOR3*)PinnedVector);
+	}
 
 	static void QuaternionMultiply([Out] Quaternion% Out, Quaternion% Quaternion1, Quaternion% Quaternion2)
 	{
