@@ -1,9 +1,10 @@
 public ref class MeshBuffer : Unknown
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10MeshBuffer);
+
 internal:
 	ID3DX10MeshBuffer* pMeshBuffer;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10MeshBuffer);
 
 	MeshBuffer(IntPtr MeshBuffer) : Unknown(MeshBuffer)
 	{	

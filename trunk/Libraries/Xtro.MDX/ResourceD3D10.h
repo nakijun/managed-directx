@@ -1,9 +1,10 @@
 public ref class Resource : DeviceChild
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Resource);
+
 internal:
 	ID3D10Resource* pResource;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Resource);
 
 	Resource(IntPtr Resource) : DeviceChild(Resource)
 	{	

@@ -1,9 +1,10 @@
 public ref class Factory sealed : Object
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_IDXGIFactory);
+
 internal:
 	IDXGIFactory* pFactory;
-
-	static Guid IID = IID_Converter::ToManaged(IID_IDXGIFactory);
 
 	Factory(IntPtr Factory) : Object(Factory)
 	{	

@@ -1,9 +1,10 @@
 public ref class EffectVectorVariable : EffectVariable
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectVectorVariable);
+
 internal:
 	ID3D10EffectVectorVariable* pEffectVectorVariable;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectVectorVariable);
 
 	EffectVectorVariable(IntPtr EffectVectorVariable) : EffectVariable(EffectVectorVariable)
 	{	

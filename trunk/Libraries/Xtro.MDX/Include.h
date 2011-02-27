@@ -1,9 +1,10 @@
 public ref class Include : Interface
 {
+private:
+	//static Guid IID = IID_Converter::ToManaged(IID_ID3D10Include);
+
 internal:
 	ID3D10Include* pInclude;
-
-	//static Guid IID = IID_Converter::ToManaged(IID_ID3D10Include);
 
 	Include(IntPtr Include) : Interface(Include)
 	{	

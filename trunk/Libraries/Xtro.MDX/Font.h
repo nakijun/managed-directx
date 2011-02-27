@@ -1,9 +1,10 @@
 public ref class Font : Unknown
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10Font);
+
 internal:
 	ID3DX10Font* pFont;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10Font);
 
 	Font(IntPtr Font) : Unknown(Font)
 	{	

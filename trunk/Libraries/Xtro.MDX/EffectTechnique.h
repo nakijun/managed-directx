@@ -1,9 +1,10 @@
 public ref class EffectTechnique : Interface
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectTechnique);
+
 internal:
 	ID3D10EffectTechnique* pEffectTechnique;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectTechnique);
 
 	EffectTechnique(IntPtr EffectTechnique) : Interface(EffectTechnique)
 	{	

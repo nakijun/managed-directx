@@ -1,9 +1,10 @@
 public ref class Texture2D : Resource
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Texture2D);
+
 internal:
 	ID3D10Texture2D* pTexture2D;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Texture2D);
 
 	Texture2D(IntPtr Texture2D) : Resource(Texture2D)
 	{	

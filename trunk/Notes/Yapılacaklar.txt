@@ -8,7 +8,6 @@
 
 * tüm E_OUTOFMEMORY leri implement et. C++ da tara. C#'a ekle try içinde
 
-* tüm IID leri private yap.
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 
 * doðal çift yönlü(method yok) : (default sequential olduðundan bu açýklama gereksiz kaldý) doðrudan native fonksiyonlara geçebilecek (içinde String^ gibi þeyler olmayan, basit tipler ve sequential struct'lar içeren) struclar [StructLayout(LayoutKind::Sequential)] olmalý. Ör : Viewport

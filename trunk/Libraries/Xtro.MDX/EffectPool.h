@@ -1,9 +1,10 @@
 public ref class EffectPool : Unknown
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectPool);
+
 internal:
 	ID3D10EffectPool* pEffectPool;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectPool);
 
 	EffectPool(IntPtr EffectPool) : Unknown(EffectPool)
 	{	

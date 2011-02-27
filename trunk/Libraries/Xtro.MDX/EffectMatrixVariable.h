@@ -1,9 +1,10 @@
 public ref class EffectMatrixVariable : EffectVariable
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectMatrixVariable);
+
 internal:
 	ID3D10EffectMatrixVariable* pEffectMatrixVariable;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectMatrixVariable);
 
 	EffectMatrixVariable(IntPtr EffectMatrixVariable) : EffectVariable(EffectMatrixVariable)
 	{	

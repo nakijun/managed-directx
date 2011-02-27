@@ -1,9 +1,10 @@
 public ref class ShaderResourceView : View
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10ShaderResourceView);
+
 internal:
 	ID3D10ShaderResourceView* pShaderResourceView;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10ShaderResourceView);
 
 	ShaderResourceView(IntPtr ShaderResourceView) : View(ShaderResourceView)
 	{	

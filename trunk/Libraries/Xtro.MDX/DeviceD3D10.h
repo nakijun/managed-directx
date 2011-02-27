@@ -1,9 +1,10 @@
 public ref class Device : Unknown
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Device);
+
 internal:
 	ID3D10Device* pDevice;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Device);
 
 	Device(IntPtr Device) : Unknown(Device)
 	{	

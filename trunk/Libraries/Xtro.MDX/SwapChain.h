@@ -1,9 +1,10 @@
 public ref class SwapChain : Object
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_IDXGISwapChain);
+
 internal:
 	IDXGISwapChain* pSwapChain;
-
-	static Guid IID = IID_Converter::ToManaged(IID_IDXGISwapChain);
 
 	SwapChain(IntPtr SwapChain) : Object(SwapChain)
 	{
