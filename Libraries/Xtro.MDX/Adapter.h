@@ -1,9 +1,10 @@
 public ref class Adapter : Object
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_IDXGIAdapter);
+
 internal:
 	IDXGIAdapter* pAdapter;
-
-	static Guid IID = IID_Converter::ToManaged(IID_IDXGIAdapter);
 
 	Adapter(IntPtr Adapter) : Object(Adapter)
 	{
