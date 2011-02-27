@@ -1,9 +1,10 @@
 public ref class Sprite : Unknown
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10Sprite);
+
 internal:
 	ID3DX10Sprite* pSprite;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10Sprite);
 
 	Sprite(IntPtr Sprite) : Unknown(Sprite)
 	{	

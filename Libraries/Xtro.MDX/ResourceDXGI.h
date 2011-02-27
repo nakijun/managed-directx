@@ -1,9 +1,10 @@
 public ref class Resource : DeviceSubObject
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_IDXGIResource);
+
 internal:
 	IDXGIResource* pResource;
-
-	static Guid IID = IID_Converter::ToManaged(IID_IDXGIResource);
 
 	Resource(IntPtr Resource) : DeviceSubObject(Resource)
 	{	

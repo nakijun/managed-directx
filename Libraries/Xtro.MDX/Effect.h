@@ -1,9 +1,10 @@
 public ref class Effect : Unknown
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Effect);
+
 internal:
 	ID3D10Effect* pEffect;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Effect);
 
 	Effect(IntPtr Effect) : Unknown(Effect)
 	{	

@@ -1,9 +1,10 @@
 public ref class DepthStencilView : View
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10DepthStencilView);
+
 internal:
 	ID3D10DepthStencilView* pDepthStencilView;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10DepthStencilView);
 
 	DepthStencilView(IntPtr DepthStencilView) : View(DepthStencilView)
 	{	

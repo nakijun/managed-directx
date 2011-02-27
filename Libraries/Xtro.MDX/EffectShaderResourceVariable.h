@@ -1,9 +1,10 @@
 public ref class EffectShaderResourceVariable : EffectVariable
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectShaderResourceVariable);
+
 internal:
 	ID3D10EffectShaderResourceVariable* pEffectShaderResourceVariable;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectShaderResourceVariable);
 
 	EffectShaderResourceVariable(IntPtr EffectShaderResourceVariable) : EffectVariable(EffectShaderResourceVariable)
 	{	

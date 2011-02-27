@@ -1,9 +1,10 @@
 public ref class EffectPass : Interface
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectPass);
+
 internal:
 	ID3D10EffectPass* pEffectPass;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectPass);
 
 	EffectPass(IntPtr EffectPass) : Interface(EffectPass)
 	{	

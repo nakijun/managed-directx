@@ -1,9 +1,10 @@
 public ref class Output : Object
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_IDXGIOutput);
+
 internal:
 	IDXGIOutput* pOutput;
-
-	static Guid IID = IID_Converter::ToManaged(IID_IDXGIOutput);
 
 	Output(IntPtr Output) : Object(Output)
 	{

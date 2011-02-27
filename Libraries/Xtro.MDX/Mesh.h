@@ -1,9 +1,10 @@
 public ref class Mesh : Unknown
 {
+private:
+	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10Mesh);
+
 internal:
 	ID3DX10Mesh* pMesh;
-
-	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10Mesh);
 
 	Mesh(IntPtr Mesh) : Unknown(Mesh)
 	{	
