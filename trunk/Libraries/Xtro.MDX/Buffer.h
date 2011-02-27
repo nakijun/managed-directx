@@ -1,6 +1,6 @@
 public ref class Buffer : Resource
 {
-public:
+private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Buffer);
 
 
