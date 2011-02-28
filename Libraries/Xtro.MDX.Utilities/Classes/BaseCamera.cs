@@ -52,8 +52,8 @@ namespace Xtro.MDX.Utilities
         protected bool EnableYAxisMovement; // If true, then camera can move in the y-axis
 
         protected bool ClipToBoundary;      // If true, then the camera will be clipped to the boundary
-        protected Vector3 MinBoundary;         // Min point in clip boundary
-        protected Vector3 MaxBoundary;         // Max point in clip boundary
+        protected Vector3 MinimumBoundary;         // Min point in clip boundary
+        protected Vector3 MaximumBoundary;         // Max point in clip boundary
 
         protected bool ResetCursorAfterMove;// If true, the class will reset the cursor position so that the cursor always has space to move 
 
@@ -107,16 +107,16 @@ namespace Xtro.MDX.Utilities
         //--------------------------------------------------------------------------------------
         // Clamps Vector to lie inside m_vMinBoundary & m_vMaxBoundary
         //--------------------------------------------------------------------------------------
-        protected void ConstrainToBoundary(Vector3 Vector)
+        protected void ConstrainToBoundary(ref Vector3 Vector)
         {
             // Constrain vector to a bounding box 
-            Vector.X = Math.Max(Vector.X, MinBoundary.X);
-            Vector.Y = Math.Max(Vector.Y, MinBoundary.Y);
-            Vector.Z = Math.Max(Vector.Z, MinBoundary.Z);
+            Vector.X = Math.Max(Vector.X, MinimumBoundary.X);
+            Vector.Y = Math.Max(Vector.Y, MinimumBoundary.Y);
+            Vector.Z = Math.Max(Vector.Z, MinimumBoundary.Z);
 
-            Vector.X = Math.Min(Vector.X, MaxBoundary.X);
-            Vector.Y = Math.Min(Vector.Y, MaxBoundary.Y);
-            Vector.Z = Math.Min(Vector.Z, MaxBoundary.Z);
+            Vector.X = Math.Min(Vector.X, MaximumBoundary.X);
+            Vector.Y = Math.Min(Vector.Y, MaximumBoundary.Y);
+            Vector.Z = Math.Min(Vector.Z, MaximumBoundary.Z);
         }
 
         //--------------------------------------------------------------------------------------
@@ -312,8 +312,83 @@ namespace Xtro.MDX.Utilities
 
             FramesToSmoothMouseData = 2.0f;
 
-            MinBoundary = new Vector3(-1, -1, -1);
-            MaxBoundary = new Vector3(1, 1, 1);
+            MinimumBoundary = new Vector3(-1, -1, -1);
+            MaximumBoundary = new Vector3(1, 1, 1);
+        }
+
+        public virtual void HandleKeyUpEvent(KeyEventArgs E)
+        {
+            // Map this key to a D3DUtil_CameraKeys enum and update the
+            // state of m_aKeys[] by removing the KEY_IS_DOWN_MASK mask.
+            var MappedKey = MapKey(E.KeyCode);
+            if (MappedKey != CameraKeys.Unknown && (uint)MappedKey < 8)
+            {
+                Keys[(int)MappedKey] &= ~KeyMaskFlag.IsDown;
+                KeysDown--;
+            }
+        }
+
+        public virtual void HandleMouseDownAndDoubleClickEvent(MouseEventArgs E)
+        {
+            // Compute the drag rectangle in screen coord.
+            var DragContains = Drag.Contains(new Point(E.X, E.Y));
+
+            // Update member var state
+            if (E.Button == MouseButtons.Left && DragContains)
+            {
+                MouseLeftButtonDown = true;
+                CurrentButtonMask |= MouseKeys.Left;
+            }
+            if (E.Button == MouseButtons.Middle && DragContains)
+            {
+                MouseMiddleButtonDown = true;
+                CurrentButtonMask |= MouseKeys.Middle;
+            }
+            if (E.Button == MouseButtons.Right && DragContains)
+            {
+                MouseRightButtonDown = true;
+                CurrentButtonMask |= MouseKeys.Right;
+            }
+
+            LastMousePosition = Cursor.Position;
+        }
+
+        public virtual void HandleMouseUpEvent(MouseEventArgs E)
+        {
+            // Update member var state
+            if (E.Button == MouseButtons.Left)
+            {
+                MouseLeftButtonDown = false;
+                CurrentButtonMask &= ~MouseKeys.Left;
+            }
+            if (E.Button == MouseButtons.Middle)
+            {
+                MouseMiddleButtonDown = false;
+                CurrentButtonMask &= ~MouseKeys.Middle;
+            }
+            if (E.Button == MouseButtons.Right)
+            {
+                MouseRightButtonDown = false;
+                CurrentButtonMask &= ~MouseKeys.Right;
+            }
+        }
+
+        public virtual void HandleMouseWheelEvent(MouseEventArgs E)
+        {
+            // Update member var state
+            MouseWheelDelta += E.Delta;
+        }
+
+        public virtual void FrameMove(float ElapsedTime)
+        {
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Reset the camera's position back to the default
+        //--------------------------------------------------------------------------------------
+        public virtual void Reset()
+        {
+            SetViewParameters(ref DefaultEye, ref DefaultLookAt);
         }
 
         //--------------------------------------------------------------------------------------
@@ -371,41 +446,104 @@ namespace Xtro.MDX.Utilities
             }
         }
 
-        public virtual void HandleKeyUpEvent(KeyEventArgs E)
+        public virtual void SetDragRectangle(ref Rectangle Rectangle)
         {
-            // Map this key to a D3DUtil_CameraKeys enum and update the
-            // state of m_aKeys[] by removing the KEY_IS_DOWN_MASK mask.
-            var MappedKey = MapKey(E.KeyCode);
-            if (MappedKey != CameraKeys.Unknown && (uint)MappedKey < 8)
-            {
-                Keys[(int)MappedKey] &= ~KeyMaskFlag.IsDown;
-                KeysDown--;
-            }
+            Drag = Rectangle;
         }
 
-        public virtual void HandleMouseDownAndDoubleClickEvent(MouseEventArgs E)
-        {             
-            // Compute the drag rectangle in screen coord.
-            var DragContains = Drag.Contains(new Point(E.X,E.Y));
+        public void SetInvertPitch(bool InvertPitch)
+        {
+            this.InvertPitch = InvertPitch;
+        }
 
-            // Update member var state
-            if (E.Button==MouseButtons.Left && DragContains)
-            {
-                MouseLeftButtonDown = true; 
-                CurrentButtonMask |= MouseKeys.Left;
-            }
-            if (E.Button == MouseButtons.Middle && DragContains)
-            {
-                MouseMiddleButtonDown = true;
-                CurrentButtonMask |= MouseKeys.Middle;
-            }
-            if (E.Button == MouseButtons.Right && DragContains)
-            {
-                MouseRightButtonDown = true;
-                CurrentButtonMask |= MouseKeys.Right;
-            }
-                
-            LastMousePosition = Cursor.Position;
+        public void SetDrag(bool MovementDrag, float TotalDragTimeToZero = 0.25f)
+        {
+            this.MovementDrag = MovementDrag;
+            this.TotalDragTimeToZero = TotalDragTimeToZero;
+        }
+
+        public void SetEnableYAxisMovement(bool EnableYAxisMovement)
+        {
+            this.EnableYAxisMovement = EnableYAxisMovement;
+        }
+
+        public void SetEnablePositionMovement(bool EnablePositionMovement)
+        {
+            this.EnablePositionMovement = EnablePositionMovement;
+        }
+
+        public void SetClipToBoundary(bool ClipToBoundary, Vector3[] MinimumBoundary, Vector3[] MaximumBoundary)
+        {
+            this.ClipToBoundary = ClipToBoundary;
+            if (MinimumBoundary != null && MinimumBoundary.Length > 0) this.MinimumBoundary = MinimumBoundary[0];
+            if (MaximumBoundary != null && MaximumBoundary.Length > 0) this.MaximumBoundary = MaximumBoundary[0];
+        }
+
+        public void SetScalers(float RotationScaler = 0.01f, float MoveScaler = 5.0f)
+        {
+            this.RotationScaler = RotationScaler;
+            this.MoveScaler = MoveScaler;
+        }
+
+        public void SetNumberOfFramesToSmoothMouseData(int Frames)
+        {
+            if (Frames > 0) FramesToSmoothMouseData = Frames;
+        }
+
+        public void SetResetCursorAfterMove(bool ResetCursorAfterMove)
+        {
+            this.ResetCursorAfterMove = ResetCursorAfterMove;
+        }
+
+        // Functions to get state
+        public Matrix GetViewMatrix()
+        {
+            return View;
+        }
+
+        public Matrix GetProjMatrix()
+        {
+            return Projection;
+        }
+
+        public Vector3 GetEyePt()
+        {
+            return Eye;
+        }
+
+        public Vector3 GetLookAtPt()
+        {
+            return LookAt;
+        }
+
+        public float GetNearClip()
+        {
+            return NearPlane;
+        }
+
+        public float GetFarClip()
+        {
+            return FarPlane;
+        }
+
+        public bool IsBeingDragged()
+        {
+            return (MouseLeftButtonDown || MouseMiddleButtonDown || MouseRightButtonDown);
+        }
+
+        public bool IsMouseLeftButtonDown()
+        {
+            return MouseLeftButtonDown;
+        }
+
+        public bool IsMouseMiddleButtonDown()
+        {
+            return MouseMiddleButtonDown;
+        }
+
+        public bool IsMouseRightButtonDown()
+        {
+            return MouseRightButtonDown;
         }
     }
 }

@@ -49,6 +49,8 @@ namespace Tutorial10
         public Form1()
         {
             InitializeComponent();
+
+            MouseWheel += Form1_MouseWheel;
         }
 
         private void Form1_Shown(object Sender, EventArgs E)
@@ -340,7 +342,7 @@ namespace Tutorial10
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-
+            if (e.Delta != 0) MessageBox.Show(e.Delta.ToString());
         }
 
         private void Form1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -349,6 +351,11 @@ namespace Tutorial10
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void Form1_MouseWheel(object sender, MouseEventArgs e)
         {
 
         }

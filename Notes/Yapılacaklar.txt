@@ -2,8 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* BaseCamera
-
 * ModelViewerCamera
 
 * tüm E_OUTOFMEMORY leri implement et. C++ da tara. C#'a ekle try içinde
