@@ -211,7 +211,7 @@ namespace Tutorial02
                 Usage = Usage.Default,
                 BindFlags = BindFlag.VertexBuffer,
                 CPU_AccessFlags = 0,
-                MiscFlags = 0
+                MiscellaneousFlags = 0
             };
 
             Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out VertexBuffer);

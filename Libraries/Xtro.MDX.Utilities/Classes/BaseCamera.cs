@@ -13,13 +13,13 @@ namespace Xtro.MDX.Utilities
         protected Matrix Projection;              // Projection matrix
 
         protected int KeysDown;            // Number of camera keys that are down.
-        protected readonly CameraKeys[] Keys = new CameraKeys[(int)CameraKeys.MaximumKeys];  // State of input - KEY_WAS_DOWN_MASK|KEY_IS_DOWN_MASK
+        protected readonly KeyMaskFlag[] Keys = new KeyMaskFlag[(int)CameraKeys.MaximumKeys];  // State of input - KEY_WAS_DOWN_MASK|KEY_IS_DOWN_MASK
         protected Vector3 KeyboardDirection;   // Direction vector of keyboard input
         protected Point LastMousePosition;  // Last absolute position of mouse cursor
         protected bool MouseLeftButtonDown;    // True if left button is down 
         protected bool MouseMiddleButtonDown;    // True if middle button is down 
         protected bool MouseRightButtonDown;    // True if right button is down 
-        protected int CurrentButtonMask;   // mask of which buttons are down
+        protected MouseKeys CurrentButtonMask;   // mask of which buttons are down
         protected int MouseWheelDelta;     // Amount of middle wheel scroll (+/-) 
         protected Vector2 MouseDelta;          // Mouse relative delta smoothed over a few frames
         protected float FramesToSmoothMouseData; // Number of frames to smooth mouse data over
@@ -285,6 +285,127 @@ namespace Xtro.MDX.Utilities
                     m_vGamePadRightThumb.z = m_GamePad[iMostRecentlyActive].fThumbRY;
                 }  */
             }
+        }
+
+        public BaseCamera()
+        {
+            // Set attributes for the view matrix
+            var EyePoint = new Vector3(0.0f, 0.0f, 0.0f);
+            var LookatPoint = new Vector3(0.0f, 0.0f, 1.0f);
+
+            // Setup the view matrix
+            SetViewParameters(ref EyePoint, ref LookatPoint);
+
+            // Setup the projection matrix
+            SetProjectionParameters(Constants.PI / 4, 1.0f, 1.0f, 1000.0f);
+
+            LastMousePosition = Cursor.Position;
+
+            Drag = new Rectangle(int.MinValue, int.MinValue, int.MaxValue, int.MaxValue);
+            TotalDragTimeToZero = 0.25f;
+
+            RotationScaler = 0.01f;
+            MoveScaler = 5.0f;
+
+            EnableYAxisMovement = true;
+            EnablePositionMovement = true;
+
+            FramesToSmoothMouseData = 2.0f;
+
+            MinBoundary = new Vector3(-1, -1, -1);
+            MaxBoundary = new Vector3(1, 1, 1);
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Client can call this to change the position and direction of camera
+        //--------------------------------------------------------------------------------------
+        public virtual void SetViewParameters(ref Vector3 EyePoint, ref Vector3 LookatPoint)
+        {
+            DefaultEye = Eye = EyePoint;
+            DefaultLookAt = LookAt = LookatPoint;
+
+            // Calc the view matrix
+            var Up = new Vector3(0, 1, 0);
+            D3DX10Functions.MatrixLookAtLH(out View, ref EyePoint, ref LookatPoint, ref Up);
+
+            Matrix InverseView;
+            D3DX10Functions.MatrixInverse(out InverseView, ref View);
+
+            // The axis basis vectors and camera position are stored inside the 
+            // position matrix in the 4 rows of the camera's world matrix.
+            // To figure out the yaw/pitch of the camera, we just need the Z basis vector
+            var Basis = new Vector3(InverseView.Value31, InverseView.Value32, InverseView.Value33);
+
+            CameraYawAngle = (float)Math.Atan2(Basis.X, Basis.Z);
+            var Length = Math.Sqrt(Basis.Z * Basis.Z + Basis.X * Basis.X);
+            CameraPitchAngle = -(float)Math.Atan2(Basis.Y, Length);
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Calculates the projection matrix based on input params
+        //--------------------------------------------------------------------------------------
+        public virtual void SetProjectionParameters(float FOV, float Aspect, float NearPlane, float FarPlane)
+        {
+            // Set attributes for the projection matrix
+            this.FOV = FOV;
+            this.Aspect = Aspect;
+            this.NearPlane = NearPlane;
+            this.FarPlane = FarPlane;
+
+            D3DX10Functions.MatrixPerspectiveFovLH(out Projection, FOV, Aspect, NearPlane, FarPlane);
+        }
+
+        public virtual void HandleKeyDownEvent(KeyEventArgs E)
+        {
+            // Map this key to a D3DUtil_CameraKeys enum and update the
+            // state of m_aKeys[] by adding the KEY_WAS_DOWN_MASK|KEY_IS_DOWN_MASK mask
+            // only if the key is not down
+            var MappedKey = MapKey(E.KeyCode);
+            if (MappedKey != CameraKeys.Unknown)
+            {
+                if (!IsKeyDown(Keys[(int)MappedKey]))
+                {
+                    Keys[(int)MappedKey] = KeyMaskFlag.WasDown | KeyMaskFlag.IsDown;
+                    KeysDown++;
+                }
+            }
+        }
+
+        public virtual void HandleKeyUpEvent(KeyEventArgs E)
+        {
+            // Map this key to a D3DUtil_CameraKeys enum and update the
+            // state of m_aKeys[] by removing the KEY_IS_DOWN_MASK mask.
+            var MappedKey = MapKey(E.KeyCode);
+            if (MappedKey != CameraKeys.Unknown && (uint)MappedKey < 8)
+            {
+                Keys[(int)MappedKey] &= ~KeyMaskFlag.IsDown;
+                KeysDown--;
+            }
+        }
+
+        public virtual void HandleMouseDownAndDoubleClickEvent(MouseEventArgs E)
+        {             
+            // Compute the drag rectangle in screen coord.
+            var DragContains = Drag.Contains(new Point(E.X,E.Y));
+
+            // Update member var state
+            if (E.Button==MouseButtons.Left && DragContains)
+            {
+                MouseLeftButtonDown = true; 
+                CurrentButtonMask |= MouseKeys.Left;
+            }
+            if (E.Button == MouseButtons.Middle && DragContains)
+            {
+                MouseMiddleButtonDown = true;
+                CurrentButtonMask |= MouseKeys.Middle;
+            }
+            if (E.Button == MouseButtons.Right && DragContains)
+            {
+                MouseRightButtonDown = true;
+                CurrentButtonMask |= MouseKeys.Right;
+            }
+                
+            LastMousePosition = Cursor.Position;
         }
     }
 }

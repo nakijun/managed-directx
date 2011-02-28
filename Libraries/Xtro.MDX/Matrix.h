@@ -1,6 +1,6 @@
 public value class Matrix : IEquatable<Matrix>
 {
-internal:
+public:
 	float Value11;
 	float Value12;
 	float Value13;
@@ -18,7 +18,6 @@ internal:
 	float Value43;
 	float Value44;
 
-public:
 	property float default[unsigned int, unsigned int]
 	{
 		float get(unsigned int Index1, unsigned int Index2)

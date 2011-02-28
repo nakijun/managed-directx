@@ -10,7 +10,7 @@ public:
 	Usage Usage;
 	BindFlag BindFlags;
 	CPU_AccessFlag CPU_AccessFlags;
-	ResourceMiscFlag MiscFlags;
+	ResourceMiscellaneousFlag MiscellaneousFlags;
 
 	static bool operator == (Texture2D_Description Left, Texture2D_Description Right)
 	{
@@ -34,7 +34,7 @@ public:
 			(int)Usage ^
 			(int)BindFlags ^
 			(int)CPU_AccessFlags ^
-			(int)MiscFlags;
+			(int)MiscellaneousFlags;
 	}
 
 	virtual bool Equals(System::Object^ Value) override
@@ -58,7 +58,7 @@ public:
 			Usage == Value.Usage &&
 			BindFlags == Value.BindFlags &&
 			CPU_AccessFlags == Value.CPU_AccessFlags &&
-			MiscFlags == Value.MiscFlags;
+			MiscellaneousFlags == Value.MiscellaneousFlags;
 	}
 
 	static bool Equals(Texture2D_Description% Value1, Texture2D_Description% Value2)
@@ -73,6 +73,6 @@ public:
 			Value1.Usage == Value2.Usage &&
 			Value1.BindFlags == Value2.BindFlags &&
 			Value1.CPU_AccessFlags == Value2.CPU_AccessFlags &&
-			Value1.MiscFlags == Value2.MiscFlags;
+			Value1.MiscellaneousFlags == Value2.MiscellaneousFlags;
 	}
 };

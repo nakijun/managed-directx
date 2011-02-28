@@ -16,9 +16,10 @@ namespace Xtro.MDX.Utilities
         Unknown = 0xFF
     };
 
+    [Flags]
     public enum MouseKeys
     {
-        LeftButton = 0x01,
+        Left = 0x01,
         Middle = 0x02,
         Right = 0x04,
         Wheel = 0x08,

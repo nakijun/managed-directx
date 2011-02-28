@@ -118,6 +118,7 @@
       <Abbreviation Text="QPF" />
       <Abbreviation Text="NA" />
       <Abbreviation Text="SRGB" />
+      <Abbreviation Text="FOV" />
     </Naming2>
   </CodeStyleSettings>
   <Daemon.SolutionSettings>

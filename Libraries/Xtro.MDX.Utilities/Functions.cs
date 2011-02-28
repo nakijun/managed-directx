@@ -628,7 +628,7 @@ namespace Xtro.MDX.Utilities
                     Usage = Usage.Default,
                     BindFlags = BindFlag.DepthStencil,
                     CPU_AccessFlags = 0,
-                    MiscFlags = 0
+                    MiscellaneousFlags = 0
                 };
                 Result = Device.CreateTexture2D(ref DepthStencilDescription, out DepthStencil);
                 if (Result < 0) return Result;
