@@ -18,7 +18,7 @@ namespace Xtro.MDX.Utilities
             public uint Height;
             public uint Depth;
             public uint MipLevels;
-            public ResourceMiscFlag MiscFlags;
+            public ResourceMiscellaneousFlag MiscellaneousFlags;
             public Usage Usage;
             public Format Format;
             public CPU_AccessFlag CpuAccessFlags;
@@ -71,7 +71,7 @@ namespace Xtro.MDX.Utilities
                     Entry.Format == LoadInfo[0].Format &&
                     Entry.CpuAccessFlags == LoadInfo[0].CPU_AccessFlags &&
                     Entry.BindFlags == LoadInfo[0].BindFlags &&
-                    Entry.MiscFlags == LoadInfo[0].MiscFlags)
+                    Entry.MiscellaneousFlags == LoadInfo[0].MiscellaneousFlags)
                 {
                     // A match is found. Obtain the IDirect3DTexture9 interface and return that.
                     object Object;
@@ -93,7 +93,7 @@ namespace Xtro.MDX.Utilities
                 Format = LoadInfo[0].Format,
                 CpuAccessFlags = LoadInfo[0].CPU_AccessFlags,
                 BindFlags = LoadInfo[0].BindFlags,
-                MiscFlags = LoadInfo[0].MiscFlags
+                MiscellaneousFlags = LoadInfo[0].MiscellaneousFlags
             };
 
             //Create the rexture
@@ -143,7 +143,7 @@ namespace Xtro.MDX.Utilities
                 ShaderResourceViewDescription.ViewDimension = SRV_Dimension.Texture2D;
                 ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
                 ShaderResourceViewDescription.Texture2D.MipLevels = LoadInfo[0].SourceInfo.Value.MipLevels;
-                if ((LoadInfo[0].SourceInfo.Value.MiscFlags & ResourceMiscFlag.TextureCube) != 0)
+                if ((LoadInfo[0].SourceInfo.Value.MiscellaneousFlags & ResourceMiscellaneousFlag.TextureCube) != 0)
                 {
                     ShaderResourceViewDescription.ViewDimension = SRV_Dimension.TextureCube;
                     ShaderResourceViewDescription.TextureCube.MostDetailedMip = 0;

@@ -333,7 +333,7 @@ namespace Xtro.MDX.Utilities
             BufferDescription.Usage = Usage.Default;
             BufferDescription.BindFlags = BindFlag.VertexBuffer;
             BufferDescription.CPU_AccessFlags = 0;
-            BufferDescription.MiscFlags = 0;
+            BufferDescription.MiscellaneousFlags = 0;
 
             if (LoaderCallbacks != null && LoaderCallbacks.Length > 0 && LoaderCallbacks[0].CreateVertexBuffer != null) LoaderCallbacks[0].CreateVertexBuffer(Device, out HeaderPair.VertexBuffer, BufferDescription, Vertices, LoaderCallbacks[0].Context);
             else
@@ -357,7 +357,7 @@ namespace Xtro.MDX.Utilities
             BufferDescription.Usage = Usage.Default;
             BufferDescription.BindFlags = BindFlag.IndexBuffer;
             BufferDescription.CPU_AccessFlags = 0;
-            BufferDescription.MiscFlags = 0;
+            BufferDescription.MiscellaneousFlags = 0;
 
             if (LoaderCallbacks != null && LoaderCallbacks.Length > 0 && LoaderCallbacks[0].CreateVertexBuffer != null) LoaderCallbacks[0].CreateIndexBuffer(Device, out HeaderPair.IndexBuffer, BufferDescription, Indices, LoaderCallbacks[0].Context);
             else
@@ -1250,7 +1250,7 @@ namespace Xtro.MDX.Utilities
                 BufferDescription.Usage = Usage.Immutable;
                 BufferDescription.BindFlags = BindFlag.IndexBuffer;
                 BufferDescription.CPU_AccessFlags = 0;
-                BufferDescription.MiscFlags = 0;
+                BufferDescription.MiscellaneousFlags = 0;
 
                 var InitData = new SubResourceData { SystemMemory = AdjacencyIndices };
                 Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out AdjacencyIndexBufferPairArray[IB_Index].IndexBuffer);

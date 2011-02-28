@@ -20,6 +20,7 @@ using Functions = Xtro.MDX.Direct3D10.Functions;
 using Buffer = Xtro.MDX.Direct3D10.Buffer;
 using Error = Xtro.MDX.Direct3D10.Error;
 using Xtro.MDX.Direct3DX10;
+using D3DX10Constants = Xtro.MDX.Direct3DX10.Constants;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
        
 namespace Tutorial04
@@ -256,7 +257,7 @@ namespace Tutorial04
                 Usage = Usage.Default,
                 BindFlags = BindFlag.VertexBuffer,
                 CPU_AccessFlags = 0,
-                MiscFlags = 0
+                MiscellaneousFlags = 0
             };
 
             Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out VertexBuffer);
@@ -296,7 +297,7 @@ namespace Tutorial04
                 Usage = Usage.Default,
                 BindFlags = BindFlag.IndexBuffer,
                 CPU_AccessFlags = 0,
-                MiscFlags = 0
+                MiscellaneousFlags = 0
             };
 
             Result = Device.CreateBuffer(ref BufferDescription, ref InitData, out IndexBuffer);
@@ -318,7 +319,7 @@ namespace Tutorial04
             D3DX10Functions.MatrixLookAtLH(out View, ref Eye, ref At, ref Up);
 
             // Initialize the projection matrix
-            float FovY = (float)Math.PI * 0.5f;
+            float FovY = (float)D3DX10Constants.PI * 0.5f;
             D3DX10Functions.MatrixPerspectiveFovLH(out Projection, FovY, ClientSize.Width / (float)ClientSize.Height, 0.1f, 100.0f);
 
             return true;

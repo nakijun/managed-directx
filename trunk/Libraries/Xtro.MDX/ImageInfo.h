@@ -6,7 +6,7 @@ public:
 	unsigned int Depth;
 	unsigned int ArraySize;
 	unsigned int MipLevels;
-	ResourceMiscFlag MiscFlags;
+	ResourceMiscellaneousFlag MiscellaneousFlags;
 	Format Format;
 	ResourceDimension ResourceDimension;
 	ImageFileFormat ImageFileFormat;
@@ -29,7 +29,7 @@ public:
 			(int)Depth ^
 			(int)ArraySize ^
 			(int)MipLevels ^
-			(int)MiscFlags ^
+			(int)MiscellaneousFlags ^
 			(int)Format ^
 			(int)ResourceDimension ^
 			(int)ImageFileFormat;
@@ -52,7 +52,7 @@ public:
 			Depth == Value.Depth &&
 			ArraySize == Value.ArraySize &&
 			MipLevels == Value.MipLevels &&
-			MiscFlags == Value.MiscFlags &&
+			MiscellaneousFlags == Value.MiscellaneousFlags &&
 			Format == Value.Format &&
 			ResourceDimension == Value.ResourceDimension &&
 			ImageFileFormat == Value.ImageFileFormat;
@@ -66,7 +66,7 @@ public:
 			Value1.Depth == Value2.Depth &&
 			Value1.ArraySize == Value2.ArraySize &&
 			Value1.MipLevels == Value2.MipLevels &&
-			Value1.MiscFlags == Value2.MiscFlags &&
+			Value1.MiscellaneousFlags == Value2.MiscellaneousFlags &&
 			Value1.Format == Value2.Format &&
 			Value1.ResourceDimension == Value2.ResourceDimension &&
 			Value1.ImageFileFormat == Value2.ImageFileFormat;

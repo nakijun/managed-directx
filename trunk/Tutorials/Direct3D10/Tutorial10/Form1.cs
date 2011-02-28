@@ -12,6 +12,7 @@ using Functions = Xtro.MDX.Direct3D10.Functions;
 using Buffer = Xtro.MDX.Direct3D10.Buffer;
 using Error = Xtro.MDX.Direct3D10.Error;
 using Xtro.MDX.Direct3DX10;
+using D3DX10Constants = Xtro.MDX.Direct3DX10.Constants;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 using Xtro.MDX.Utilities;
 using UtilitiesFunctions = Xtro.MDX.Utilities.Functions;
@@ -30,7 +31,7 @@ namespace Tutorial10
 
         static double DegreeToRadian(double Degree)
         {
-            return Degree * Math.PI / 180.0f;
+            return Degree * D3DX10Constants.PI / 180.0f;
         }
 
         Effect Effect;
@@ -214,7 +215,7 @@ namespace Tutorial10
         {
             // Setup the projection parameters again
             var Aspect = (float)BackBufferSurfaceDescription.Width / BackBufferSurfaceDescription.Height;
-            D3DX10Functions.MatrixPerspectiveFovLH(out Projection, (float)Math.PI * 0.25f, Aspect, 0.5f, 1000.0f);
+            D3DX10Functions.MatrixPerspectiveFovLH(out Projection, (float)D3DX10Constants.PI * 0.25f, Aspect, 0.5f, 1000.0f);
             ProjectionVariable.SetMatrix((float[])Projection);
 
             return 0;
@@ -335,6 +336,21 @@ namespace Tutorial10
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             UtilitiesFunctions.HandleKeyDownEvent(e);
+        }
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void Form1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }
