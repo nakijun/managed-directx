@@ -4,6 +4,8 @@
 
 * ModelViewerCamera
 
+* gereksiz switch'leri if e çevir.
+
 * tüm E_OUTOFMEMORY leri implement et. C++ da tara. C#'a ekle try içinde
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)

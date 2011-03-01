@@ -9,6 +9,7 @@ namespace Xtro.MDX.Utilities
 {
     public class BaseCamera
     {
+// ReSharper disable MemberCanBePrivate.Global
         protected Matrix View;              // View matrix 
         protected Matrix Projection;              // Projection matrix
 
@@ -56,6 +57,7 @@ namespace Xtro.MDX.Utilities
         protected Vector3 MaximumBoundary;         // Max point in clip boundary
 
         protected bool ResetCursorAfterMove;// If true, the class will reset the cursor position so that the cursor always has space to move 
+        // ReSharper restore MemberCanBePrivate.Global
 
         //--------------------------------------------------------------------------------------
         // Maps a windows virtual key to an enum
@@ -94,12 +96,12 @@ namespace Xtro.MDX.Utilities
             return CameraKeys.Unknown;
         }
 
-        protected bool IsKeyDown(KeyMaskFlag Key)
+        protected static bool IsKeyDown(KeyMaskFlag Key)
         {
             return ((Key & KeyMaskFlag.IsDown) == KeyMaskFlag.IsDown);
         }
 
-        bool WasKeyDown(KeyMaskFlag Key)
+        protected bool WasKeyDown(KeyMaskFlag Key)
         {
             return ((Key & KeyMaskFlag.WasDown) == KeyMaskFlag.WasDown);
         }
@@ -168,7 +170,6 @@ namespace Xtro.MDX.Utilities
         //--------------------------------------------------------------------------------------
         protected void UpdateVelocity(float ElapsedTime)
         {
-            Matrix RotDelta;
             RotVelocity = MouseDelta * RotationScaler /*+GamePadRightThumb * 0.02f*/;
 
             var Accel = KeyboardDirection/* + m_vGamePadLeftThumb*/;
@@ -225,15 +226,15 @@ namespace Xtro.MDX.Utilities
             if (GetKeyboardInput)
             {
                 // Update acceleration vector based on keyboard state
-                if (IsKeyDown((KeyMaskFlag)Keys[(int)CameraKeys.MoveForward])) KeyboardDirection.Z += 1.0f;
-                if (IsKeyDown((KeyMaskFlag)Keys[(int)CameraKeys.MoveBackward])) KeyboardDirection.Z -= 1.0f;
+                if (IsKeyDown(Keys[(int)CameraKeys.MoveForward])) KeyboardDirection.Z += 1.0f;
+                if (IsKeyDown(Keys[(int)CameraKeys.MoveBackward])) KeyboardDirection.Z -= 1.0f;
                 if (EnableYAxisMovement)
                 {
-                    if (IsKeyDown((KeyMaskFlag)Keys[(int)CameraKeys.MoveUp])) KeyboardDirection.Y += 1.0f;
-                    if (IsKeyDown((KeyMaskFlag)Keys[(int)CameraKeys.MoveDown])) KeyboardDirection.Y -= 1.0f;
+                    if (IsKeyDown(Keys[(int)CameraKeys.MoveUp])) KeyboardDirection.Y += 1.0f;
+                    if (IsKeyDown(Keys[(int)CameraKeys.MoveDown])) KeyboardDirection.Y -= 1.0f;
                 }
-                if (IsKeyDown((KeyMaskFlag)Keys[(int)CameraKeys.StrafeRight])) KeyboardDirection.X += 1.0f;
-                if (IsKeyDown((KeyMaskFlag)Keys[(int)CameraKeys.StrafeLeft])) KeyboardDirection.X -= 1.0f;
+                if (IsKeyDown(Keys[(int)CameraKeys.StrafeRight])) KeyboardDirection.X += 1.0f;
+                if (IsKeyDown(Keys[(int)CameraKeys.StrafeLeft])) KeyboardDirection.X -= 1.0f;
             }
 
             if (GetMouseInput)
