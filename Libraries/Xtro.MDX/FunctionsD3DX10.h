@@ -478,6 +478,14 @@ public:
 		D3DXVec3Cross((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
 	}
 
+	static void Vector3TransformCoordinates([Out] Vector3% Out, Vector3% Vector, Matrix% Matrix)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		D3DXVec3TransformCoord((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
+	}
+
 	static float Vector3Dot(Vector3% Vector1, Vector3% Vector2)
 	{
 		pin_ptr<Vector3> PinnedVector1 = &Vector1;
@@ -489,6 +497,20 @@ public:
 	{
 		pin_ptr<Vector3> PinnedVector = &Vector;
 		return D3DXVec3LengthSq((D3DXVECTOR3*)PinnedVector);
+	}
+
+	static float Vector3Length(Vector3% Vector)
+	{
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		return D3DXVec3Length((D3DXVECTOR3*)PinnedVector);
+	}
+
+	static void Vector3Subtract([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+		D3DXVec3Subtract((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
 	}
 
 	static void QuaternionMultiply([Out] Quaternion% Out, Quaternion% Quaternion1, Quaternion% Quaternion2)
@@ -517,6 +539,13 @@ public:
 		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
 		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
 		D3DXQuaternionInverse((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static void QuaternionRotationMatrix([Out] Quaternion% Out, Matrix% Matrix)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		D3DXQuaternionRotationMatrix((D3DXQUATERNION*)PinnedOut, (D3DXMATRIX*)PinnedMatrix);
 	}
 
 	static void MatrixRotationQuaternion([Out] Matrix% Out, Quaternion% Quaternion)

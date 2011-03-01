@@ -2,7 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* ModelViewerCamera
+* Tut10
 
 * gereksiz switch'leri if e çevir.
 

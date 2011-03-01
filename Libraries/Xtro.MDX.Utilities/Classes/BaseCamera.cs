@@ -9,7 +9,7 @@ namespace Xtro.MDX.Utilities
 {
     public class BaseCamera
     {
-// ReSharper disable MemberCanBePrivate.Global
+        // ReSharper disable MemberCanBePrivate.Global
         protected Matrix View;              // View matrix 
         protected Matrix Projection;              // Projection matrix
 
@@ -294,11 +294,13 @@ namespace Xtro.MDX.Utilities
             var EyePoint = new Vector3(0.0f, 0.0f, 0.0f);
             var LookatPoint = new Vector3(0.0f, 0.0f, 1.0f);
 
+            // ReSharper disable DoNotCallOverridableMethodsInConstructor
             // Setup the view matrix
             SetViewParameters(ref EyePoint, ref LookatPoint);
 
             // Setup the projection matrix
             SetProjectionParameters(Constants.PI / 4, 1.0f, 1.0f, 1000.0f);
+            // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
             LastMousePosition = Cursor.Position;
 

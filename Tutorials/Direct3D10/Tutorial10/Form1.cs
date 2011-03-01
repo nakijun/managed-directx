@@ -34,6 +34,8 @@ namespace Tutorial10
             return Degree * D3DX10Constants.PI / 180.0f;
         }
 
+        ModelViewerCamera Camera;
+
         Effect Effect;
         InputLayout VertexLayout;
         EffectTechnique Technique;
@@ -51,6 +53,8 @@ namespace Tutorial10
             InitializeComponent();
 
             MouseWheel += Form1_MouseWheel;
+
+            Camera = new ModelViewerCamera(this);
         }
 
         private void Form1_Shown(object Sender, EventArgs E)
