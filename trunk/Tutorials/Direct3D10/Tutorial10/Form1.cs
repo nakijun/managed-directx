@@ -359,5 +359,10 @@ namespace Tutorial10
         {
 
         }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 }

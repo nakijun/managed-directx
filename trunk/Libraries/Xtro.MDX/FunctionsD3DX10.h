@@ -470,6 +470,21 @@ public:
 		D3DXVec3Normalize((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector);
 	}
 
+	static void Vector3Cross([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+		D3DXVec3Cross((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
+	}
+
+	static float Vector3Dot(Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+		return D3DXVec3Dot((D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
+	}
+
 	static float Vector3LengthSquare(Vector3% Vector)
 	{
 		pin_ptr<Vector3> PinnedVector = &Vector;
