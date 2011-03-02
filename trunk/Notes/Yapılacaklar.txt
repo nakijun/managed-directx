@@ -4,6 +4,8 @@
 
 * Tut10
 
+* FontCharacterSet gibi DX'e ait olmayanlarý Windows yada Base namespace'e taþý.
+
 * gereksiz switch'leri if e çevir.
 
 * tüm E_OUTOFMEMORY leri implement et. C++ da tara. C#'a ekle try içinde
