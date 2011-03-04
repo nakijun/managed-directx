@@ -2,6 +2,8 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
+* DialogResourceManager
+
 * Tut10
 
 * FontCharacterSet gibi DX'e ait olmayanlarý Windows yada Base namespace'e taþý.

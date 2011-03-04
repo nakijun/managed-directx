@@ -104,6 +104,7 @@
     <Compile Include="Callbacks.cs" />
     <Compile Include="Classes\ArcBall.cs" />
     <Compile Include="Classes\BaseCamera.cs" />
+    <Compile Include="Classes\DialogResourceManager.cs" />
     <Compile Include="Classes\Enumeration.cs" />
     <Compile Include="Classes\Counters.cs" />
     <Compile Include="Classes\ModelViewerCamera.cs" />

@@ -638,7 +638,7 @@ namespace Xtro.MDX.Utilities
                 var DepthStencilViewDescription = new DepthStencilViewDescription
                 {
                     Format = DepthStencilDescription.Format,
-                    ViewDimension = DepthStencilDescription.SampleDescription.Count > 1 ? DSV_Dimension.Texture2DMS : DSV_Dimension.Texture2D,
+                    ViewDimension = DepthStencilDescription.SampleDescription.Count > 1 ? DepthStencilViewDimension.Texture2D_MultiSampling : DepthStencilViewDimension.Texture2D,
                     Texture2D =
                     {
                         MipSlice = 0

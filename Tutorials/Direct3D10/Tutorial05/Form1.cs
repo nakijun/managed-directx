@@ -171,7 +171,7 @@ namespace Tutorial05
             DepthStencilViewDescription DepthStencilViewDescription = new DepthStencilViewDescription
             {
                 Format = DepthStencilDescription.Format,
-                ViewDimension = DSV_Dimension.Texture2D
+                ViewDimension = DepthStencilViewDimension.Texture2D
             };
             DepthStencilViewDescription.Texture2D.MipSlice = 0;
             Result = Device.CreateDepthStencilView(DepthStencil, ref DepthStencilViewDescription, out DepthStencilView);
