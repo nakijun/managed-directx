@@ -330,6 +330,27 @@ public:
 		return Result;
 	}
 
+	static int CreateFont(Xtro::MDX::Direct3D10::Device^ Device, int Height, unsigned int Width, unsigned int Weight, unsigned int MipLevels, bool Italic, FontCharacterSet CharSet, FontPrecision OutputPrecision, FontQuality Quality, FontPitchAndFamily PitchAndFamily, String^ FaceName, [Out] Font^% Font)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result;
+		ID3DX10Font* pFont = 0;
+
+		IntPtr pFaceName = Marshal::StringToHGlobalUni(FaceName);
+		try { Result = D3DX10CreateFont(pDevice, Height, Width, Weight, MipLevels, Italic, (unsigned int)CharSet, (unsigned int)OutputPrecision, (unsigned int)Quality, (unsigned int)PitchAndFamily, (LPCWSTR)pFaceName.ToPointer(), &pFont); }		
+		finally { Marshal::FreeHGlobal(pFaceName); }
+
+		if (pFont)
+		{
+			try { Font = (Xtro::MDX::Direct3DX10::Font^)Interface::Interfaces[IntPtr(pFont)]; }
+			catch (KeyNotFoundException^) { Font = gcnew Xtro::MDX::Direct3DX10::Font(IntPtr(pFont)); }
+		}
+		else Font = nullptr;
+
+		return Result;
+	}
+
 	static int CreateSprite(Xtro::MDX::Direct3D10::Device^ Device, unsigned int DeviceBufferSize, [Out] Sprite^% Sprite)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
