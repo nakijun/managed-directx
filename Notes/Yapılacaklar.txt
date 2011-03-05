@@ -2,7 +2,9 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* DialogResourceManager
+* Dialog
+
+* DialogResourceManager public methods.
 
 * Tut10
 

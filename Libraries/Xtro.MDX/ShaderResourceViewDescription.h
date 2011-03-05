@@ -3,7 +3,7 @@ public value class ShaderResourceViewDescription : IEquatable<ShaderResourceView
 {
 public:
 	[FieldOffset(0)]Format Format;
-	[FieldOffset(4)]SRV_Dimension ViewDimension;
+	[FieldOffset(4)]ShaderResourceViewDimension ViewDimension;
 	[FieldOffset(8)]BufferSRV Buffer;
 	[FieldOffset(8)]Texture1D_SRV Texture1D;
 	[FieldOffset(8)]Texture1D_ArraySRV Texture1DArray;
