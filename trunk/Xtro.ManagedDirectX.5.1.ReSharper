@@ -119,6 +119,7 @@
       <Abbreviation Text="NA" />
       <Abbreviation Text="SRGB" />
       <Abbreviation Text="FOV" />
+      <Abbreviation Text="UI" />
     </Naming2>
   </CodeStyleSettings>
   <Daemon.SolutionSettings>

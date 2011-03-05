@@ -3,7 +3,7 @@ public value class RenderTargetViewDescription : IEquatable<RenderTargetViewDesc
 {
 public:
 	[FieldOffset(0)]Format Format;
-	[FieldOffset(4)]RTV_Dimension ViewDimension;
+	[FieldOffset(4)]RenderTargetViewDimension ViewDimension;
 	[FieldOffset(8)]BufferRTV Buffer;
 	[FieldOffset(8)]Texture1D_RTV Texture1D;
 	[FieldOffset(8)]Texture1D_ArrayRTV Texture1DArray;

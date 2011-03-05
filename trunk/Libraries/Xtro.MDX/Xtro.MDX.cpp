@@ -52,6 +52,7 @@ namespace Direct3D10
 
 	#include "ConstantsD3D10.h"
 	#include "EnumsD3D10.h"
+	#include "StateBlock.h"
 	#include "Include.h"
 	#include "ShaderMacro.h"
 	#include "BufferRTV.h"
@@ -121,8 +122,8 @@ namespace Direct3DX10
 {
 	using namespace Xtro::MDX::Direct3D10;
 
-	#include "ConstantsD3DX10.h"
 	#include "EnumsD3DX10.h"
+	#include "ConstantsD3DX10.h"
 	#include "Float16.h"
 	#include "Vector.h"
 	#include "Vector2.h"

@@ -135,23 +135,23 @@ namespace Xtro.MDX.Utilities
             switch (LoadInfo[0].SourceInfo.Value.ResourceDimension)
             {
             case ResourceDimension.Texture1D:
-                ShaderResourceViewDescription.ViewDimension = SRV_Dimension.Texture1D;
+                ShaderResourceViewDescription.ViewDimension = ShaderResourceViewDimension.Texture1D;
                 ShaderResourceViewDescription.Texture1D.MostDetailedMip = 0;
                 ShaderResourceViewDescription.Texture1D.MipLevels = LoadInfo[0].SourceInfo.Value.MipLevels;
                 break;
             case ResourceDimension.Texture2D:
-                ShaderResourceViewDescription.ViewDimension = SRV_Dimension.Texture2D;
+                ShaderResourceViewDescription.ViewDimension = ShaderResourceViewDimension.Texture2D;
                 ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
                 ShaderResourceViewDescription.Texture2D.MipLevels = LoadInfo[0].SourceInfo.Value.MipLevels;
                 if ((LoadInfo[0].SourceInfo.Value.MiscellaneousFlags & ResourceMiscellaneousFlag.TextureCube) != 0)
                 {
-                    ShaderResourceViewDescription.ViewDimension = SRV_Dimension.TextureCube;
+                    ShaderResourceViewDescription.ViewDimension = ShaderResourceViewDimension.TextureCube;
                     ShaderResourceViewDescription.TextureCube.MostDetailedMip = 0;
                     ShaderResourceViewDescription.TextureCube.MipLevels = LoadInfo[0].SourceInfo.Value.MipLevels;
                 }
                 break;
             case ResourceDimension.Texture3D:
-                ShaderResourceViewDescription.ViewDimension = SRV_Dimension.Texture3D;
+                ShaderResourceViewDescription.ViewDimension = ShaderResourceViewDimension.Texture3D;
                 ShaderResourceViewDescription.Texture3D.MostDetailedMip = 0;
                 ShaderResourceViewDescription.Texture3D.MipLevels = LoadInfo[0].SourceInfo.Value.MipLevels;
                 break;

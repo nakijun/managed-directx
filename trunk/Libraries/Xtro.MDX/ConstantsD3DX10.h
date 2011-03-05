@@ -1,8 +1,8 @@
 public ref class Constants abstract sealed
 {
 public:
-	literal int Default = D3DX10_DEFAULT;
-	literal int FromFile = D3DX10_FROM_FILE;
-	literal int FormatFromFile = DXGI_FORMAT_FROM_FILE;
+	literal unsigned int Default = D3DX10_DEFAULT;
+	literal unsigned int FromFile = D3DX10_FROM_FILE;
+	literal Format FormatFromFile = (Format)DXGI_FORMAT_FROM_FILE;
 	literal float PI = D3DX_PI;
 };
