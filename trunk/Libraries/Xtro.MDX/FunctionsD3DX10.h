@@ -575,4 +575,12 @@ public:
 		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
 		D3DXMatrixRotationQuaternion((D3DXMATRIX*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
 	}
+
+	static void ColorLerp([Out] Color% Out, Color% Color1, Color% Color2, float S)
+	{
+		pin_ptr<Color> PinnedOut = &Out;
+		pin_ptr<Color> PinnedColor1 = &Color1;
+		pin_ptr<Color> PinnedColor2 = &Color2;
+		D3DXColorLerp((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor1, (D3DXCOLOR*)PinnedColor2, S);
+	}
 };

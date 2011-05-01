@@ -3,6 +3,7 @@
 ----------------------------------------------------------------------
 
 * Dialog
+  private methods
 
 * DialogResourceManager public methods.
 
