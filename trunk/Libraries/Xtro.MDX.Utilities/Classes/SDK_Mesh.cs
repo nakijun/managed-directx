@@ -429,9 +429,7 @@ namespace Xtro.MDX.Utilities
 
                 StaticMeshData = HeapData;
 
-                var DataStream = Data.GetStream();
-                DataStream.Seek(0, SeekOrigin.Begin);
-                DataStream.CopyTo(StaticMeshData.GetStream());
+                Data.CopyTo(StaticMeshData);
             }
             else
             {

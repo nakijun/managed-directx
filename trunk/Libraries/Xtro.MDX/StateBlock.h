@@ -12,4 +12,13 @@ internal:
 	}
 
 public:
+	int Capture()
+	{
+		return pStateBlock->Capture();
+	}
+
+	int Apply()
+	{
+		return pStateBlock->Apply();
+	}
 };

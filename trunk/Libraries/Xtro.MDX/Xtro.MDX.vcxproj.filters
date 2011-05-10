@@ -628,6 +628,9 @@
     <ClInclude Include="StateBlock.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteStruct.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">

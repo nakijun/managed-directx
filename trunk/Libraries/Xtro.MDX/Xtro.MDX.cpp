@@ -132,6 +132,7 @@ namespace Direct3DX10
 	#include "Quaternion.h"
 	#include "Color.h"
 	#include "Matrix.h"
+	#include "SpriteStruct.h"
 	#include "Sprite.h"
 	#include "Font.h"
 	#include "MeshBuffer.h"

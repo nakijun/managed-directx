@@ -251,6 +251,7 @@
     <ClInclude Include="SampleDescription.h" />
     <ClInclude Include="ShaderResourceViewDescription.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteStruct.h" />
     <ClInclude Include="StateBlock.h" />
     <ClInclude Include="SurfaceDescription.h" />
     <ClInclude Include="SwapChainDescription.h" />
