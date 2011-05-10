@@ -104,7 +104,9 @@ namespace Xtro.MDX.Utilities
 
         public Effect Effect;        // Effect used to render UI with D3D10
         public EffectTechnique TechRenderUI;  // Technique: RenderUI
-        public EffectTechnique TechRenderUIUntex;  // Technique: RenderUI without texture
+// ReSharper disable InconsistentNaming
+        public EffectTechnique TechRenderUI_Untex;  // Technique: RenderUI without texture
+// ReSharper restore InconsistentNaming
         public EffectShaderResourceVariable FxTexture;
         public InputLayout InputLayout;
         public Buffer VertexBufferScreenQuad;
@@ -114,5 +116,20 @@ namespace Xtro.MDX.Utilities
         public uint BackBufferHeight;
         
         public List<Dialog> Dialogs;            // Dialogs registered
+
+        public Device GetDevice()
+        {
+            return Device;
+        }
+
+        public TextureNode[] GetTextureNode( int Index )
+        {
+            return TextureCache[Index];
+        }
+
+        public FontNode[] GetFontNode( int Index )
+        {
+            return FontCache[Index];
+        }
     }
 }

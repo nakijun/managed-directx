@@ -576,6 +576,12 @@ public:
 		D3DXMatrixRotationQuaternion((D3DXMATRIX*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
 	}
 
+	static void MatrixOrthoOffCenterLH([Out] Matrix% Out, float L, float R, float B, float T, float ZN, float ZF)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixOrthoOffCenterLH((D3DXMATRIX*)PinnedOut, L, R, B, T, ZN, ZF);
+	}
+
 	static void ColorLerp([Out] Color% Out, Color% Color1, Color% Color2, float S)
 	{
 		pin_ptr<Color> PinnedOut = &Out;

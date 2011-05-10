@@ -306,8 +306,8 @@ public enum class Map
 	Read = D3D10_MAP_READ,
 	Write = D3D10_MAP_WRITE,
 	ReadWrite = D3D10_MAP_READ_WRITE,
-	Discard = D3D10_MAP_WRITE_DISCARD,
-	NoOverwrite = D3D10_MAP_WRITE_NO_OVERWRITE 
+	WriteDiscard = D3D10_MAP_WRITE_DISCARD,
+	WriteNoOverwrite = D3D10_MAP_WRITE_NO_OVERWRITE 
 };
 
 [System::Flags]

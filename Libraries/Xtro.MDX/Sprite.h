@@ -21,4 +21,24 @@ public:
 	{
 		return pSprite->End();
 	}
+
+	int SetProjectionTransform(Matrix% ProjectionTransform)
+	{
+		pin_ptr<Matrix> PinnedProjectionTransform = &ProjectionTransform;
+		return pSprite->SetProjectionTransform((D3DXMATRIX*)PinnedProjectionTransform);
+	}
+
+	int DrawSpritesBuffered(array<SpriteStruct>^ Sprites, unsigned int SpriteCount)
+	{
+		D3DX10_SPRITE* pSprites = 0;
+
+		if (Sprites != nullptr && Sprites->Length > 0)
+		{
+			unsigned int ElementCount = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
+			pSprites = new D3DX10_SPRITE[ElementCount];
+			for (int ElementNo = 0; ElementNo < ElementCount; ElementNo++) Sprites[ElementNo].ToNative(&pSprites[ElementNo]);
+		}
+
+		return pSprite->DrawSpritesBuffered(pSprites, SpriteCount);
+	}
 };

@@ -142,4 +142,38 @@ public:
 		try	{ return memcmp(pMemory, Value->pMemory, FSize) == 0; }
 		catch (...) { return false; }
 	}
+
+	generic<typename T> where T : value class
+	void CopyTo(unsigned int SourceOffset, unsigned int SourceIndex, UnmanagedMemory^ Target, unsigned int TargetOffset, unsigned int TargetIndex, unsigned int Count)
+	{
+		if (Target == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Target");
+
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+
+		memcpy(Target->pMemory + TargetOffset + TargetIndex * Size, pMemory + SourceOffset + SourceIndex * Size, Count * Size);
+	}
+
+	generic<typename T> where T : value class
+	void CopyTo(unsigned int SourceOffset, UnmanagedMemory^ Target, unsigned int TargetOffset, unsigned int Count)
+	{
+		if (Target == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Target");
+
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+
+		memcpy(Target->pMemory + TargetOffset, pMemory + SourceOffset, Count * Size);
+	}
+
+	void CopyTo(unsigned int SourceOffset, UnmanagedMemory^ Target, unsigned int TargetOffset, unsigned int Size)
+	{
+		if (Target == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Target");
+
+		memcpy(Target->pMemory + TargetOffset, pMemory + SourceOffset, Size);
+	}
+
+	void CopyTo(UnmanagedMemory^ Target)
+	{
+		if (Target == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Target");
+
+		memcpy(Target->pMemory, pMemory, FSize);
+	}
 };

@@ -65,4 +65,13 @@ public:
 
 		Write(0, Values, Values->Length, 0);
 	}
+
+	void CopyTo(unsigned int SourceIndex, UnmanagedMemory^ Target, unsigned int TargetIndex, unsigned int Count)
+	{
+		if (Target == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Target");
+
+		unsigned int Size = Marshal::SizeOf(T::typeid);
+
+		memcpy(Target->pMemory + TargetIndex * Size, pMemory + SourceIndex * Size, Count * Size);
+	}
 };
