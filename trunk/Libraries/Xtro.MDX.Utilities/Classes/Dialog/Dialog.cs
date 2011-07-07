@@ -151,7 +151,7 @@ namespace Xtro.MDX.Utilities
                 // DrawSprite will offset the rect down by
                 // m_nCaptionHeight, so adjust the rect higher
                 // here to negate the effect.
-                var Rectangle = new Rectangle(0, -CaptionHeight, Width, 0);
+                var Rectangle = new Rectangle(0, -CaptionHeight, Width, CaptionHeight);
                 DrawSprite(CaptionElement, ref Rectangle, 0.99f);
                 Rectangle.X += 5; // Make a left margin
                 var Output = Caption;
@@ -193,7 +193,7 @@ namespace Xtro.MDX.Utilities
             // Element for the caption
             //-------------------------------------
             CaptionElement.SetFont(0);
-            var TextureRectangle = new Rectangle(17, 269, 241, 287);
+            var TextureRectangle = new Rectangle(17, 269, 224, 18);
             CaptionElement.SetTexture(0, new[] { TextureRectangle });
             CaptionElement.TextureColor.States[(int)ControlState.Normal] = (uint)SystemColor.FromArgb(255, 255, 255, 255).ToArgb();
             CaptionElement.FontColor.States[(int)ControlState.Normal] = (uint)SystemColor.FromArgb(255, 255, 255, 255).ToArgb();
@@ -229,7 +229,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTButton - Fill layer
             //-------------------------------------
-            TextureRectangle = new Rectangle(136, 0, 252, 54);
+            TextureRectangle = new Rectangle(136, 0, 116, 54);
             Element.SetTexture(0, new[] { TextureRectangle }, (uint)SystemColor.FromArgb(0, 255, 255, 255).ToArgb());
             Element.TextureColor.States[(int)ControlState.MouseOver] = (uint)SystemColor.FromArgb(160, 255, 255, 255).ToArgb();
             Element.TextureColor.States[(int)ControlState.Pressed] = (uint)SystemColor.FromArgb(60, 0, 0, 0).ToArgb();
@@ -243,7 +243,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTCheckBox - Box
             //-------------------------------------
-            TextureRectangle = new Rectangle(0, 54, 27, 81);
+            TextureRectangle = new Rectangle(0, 54, 27, 27);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.SetFont(0, (uint)SystemColor.FromArgb(255, 255, 255, 255).ToArgb(), FontDrawFlag.Left | FontDrawFlag.VerticalCenter);
             Element.FontColor.States[(int)ControlState.Disabled] = (uint)SystemColor.FromArgb(200, 200, 200, 200).ToArgb();
@@ -258,7 +258,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTCheckBox - Check
             //-------------------------------------
-            TextureRectangle = new Rectangle(27, 54, 54, 81);
+            TextureRectangle = new Rectangle(27, 54, 27, 27);
             Element.SetTexture(0, new[] { TextureRectangle });
 
             // Assign the Element
@@ -268,7 +268,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTRadioButton - Box
             //-------------------------------------
-            TextureRectangle = new Rectangle(54, 54, 81, 81);
+            TextureRectangle = new Rectangle(54, 54, 27, 27);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.SetFont(0, (uint)SystemColor.FromArgb(255, 255, 255, 255).ToArgb(), FontDrawFlag.Left | FontDrawFlag.VerticalCenter);
             Element.FontColor.States[(int)ControlState.Disabled] = (uint)SystemColor.FromArgb(200, 200, 200, 200).ToArgb();
@@ -283,7 +283,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTRadioButton - Check
             //-------------------------------------
-            TextureRectangle = new Rectangle(81, 54, 108, 81);
+            TextureRectangle = new Rectangle(81, 54, 27, 27);
             Element.SetTexture(0, new[] { TextureRectangle });
 
             // Assign the Element
@@ -293,7 +293,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTComboBox - Main
             //-------------------------------------
-            TextureRectangle = new Rectangle(7, 81, 247, 123);
+            TextureRectangle = new Rectangle(7, 81, 240, 42);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.SetFont(0);
             Element.TextureColor.States[(int)ControlState.Normal] = (uint)SystemColor.FromArgb(150, 200, 200, 200).ToArgb();
@@ -311,7 +311,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTComboBox - Button
             //-------------------------------------
-            TextureRectangle = new Rectangle(98, 189, 151, 238);
+            TextureRectangle = new Rectangle(98, 189, 53, 49);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.TextureColor.States[(int)ControlState.Normal] = (uint)SystemColor.FromArgb(150, 255, 255, 255).ToArgb();
             Element.TextureColor.States[(int)ControlState.Pressed] = (uint)SystemColor.FromArgb(255, 150, 150, 150).ToArgb();
@@ -325,7 +325,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTComboBox - Dropdown
             //-------------------------------------
-            TextureRectangle = new Rectangle(13, 123, 241, 160);
+            TextureRectangle = new Rectangle(13, 123, 228, 37);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.SetFont(0, (uint)SystemColor.FromArgb(255, 0, 0, 0).ToArgb(), FontDrawFlag.Left | FontDrawFlag.Top);
 
@@ -336,7 +336,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTComboBox - Selection
             //-------------------------------------
-            TextureRectangle = new Rectangle(12, 163, 239, 183);
+            TextureRectangle = new Rectangle(12, 163, 227, 20);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.SetFont(0, (uint)SystemColor.FromArgb(255, 255, 255, 255).ToArgb(), FontDrawFlag.Left | FontDrawFlag.Top);
 
@@ -347,7 +347,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTSlider - Track
             //-------------------------------------
-            TextureRectangle = new Rectangle(1, 187, 93, 228);
+            TextureRectangle = new Rectangle(1, 187, 92, 41);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.TextureColor.States[(int)ControlState.Normal] = (uint)SystemColor.FromArgb(150, 255, 255, 255).ToArgb();
             Element.TextureColor.States[(int)ControlState.Focus] = (uint)SystemColor.FromArgb(200, 255, 255, 255).ToArgb();
@@ -359,7 +359,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTSlider - Button
             //-------------------------------------
-            TextureRectangle = new Rectangle(151, 193, 192, 234);
+            TextureRectangle = new Rectangle(151, 193, 41, 41);
             Element.SetTexture(0, new[] { TextureRectangle });
 
             // Assign the Element
@@ -370,7 +370,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             const int ScrollBarStartX = 196;
             const int ScrollBarStartY = 191;
-            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 21, ScrollBarStartX + 22, ScrollBarStartY + 32);
+            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 21, 22, 32);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.TextureColor.States[(int)ControlState.Disabled] = (uint)SystemColor.FromArgb(255, 200, 200, 200).ToArgb();
 
@@ -380,7 +380,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTScrollBar - Up Arrow
             //-------------------------------------
-            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 1, ScrollBarStartX + 22, ScrollBarStartY + 21);
+            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 1, 22, 21);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.TextureColor.States[(int)ControlState.Disabled] = (uint)SystemColor.FromArgb(255, 200, 200, 200).ToArgb();
 
@@ -391,7 +391,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTScrollBar - Down Arrow
             //-------------------------------------
-            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 32, ScrollBarStartX + 22, ScrollBarStartY + 53);
+            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 32, 22, 53);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.TextureColor.States[(int)ControlState.Disabled] = (uint)SystemColor.FromArgb(255, 200, 200, 200).ToArgb();
 
@@ -402,7 +402,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTScrollBar - Button
             //-------------------------------------
-            TextureRectangle = new Rectangle(220, 192, 238, 234);
+            TextureRectangle = new Rectangle(220, 192, 18, 42);
             Element.SetTexture(0, new[] { TextureRectangle });
 
             // Assign the Element
@@ -426,38 +426,38 @@ namespace Xtro.MDX.Utilities
             Element.SetFont(0, (uint)SystemColor.FromArgb(255, 0, 0, 0).ToArgb(), FontDrawFlag.Left | FontDrawFlag.Top);
 
             // Assign the style
-            TextureRectangle = new Rectangle(14, 90, 241, 113);
+            TextureRectangle = new Rectangle(14, 90, 227, 23);
             Element.SetTexture(0, new[] { TextureRectangle });
             SetDefaultElement(ControlType.EditBox, 0, Element);
-            TextureRectangle = new Rectangle(8, 82, 14, 90);
+            TextureRectangle = new Rectangle(8, 82, 6, 8);
             Element.SetTexture(0, new[] { TextureRectangle });
             SetDefaultElement(ControlType.EditBox, 1, Element);
-            TextureRectangle = new Rectangle(14, 82, 241, 90);
+            TextureRectangle = new Rectangle(14, 82, 227, 8);
             Element.SetTexture(0, new[] { TextureRectangle });
             SetDefaultElement(ControlType.EditBox, 2, Element);
-            TextureRectangle = new Rectangle(241, 82, 246, 90);
+            TextureRectangle = new Rectangle(241, 82, 5, 8);
             Element.SetTexture(0, new[] { TextureRectangle });
             SetDefaultElement(ControlType.EditBox, 3, Element);
-            TextureRectangle = new Rectangle(8, 90, 14, 113);
+            TextureRectangle = new Rectangle(8, 90, 6, 23);
             Element.SetTexture(0, new[] { TextureRectangle });
             SetDefaultElement(ControlType.EditBox, 4, Element);
-            TextureRectangle = new Rectangle(241, 90, 246, 113);
+            TextureRectangle = new Rectangle(241, 90, 5, 23);
             Element.SetTexture(0, new[] { TextureRectangle });
             SetDefaultElement(ControlType.EditBox, 5, Element);
-            TextureRectangle = new Rectangle(8, 113, 14, 121);
+            TextureRectangle = new Rectangle(8, 113, 6, 8);
             Element.SetTexture(0, new[] { TextureRectangle });
             SetDefaultElement(ControlType.EditBox, 6, Element);
-            TextureRectangle = new Rectangle(14, 113, 241, 121);
+            TextureRectangle = new Rectangle(14, 113, 227, 8);
             Element.SetTexture(0, new[] { TextureRectangle });
             SetDefaultElement(ControlType.EditBox, 7, Element);
-            TextureRectangle = new Rectangle(241, 113, 246, 121);
+            TextureRectangle = new Rectangle(241, 113, 5, 8);
             Element.SetTexture(0, new[] { TextureRectangle });
             SetDefaultElement(ControlType.EditBox, 8, Element);
 
             //-------------------------------------
             // CDXUTListBox - Main
             //-------------------------------------
-            TextureRectangle = new Rectangle(13, 123, 241, 160);
+            TextureRectangle = new Rectangle(13, 123, 228, 37);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.SetFont(0, (uint)SystemColor.FromArgb(255, 0, 0, 0).ToArgb(), FontDrawFlag.Left | FontDrawFlag.Top);
 
@@ -468,7 +468,7 @@ namespace Xtro.MDX.Utilities
             // CDXUTListBox - Selection
             //-------------------------------------
 
-            TextureRectangle = new Rectangle(16, 166, 240, 183);
+            TextureRectangle = new Rectangle(16, 166, 224, 17);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.SetFont(0, (uint)SystemColor.FromArgb(255, 255, 255, 255).ToArgb(), FontDrawFlag.Left | FontDrawFlag.Top);
 
@@ -1432,6 +1432,11 @@ namespace Xtro.MDX.Utilities
                     if (RadioButton.ButtonGroup == ButtonGroup) RadioButton.SetChecked(false, false);
                 }
             }
+        }
+
+        public DialogResourceManager GetManager()
+        {
+            return Manager;
         }
     }
 }

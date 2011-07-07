@@ -1221,7 +1221,7 @@ namespace Xtro.MDX.Utilities
                     // Resize the window.  It is important to adjust the window size 
                     // after resetting the device rather than beforehand to ensure 
                     // that the monitor resolution is correct and does not limit the size of the new window.
-                    GetForm().Bounds = new Rectangle(new Point(ResizedWindow.Left, ResizedWindow.Top), new Size(WindowWidth, WindowHeight));
+                    GetForm().Bounds = new Rectangle(ResizedWindow.Left, ResizedWindow.Top, WindowWidth, WindowHeight);
                 }
                 else
                 {

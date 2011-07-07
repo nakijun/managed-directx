@@ -3,6 +3,7 @@
 ----------------------------------------------------------------------
 
 * ComboBox
+    UpdateRects
 
 * Dialog
   AddRadioButton

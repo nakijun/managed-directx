@@ -21,7 +21,7 @@ namespace Xtro.MDX.Utilities
 
         protected virtual void UpdateRectangles()
         {
-            BoundingBox = new Rectangle(X, Y, X + Width, Y + Height);
+            BoundingBox = new Rectangle(X, Y, Width, Height);
         }
 
         public const int MaximumStates = 6;
@@ -51,7 +51,7 @@ namespace Xtro.MDX.Utilities
             this.Dialog = null;
         }
 
-        public void Delete()
+        public virtual void Delete()
         {
             Elements.Clear();
         }
