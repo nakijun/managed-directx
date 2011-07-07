@@ -1097,6 +1097,29 @@ namespace Xtro.MDX.Utilities
             return 0;
         }
 
+        public int AddRadioButton(int ID, uint ButtonGroup, string Text, int X, int Y, int Width, int Height, bool Checked, Keys Hotkey, bool IsDefault, out RadioButton Created)
+        {
+            var RadioButton = new RadioButton(this);
+
+            Created = RadioButton;
+
+            var Result = AddControl(RadioButton);
+            if (Result < 0) return Result;
+
+            // Set the ID and list index
+            RadioButton.SetID(ID);
+            RadioButton.Text = Text;
+            RadioButton.ButtonGroup = ButtonGroup;
+            RadioButton.SetLocation(X, Y);
+            RadioButton.SetSize(Width, Height);
+            RadioButton.SetHotkey(Hotkey);
+            RadioButton.SetChecked(Checked);
+            RadioButton.IsDefault = IsDefault;
+            RadioButton.SetChecked(Checked);
+
+            return 0;
+        }
+
         public int AddControl(Control Control)
         {
             var Result = InitControl(Control);
