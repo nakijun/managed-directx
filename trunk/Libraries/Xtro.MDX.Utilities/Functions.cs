@@ -1512,6 +1512,11 @@ namespace Xtro.MDX.Utilities
             return GetState().Factory;
         }
 
+        public static bool GetAutomation()
+        {
+            return GetState().Automation;
+        }
+
         public static int ErrorBox(int Result, string Message)
         {
             if (GetShowMessageBoxOnError()) MessageBox.Show("An error has occured with error " + Result + " : " + Message);

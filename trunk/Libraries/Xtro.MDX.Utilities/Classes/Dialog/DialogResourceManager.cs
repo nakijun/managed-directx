@@ -16,7 +16,7 @@ namespace Xtro.MDX.Utilities
         {
             public string Face;
             public int Height;
-            public uint Weight;
+            public FontWeight Weight;
             public Font Font;
         };
 
@@ -40,7 +40,7 @@ namespace Xtro.MDX.Utilities
 
             if (FontNode[0].Font != null) FontNode[0].Font.Release();
 
-            var Result = D3DX10Functions.CreateFontW(Device, FontNode[0].Height, 0, FontNode[0].Weight, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, FontNode[0].Face, out FontNode[0].Font);
+            var Result = D3DX10Functions.CreateFontW(Device, FontNode[0].Height, 0, (uint)FontNode[0].Weight, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, FontNode[0].Face, out FontNode[0].Font);
 
             return Result < 0 ? Result : 0;
         }
@@ -104,9 +104,9 @@ namespace Xtro.MDX.Utilities
 
         public Effect Effect;        // Effect used to render UI with D3D10
         public EffectTechnique TechRenderUI;  // Technique: RenderUI
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         public EffectTechnique TechRenderUI_Untex;  // Technique: RenderUI without texture
-// ReSharper restore InconsistentNaming
+        // ReSharper restore InconsistentNaming
         public EffectShaderResourceVariable FxTexture;
         public InputLayout InputLayout;
         public Buffer VertexBufferScreenQuad;
@@ -114,7 +114,7 @@ namespace Xtro.MDX.Utilities
         public Sprite Sprite;
         public uint BackBufferWidth;
         public uint BackBufferHeight;
-        
+
         public List<Dialog> Dialogs;            // Dialogs registered
 
         public Device GetDevice()
@@ -122,14 +122,85 @@ namespace Xtro.MDX.Utilities
             return Device;
         }
 
-        public TextureNode[] GetTextureNode( int Index )
+        public TextureNode[] GetTextureNode(int Index)
         {
             return TextureCache[Index];
         }
 
-        public FontNode[] GetFontNode( int Index )
+        public FontNode[] GetFontNode(int Index)
         {
             return FontCache[Index];
+        }
+
+        public int AddFont(string FaceName, int Height, FontWeight Weight)
+        {
+            // See if this font already exists
+            for (var I = 0; I < FontCache.Count; I++)
+            {
+                var FontNode = FontCache[I];
+                if (FontNode[0].Face == FaceName && FontNode[0].Height == Height && FontNode[0].Weight == Weight) return I;
+            }
+
+            // Add a new font and try to create it
+            var NewFontNode = new FontNode
+            {
+                Face = FaceName,
+                Height = Height,
+                Weight = Weight
+            };
+            FontCache.Add(new[] { NewFontNode });
+
+            var Result = FontCache.Count - 1;
+
+            // If a device is available, try to create immediately
+            if (Device != null) CreateFont((uint)Result);
+
+            return Result;
+        }
+
+        public bool RegisterDialog(Dialog Dialog)
+        {
+            // Check that the dialog isn't already registered.
+            foreach (var D in Dialogs)
+                if (D == Dialog) return true;
+
+            // Add to the list.
+            Dialogs.Add(Dialog);
+
+            // Set up next and prev pointers.
+            if (Dialogs.Count > 1)
+                Dialogs[Dialogs.Count - 2].SetNextDialog(Dialog);
+            Dialogs[Dialogs.Count - 1].SetNextDialog(Dialogs[0]);
+
+            return true;
+        }
+
+        public int AddTexture(string Filename)
+        {
+            // See if this texture already exists
+            for( var I = 0; I < TextureCache.Count; I++ )
+            {
+                var TextureNode = TextureCache[I];
+                if( TextureNode[0].FileName== Filename )return I;
+            }
+
+            // Add a new texture and try to create it
+            var NewTextureNode = new TextureNode{FileName = Filename};
+
+            TextureCache.Add(new[]{ NewTextureNode });
+
+            var Texture = TextureCache.Count - 1;
+
+            return Texture;
+        }
+
+        public void EnableKeyboardInputForAllDialogs()
+        {
+            // Enable keyboard input for all registered dialogs
+            foreach (var Dialog in Dialogs)
+            {
+                Dialog.EnableKeyboardInput(true);
+            }
         }
     }
 }

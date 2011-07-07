@@ -22,6 +22,6 @@ namespace Xtro.MDX.Utilities
         public delegate void CreateVertexBuffer(Device Device, out Buffer Buffer, BufferDescription BufferDescription, UnmanagedMemory Data, object Context);
         public delegate void CreateIndexBuffer(Device Device, out Buffer Buffer, BufferDescription BufferDescription, UnmanagedMemory Data, object Context);
 
-        public delegate void GuiEvent(uint Event, int ControlID, Control Control, object UserContext);
+        public delegate void GuiEvent(Event Event, int ControlID, Control Control, object UserContext);
     }
 }
