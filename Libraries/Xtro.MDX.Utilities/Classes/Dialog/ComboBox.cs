@@ -29,7 +29,7 @@ namespace Xtro.MDX.Utilities.Classes
         protected Rectangle DropdownRectangle;
         protected Rectangle DropdownTextRectangle;
 
-        protected readonly List<Item[]> Items=new List<Item[]>();
+        protected readonly List<Item[]> Items = new List<Item[]>();
 
         public ComboBox(Dialog Dialog)
             : base(Dialog)
@@ -71,8 +71,6 @@ namespace Xtro.MDX.Utilities.Classes
 
         public override bool HandleKeyDownEvent(KeyEventArgs E)
         {
-            const uint RepeatMask = 0x40000000;
-
             if (!Enabled || !Visible) return false;
 
             // Let the scroll bar have a chance to handle it first
@@ -135,11 +133,6 @@ namespace Xtro.MDX.Utilities.Classes
             }
 
             return false;
-        }
-
-        public uint GetNumberOfItems()
-        {
-            return (uint)Items.Count;
         }
 
         public override bool HandleMouseMove(MouseEventArgs E)
@@ -439,6 +432,204 @@ namespace Xtro.MDX.Utilities.Classes
                 var Item = Items[Selected];
                 if (Item != null) Dialog.DrawText(Item[0].Text, Element, ref TextRectangle);
             }
+        }
+
+        public new void UpdateRectangles()
+        {
+
+            base.UpdateRectangles();
+
+            ButtonRectangle = BoundingBox;
+            ButtonRectangle.X = ButtonRectangle.Right - ButtonRectangle.Height;
+
+            TextRectangle = BoundingBox;
+            TextRectangle.Width = ButtonRectangle.Left - TextRectangle.Left;
+
+            DropdownRectangle = TextRectangle;
+            DropdownRectangle.Offset(0, (int)(0.90f * TextRectangle.Height));
+            DropdownRectangle.Height += DropHeight;
+            DropdownRectangle.Width -= ScrollBarWidth;
+
+            DropdownTextRectangle = DropdownRectangle;
+            DropdownTextRectangle.X += (int)(0.1f * DropdownRectangle.Width);
+            DropdownTextRectangle.Width -= (int)(0.1f * DropdownRectangle.Width);
+            DropdownTextRectangle.Y += (int)(0.1f * DropdownRectangle.Height);
+            DropdownTextRectangle.Height -= (int)(0.1f * DropdownRectangle.Height);
+
+            // Update the scrollbar's rects
+            ScrollBar.SetLocation(DropdownRectangle.Right, DropdownRectangle.Top + 2);
+            ScrollBar.SetSize(ScrollBarWidth, DropdownRectangle.Height - 2);
+            var FontNode = Dialog.GetManager().GetFontNode((int)Elements[2].Font);
+            if (FontNode != null && FontNode[0].Height != 0)
+            {
+                ScrollBar.SetPageSize(DropdownTextRectangle.Height / FontNode[0].Height);
+
+                // The selected item may have been scrolled off the page.
+                // Ensure that it is in page again.
+                ScrollBar.ShowItem(Selected);
+            }
+        }
+
+        public int AddItem(string Text, object Data)
+        {
+            // Validate parameters
+            if (string.IsNullOrEmpty(Text)) return (int)Error.InvalidArgument;
+
+            // Create a new item and set the data
+            var Item = new Item
+            {
+                Text = Text,
+                Data = Data
+            };
+
+            Items.Add(new[] { Item });
+
+            // Update the scroll bar with new range
+            ScrollBar.SetTrackRange(0, Items.Count);
+
+            // If this is the only item in the list, it's selected
+            if (GetNumberOfItems() == 1)
+            {
+                Selected = 0;
+                Focused = 0;
+                Dialog.SendEvent(Event.ComboBoxSelectionChanged, false, this);
+            }
+
+            return 0;
+        }
+
+        public void RemoveAllItems()
+        {
+            Items.Clear();
+            ScrollBar.SetTrackRange(0, 1);
+            Focused = Selected = -1;
+        }
+
+        public void RemoveItem(uint Index)
+        {
+            Items.RemoveAt((int)Index);
+            ScrollBar.SetTrackRange(0, Items.Count);
+            if (Selected >= Items.Count) Selected = Items.Count - 1;
+        }
+
+        public bool ContainsItem(string Text, uint Start)
+        {
+            return (-1 != FindItem(Text, Start));
+        }
+
+        public int FindItem(string Text, uint Start = (uint)0)
+        {
+            if (string.IsNullOrEmpty(Text)) return -1;
+
+            for (var I = (int)Start; I < Items.Count; I++)
+            {
+                var Item = Items[I];
+
+                if (Item[0].Text == Text) return I;
+            }
+
+            return -1;
+        }
+
+        public object GetItemData(string Text)
+        {
+            var I = FindItem(Text);
+            if (I == -1) return null;
+
+            var Item = Items[I];
+            return Item == null ? null : Item[0].Data;
+        }
+
+        public object GetItemData(int Index)
+        {
+            if (Index < 0 || Index >= Items.Count) return null;
+
+            return Items[Index][0].Data;
+        }
+
+        public void SetDropHeight(uint Height)
+        {
+            DropHeight = (int)Height;
+            UpdateRectangles();
+        }
+
+        public int GetScrollBarWidth()
+        {
+            return ScrollBarWidth;
+        }
+
+        public void SetScrollBarWidth(int Width)
+        {
+            ScrollBarWidth = Width;
+            UpdateRectangles();
+        }
+
+        public int GetSelectedIndex()
+        {
+            return Selected;
+        }
+
+        public object GetSelectedData()
+        {
+            if (Selected < 0) return null;
+
+            var Item = Items[Selected];
+            return Item[0].Data;
+        }
+
+        public Item[] GetSelectedItem()
+        {
+            return Selected < 0 ? null : Items[Selected];
+        }
+
+        public uint GetNumberOfItems()
+        {
+            return (uint)Items.Count;
+        }
+
+        public Item[] GetItem(uint Index)
+        {
+            return Items[(int)Index];
+        }
+
+        public int SetSelectedByIndex(uint Index)
+        {
+            if (Index >= GetNumberOfItems()) return (int)Error.InvalidArgument;
+
+            Focused = Selected = (int)Index;
+            Dialog.SendEvent(Event.ComboBoxSelectionChanged, false, this);
+
+            return 0;
+        }
+
+        public int SetSelectedByText(string Text)
+        {
+            if (string.IsNullOrEmpty(Text)) return (int)Error.InvalidArgument;
+
+            var I = FindItem(Text);
+            if (I == -1) return (int)Error.Fail;
+
+            Focused = Selected = I;
+            Dialog.SendEvent(Event.ComboBoxSelectionChanged, false, this);
+
+            return 0;
+        }
+
+        public int SetSelectedByData(object Data)
+        {
+            for (var I = 0; I < Items.Count; I++)
+            {
+                var Item = Items[I];
+
+                if (Item[0].Data == Data)
+                {
+                    Focused = Selected = I;
+                    Dialog.SendEvent(Event.ComboBoxSelectionChanged, false, this);
+                    return 0;
+                }
+            }
+
+            return (int)Error.Fail;
         }
     }
 }

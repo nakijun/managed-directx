@@ -2,11 +2,8 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* ComboBox
-    UpdateRects
-
 * Dialog
-  AddRadioButton
+  AddComboBox
   public methods
 
 * DialogResourceManager public methods.
