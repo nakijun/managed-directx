@@ -368,5 +368,15 @@ namespace Tutorial10
         {
 
         }
+
+        private void Form1_Move(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_MouseCaptureChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

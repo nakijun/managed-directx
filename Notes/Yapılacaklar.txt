@@ -2,10 +2,15 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
+* ComboBox
+
 * Dialog
-  private methods
+  AddRadioButton
+  public methods
 
 * DialogResourceManager public methods.
+
+* controllerdeki tüm handle metodlarý override olmalý. yani hepsi en atada bulunmalý. alt seviyelerde virtual ile handle metodu olmamalý.
 
 * Tut10
 

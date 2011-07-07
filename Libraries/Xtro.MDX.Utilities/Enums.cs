@@ -85,4 +85,46 @@ namespace Xtro.MDX.Utilities
         PreserveInput,    // Use input without change, but may cause no valid device to be found
         ClosestToInput    // Use the closest valid value to the input 
     };
+
+    public enum Event
+    {
+        ButtonClicked = 0x0101,
+        ComboBoxSelectionChanged = 0x0201,
+        RadioButtonChanged = 0x0301,
+        CheckBoxChanged = 0x0401,
+        SliderValueChanged = 0x0501,
+        EditBoxString = 0x0601,
+        // EVENT_EDITBOX_CHANGE is sent when the listbox content changes
+        // due to user input.
+        EditBoxChange = 0x0602,
+        ListBoxItemDoubleClick = 0x0701,
+        // EVENT_LISTBOX_SELECTION is fired off when the selection changes in
+        // a single selection list box.
+        ListBoxSelection = 0x0702,
+        ListBoxSelectionEnd = 0x0703
+    }
+
+    public enum ControlType
+    {
+        Button,
+        Static,
+        CheckBox,
+        RadioButton,
+        ComboBox,
+        Slider,
+        EditBox,
+        ImeEditBox,
+        ListBox,
+        ScrollBar
+    };
+
+    public enum ControlState
+    {
+        Normal = 0,
+        Disabled,
+        Hidden,
+        Focus,
+        MouseOver,
+        Pressed,
+    };
 }

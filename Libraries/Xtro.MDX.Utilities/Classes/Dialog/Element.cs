@@ -6,7 +6,7 @@ using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 
 namespace Xtro.MDX.Utilities
 {
-    public class Element
+    public sealed class Element
     {
         public Element()
         {
@@ -26,14 +26,14 @@ namespace Xtro.MDX.Utilities
                     States[I] = DefaultColor;
                 }
 
-                States[(int)Control.State.Disabled] = DisabledColor;
-                States[(int)Control.State.Hidden] = HiddenColor;
+                States[(int)ControlState.Disabled] = DisabledColor;
+                States[(int)ControlState.Hidden] = HiddenColor;
                 Current = new Color(HiddenColor);
             }
 
-            public void Blend(uint State, float ElapsedTime, float Rate = 0.7f)
+            public void Blend(ControlState State, float ElapsedTime, float Rate = 0.7f)
             {
-                var DestinationColor = new Color(States[State]);
+                var DestinationColor = new Color(States[(int)State]);
                 D3DX10Functions.ColorLerp(out Current, ref Current, ref DestinationColor, (float)(1.0f - Math.Pow(Rate, 30 * ElapsedTime)));
             }
         };
@@ -67,8 +67,8 @@ namespace Xtro.MDX.Utilities
 
         public void Refresh()
         {
-            TextureColor.Current = new Color(TextureColor.States[(int)Control.State.Hidden]);
-            FontColor.Current = new Color(FontColor.States[(int)Control.State.Hidden]);
+            TextureColor.Current = new Color(TextureColor.States[(int)ControlState.Hidden]);
+            FontColor.Current = new Color(FontColor.States[(int)ControlState.Hidden]);
         }
     }
 }

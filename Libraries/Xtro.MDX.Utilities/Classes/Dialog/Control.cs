@@ -1,37 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Xtro.MDX.Utilities
 {
     public class Control
     {
-        public enum Type
-        {
-            Button,
-            Static,
-            CheckBox,
-            RadioButton,
-            ComboBox,
-            Slider,
-            EditBox,
-            ImeEditBox,
-            ListBox,
-            ScrollBar
-        };
-
-        public enum State
-        {
-            Normal = 0,
-            Disabled,
-            Hidden,
-            Focus,
-            MouseOver,
-            Pressed,
-        };
+        protected const float NearButtonDepth = 0.6f;
+        protected const float FarButtonDepth = 0.8f;
 
         protected int ID;                 // ID number
-        protected Type FType;  // Control type, set once in constructor  
-        protected uint Hotkey;            // Virtual key code for this control's hotkey
+        protected ControlType Type;  // Control type, set once in constructor  
+        protected Keys Hotkey;            // Virtual key code for this control's hotkey
         protected object UserData;         // Data associated with this control that is set by user.
 
         protected bool Enabled;           // Enabled/disabled flag
@@ -62,7 +43,7 @@ namespace Xtro.MDX.Utilities
 
         public Control(Dialog Dialog = null)
         {
-            FType = Type.Button;
+            Type = ControlType.Button;
             this.Dialog = Dialog;
             Enabled = true;
             Visible = true;
@@ -154,9 +135,9 @@ namespace Xtro.MDX.Utilities
             return Visible;
         }
 
-        public new Type GetType()
+        public new ControlType GetType()
         {
-            return FType;
+            return Type;
         }
 
         public int GetID()
@@ -181,12 +162,12 @@ namespace Xtro.MDX.Utilities
             UpdateRectangles();
         }
 
-        public void SetHotkey(uint Hotkey)
+        public void SetHotkey(Keys Hotkey)
         {
             this.Hotkey = Hotkey;
         }
 
-        public uint GetHotkey()
+        public Keys GetHotkey()
         {
             return Hotkey;
         }
@@ -205,7 +186,7 @@ namespace Xtro.MDX.Utilities
         {
             var Element = Elements[0];
 
-            if (Element != null) Element.FontColor.States[(int)State.Normal] = Color;
+            if (Element != null) Element.FontColor.States[(int)ControlState.Normal] = Color;
         }
 
         public Element GetElement(uint Element)
@@ -237,6 +218,71 @@ namespace Xtro.MDX.Utilities
             CurrentElement.TextureRectangle = Element.TextureRectangle;
 
             return 0;
+        }
+
+        public virtual bool HandleMouseDownAndDoubleClickEvent(MouseEventArgs E, Point Point)
+        {
+            return false;
+        }
+
+        public virtual bool HandleMouseDownEvent(MouseEventArgs E, Point Point)
+        {
+            return false;
+        }
+
+        public virtual bool HandleMouseUpEvent(MouseEventArgs E, Point Point)
+        {
+            return false;
+        }
+
+        public virtual bool HandleMouseMoveEvent(MouseEventArgs E, Point Point)
+        {
+            return false;
+        }
+
+        public virtual bool HandleMouseWheelEvent(MouseEventArgs E, Point Point)
+        {
+            return false;
+        }
+
+        public virtual bool HandleMouseMove(MouseEventArgs E)
+        {
+            return false;
+        }
+
+        public virtual bool HandleMouseCaptureChangedEvent(EventArgs E)
+        {
+            return false;
+        }
+
+        public virtual bool HandleKeyDownEvent(KeyEventArgs E)
+        {
+            return false;
+        }
+
+        public virtual bool HandleKeyUpEvent(KeyEventArgs E)
+        {
+            return false;
+        }
+
+        public virtual bool HandleResizeEvent()
+        {
+            return false;
+        }
+
+        public virtual bool HandleMoveEvent()
+        {
+            return false;
+        }
+
+        public virtual bool HandleActivatedEvent()
+        {
+            return false;
+        }
+
+        public virtual bool HandleDeactivateEvent()
+        {
+            return false;
         }
     }
 }
