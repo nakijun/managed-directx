@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Xtro.MDX.Utilities.Classes
+namespace Xtro.MDX.Utilities
 {
     public class ScrollBar : Control
     {

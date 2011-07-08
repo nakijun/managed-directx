@@ -2,8 +2,10 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
+* Slider
+    ContainsPoint
+
 * Dialog
-  AddComboBox
   public methods
 
 * DialogResourceManager public methods.

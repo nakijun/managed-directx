@@ -111,6 +111,7 @@
     <Compile Include="Classes\Dialog\Dialog.cs" />
     <Compile Include="Classes\Dialog\DialogResourceManager.cs" />
     <Compile Include="Classes\Dialog\Element.cs" />
+    <Compile Include="Classes\Dialog\Slider.cs" />
     <Compile Include="Classes\Enumeration.cs" />
     <Compile Include="Classes\Counters.cs" />
     <Compile Include="Classes\ModelViewerCamera.cs" />
