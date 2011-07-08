@@ -1120,6 +1120,46 @@ namespace Xtro.MDX.Utilities
             return 0;
         }
 
+        public int AddComboBox(int ID, int X, int Y, int Width, int Height, Keys Hotkey, bool IsDefault, out ComboBox Created)
+        {
+            var ComboBox = new ComboBox(this);
+
+            Created = ComboBox;
+
+            var Result = AddControl(ComboBox);
+            if (Result < 0) return Result;
+
+            // Set the ID and list index
+            ComboBox.SetID(ID);
+            ComboBox.SetLocation(X, Y);
+            ComboBox.SetSize(Width, Height);
+            ComboBox.SetHotkey(Hotkey);
+            ComboBox.IsDefault = IsDefault;
+
+            return 0;
+        }
+
+        public int AddSlider(int ID, int X, int Y, int Width, int Height, int Minimum, int Maximum, int Value, bool IsDefault, out Slider Created)
+        {
+            var Slider = new Slider(this);
+
+            Created = Slider;
+
+            var Result = AddControl(Slider);
+            if (Result < 0) return Result;
+
+            // Set the ID and list index
+            Slider.SetID(ID);
+            Slider.SetLocation(X, Y);
+            Slider.SetSize(Width, Height);
+            Slider.IsDefault = IsDefault;
+            Slider.SetRange(Minimum, Maximum);
+            Slider.SetValue(Value);
+            Slider.UpdateRects();
+
+            return 0;
+        }
+
         public int AddControl(Control Control)
         {
             var Result = InitControl(Control);

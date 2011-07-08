@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Color = Xtro.MDX.Direct3DX10.Color;
 
-namespace Xtro.MDX.Utilities.Classes
+namespace Xtro.MDX.Utilities
 {
     public class ComboBox : Button
     {
