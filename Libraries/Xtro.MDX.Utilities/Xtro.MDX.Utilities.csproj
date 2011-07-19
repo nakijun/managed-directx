@@ -110,8 +110,11 @@
     <Compile Include="Classes\Dialog\CheckBox.cs" />
     <Compile Include="Classes\Dialog\Dialog.cs" />
     <Compile Include="Classes\Dialog\DialogResourceManager.cs" />
+    <Compile Include="Classes\Dialog\EditBox.cs" />
     <Compile Include="Classes\Dialog\Element.cs" />
+    <Compile Include="Classes\Dialog\ListBox.cs" />
     <Compile Include="Classes\Dialog\Slider.cs" />
+    <Compile Include="Classes\Dialog\UniBuffer.cs" />
     <Compile Include="Classes\Enumeration.cs" />
     <Compile Include="Classes\Counters.cs" />
     <Compile Include="Classes\ModelViewerCamera.cs" />

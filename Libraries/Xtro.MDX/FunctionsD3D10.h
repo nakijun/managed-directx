@@ -45,4 +45,46 @@ public:
 
 		return Result;
 	}
+
+	static int StateBlockMaskEnableAll([Out] StateBlockMask% Mask)
+	{
+		D3D10_STATE_BLOCK_MASK NativeMask;			   
+		int Result = D3D10StateBlockMaskEnableAll(&NativeMask);
+
+		if (Result >= 0) Mask.FromNative(&NativeMask);
+
+		return Result;
+	}
+
+	static int StateBlockMaskDisableCapture(StateBlockMask% Mask, DeviceStateType StateType, unsigned int RangeStart, unsigned int RangeLength)
+	{
+		D3D10_STATE_BLOCK_MASK NativeMask;			
+		Mask.ToNative(&NativeMask);
+
+		int Result = D3D10StateBlockMaskDisableCapture(&NativeMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
+
+		if (Result >= 0) Mask.FromNative(&NativeMask);
+
+		return Result;
+	}
+
+	static int CreateStateBlock(Device^ Device, StateBlockMask% StateBlockMask, [Out] StateBlock^% StateBlock)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		D3D10_STATE_BLOCK_MASK NativeStateBlockMask;			
+		StateBlockMask.ToNative(&NativeStateBlockMask);
+
+		ID3D10StateBlock* pStateBlock = 0;
+		int Result = D3D10CreateStateBlock(pDevice, &NativeStateBlockMask, &pStateBlock);
+
+		if (pStateBlock)
+		{
+			try { StateBlock = (Xtro::MDX::Direct3D10::StateBlock^)Interface::Interfaces[IntPtr(pStateBlock)]; }
+			catch (KeyNotFoundException^) { StateBlock = gcnew Xtro::MDX::Direct3D10::StateBlock(IntPtr(pStateBlock)); }					
+		}
+		else StateBlock = nullptr;
+
+		return Result;
+	}
 };

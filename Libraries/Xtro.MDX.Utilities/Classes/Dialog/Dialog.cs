@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
+using Xtro.MDX.Generic;
 using Xtro.MDX.Direct3D10;
 using Xtro.MDX.Direct3DX10;
 using Color = Xtro.MDX.Direct3DX10.Color;
@@ -23,7 +22,7 @@ namespace Xtro.MDX.Utilities
             public Element Element;
         };
 
-        internal struct ScreenVertex
+        public struct ScreenVertex
         {
             public float X, Y, Z;
             public Color Color;
@@ -31,8 +30,6 @@ namespace Xtro.MDX.Utilities
             public float TU, TV;
             // ReSharper restore InconsistentNaming
         };
-
-        int DefaultControlID;
 
         static double TimeRefresh;
         double TimeLastRefresh;
@@ -43,17 +40,10 @@ namespace Xtro.MDX.Utilities
 
         Control ControlMouseOver;           // The control which is hovered over
 
-        bool Visible;
-        bool ShowCaption;
-        bool Minimized;
         bool Drag;
-        string Caption;
 
         int X;
         int Y;
-        int Width;
-        int Height;
-        int CaptionHeight;
 
         uint ColorTopLeft;
         uint ColorTopRight;
@@ -64,13 +54,13 @@ namespace Xtro.MDX.Utilities
         Callbacks.GuiEvent CallbackEvent;
         object CallbackEventUserContext;
 
-        List<int> Textures = new List<int>();   // Index into m_TextureCache;
-        List<int> Fonts = new List<int>();      // Index into m_FontCache;
+        readonly List<int> Textures = new List<int>();   // Index into m_TextureCache;
+        readonly List<int> Fonts = new List<int>();      // Index into m_FontCache;
 
-        List<Control> Controls;
-        List<ElementHolder[]> DefaultElements;
+        readonly List<Control> Controls=new List<Control>();
+        readonly List<ElementHolder[]> DefaultElements=new List<ElementHolder[]>();
 
-        Element CaptionElement;  // Element for the caption
+        readonly Element CaptionElement=new Element();  // Element for the caption
 
         Dialog NextDialog;
         Dialog PrevDialog;
@@ -79,7 +69,15 @@ namespace Xtro.MDX.Utilities
         public bool KeyboardInput;
         public bool MouseInput;
 
-        int OnRender(float ElapsedTime)
+        public bool Visible;
+        public bool Minimized;
+        public bool EnableCaption;
+        public int CaptionHeight;
+        public string Caption;
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+
+        public int OnRender(float ElapsedTime)
         {
             // See if the dialog needs to be refreshed
             if (TimeLastRefresh < TimeRefresh)
@@ -89,7 +87,7 @@ namespace Xtro.MDX.Utilities
             }
 
             // For invisible dialog, out now.
-            if (!Visible || (Minimized && string.IsNullOrEmpty(Caption))) return 0;
+            if (!Visible || (Minimized && !EnableCaption)) return 0;
 
             var Device = Manager.GetDevice();
 
@@ -146,7 +144,7 @@ namespace Xtro.MDX.Utilities
             Manager.TechRenderUI.GetPassByIndex(0).Apply(0);
 
             // Render the caption if it's enabled.
-            if (!string.IsNullOrEmpty(Caption))
+            if (!EnableCaption)
             {
                 // DrawSprite will offset the rect down by
                 // m_nCaptionHeight, so adjust the rect higher
@@ -492,12 +490,6 @@ namespace Xtro.MDX.Utilities
             if (Control != null) ControlMouseOver.OnMouseEnter();
         }
 
-        void OnMouseUp(Point Point)
-        {
-            ControlPressed = null;
-            ControlMouseOver = null;
-        }
-
         internal void SetNextDialog(Dialog NextDialog)
         {
             if (NextDialog == null) NextDialog = this;
@@ -626,7 +618,6 @@ namespace Xtro.MDX.Utilities
             NextDialog = this;
             PrevDialog = this;
 
-            DefaultControlID = 0xffff;
             MouseInput = true;
         }
 
@@ -657,7 +648,7 @@ namespace Xtro.MDX.Utilities
             if (Functions.GetAutomation() && E.Button == MouseButtons.Left) Manager.EnableKeyboardInputForAllDialogs();
 
             // If caption is enable, check for clicks in the caption area.
-            if (!string.IsNullOrEmpty(Caption))
+            if (!EnableCaption)
             {
                 if (E.Button == MouseButtons.Left)
                 {
@@ -679,7 +670,7 @@ namespace Xtro.MDX.Utilities
             var MousePoint = E.Location;
 
             // If caption is enabled, offset the Y coordinate by the negative of its height.
-            if (!string.IsNullOrEmpty(Caption)) MousePoint.Y -= CaptionHeight;
+            if (!EnableCaption) MousePoint.Y -= CaptionHeight;
 
             // If a control is in focus, it belongs to this dialog, and it's enabled, then give
             // it the first chance at handling the message.
@@ -780,7 +771,7 @@ namespace Xtro.MDX.Utilities
             if (!Visible) return false;
 
             // If caption is enable, check for clicks in the caption area.
-            if (!string.IsNullOrEmpty(Caption))
+            if (!EnableCaption)
             {
                 if (E.Button == MouseButtons.Left && Drag)
                 {
@@ -805,7 +796,7 @@ namespace Xtro.MDX.Utilities
             MousePoint.Y -= Y;
 
             // If caption is enabled, offset the Y coordinate by the negative of its height.
-            if (!string.IsNullOrEmpty(Caption)) MousePoint.Y -= CaptionHeight;
+            if (!EnableCaption) MousePoint.Y -= CaptionHeight;
 
             // If a control is in focus, it belongs to this dialog, and it's enabled, then give
             // it the first chance at handling the message.
@@ -953,7 +944,7 @@ namespace Xtro.MDX.Utilities
             MousePoint.Y -= Y;
 
             // If caption is enabled, offset the Y coordinate by the negative of its height.
-            if (!string.IsNullOrEmpty(Caption)) MousePoint.Y -= CaptionHeight;
+            if (!EnableCaption) MousePoint.Y -= CaptionHeight;
 
             // If a control is in focus, it belongs to this dialog, and it's enabled, then give
             // it the first chance at handling the message.
@@ -993,7 +984,7 @@ namespace Xtro.MDX.Utilities
             MousePoint.Y -= Y;
 
             // If caption is enabled, offset the Y coordinate by the negative of its height.
-            if (!string.IsNullOrEmpty(Caption)) MousePoint.Y -= CaptionHeight;
+            if (!EnableCaption) MousePoint.Y -= CaptionHeight;
 
             // If a control is in focus, it belongs to this dialog, and it's enabled, then give
             // it the first chance at handling the message.
@@ -1155,7 +1146,7 @@ namespace Xtro.MDX.Utilities
             Slider.IsDefault = IsDefault;
             Slider.SetRange(Minimum, Maximum);
             Slider.SetValue(Value);
-            Slider.UpdateRects();
+            Slider.UpdateRectangles();
 
             return 0;
         }
@@ -1188,23 +1179,6 @@ namespace Xtro.MDX.Utilities
             return Result < 0 ? Result : 0;
         }
 
-        public Control GetControlAtPoint(Point Point)
-        {
-            // Search through all child controls for the first one which
-            // contains the mouse point
-            foreach (var Control in Controls)
-            {
-                if (Control == null) continue;
-
-                // We only return the current control if it is visible
-                // and enabled.  Because GetControlAtPoint() is used to do mouse
-                // hittest, it makes sense to perform this filtering.
-                if (Control.ContainsPoint(Point) && Control.GetEnabled() && Control.GetVisible()) return Control;
-            }
-
-            return null;
-        }
-
         public DialogResourceManager.FontNode[] GetFont(uint Index)
         {
             return Manager == null ? null : Manager.GetFontNode(Fonts[(int)Index]);
@@ -1222,7 +1196,7 @@ namespace Xtro.MDX.Utilities
             Screen.Offset(Screen.Width / 2, Screen.Height / 2);
 
             // If caption is enabled, offset the Y position by its height.
-            if (!string.IsNullOrEmpty(Caption)) Screen.Offset(0, CaptionHeight);
+            if (!EnableCaption) Screen.Offset(0, CaptionHeight);
 
             var TextureNode = GetTexture(Element.Texture);
             if (TextureNode == null) return (int)Error.Fail;
@@ -1270,7 +1244,7 @@ namespace Xtro.MDX.Utilities
             Screen.Offset(X, Y);
 
             // If caption is enabled, offset the Y position by its height.
-            if (!string.IsNullOrEmpty(Caption)) Screen.Offset(0, CaptionHeight);
+            if (!EnableCaption) Screen.Offset(0, CaptionHeight);
 
             var BackBufferWidth = (float)Manager.BackBufferWidth;
             var BackBufferHeight = (float)Manager.BackBufferHeight;
@@ -1483,6 +1457,107 @@ namespace Xtro.MDX.Utilities
             ControlFocus = Control;
         }
 
+        public DialogResourceManager GetManager()
+        {
+            return Manager;
+        }
+
+        // Control retrieval
+        public Static GetStatic(int ID)
+        {
+            return (Static)GetControl(ID, ControlType.Static);
+        }
+
+        public Button GetButton(int ID)
+        {
+            return (Button)GetControl(ID, ControlType.Button);
+        }
+
+        public CheckBox GetCheckBox(int ID)
+        {
+            return (CheckBox)GetControl(ID, ControlType.CheckBox);
+        }
+
+        public RadioButton GetRadioButton(int ID)
+        {
+            return (RadioButton)GetControl(ID, ControlType.RadioButton);
+        }
+
+        public ComboBox GetComboBox(int ID)
+        {
+            return (ComboBox)GetControl(ID, ControlType.ComboBox);
+        }
+
+        public Slider GetSlider(int ID)
+        {
+            return (Slider)GetControl(ID, ControlType.Slider);
+        }
+
+        public EditBox GetEditBox(int ID)
+        {
+            return (EditBox)GetControl(ID, ControlType.EditBox);
+        }
+
+        public ListBox GetListBox(int ID)
+        {
+            return (ListBox)GetControl(ID, ControlType.ListBox);
+        }
+
+        public Control GetControl(int ID)
+        {
+            // Try to find the control with the given ID
+            foreach (var Control in Controls)
+            {
+                if (Control.GetID() == ID) return Control;
+            }
+
+            // Not found
+            return null;
+        }
+
+        public Control GetControl(int ID, ControlType ControlType)
+        {
+            // Try to find the control with the given ID
+            foreach (var Control in Controls)
+            {
+                if (Control.GetID() == ID && Control.GetType() == ControlType) return Control;
+            }
+
+            // Not found
+            return null;
+        }
+
+        public Control GetControlAtPoint(Point Point)
+        {
+            // Search through all child controls for the first one which
+            // contains the mouse point
+            foreach (var Control in Controls)
+            {
+                if (Control == null) continue;
+
+                // We only return the current control if it is visible
+                // and enabled.  Because GetControlAtPoint() is used to do mouse
+                // hittest, it makes sense to perform this filtering.
+                if (Control.ContainsPoint(Point) && Control.GetEnabled() && Control.GetVisible()) return Control;
+            }
+
+            return null;
+        }
+
+        public bool GetControlEnabled(int ID)
+        {
+            var Control = GetControl(ID);
+            return Control != null && Control.GetEnabled();
+        }
+
+        public void SetControlEnabled(int ID, bool Enabled)
+        {
+            var Control = GetControl(ID);
+            if (Control == null) return;
+
+            Control.SetEnabled(Enabled);
+        }
+
         public void ClearRadioButtonGroup(uint ButtonGroup)
         {
             // Find all radio buttons with the given group number
@@ -1497,9 +1572,162 @@ namespace Xtro.MDX.Utilities
             }
         }
 
-        public DialogResourceManager GetManager()
+        public void ClearComboBox(int ID)
         {
-            return Manager;
+            var ComboBox = GetComboBox(ID);
+            if (ComboBox == null) return;
+
+            ComboBox.RemoveAllItems();
+        }
+
+        public Element GetDefaultElement(ControlType ControlType, Element Element)
+        {
+            foreach (var ElementHolder in DefaultElements)
+            {
+                if (ElementHolder[0].ControlType == ControlType && ElementHolder[0].Element == Element)
+                {
+                    return ElementHolder[0].Element;
+                }
+            }
+
+            return null;
+        }
+
+        public int DrawRectangle(ref Rectangle Rectangle, Color Color)
+        {
+            var ScreenRectangle = Rectangle;
+            ScreenRectangle.Offset(X, Y);
+
+            // If caption is enabled, offset the Y position by its height.
+            if (!EnableCaption) ScreenRectangle.Offset(0, CaptionHeight);
+
+            var Device = Manager.GetDevice();
+
+            // Convert the rect from screen coordinates to clip space coordinates.
+            var Left = ScreenRectangle.Left * 2.0f / Manager.BackBufferWidth - 1.0f;
+            var Right = ScreenRectangle.Right * 2.0f / Manager.BackBufferWidth - 1.0f;
+            var Top = 1.0f - ScreenRectangle.Top * 2.0f / Manager.BackBufferHeight;
+            var Bottom = 1.0f - ScreenRectangle.Bottom * 2.0f / Manager.BackBufferHeight;
+            var Vertices = new[]
+            {
+                new ScreenVertex{X= Left,Y=     Top,Z= 0.5f, Color =Color,TU= 0.0f,TV= 0.0f },
+                new ScreenVertex{X= Right,Y=    Top,Z= 0.5f,Color =Color, TU=1.0f, TV=0.0f },
+                new ScreenVertex{X= Left, Y= Bottom,Z= 0.5f,Color =Color, TU=0.0f, TV=1.0f },
+                new ScreenVertex{X= Right,Y= Bottom,Z= 0.5f,Color =Color, TU=1.0f, TV=1.0f },
+            };
+            UnmanagedMemory<ScreenVertex> VertexBuffer;
+            UnmanagedMemory Temp;
+            if (Manager.VertexBufferScreenQuad.Map(Map.WriteDiscard, 0, out Temp) >= 0)
+            {
+                VertexBuffer = new UnmanagedMemory<ScreenVertex>(Temp.Pointer, Temp.Size);
+                VertexBuffer.Write(Vertices);
+                Manager.VertexBufferScreenQuad.Unmap();
+            }
+
+            // Since we're doing our own drawing here we need to flush the sprites
+            Manager.Sprite.Flush();
+
+            InputLayout OldLayout;
+            PrimitiveTopology OldTopology;
+
+            Device.IA_GetInputLayout(out OldLayout);
+            Device.IA_GetPrimitiveTopology(out OldTopology);
+            Device.IA_SetInputLayout(Manager.InputLayout);
+            Device.IA_SetPrimitiveTopology(PrimitiveTopology.TriangleStrip);
+
+            TechniqueDescription TechniqueDescription;
+            Manager.TechRenderUI.GetDescription(out TechniqueDescription);
+            for (var P = (uint)0; P < TechniqueDescription.Passes; ++P)
+            {
+                Manager.TechRenderUI.GetPassByIndex(P).Apply(0);
+                Device.Draw(4, 0);
+            }
+
+            Device.IA_SetInputLayout(OldLayout);
+            Device.IA_SetPrimitiveTopology(OldTopology);
+            if (OldLayout != null) OldLayout.Release();
+
+            return 0;
+        }
+
+        public int CalculateTextRectangle(string Text, Element Element, ref Rectangle Destination, int Count)
+        {
+            var FontNode = GetFont(Element.Font);
+            if (FontNode == null) return (int)Error.Fail;
+
+            var TextFormat = Element.TextFormat | FontDrawFlag.CalculateRectange;
+            // Since we are only computing the rectangle, we don't need a sprite.
+            if (FontNode[0].Font != null)
+            {
+                var Result = FontNode[0].Font.DrawTextW(null, Text, Count, ref Destination, TextFormat, ref Element.FontColor.Current);
+                if (Result < 0) return Result;
+            }
+
+            return 0;
+        }
+
+        public void SetBackgroundColors(uint ColorAllCorners)
+        {
+            SetBackgroundColors(ColorAllCorners, ColorAllCorners, ColorAllCorners, ColorAllCorners);
+        }
+
+        public void SetBackgroundColors(uint ColorTopLeft, uint ColorTopRight, uint ColorBottomLeft, uint ColorBottomRight)
+        {
+            this.ColorTopLeft = ColorTopLeft;
+            this.ColorTopRight = ColorTopRight;
+            this.ColorBottomLeft = ColorBottomLeft;
+            this.ColorBottomRight = ColorBottomRight;
+        }
+
+        public void GetLocation(out Point Point)
+        {
+            Point = new Point(X, Y);
+        }
+
+        public void SetLocation(int X, int Y)
+        {
+            this.X = X; this.Y = Y;
+        }
+
+        public void SetSize(int Width, int Height)
+        {
+            this.Width = Width; this.Height = Height;
+        }
+
+        public static void SetRefreshTime(float Time)
+        {
+            TimeRefresh = Time;
+        }
+
+        public void RemoveControl(int ID)
+        {
+            for (var I = 0; I < Controls.Count; I++)
+            {
+                var Control = Controls[I];
+                if (Control.GetID() == ID)
+                {
+                    // Clean focus first
+                    ClearFocus();
+
+                    // Clear references to this control
+                    if (ControlFocus == Control)
+                        ControlFocus = null;
+                    if (ControlPressed == Control)
+                        ControlPressed = null;
+                    if (ControlMouseOver == Control)
+                        ControlMouseOver = null;
+
+                    Controls.RemoveAt(I);
+
+                    return;
+                }
+            }
+        }
+    
+        public void SetCallback( Callbacks.GuiEvent Callback, object UserContext )
+        {
+            CallbackEvent = Callback;
+            CallbackEventUserContext = UserContext;
         }
     }
 }

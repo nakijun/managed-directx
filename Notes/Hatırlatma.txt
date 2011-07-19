@@ -3,11 +3,13 @@
 * Burda bilgi yeralmasýn. kontrol edip bilgileri bilgiler.txt ye koy
 ----------------------------------------------------------------------
 
+* Sýk sýk eski versiyonlara yedek al
+
+* tüm enumlarý kontrol et. native halinde none olanlara bizde de ekle. olmayanlara fazladan ekleme
+
 * RasterizerDescription gibi içinde bool barýndýran ve FromNative/ToNative/Marshal iþlemine girmeyen struclarda StructLayout ve Size bilgisi ver.
 
 * mdx(c++) deki tüm if leri tara gerekeni "? :" yap
-
-* cast için as kullanmaktan vazgeç
 
 * String^ olan her yeri marshal/unmarshal try catch yap.
 
@@ -20,4 +22,4 @@
 
 * Bütün struct parametrelerini ref yap
 
-* PassDescription gibi içinde array olan struclarýn eþitlik kontrolünde array i basit tip ise memcpy ile deðilse tek tek içini tarayarak kontrol et.
+* PassDescription gibi içinde array olan struclarýn eþitlik kontrolünde array i basit tip ise memcmp ile deðilse tek tek içini tarayarak kontrol et.

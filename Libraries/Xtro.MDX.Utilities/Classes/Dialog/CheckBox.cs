@@ -104,7 +104,7 @@ namespace Xtro.MDX.Utilities
             return BoundingBox.Contains(Point) || ButtonRectangle.Contains(Point);
         }
 
-        public new virtual void UpdateRectangles()
+        public override void UpdateRectangles()
         {
             base.UpdateRectangles();
 

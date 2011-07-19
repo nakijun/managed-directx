@@ -135,20 +135,20 @@ namespace Xtro.MDX.Utilities
             return false;
         }
 
-        public override bool HandleMouseMove(MouseEventArgs E)
+        public override bool HandleMouseMoveEvent(MouseEventArgs E, Point Point)
         {
             if (!Enabled || !Visible) return false;
 
             // Let the scroll bar handle it first.
-            if (ScrollBar.HandleMouseMove(E)) return true;
+            if (ScrollBar.HandleMouseMoveEvent(E, Point)) return true;
 
-            if (Opened && DropdownRectangle.Contains(E.Location))
+            if (Opened && DropdownRectangle.Contains(Point))
             {
                 // Determine which item has been selected
                 for (var I = 0; I < Items.Count; I++)
                 {
                     var Item = Items[I];
-                    if (Item[0].Visible && Item[0].ActiveRectangle.Contains(E.Location)) Focused = I;
+                    if (Item[0].Visible && Item[0].ActiveRectangle.Contains(Point)) Focused = I;
                 }
                 return true;
             }
@@ -434,7 +434,7 @@ namespace Xtro.MDX.Utilities
             }
         }
 
-        public new void UpdateRectangles()
+        public override void UpdateRectangles()
         {
 
             base.UpdateRectangles();

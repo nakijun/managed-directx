@@ -58,7 +58,7 @@ public enum class Error
 	CannotRemoveLastItem = D3DX10_ERR_CANNOT_REMOVE_LAST_ITEM, 
 };
 
-[System::Flags]
+[Flags]
 public enum class FilterFlag
 {
 	None = D3DX10_FILTER_NONE,
@@ -100,10 +100,11 @@ public enum class FontCharacterSet
 	Mac = MAC_CHARSET
 };
 
-[System::Flags]
+[Flags]
 public enum class FontDrawFlag
 {
 	Top = DT_TOP,
+	CalculateRectange = DT_CALCRECT,
 	Left = DT_LEFT,
 	Center = DT_CENTER,
 	Right = DT_RIGHT,
@@ -116,6 +117,7 @@ public enum class FontDrawFlag
 	RtlReading = DT_RTLREADING,
 };
 
+[Flags]
 public enum class FontPitchAndFamily
 {
 	Default = DEFAULT_PITCH,
@@ -187,14 +189,14 @@ public enum class ImageFileFormat
 	ForceDword = D3DX10_IFF_FORCE_DWORD
 }; 
 
-[System::Flags]
+[Flags]
 public enum class MeshFlag
 {
     x32 = D3DX10_MESH_32_BIT,
     GS_Adjacency = D3DX10_MESH_GS_ADJACENCY
 };
 
-[System::Flags]
+[Flags]
 public enum class SpriteFlag
 {
 	GroupByTexture = D3DX10_SPRITE_SORT_TEXTURE,

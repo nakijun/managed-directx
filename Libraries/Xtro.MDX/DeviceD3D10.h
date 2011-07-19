@@ -175,6 +175,19 @@ public:
 		pDevice->RSSetViewports(NumberOfViewports, (D3D10_VIEWPORT*)PinnedViewports);
 	}
 
+	void IA_GetInputLayout([Out] InputLayout^% InputLayout)
+	{
+		ID3D10InputLayout* pInputLayout = 0;
+		pDevice->IAGetInputLayout(&pInputLayout);
+
+		if (pInputLayout)
+		{
+			try { InputLayout = (Xtro::MDX::Direct3D10::InputLayout^)Interfaces[IntPtr(pInputLayout)]; }
+			catch (KeyNotFoundException^) { InputLayout = gcnew Xtro::MDX::Direct3D10::InputLayout(IntPtr(pInputLayout)); }					
+		}
+		else InputLayout = nullptr;
+	}
+
 	void IA_SetInputLayout(InputLayout^ InputLayout)
 	{
 		ID3D10InputLayout* pInputLayout = InputLayout == nullptr ? 0 : InputLayout->pInputLayout;
@@ -386,6 +399,13 @@ public:
 		ID3D10Buffer* pIndexBuffer = IndexBuffer == nullptr ? 0 : IndexBuffer->pBuffer;
 
 		pDevice->IASetIndexBuffer(pIndexBuffer, (DXGI_FORMAT)Format, Offset);
+	}
+
+	void IA_GetPrimitiveTopology([Out] PrimitiveTopology% Topology)
+	{
+		pin_ptr<PrimitiveTopology> PinnedTopology = &Topology;
+
+		pDevice->IAGetPrimitiveTopology((D3D10_PRIMITIVE_TOPOLOGY*)PinnedTopology);
 	}
 
 	void IA_SetPrimitiveTopology(PrimitiveTopology Topology)

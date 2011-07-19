@@ -1,5 +1,5 @@
 
-* Sýk sýk eski versiyonlara yedek al
+* cast için as kullanmaktan vazgeç
 
 * struct larýn public contsructorlarý olmasýn. DirectX C++ tanýmlarýnda bulunan constructorlar hariç. 
 

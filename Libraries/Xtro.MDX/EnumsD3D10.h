@@ -1,10 +1,10 @@
-[System::Flags]
+[Flags]
 public enum class AsyncGetDataFlag
 {
     DoNotFlush = D3D10_ASYNC_GETDATA_DONOTFLUSH
 };
 
-[System::Flags]
+[Flags]
 public enum class BindFlag
 {
 	VertexBuffer = D3D10_BIND_VERTEX_BUFFER,
@@ -52,14 +52,14 @@ public enum class ConstantBufferType
 	Texture = D3D10_CT_TBUFFER	
 };
 
-[System::Flags]
+[Flags]
 public enum class CPU_AccessFlag
 {
 	Write = D3D10_CPU_ACCESS_WRITE,
 	Read = D3D10_CPU_ACCESS_READ
 };
 
-[System::Flags]
+[Flags]
 public enum class CreateDeviceFlag
 {
 	SingleThreaded = D3D10_CREATE_DEVICE_SINGLETHREADED,
@@ -71,7 +71,7 @@ public enum class CreateDeviceFlag
 	StrictValidation = D3D10_CREATE_DEVICE_STRICT_VALIDATION
 };
 
-[System::Flags]
+[Flags]
 public enum class ClearFlag
 {
 	Depth = D3D10_CLEAR_DEPTH,
@@ -146,9 +146,9 @@ public enum class DepthWriteMask
 public enum class DeviceStateType
 {
 	StreamOutputBuffer = D3D10_DST_SO_BUFFERS,
-	OutputMergeRenderTargets = D3D10_DST_OM_RENDER_TARGETS,
-	OutputMergeDepthStencilState = D3D10_DST_OM_DEPTH_STENCIL_STATE,
-	OutputMergeBlendState = D3D10_DST_OM_BLEND_STATE,
+	OutputMergerRenderTargets = D3D10_DST_OM_RENDER_TARGETS,
+	OutputMergerDepthStencilState = D3D10_DST_OM_DEPTH_STENCIL_STATE,
+	OutputMergerBlendState = D3D10_DST_OM_BLEND_STATE,
 	VertexShader = D3D10_DST_VS,
 	VertexShaderSampler = D3D10_DST_VS_SAMPLERS,
 	VertexShader_ShaderResource = D3D10_DST_VS_SHADER_RESOURCES,
@@ -191,7 +191,7 @@ public enum class DriverType
 	Warp = D3D10_DRIVER_TYPE_WARP
 };
 
-[System::Flags]
+[Flags]
 public enum class EffectFlag
 {
 	CompileChildEffect = D3D10_EFFECT_COMPILE_CHILD_EFFECT,
@@ -310,7 +310,7 @@ public enum class Map
 	WriteNoOverwrite = D3D10_MAP_WRITE_NO_OVERWRITE 
 };
 
-[System::Flags]
+[Flags]
 public enum class MapFlag
 {
 	DoNotWait = D3D10_MAP_FLAG_DO_NOT_WAIT 
@@ -888,13 +888,13 @@ public enum class Query
 	StreamingOutOverflowPredicate = D3D10_QUERY_SO_OVERFLOW_PREDICATE
 };
 
-[System::Flags]
+[Flags]
 public enum class QueryMiscellaneousFlag
 {
 	Predicatehint = D3D10_QUERY_MISC_PREDICATEHINT
 };
 
-[System::Flags]
+[Flags]
 public enum class RaiseFlag
 {
 	DriverInternalError = D3D10_RAISE_FLAG_DRIVER_INTERNAL_ERROR
@@ -930,7 +930,7 @@ public enum class ResourceDimension
 	Texture3D = D3D10_RESOURCE_DIMENSION_TEXTURE3D
 };
 
-[System::Flags]
+[Flags]
 public enum class ResourceMiscellaneousFlag
 {
 	GenerateMips = D3D10_RESOURCE_MISC_GENERATE_MIPS,
@@ -989,7 +989,7 @@ public enum class StencilOperation
 	Decrement = D3D10_STENCIL_OP_DECR
 };
 
-[System::Flags]
+[Flags]
 public enum class ShaderFlag
 {
 	Debug = D3D10_SHADER_DEBUG,
@@ -1013,14 +1013,14 @@ public enum class ShaderFlag
 	OptimizationLevel3 = D3D10_SHADER_OPTIMIZATION_LEVEL3
 };
 
-[System::Flags]
+[Flags]
 public enum class ShaderConstantBufferFlag
 {
 	UserPacked = D3D10_CBF_USERPACKED,
 	ForceDWORD = D3D10_CBF_FORCE_DWORD,
 };
 
-[System::Flags]
+[Flags]
 public enum class ShaderInputFlag
 {
 	UserPacked = D3D10_SIF_USERPACKED,
@@ -1073,7 +1073,7 @@ public enum class ShaderVariableClass
 	ForceDWORD = D3D10_SVC_FORCE_DWORD,
 };
 
-[System::Flags]
+[Flags]
 public enum class ShaderVariableFlag
 {
 	UserPacked = D3D10_SVF_USERPACKED,

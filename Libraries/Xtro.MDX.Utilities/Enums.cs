@@ -34,6 +34,7 @@ namespace Xtro.MDX.Utilities
 
     public enum Error
     {
+        NotImplemented = -2147467263,
         NoDirect3D = -2147219199,
         NoCompatibleDevices = -2147219198,
         MediaNotFound = -2147219197,
