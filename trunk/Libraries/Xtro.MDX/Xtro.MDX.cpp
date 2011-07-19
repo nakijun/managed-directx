@@ -102,6 +102,7 @@ namespace Direct3D10
 	#include "RasterizerDescription.h"
 	#include "RasterizerState.h"
 	#include "DeviceD3D10.h"
+	#include "StateBlockMask.h"
 	#include "FunctionsD3D10.h"
 	#include "EffectPass.h"
 	#include "EffectTechnique.h"

@@ -110,33 +110,31 @@ public:
 		return Result;
 	}
 		
-	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
+	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-		SIZE_T Size = SourceData == nullptr ? 0 : SourceData->FSize;
 
 		int Result = 0;
 		ID3D10Resource* pResource = 0;
-		Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, Size, 0, 0, &pResource, 0);
+		Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, 0, 0, &pResource, 0);
 
 		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
 
 		return Result;
 	}
 		
-	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, ImageLoadInfo% LoadInfo, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
+	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, ImageLoadInfo% LoadInfo, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-		SIZE_T Size = SourceData == nullptr ? 0 : SourceData->FSize;
 
 		int Result = 0;
 		ID3D10Resource* pResource = 0;
 
 		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
 		LoadInfo.Marshal(&NativeLoadInfo);
-		try { Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, Size, &NativeLoadInfo, 0, &pResource, 0); }
+		try { Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, &NativeLoadInfo, 0, &pResource, 0); }
 		finally { LoadInfo.Unmarshal(); }
 			  
 		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
@@ -287,6 +285,104 @@ public:
 			}
 
 			Result = D3DX10CreateEffectFromFile((LPCWSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, pEffectPool, 0, &pEffect, 0, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (Defines != nullptr)
+			{
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Unmarshal();
+			}
+			if (pDefines) delete[] pDefines;
+		}
+
+		if (pEffect)
+		{
+			try { Effect = (Xtro::MDX::Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
+			catch (KeyNotFoundException^) { Effect = gcnew Xtro::MDX::Direct3D10::Effect(IntPtr(pEffect)); }
+		}
+		else Effect = nullptr;
+
+		return Result;
+	}
+
+	static int CreateEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect, [Out] Blob^% Errors)
+	{
+		LPCVOID pData = Data == nullptr ? 0 : Data->pMemory;
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		ID3D10EffectPool* pEffectPool = EffectPool == nullptr ? 0 : EffectPool->pEffectPool;
+
+		int Result = 0;
+		ID3D10Effect* pEffect = 0;
+		ID3D10Blob* pErrors = 0;
+
+		IntPtr pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+		IntPtr pProfile = Marshal::StringToHGlobalAnsi(Profile);
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+			}
+
+			Result = D3DX10CreateEffectFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, pEffectPool, 0, &pEffect, &pErrors, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (Defines != nullptr)
+			{
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Unmarshal();
+			}
+			if (pDefines) delete[] pDefines;
+		}
+
+		if (pEffect)
+		{
+			try { Effect = (Xtro::MDX::Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
+			catch (KeyNotFoundException^) { Effect = gcnew Xtro::MDX::Direct3D10::Effect(IntPtr(pEffect)); }
+		}
+		else Effect = nullptr;
+
+		if (pErrors)
+		{
+			try { Errors = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
+			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
+		}
+		else Errors = nullptr;
+
+		return Result;
+	}
+	
+	static int CreateEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect)
+	{
+		LPCVOID pData = Data == nullptr ? 0 : Data->pMemory;
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		ID3D10EffectPool* pEffectPool = EffectPool == nullptr ? 0 : EffectPool->pEffectPool;
+
+		int Result = 0;
+		ID3D10Effect* pEffect = 0;
+
+		IntPtr pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+		IntPtr pProfile = Marshal::StringToHGlobalAnsi(Profile);
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+			}
+
+			Result = D3DX10CreateEffectFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, pEffectPool, 0, &pEffect, 0, 0);
 		}
 		finally
 		{

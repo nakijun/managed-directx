@@ -27,4 +27,9 @@ public:
 		try	{ return pFont->DrawText(pSprite, (LPCTSTR)pString.ToPointer(), Count, &NativeRectangle, (unsigned int)Format, ((D3DXCOLOR*)PinnedColor)[0]); }
 		finally { Marshal::FreeHGlobal(pString); }
 	}
+
+	IntPtr GetDC()
+	{
+		return IntPtr(pFont->GetDC());
+	}
 };

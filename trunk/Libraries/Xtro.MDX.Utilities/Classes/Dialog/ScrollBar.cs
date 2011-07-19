@@ -151,10 +151,8 @@ namespace Xtro.MDX.Utilities
             return false;
         }
 
-        public override bool HandleMouseMove(MouseEventArgs E)
+        public override bool HandleMouseMoveEvent(MouseEventArgs E, Point Point)
         {
-            var Point = E.Location;
-
             LastMouse = Point;
 
             if (Drag)
@@ -268,7 +266,7 @@ namespace Xtro.MDX.Utilities
             Dialog.DrawSprite(Element, ref ThumbRectangle, NearButtonDepth);
         }
 
-        public new void UpdateRectangles()
+        public override void UpdateRectangles()
         {
             base.UpdateRectangles();
 

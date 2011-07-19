@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Xtro.MDX.Direct3D10;
 using Xtro.MDX.Direct3DX10;
+using Xtro.MDX.DXGI;
 using Buffer = Xtro.MDX.Direct3D10.Buffer;
 using Constants = Xtro.MDX.Direct3DX10.Constants;
+using D3D10Functions = Xtro.MDX.Direct3D10.Functions;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
+using Device = Xtro.MDX.Direct3D10.Device;
+using Resource = Xtro.MDX.Direct3D10.Resource;
 
 namespace Xtro.MDX.Utilities
 {
-    public class DialogResourceManager
+    public sealed class DialogResourceManager
     {
         public struct FontNode
         {
@@ -29,10 +32,110 @@ namespace Xtro.MDX.Utilities
             public ShaderResourceView TextureResourceView;
         };
 
+        // ReSharper disable InconsistentNaming
+        const string UI_EffectFile =
+            // ReSharper restore InconsistentNaming
+            "Texture2D g_Texture;" +
+            "" +
+            "SamplerState Sampler" +
+            "{" +
+            "    Filter = MIN_MAG_MIP_LINEAR;" +
+            "    AddressU = Wrap;" +
+            "    AddressV = Wrap;" +
+            "};" +
+            "" +
+            "BlendState UIBlend" +
+            "{" +
+            "    AlphaToCoverageEnable = FALSE;" +
+            "    BlendEnable[0] = TRUE;" +
+            "    SrcBlend = SRC_ALPHA;" +
+            "    DestBlend = INV_SRC_ALPHA;" +
+            "    BlendOp = ADD;" +
+            "    SrcBlendAlpha = ONE;" +
+            "    DestBlendAlpha = ZERO;" +
+            "    BlendOpAlpha = ADD;" +
+            "    RenderTargetWriteMask[0] = 0x0F;" +
+            "};" +
+            "" +
+            "BlendState NoBlending" +
+            "{" +
+            "    BlendEnable[0] = FALSE;" +
+            "    RenderTargetWriteMask[0] = 0x0F;" +
+            "};" +
+            "" +
+            "DepthStencilState DisableDepth" +
+            "{" +
+            "    DepthEnable = false;" +
+            "};" +
+            "DepthStencilState EnableDepth" +
+            "{" +
+            "    DepthEnable = true;" +
+            "};" +
+            "struct VS_OUTPUT" +
+            "{" +
+            "    float4 Pos : SV_POSITION;" +
+            "    float4 Dif : COLOR;" +
+            "    float2 Tex : TEXCOORD;" +
+            "};" +
+            "" +
+            "VS_OUTPUT VS( float3 vPos : POSITION," +
+            "              float4 Dif : COLOR," +
+            "              float2 vTexCoord0 : TEXCOORD )" +
+            "{" +
+            "    VS_OUTPUT Output;" +
+            "" +
+            "    Output.Pos = float4( vPos, 1.0f );" +
+            "    Output.Dif = Dif;" +
+            "    Output.Tex = vTexCoord0;" +
+            "" +
+            "    return Output;" +
+            "}" +
+            "" +
+            "float4 PS( VS_OUTPUT In ) : SV_Target" +
+            "{" +
+            "    return g_Texture.Sample( Sampler, In.Tex ) * In.Dif;" +
+            "}" +
+            "" +
+            "float4 PSUntex( VS_OUTPUT In ) : SV_Target" +
+            "{" +
+            "    return In.Dif;" +
+            "}" +
+            "" +
+            "technique10 RenderUI" +
+            "{" +
+            "    pass P0" +
+            "    {" +
+            "        SetVertexShader( CompileShader( vs_4_0, VS() ) );" +
+            "        SetGeometryShader( NULL );" +
+            "        SetPixelShader( CompileShader( ps_4_0, PS() ) );" +
+            "        SetDepthStencilState( DisableDepth, 0 );" +
+            "        SetBlendState( UIBlend, float4( 0.0f, 0.0f, 0.0f, 0.0f ), 0xFFFFFFFF );" +
+            "    }" +
+            "}" +
+            "technique10 RenderUIUntex" +
+            "{" +
+            "    pass P0" +
+            "    {" +
+            "        SetVertexShader( CompileShader( vs_4_0, VS() ) );" +
+            "        SetGeometryShader( NULL );" +
+            "        SetPixelShader( CompileShader( ps_4_0, PSUntex() ) );" +
+            "        SetDepthStencilState( DisableDepth, 0 );" +
+            "        SetBlendState( UIBlend, float4( 0.0f, 0.0f, 0.0f, 0.0f ), 0xFFFFFFFF );" +
+            "    }" +
+            "}" +
+            "technique10 RestoreState" +
+            "{" +
+            "    pass P0" +
+            "    {" +
+            "        SetDepthStencilState( EnableDepth, 0 );" +
+            "        SetBlendState( NoBlending, float4( 0.0f, 0.0f, 0.0f, 0.0f ), 0xFFFFFFFF );" +
+            "    }" +
+            "}";
+
         Device Device;
 
-        List<TextureNode[]> TextureCache;   // Shared textures
-        List<FontNode[]> FontCache;         // Shared fonts
+        readonly List<TextureNode[]> TextureCache = new List<TextureNode[]>();   // Shared textures
+        readonly List<FontNode[]> FontCache = new List<FontNode[]>();         // Shared fonts
 
         int CreateFont(uint Font)
         {
@@ -115,7 +218,140 @@ namespace Xtro.MDX.Utilities
         public uint BackBufferWidth;
         public uint BackBufferHeight;
 
-        public List<Dialog> Dialogs;            // Dialogs registered
+        public readonly List<Dialog> Dialogs = new List<Dialog>();            // Dialogs registered
+
+        ~DialogResourceManager()
+        {
+            Delete();
+        }
+
+        public void Delete()
+        {
+            FontCache.Clear();
+            TextureCache.Clear();
+        }
+
+        public int OnCreateDevice(Device Device)
+        {
+            this.Device = Device;
+
+            var Encoding = new ASCIIEncoding();
+            var Bytes = Encoding.GetBytes(UI_EffectFile);
+            var Data = new UnmanagedMemory((uint)Bytes.Length);
+            Data.Write(0, Bytes);
+
+            // Create the UI effect object
+            var Result = D3DX10Functions.CreateEffectFromMemory(Data, Data.Size, null, null, null, "fx_4_0", ShaderFlag.EnableStrictness, 0, Device, null, out Effect);
+            if (Result < 0) return Result;
+
+            TechRenderUI = Effect.GetTechniqueByName("RenderUI");
+            TechRenderUI_Untex = Effect.GetTechniqueByName("RenderUIUntex");
+            FxTexture = Effect.GetVariableByName("g_Texture").AsShaderResource();
+
+            // Create the font and texture objects in the cache arrays.
+            uint I;
+            for (I = 0; I < FontCache.Count; I++)
+            {
+                Result = CreateFont(I);
+                if (Result < 0) return Result;
+            }
+
+            for (I = 0; I < TextureCache.Count; I++)
+            {
+                Result = CreateTexture(I);
+                if (Result < 0) return Result;
+            }
+
+            // Create input layout
+            var Layout = new[]
+            {
+                new InputElementDescription{SemanticName= "POSITION",SemanticIndex=  0,Format=Format.R32G32B32_Float,InputSlot=  0,AlignedByteOffset= 0,InputSlotClass=InputClassification.InputPerVertexData,InstanceDataStepRate= 0 },
+                new InputElementDescription{SemanticName= "COLOR",   SemanticIndex=  0,Format= Format.R32G32B32_Float,InputSlot= 0,AlignedByteOffset= 12, InputSlotClass=InputClassification.InputPerVertexData,InstanceDataStepRate= 0 },
+                new InputElementDescription{SemanticName= "TEXCOORD",SemanticIndex=  0,Format= Format.R32G32_Float,   InputSlot= 0,AlignedByteOffset= 28, InputSlotClass=InputClassification.InputPerVertexData,InstanceDataStepRate= 0 }
+            };
+
+            PassDescription PassDescription;
+            Result = TechRenderUI.GetPassByIndex(0).GetDescription(out PassDescription);
+            if (Result < 0) return Result;
+            Result = Device.CreateInputLayout(Layout, 3, PassDescription.IA_InputSignature, PassDescription.IA_InputSignature.Size, out InputLayout);
+            if (Result < 0) return Result;
+
+            // Create a vertex buffer quad for rendering later
+            BufferDescription BufferDescription;
+            BufferDescription.ByteWidth = (uint)Marshal.SizeOf(typeof(Dialog.ScreenVertex)) * 4;
+            BufferDescription.Usage = Usage.Dynamic;
+            BufferDescription.BindFlags = BindFlag.VertexBuffer;
+            BufferDescription.CPU_AccessFlags = CPU_AccessFlag.Write;
+            BufferDescription.MiscellaneousFlags = 0;
+            Result = Device.CreateBuffer(ref BufferDescription, out VertexBufferScreenQuad);
+
+            return Result < 0 ? Result : 0;
+        }
+
+        public int OnResizedSwapChain(Device Device, ref SurfaceDescription BackBufferSurfaceDescription)
+        {
+            BackBufferWidth = BackBufferSurfaceDescription.Width;
+            BackBufferHeight = BackBufferSurfaceDescription.Height;
+
+            var Result = D3DX10Functions.CreateSprite(Device, 500, out Sprite);
+            if (Result < 0) return Result;
+
+            StateBlockMask StateBlockMask;
+            D3D10Functions.StateBlockMaskEnableAll(out StateBlockMask);
+            D3D10Functions.StateBlockMaskDisableCapture(ref StateBlockMask, DeviceStateType.OutputMergerRenderTargets, 0, 1);
+            Result = D3D10Functions.CreateStateBlock(Device, ref StateBlockMask, out StateBlock);
+
+            return Result;
+        }
+
+        public void OnReleasingSwapChain()
+        {
+            if (Sprite != null) Sprite.Release();
+            Sprite = null;
+
+            if (StateBlock != null) StateBlock.Release();
+            StateBlock = null;
+        }
+
+        public void OnDestroyDevice()
+        {
+            int I;
+
+            Device = null;
+
+            // Release the resources but don't clear the cache, as these will need to be
+            // recreated if the device is recreated
+            for (I = 0; I < FontCache.Count; I++)
+            {
+                var FontNode = FontCache[I];
+                if (FontNode[0].Font != null) FontNode[0].Font.Release();
+                FontNode[0].Font = null;
+            }
+
+            for (I = 0; I < TextureCache.Count; I++)
+            {
+                var TextureNode = TextureCache[I];
+                if (TextureNode[0].TextureResourceView != null) TextureNode[0].TextureResourceView.Release();
+                TextureNode[0].TextureResourceView = null;
+                if (TextureNode[0].Texture != null) TextureNode[0].Texture.Release();
+                TextureNode[0].Texture = null;
+            }
+
+            if (VertexBufferScreenQuad != null) VertexBufferScreenQuad.Release();
+            VertexBufferScreenQuad = null;
+
+            if (StateBlock != null) StateBlock.Release();
+            StateBlock = null;
+
+            if (Sprite != null) Sprite.Release();
+            Sprite = null;
+
+            if (InputLayout != null) InputLayout.Release();
+            InputLayout = null;
+
+            if (Effect != null) Effect.Release();
+            Effect = null;
+        }
 
         public Device GetDevice()
         {
@@ -162,7 +398,9 @@ namespace Xtro.MDX.Utilities
         {
             // Check that the dialog isn't already registered.
             foreach (var D in Dialogs)
+            {
                 if (D == Dialog) return true;
+            }
 
             // Add to the list.
             Dialogs.Add(Dialog);
@@ -175,19 +413,43 @@ namespace Xtro.MDX.Utilities
             return true;
         }
 
+        public void UnregisterDialog(Dialog Dialog)
+        {
+            // Search for the dialog in the list.
+            for (var I = 0; I < Dialogs.Count; I++)
+            {
+                if (Dialogs[I] == Dialog)
+                {
+                    Dialogs.RemoveAt(I);
+                    if (Dialogs.Count > 0)
+                    {
+                        int L;
+
+                        if (0 == I) L = Dialogs.Count - 1;
+                        else L = I - 1;
+
+                        var R = Dialogs.Count == I ? 0 : I;
+
+                        Dialogs[L].SetNextDialog(Dialogs[R]);
+                    }
+                    return;
+                }
+            }
+        }
+
         public int AddTexture(string Filename)
         {
             // See if this texture already exists
-            for( var I = 0; I < TextureCache.Count; I++ )
+            for (var I = 0; I < TextureCache.Count; I++)
             {
                 var TextureNode = TextureCache[I];
-                if( TextureNode[0].FileName== Filename )return I;
+                if (TextureNode[0].FileName == Filename) return I;
             }
 
             // Add a new texture and try to create it
-            var NewTextureNode = new TextureNode{FileName = Filename};
+            var NewTextureNode = new TextureNode { FileName = Filename };
 
-            TextureCache.Add(new[]{ NewTextureNode });
+            TextureCache.Add(new[] { NewTextureNode });
 
             var Texture = TextureCache.Count - 1;
 

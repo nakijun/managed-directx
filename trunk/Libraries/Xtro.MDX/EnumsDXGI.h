@@ -1,4 +1,4 @@
-[System::Flags]
+[Flags]
 public enum class AdapterFlag
 {
     None = DXGI_ADAPTER_FLAG_NONE,
@@ -6,7 +6,7 @@ public enum class AdapterFlag
     ForceDwordDXGI_ADAPTER_FLAG_FORCE_DWORD,
 };
 
-[System::Flags]
+[Flags]
 public enum class EnumerationModeFlag 
 {
 	Interlaced = DXGI_ENUM_MODES_INTERLACED,
@@ -125,7 +125,7 @@ public enum class Format
 	B8G8R8X8_UNorm = DXGI_FORMAT_B8G8R8X8_UNORM,
 };
 
-[System::Flags]
+[Flags]
 public enum class MakeWindowAssociationFlag
 {
 	NoWindowChanges = DXGI_MWA_NO_WINDOW_CHANGES,
@@ -157,7 +157,7 @@ public enum class ModeScanlineOrder
 	LowerFieldFirst = DXGI_MODE_SCANLINE_ORDER_LOWER_FIELD_FIRST
 };
 
-[System::Flags]
+[Flags]
 public enum class PresentFlag
 {
 	DoNotSequence = DXGI_PRESENT_DO_NOT_SEQUENCE,
@@ -165,7 +165,7 @@ public enum class PresentFlag
 	Test = DXGI_PRESENT_TEST
 };
 
-[System::Flags]
+[Flags]
 public enum class Residency
 {
     Resident = DXGI_RESIDENCY_FULLY_RESIDENT,
@@ -173,7 +173,7 @@ public enum class Residency
     EvictedToDisk = DXGI_RESIDENCY_EVICTED_TO_DISK,
 };				  
 
-[System::Flags]
+[Flags]
 public enum class SwapChainFlag
 {
 	NonPrerotated = DXGI_SWAP_CHAIN_FLAG_NONPREROTATED,
@@ -197,7 +197,7 @@ public enum class Status
 	ModeChangeInProgress = DXGI_STATUS_MODE_CHANGE_IN_PROGRESS ,
 };
 
-[System::Flags]
+[Flags]
 public enum class UsageFlag
 {
 	ShaderInput = DXGI_USAGE_SHADER_INPUT,

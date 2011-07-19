@@ -19,11 +19,6 @@ namespace Xtro.MDX.Utilities
 
         protected Rectangle BoundingBox;      // Rectangle defining the active region of the control
 
-        protected virtual void UpdateRectangles()
-        {
-            BoundingBox = new Rectangle(X, Y, Width, Height);
-        }
-
         public const int MaximumStates = 6;
 
         public bool Visible;                // Shown/hidden flag
@@ -59,6 +54,11 @@ namespace Xtro.MDX.Utilities
         ~Control()
         {
             Delete();
+        }
+
+        public virtual void UpdateRectangles()
+        {
+            BoundingBox = new Rectangle(X, Y, Width, Height);
         }
 
         public virtual int OnInit()
@@ -241,11 +241,6 @@ namespace Xtro.MDX.Utilities
         }
 
         public virtual bool HandleMouseWheelEvent(MouseEventArgs E, Point Point)
-        {
-            return false;
-        }
-
-        public virtual bool HandleMouseMove(MouseEventArgs E)
         {
             return false;
         }

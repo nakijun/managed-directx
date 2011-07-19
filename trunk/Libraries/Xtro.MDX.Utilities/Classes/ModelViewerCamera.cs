@@ -241,7 +241,7 @@ namespace Xtro.MDX.Utilities
         //--------------------------------------------------------------------------------------
         // Override for setting the view parameters
         //--------------------------------------------------------------------------------------
-        public new void SetViewParameters(ref Vector3 EyePoint, ref Vector3 LookatPoint)
+        public override void SetViewParameters(ref Vector3 EyePoint, ref Vector3 LookatPoint)
         {
             base.SetViewParameters(ref EyePoint, ref LookatPoint);
 

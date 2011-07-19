@@ -41,4 +41,9 @@ public:
 
 		return pSprite->DrawSpritesBuffered(pSprites, SpriteCount);
 	}
+
+	int Flush()
+	{
+		return pSprite->Flush();
+	}
 };

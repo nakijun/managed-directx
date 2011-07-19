@@ -43,7 +43,7 @@ namespace Xtro.MDX.Utilities
         }
 
         public override bool HandleMouseDownAndDoubleClickEvent(MouseEventArgs E, Point Point)
-        {
+        {                
             if (!Enabled || !Visible) return false;
 
             if (E.Button == MouseButtons.Left)

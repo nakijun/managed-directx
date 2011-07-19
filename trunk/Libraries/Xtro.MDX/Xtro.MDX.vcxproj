@@ -253,6 +253,7 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteStruct.h" />
     <ClInclude Include="StateBlock.h" />
+    <ClInclude Include="StateBlockMask.h" />
     <ClInclude Include="SurfaceDescription.h" />
     <ClInclude Include="SwapChainDescription.h" />
     <ClInclude Include="InputElementDescription.h" />
