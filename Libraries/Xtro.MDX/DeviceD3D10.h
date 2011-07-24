@@ -160,7 +160,7 @@ public:
 		pDevice->RSGetViewports(PinnedNumberOfViewports, 0);
 	}
 
-	void RS_GetViewports(unsigned int NumberOfViewports, [Out] array<Viewport>^% Viewports)
+	void RS_GetViewports(unsigned int NumberOfViewports, array<Viewport>^% Viewports)
 	{
 		pin_ptr<unsigned int> PinnedNumberOfViewports = &NumberOfViewports;
 		pin_ptr<Viewport> PinnedViewports = Viewports != nullptr && Viewports->Length > 0 ? &Viewports[0] : nullptr;
@@ -503,5 +503,29 @@ public:
 		else BlendState = nullptr;
 
 		return Result;
+	}
+
+	void OM_GetBlendState([Out] BlendState^% BlendState, [Out] Float4% BlendFactor, [Out] unsigned int% SampleMask)
+	{
+		pin_ptr<Float4> PinnedBlendFactor = &BlendFactor;
+		pin_ptr<unsigned int> PinnedSampleMask = &SampleMask;
+
+		ID3D10BlendState* pBlendState = 0;
+		pDevice->OMGetBlendState(&pBlendState, (float*)PinnedBlendFactor, PinnedSampleMask);
+
+		if (pBlendState)
+		{
+			try { BlendState = (Xtro::MDX::Direct3D10::BlendState^)Interfaces[IntPtr(pBlendState)]; }
+			catch (KeyNotFoundException^) { BlendState = gcnew Xtro::MDX::Direct3D10::BlendState(IntPtr(pBlendState)); }					
+		}
+		else BlendState = nullptr;
+	}
+
+	void OM_SetBlendState(BlendState^ BlendState, Float4% BlendFactor, unsigned int SampleMask)
+	{
+		ID3D10BlendState* pBlendState = BlendState == nullptr ? 0 : BlendState->pBlendState;
+		pin_ptr<Float4> PinnedBlendFactor = &BlendFactor;
+
+		pDevice->OMSetBlendState(pBlendState, (float*)PinnedBlendFactor, SampleMask);
 	}
 };
