@@ -46,4 +46,19 @@ public:
 	{
 		return pSprite->Flush();
 	}
+
+	int GetDevice([Out] Xtro::MDX::Direct3D10::Device^% Device_)
+	{
+		ID3D10Device* pDevice = 0;
+		int Result = pSprite->GetDevice(&pDevice);
+
+		if (pDevice) 
+		{
+			try { Device_ = (Xtro::MDX::Direct3D10::Device^)Interfaces[IntPtr(pDevice)]; }
+			catch (KeyNotFoundException^) { Device_ = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }
+		}
+		else Device_ = nullptr;
+
+		return Result;
+	}
 };

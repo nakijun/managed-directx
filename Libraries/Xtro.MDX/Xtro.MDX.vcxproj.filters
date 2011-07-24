@@ -634,6 +634,27 @@
     <ClInclude Include="StateBlockMask.h">
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
+    <ClInclude Include="BlendState.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceChild_ForwardedMethods.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendDescription.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Boolean8.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Byte8.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Byte2.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Byte16.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">

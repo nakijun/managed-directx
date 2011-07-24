@@ -12,4 +12,5 @@ internal:
 	}
 
 public:
+	void GetDevice([Out] Device^% Device);
 };

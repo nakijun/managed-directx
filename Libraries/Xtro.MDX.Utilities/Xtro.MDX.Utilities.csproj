@@ -113,6 +113,7 @@
     <Compile Include="Classes\Dialog\EditBox.cs" />
     <Compile Include="Classes\Dialog\Element.cs" />
     <Compile Include="Classes\Dialog\ListBox.cs" />
+    <Compile Include="Classes\Dialog\SettingsDialog.cs" />
     <Compile Include="Classes\Dialog\Slider.cs" />
     <Compile Include="Classes\Dialog\UniBuffer.cs" />
     <Compile Include="Classes\Enumeration.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Classes\Dialog\RadioButton.cs" />
     <Compile Include="Classes\Dialog\ScrollBar.cs" />
     <Compile Include="Classes\Dialog\Static.cs" />
+    <Compile Include="Classes\TextHelper.cs" />
     <Compile Include="Windows.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Functions.cs" />

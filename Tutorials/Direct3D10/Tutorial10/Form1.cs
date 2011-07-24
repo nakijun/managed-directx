@@ -35,6 +35,14 @@ namespace Tutorial10
         }
 
         ModelViewerCamera Camera;
+        DialogResourceManager DialogResourceManager;// manager for shared resources of dialogs
+        SettingsDialog SettingsDialog;       // Device settings dialog
+        Dialog HUD;                  // manages the 3D UI
+        Dialog SampleUI;             // dialog for sample specific controls
+
+        Font Font = null;         // Font for drawing text
+        Sprite Sprite = null;       // Sprite for batching text drawing
+        TextHelper TextHelper = null;
 
         Effect Effect;
         InputLayout VertexLayout;
@@ -54,7 +62,8 @@ namespace Tutorial10
 
             MouseWheel += Form1_MouseWheel;
 
-            Camera = new ModelViewerCamera(this);
+            ArcBall.DefaultForm = this;
+            Camera = new ModelViewerCamera();
         }
 
         private void Form1_Shown(object Sender, EventArgs E)
@@ -236,7 +245,7 @@ namespace Tutorial10
             //
             // Clear the back buffer
             //
-            Float4 ClearColor = new Float4(0.0f, 0.125f, 0.3f, 1.0f); //red,green,blue,alpha
+            Float4 ClearColor = new Float4(new[]{0.0f, 0.125f, 0.3f, 1.0f}); //red,green,blue,alpha
             var RenderTargetView = UtilitiesFunctions.GetRenderTargetView();
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 

@@ -18,6 +18,10 @@ namespace MDX
 	#include "IID_Converter.h"
 	#include "Unknown.h"
 	#include "Float4.h"
+	#include "Boolean8.h"
+	#include "Byte2.h"
+	#include "Byte8.h"
+	#include "Byte16.h"
 	#include "UnmanagedMemory.h"
 namespace Generic
 {
@@ -50,8 +54,11 @@ namespace Direct3D10
 {
 	using namespace Xtro::MDX::DXGI;
 
+	ref class Device;
+
 	#include "ConstantsD3D10.h"
 	#include "EnumsD3D10.h"
+	#include "BlendDescription.h"
 	#include "StateBlock.h"
 	#include "Include.h"
 	#include "ShaderMacro.h"
@@ -90,6 +97,7 @@ namespace Direct3D10
 	#include "PassDescription.h"
 	#include "ResourceD3D10.h"
 	#include "InputLayout.h"
+	#include "BlendState.h"
 	#include "Buffer.h"
 	#include "Texture2D_Description.h"
 	#include "Texture1D.h"
@@ -102,6 +110,7 @@ namespace Direct3D10
 	#include "RasterizerDescription.h"
 	#include "RasterizerState.h"
 	#include "DeviceD3D10.h"
+	#include "DeviceChild_ForwardedMethods.h"
 	#include "StateBlockMask.h"
 	#include "FunctionsD3D10.h"
 	#include "EffectPass.h"

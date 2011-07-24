@@ -148,13 +148,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BlendDescription.h" />
+    <ClInclude Include="BlendState.h" />
+    <ClInclude Include="Boolean8.h" />
     <ClInclude Include="BufferSRV.h" />
+    <ClInclude Include="Byte16.h" />
+    <ClInclude Include="Byte2.h" />
+    <ClInclude Include="Byte8.h" />
     <ClInclude Include="ConstantsD3DX10.h" />
     <ClInclude Include="Counter.h" />
     <ClInclude Include="Asynchronous.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantsD3D10.h" />
+    <ClInclude Include="DeviceChild_ForwardedMethods.h" />
     <ClInclude Include="DeviceDXGI.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FontDescription.h" />

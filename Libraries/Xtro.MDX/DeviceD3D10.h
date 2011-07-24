@@ -487,4 +487,21 @@ public:
 
 		return Result;
 	}
+
+	int CreateBlendState(BlendDescription% BlendStateDescription, [Out] BlendState^% BlendState)
+	{
+		pin_ptr<BlendDescription> PinnedBlendDescription = &BlendStateDescription;
+
+		ID3D10BlendState* pBlendState = 0;
+		int Result = pDevice->CreateBlendState((D3D10_BLEND_DESC*)PinnedBlendDescription, &pBlendState);
+
+		if (pBlendState)
+		{
+			try { BlendState = (Xtro::MDX::Direct3D10::BlendState^)Interfaces[IntPtr(pBlendState)]; }
+			catch (KeyNotFoundException^) { BlendState = gcnew Xtro::MDX::Direct3D10::BlendState(IntPtr(pBlendState)); }					
+		}
+		else BlendState = nullptr;
+
+		return Result;
+	}
 };
