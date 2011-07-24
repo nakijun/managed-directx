@@ -48,31 +48,17 @@ public:
 
 	virtual bool Equals(Texture2D_Description Value)
 	{
-		return
-			Width == Value.Width &&
-			Height == Value.Height &&
-			MipLevels == Value.MipLevels &&
-			ArraySize == Value.ArraySize &&
-			Format == Value.Format &&
-			SampleDescription == Value.SampleDescription &&
-			Usage == Value.Usage &&
-			BindFlags == Value.BindFlags &&
-			CPU_AccessFlags == Value.CPU_AccessFlags &&
-			MiscellaneousFlags == Value.MiscellaneousFlags;
+		pin_ptr<unsigned int> PinnedThis = &Width;
+		pin_ptr<Texture2D_Description> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Texture2D_Description::typeid)) == 0;
 	}
 
 	static bool Equals(Texture2D_Description% Value1, Texture2D_Description% Value2)
 	{
-		return
-			Value1.Width == Value2.Width &&
-			Value1.Height == Value2.Height &&
-			Value1.MipLevels == Value2.MipLevels &&
-			Value1.ArraySize == Value2.ArraySize &&
-			Value1.Format == Value2.Format &&
-			Value1.SampleDescription == Value2.SampleDescription &&
-			Value1.Usage == Value2.Usage &&
-			Value1.BindFlags == Value2.BindFlags &&
-			Value1.CPU_AccessFlags == Value2.CPU_AccessFlags &&
-			Value1.MiscellaneousFlags == Value2.MiscellaneousFlags;
+		pin_ptr<Texture2D_Description> PinnedValue1 = &Value1;
+		pin_ptr<Texture2D_Description> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Texture2D_Description::typeid)) == 0;
 	}
 };

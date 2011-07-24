@@ -30,15 +30,17 @@ public:
 
 	virtual bool Equals(Texture2D_SRV Value)
 	{
-		return 
-			MostDetailedMip == Value.MostDetailedMip &&
-			MipLevels == Value.MipLevels;
+		pin_ptr<unsigned int> PinnedThis = &MostDetailedMip;
+		pin_ptr<Texture2D_SRV> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Texture2D_SRV::typeid)) == 0;
 	}
 
 	static bool Equals(Texture2D_SRV% Value1, Texture2D_SRV% Value2)
 	{
-		return 
-			Value1.MostDetailedMip == Value2.MostDetailedMip &&
-			Value1.MipLevels == Value2.MipLevels;
+		pin_ptr<Texture2D_SRV> PinnedValue1 = &Value1;
+		pin_ptr<Texture2D_SRV> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Texture2D_SRV::typeid)) == 0;
 	}
 };

@@ -32,15 +32,17 @@ public:
 
 	virtual bool Equals(BufferSRV Value)
 	{
-		return
-			ElementOffset == Value.ElementOffset &&
-			ElementWidth == Value.ElementWidth;
+		pin_ptr<unsigned int> PinnedThis = &ElementOffset;
+		pin_ptr<BufferSRV> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(BufferSRV::typeid)) == 0;
 	}
 
 	static bool Equals(BufferSRV% Value1, BufferSRV% Value2)
 	{
-		return
-			Value1.ElementOffset == Value2.ElementOffset && 
-			Value1.ElementWidth == Value2.ElementWidth;
+		pin_ptr<BufferSRV> PinnedValue1 = &Value1;
+		pin_ptr<BufferSRV> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(BufferSRV::typeid)) == 0;
 	}
 };

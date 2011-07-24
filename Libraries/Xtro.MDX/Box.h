@@ -40,23 +40,17 @@ public:
 
 	virtual bool Equals(Box Value)
 	{
-		return
-			Left == Value.Left &&
-			Top == Value.Top &&
-			Front == Value.Front &&
-			Right == Value.Right &&
-			Bottom == Value.Bottom &&
-			Back == Value.Back;
+		pin_ptr<unsigned int> PinnedThis = &Left;
+		pin_ptr<Box> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Box::typeid)) == 0;
 	}
 
 	static bool Equals(Box% Value1, Box% Value2)
 	{
-		return
-			Value1.Left == Value2.Left && 
-			Value1.Top == Value2.Top && 
-			Value1.Front == Value2.Front && 
-			Value1.Right == Value2.Right && 
-			Value1.Bottom == Value2.Bottom && 
-			Value1.Back == Value2.Back;
+		pin_ptr<Box> PinnedValue1 = &Value1;
+		pin_ptr<Box> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Box::typeid)) == 0;
 	}
 };

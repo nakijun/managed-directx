@@ -43,17 +43,17 @@ public:
 
 	virtual bool Equals(ShaderResourceViewDescription Value)
 	{
-		return
-			Format == Value.Format &&
-			ViewDimension == Value.ViewDimension &&
-			Texture1DArray == Value.Texture1DArray;
+		pin_ptr<Xtro::MDX::Direct3D10::Format> PinnedThis = &Format;
+		pin_ptr<ShaderResourceViewDescription> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(ShaderResourceViewDescription::typeid)) == 0;
 	}
 
 	static bool Equals(ShaderResourceViewDescription% Value1, ShaderResourceViewDescription% Value2)
 	{
-		return
-			Value1.Format == Value2.Format && 
-			Value1.ViewDimension == Value2.ViewDimension &&
-			Value1.Texture1DArray == Value2.Texture1DArray;
+		pin_ptr<ShaderResourceViewDescription> PinnedValue1 = &Value1;
+		pin_ptr<ShaderResourceViewDescription> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(ShaderResourceViewDescription::typeid)) == 0;
 	}
 };

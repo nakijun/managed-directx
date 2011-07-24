@@ -49,31 +49,17 @@ public:
 
 	virtual bool Equals(RasterizerDescription Value)
 	{
-		return
-			FillMode == Value.FillMode &&
-			CullMode == Value.CullMode &&
-			FrontCounterClockwise == Value.FrontCounterClockwise &&
-			DepthBias == Value.DepthBias &&
-			DepthBiasClamp == Value.DepthBiasClamp &&
-			SlopeScaledDepthBias == Value.SlopeScaledDepthBias &&
-			DepthClipEnable == Value.DepthClipEnable &&
-			ScissorEnable == Value.ScissorEnable &&
-			MultisampleEnable == Value.MultisampleEnable &&
-			AntialiasedLineEnable == Value.AntialiasedLineEnable;
+		pin_ptr<Xtro::MDX::Direct3D10::FillMode> PinnedThis = &FillMode;
+		pin_ptr<RasterizerDescription> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(RasterizerDescription::typeid)) == 0;
 	}
 
 	static bool Equals(RasterizerDescription% Value1, RasterizerDescription% Value2)
 	{
-		return
-			Value1.FillMode == Value2.FillMode &&
-			Value1.CullMode == Value2.CullMode &&
-			Value1.FrontCounterClockwise == Value2.FrontCounterClockwise &&
-			Value1.DepthBias == Value2.DepthBias &&
-			Value1.DepthBiasClamp == Value2.DepthBiasClamp &&
-			Value1.SlopeScaledDepthBias == Value2.SlopeScaledDepthBias &&
-			Value1.DepthClipEnable == Value2.DepthClipEnable &&
-			Value1.ScissorEnable == Value2.ScissorEnable &&
-			Value1.MultisampleEnable == Value2.MultisampleEnable &&
-			Value1.AntialiasedLineEnable == Value2.AntialiasedLineEnable;
+		pin_ptr<RasterizerDescription> PinnedValue1 = &Value1;
+		pin_ptr<RasterizerDescription> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(RasterizerDescription::typeid)) == 0;
 	}
 };

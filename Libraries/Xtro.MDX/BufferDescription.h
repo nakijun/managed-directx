@@ -38,21 +38,17 @@ public:
 
 	virtual bool Equals(BufferDescription Value)
 	{
-		return
-			ByteWidth == Value.ByteWidth &&
-			Usage == Value.Usage &&
-			BindFlags == Value.BindFlags &&
-			CPU_AccessFlags == Value.CPU_AccessFlags &&
-			MiscellaneousFlags == Value.MiscellaneousFlags;
+		pin_ptr<unsigned int> PinnedThis = &ByteWidth;
+		pin_ptr<BufferDescription> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(BufferDescription::typeid)) == 0;
 	}
 
 	static bool Equals(BufferDescription% Value1, BufferDescription% Value2)
 	{
-		return
-			Value1.ByteWidth == Value2.ByteWidth && 
-			Value1.Usage == Value2.Usage &&
-			Value1.BindFlags == Value2.BindFlags &&
-			Value1.CPU_AccessFlags == Value2.CPU_AccessFlags &&
-			Value1.MiscellaneousFlags == Value2.MiscellaneousFlags;
+		pin_ptr<BufferDescription> PinnedValue1 = &Value1;
+		pin_ptr<BufferDescription> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(BufferDescription::typeid)) == 0;
 	}
 };

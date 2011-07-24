@@ -40,23 +40,17 @@ public:
 
 	virtual bool Equals(Viewport Value)
 	{
-		return
-			TopLeftX == Value.TopLeftX &&
-			TopLeftY == Value.TopLeftY &&
-			Width == Value.Width &&
-			Height == Value.Height &&
-			MinDepth == Value.MinDepth &&
-			MaxDepth == Value.MaxDepth;
+		pin_ptr<unsigned int> PinnedThis = &TopLeftX;
+		pin_ptr<Viewport> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Viewport::typeid)) == 0;
 	}
 
 	static bool Equals(Viewport% Value1, Viewport% Value2)
 	{
-		return
-			Value1.TopLeftX == Value2.TopLeftX && 
-			Value1.TopLeftY == Value2.TopLeftY && 
-			Value1.Width == Value2.Width && 
-			Value1.Height == Value2.Height && 
-			Value1.MinDepth == Value2.MinDepth && 
-			Value1.MaxDepth == Value2.MaxDepth;
+		pin_ptr<Viewport> PinnedValue1 = &Value1;
+		pin_ptr<Viewport> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Viewport::typeid)) == 0;
 	}
 };

@@ -40,17 +40,17 @@ public:
 
 	virtual bool Equals(DepthStencilViewDescription Value)
 	{
-		return
-			Format == Value.Format &&
-			ViewDimension == Value.ViewDimension &&
-			Texture1DArray == Value.Texture1DArray;
+		pin_ptr<Xtro::MDX::Direct3D10::Format> PinnedThis = &Format;
+		pin_ptr<DepthStencilViewDescription> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(DepthStencilViewDescription::typeid)) == 0;
 	}
 
 	static bool Equals(DepthStencilViewDescription% Value1, DepthStencilViewDescription% Value2)
 	{
-		return
-			Value1.Format == Value2.Format && 
-			Value1.ViewDimension == Value2.ViewDimension &&
-			Value1.Texture1DArray == Value2.Texture1DArray;
+		pin_ptr<DepthStencilViewDescription> PinnedValue1 = &Value1;
+		pin_ptr<DepthStencilViewDescription> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(DepthStencilViewDescription::typeid)) == 0;
 	}
 };

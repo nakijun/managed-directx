@@ -36,19 +36,17 @@ public:
 
 	virtual bool Equals(SurfaceDescription Value)
 	{
-		return
-			Width == Value.Width &&
-			Height == Value.Height &&
-			Format == Value.Format &&
-			SampleDescription == Value.SampleDescription;
+		pin_ptr<unsigned int> PinnedThis = &Width;
+		pin_ptr<SurfaceDescription> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SurfaceDescription::typeid)) == 0;
 	}
 
 	static bool Equals(SurfaceDescription% Value1, SurfaceDescription% Value2)
 	{
-		return
-			Value1.Width == Value2.Width &&
-			Value1.Height == Value2.Height &&
-			Value1.Format == Value2.Format &&
-			Value1.SampleDescription == Value2.SampleDescription;
+		pin_ptr<SurfaceDescription> PinnedValue1 = &Value1;
+		pin_ptr<SurfaceDescription> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(SurfaceDescription::typeid)) == 0;
 	}
 };
