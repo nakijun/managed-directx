@@ -2,7 +2,11 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* controllerdeki tüm handle metodlarý override olmalý. yani hepsi en atada bulunmalý. alt seviyelerde virtual ile handle metodu olmamalý.
+* equals methodlarýnda memcpy ile kontrol yap.(ör : BlendDescription)
+
+* TextHelper
+
+* SettingsDialog
 
 * Tut10
 

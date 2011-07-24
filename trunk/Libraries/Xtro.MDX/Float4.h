@@ -1,10 +1,10 @@
 public value class Float4 : IEquatable<Float4>
 {
-internal:
+private:
+	float Value0;
 	float Value1;
 	float Value2;
 	float Value3;
-	float Value4;
 
 public:
 	property float default[int]
@@ -13,10 +13,10 @@ public:
 		{
 			switch (Index)
 			{
-			case 0 : return Value1;
-			case 1 : return Value2;
-			case 2 : return Value3;
-			case 3 : return Value4;
+			case 0 : return Value0;
+			case 1 : return Value1;
+			case 2 : return Value2;
+			case 3 : return Value3;
 			default : return 0;
 			}
 		}
@@ -25,10 +25,10 @@ public:
 		{
 			switch (Index)
 			{
-			case 0 : Value1 = Value; break;
-			case 1 : Value2 = Value; break;
-			case 2 : Value3 = Value; break;
-			case 3 : Value4 = Value; break;
+			case 0 : Value0 = Value; break;
+			case 1 : Value1 = Value; break;
+			case 2 : Value2 = Value; break;
+			case 3 : Value3 = Value; break;
 			default : return;
 			}
 		}
@@ -39,21 +39,19 @@ public:
 		if (Floats == nullptr || Floats->Length < 4) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedValue1 = &Value1;
-		memcpy(PinnedValue1, PinnedFloats, sizeof(float) * 4);
-	}
-
-	Float4(float Value1, float Value2, float Value3, float Value4)
-	{
-		this->Value1 = Value1;
-		this->Value2 = Value2;
-		this->Value3 = Value3;
-		this->Value4 = Value4;
+		pin_ptr<float> PinnedValue0 = &Value0;
+		memcpy(PinnedValue0, PinnedFloats, Marshal::SizeOf(Float4::typeid));
 	}
 
 	static explicit operator array<float>^(Float4 Value)
 	{
-		return gcnew array<float>(4) { Value.Value1, Value.Value2, Value.Value3, Value.Value4 };
+		array<float>^ Floats = gcnew array<float>(4);
+		
+		pin_ptr<float> PinnedFloats = &Floats[0];
+		pin_ptr<Float4> PinnedValue = &Value;
+		memcpy(PinnedFloats, PinnedValue, Marshal::SizeOf(Float4::typeid));
+
+		return Floats;
 	}
 
 	static bool operator == (Float4 Left, Float4 Right)
@@ -69,10 +67,10 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
+			(int)Value0 ^
 			(int)Value1 ^
 			(int)Value2 ^
-			(int)Value3 ^
-			(int)Value4;
+			(int)Value3;
 	}
 
 	virtual bool Equals(System::Object^ Value) override
@@ -86,19 +84,17 @@ public:
 
 	virtual bool Equals(Float4 Value)
 	{
-		return
-			Value1 == Value.Value1 &&
-			Value2 == Value.Value2 &&
-			Value3 == Value.Value3 &&
-			Value4 == Value.Value4;
+		pin_ptr<float> PinnedThis = &Value0;
+		pin_ptr<Float4> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Float4::typeid)) == 0;
 	}
 
 	static bool Equals(Float4% Value1, Float4% Value2)
 	{
-		return
-			Value1.Value1 == Value2.Value1 && 
-			Value1.Value2 == Value2.Value2 && 
-			Value1.Value3 == Value2.Value3 && 
-			Value1.Value4 == Value2.Value4;
+		pin_ptr<Float4> PinnedValue1 = &Value1;
+		pin_ptr<Float4> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Float4::typeid)) == 0;
 	}
 };

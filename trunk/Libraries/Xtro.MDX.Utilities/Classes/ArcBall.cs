@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Xtro.MDX.Direct3DX10;
@@ -50,11 +51,13 @@ namespace Xtro.MDX.Utilities
             return new Vector3(X, Y, Z);
         }
 
-        public ArcBall(Form Form)
+        public static Form DefaultForm;
+
+        public ArcBall()
         {
             Reset();
 
-            var ClientRectangle = Form.ClientRectangle;
+            var ClientRectangle = DefaultForm.ClientRectangle;
             SetWindow(ClientRectangle.Right, ClientRectangle.Bottom);
         }
 
@@ -109,7 +112,7 @@ namespace Xtro.MDX.Utilities
             if (Drag)
             {
                 CurrentPoint = ScreenToVector(X, Y);
-                Now = Down * QuatFromBallPoints(ref DownPoint, ref CurrentPoint);
+                Now = Down * QuaternionFromBallPoints(ref DownPoint, ref CurrentPoint);
             }
         }
 
@@ -182,17 +185,17 @@ namespace Xtro.MDX.Utilities
             return Drag;
         }
 
-        public Quaternion GetQuatNow()
+        public Quaternion GetQuaternionNow()
         {
             return Now;
         }
 
-        public void SetQuatNow(ref Quaternion Q)
+        public void SetQuaternionNow(ref Quaternion Q)
         {
             Now = Q;
         }
 
-        public static Quaternion QuatFromBallPoints(ref Vector3 From, ref Vector3 To)
+        public static Quaternion QuaternionFromBallPoints(ref Vector3 From, ref Vector3 To)
         {
             Vector3 Part;
             var Dot = D3DX10Functions.Vector3Dot(ref From, ref To);

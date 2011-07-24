@@ -339,7 +339,7 @@ namespace Tutorial04
             D3DX10Functions.MatrixRotationY(out World, Time);
 
             // Clear the backbuffer
-            Float4 ClearColor = new Float4(0.0f, 0.125f, 0.3f, 1.0f); //red,green,blue,alpha
+            Float4 ClearColor = new Float4(new[]{0.0f, 0.125f, 0.3f, 1.0f}); //red,green,blue,alpha
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 
             int Result = 0;

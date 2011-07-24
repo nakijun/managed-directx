@@ -48,22 +48,17 @@ public:
 
 	static int StateBlockMaskEnableAll([Out] StateBlockMask% Mask)
 	{
-		D3D10_STATE_BLOCK_MASK NativeMask;			   
-		int Result = D3D10StateBlockMaskEnableAll(&NativeMask);
-
-		if (Result >= 0) Mask.FromNative(&NativeMask);
+		pin_ptr<StateBlockMask> PinnedMask = &Mask;
+		int Result = D3D10StateBlockMaskEnableAll((D3D10_STATE_BLOCK_MASK*)PinnedMask);
 
 		return Result;
 	}
 
 	static int StateBlockMaskDisableCapture(StateBlockMask% Mask, DeviceStateType StateType, unsigned int RangeStart, unsigned int RangeLength)
 	{
-		D3D10_STATE_BLOCK_MASK NativeMask;			
-		Mask.ToNative(&NativeMask);
+		pin_ptr<StateBlockMask> PinnedMask = &Mask;
 
-		int Result = D3D10StateBlockMaskDisableCapture(&NativeMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
-
-		if (Result >= 0) Mask.FromNative(&NativeMask);
+		int Result = D3D10StateBlockMaskDisableCapture((D3D10_STATE_BLOCK_MASK*)PinnedMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
 
 		return Result;
 	}
@@ -72,11 +67,10 @@ public:
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
-		D3D10_STATE_BLOCK_MASK NativeStateBlockMask;			
-		StateBlockMask.ToNative(&NativeStateBlockMask);
+		pin_ptr<Xtro::MDX::Direct3D10::StateBlockMask> PinnedStateBlockMask = &StateBlockMask;
 
 		ID3D10StateBlock* pStateBlock = 0;
-		int Result = D3D10CreateStateBlock(pDevice, &NativeStateBlockMask, &pStateBlock);
+		int Result = D3D10CreateStateBlock(pDevice, (D3D10_STATE_BLOCK_MASK*)PinnedStateBlockMask, &pStateBlock);
 
 		if (pStateBlock)
 		{

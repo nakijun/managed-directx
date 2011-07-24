@@ -8,8 +8,8 @@ namespace Xtro.MDX.Utilities
 {
     public class ModelViewerCamera : BaseCamera
     {
-        readonly ArcBall WorldArcBall;
-        readonly ArcBall ViewArcBall;
+        readonly ArcBall WorldArcBall = new ArcBall();
+        readonly ArcBall ViewArcBall = new ArcBall();
         Vector3 ModelCenter;
         Matrix ModelLastRotation;        // Last arcball rotation matrix for model 
         Matrix ModelRotation;            // Rotation matrix of model
@@ -29,11 +29,8 @@ namespace Xtro.MDX.Utilities
 
         Matrix CameraRotationLast;
 
-        public ModelViewerCamera(Form Form)
+        public ModelViewerCamera()
         {
-            WorldArcBall = new ArcBall(Form);
-            ViewArcBall = new ArcBall(Form);
-
             D3DX10Functions.MatrixIdentity(out World);
             D3DX10Functions.MatrixIdentity(out ModelRotation);
             D3DX10Functions.MatrixIdentity(out ModelLastRotation);
@@ -251,7 +248,7 @@ namespace Xtro.MDX.Utilities
             var Up = new Vector3(0, 1, 0);
             D3DX10Functions.MatrixLookAtLH(out Rotation, ref EyePoint, ref LookatPoint, ref Up);
             D3DX10Functions.QuaternionRotationMatrix(out Quaternion, ref Rotation);
-            ViewArcBall.SetQuatNow(ref Quaternion);
+            ViewArcBall.SetQuaternionNow(ref Quaternion);
 
             // Set the radius according to the distance
             Vector3 EyeToPoint;
@@ -300,13 +297,13 @@ namespace Xtro.MDX.Utilities
 
         public void SetViewQuat(Quaternion Q)
         {
-            ViewArcBall.SetQuatNow(ref Q);
+            ViewArcBall.SetQuaternionNow(ref Q);
             DragSinceLastUpdate = true;
         }
 
         public void SetWorldQuat(Quaternion Q)
         {
-            WorldArcBall.SetQuatNow(ref Q);
+            WorldArcBall.SetQuaternionNow(ref Q);
             DragSinceLastUpdate = true;
         }
 

@@ -230,7 +230,7 @@ namespace Tutorial09
             //
             // Clear the back buffer
             //
-            Float4 ClearColor = new Float4(0.0f, 0.125f, 0.3f, 1.0f); //red,green,blue,alpha
+            Float4 ClearColor = new Float4(new[]{0.0f, 0.125f, 0.3f, 1.0f}); //red,green,blue,alpha
             var RenderTargetView = UtilitiesFunctions.GetRenderTargetView();
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 

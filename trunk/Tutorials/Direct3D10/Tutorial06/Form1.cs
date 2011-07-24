@@ -420,7 +420,7 @@ namespace Tutorial06
             LightDirections.Set(1, ref Vector4);
 
             // Clear the backbuffer
-            Float4 ClearColor = new Float4(0.0f, 0.125f, 0.3f, 1.0f); //red,green,blue,alpha
+            Float4 ClearColor = new Float4(new[]{0.0f, 0.125f, 0.3f, 1.0f}); //red,green,blue,alpha
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 
             // Clear the depth buffer to 1.0 (max depth)
