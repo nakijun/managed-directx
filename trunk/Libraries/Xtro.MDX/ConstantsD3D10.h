@@ -6,4 +6,5 @@ public:
 	literal int CommonShaderSamplerSlotCount = D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT;
 	literal int IA_VertexInputResourceSlotCount = D3D10_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;
 	literal int MaximumMultisampleSampleCount = D3D10_MAX_MULTISAMPLE_SAMPLE_COUNT;
+	literal int ViewportAndScissorRectangleObjectCountPerPipeline = D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
 };

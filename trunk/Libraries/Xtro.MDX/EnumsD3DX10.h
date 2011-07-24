@@ -199,9 +199,9 @@ public enum class MeshFlag
 [Flags]
 public enum class SpriteFlag
 {
-	GroupByTexture = D3DX10_SPRITE_SORT_TEXTURE,
-	SortBackToFront = D3DX10_SPRITE_SORT_DEPTH_BACK_TO_FRONT,
-	SortFrontToBack = D3DX10_SPRITE_SORT_DEPTH_FRONT_TO_BACK,
+	SortTexture = D3DX10_SPRITE_SORT_TEXTURE,
+	SortDepthBackToFront = D3DX10_SPRITE_SORT_DEPTH_BACK_TO_FRONT,
+	SortDepthFrontToBack = D3DX10_SPRITE_SORT_DEPTH_FRONT_TO_BACK,
 	SaveState = D3DX10_SPRITE_SAVE_STATE,
-	IncreaseTextureReferenceCount = D3DX10_SPRITE_ADDREF_TEXTURES
+	AddReferenceTextures = D3DX10_SPRITE_ADDREF_TEXTURES
 };
