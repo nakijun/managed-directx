@@ -32,15 +32,17 @@ public:
 
 	virtual bool Equals(Rational Value)
 	{
-		return
-			Numerator == Value.Numerator &&
-			Denominator == Value.Denominator;
+		pin_ptr<unsigned int> PinnedThis = &Numerator;
+		pin_ptr<Rational> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Rational::typeid)) == 0;
 	}
 
 	static bool Equals(Rational% Value1, Rational% Value2)
 	{
-		return
-			Value1.Numerator == Value2.Numerator && 
-			Value1.Denominator == Value2.Denominator;
+		pin_ptr<Rational> PinnedValue1 = &Value1;
+		pin_ptr<Rational> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Rational::typeid)) == 0;
 	}
 };

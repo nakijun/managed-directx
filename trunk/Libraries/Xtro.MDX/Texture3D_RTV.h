@@ -34,17 +34,17 @@ public:
 
 	virtual bool Equals(Texture3D_RTV Value)
 	{
-		return
-			MipSlice == Value.MipSlice &&
-			FirstWSlice == Value.FirstWSlice &&
-			WSize == Value.WSize;
+		pin_ptr<unsigned int> PinnedThis = &MipSlice;
+		pin_ptr<Texture3D_RTV> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Texture3D_RTV::typeid)) == 0;
 	}
 
 	static bool Equals(Texture3D_RTV% Value1, Texture3D_RTV% Value2)
 	{
-		return
-			Value1.MipSlice == Value2.MipSlice && 
-			Value1.FirstWSlice == Value2.FirstWSlice && 
-			Value1.WSize == Value2.WSize;
+		pin_ptr<Texture3D_RTV> PinnedValue1 = &Value1;
+		pin_ptr<Texture3D_RTV> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Texture3D_RTV::typeid)) == 0;
 	}
 };

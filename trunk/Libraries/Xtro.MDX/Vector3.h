@@ -130,17 +130,17 @@ public:
 
 	virtual bool Equals(Vector3 Value)
 	{
-		return
-			X == Value.X &&
-			Y == Value.Y &&
-			Z == Value.Z;
+		pin_ptr<float> PinnedThis = &X;
+		pin_ptr<Vector3> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Vector3::typeid)) == 0;
 	}
 
 	static bool Equals(Vector3% Value1, Vector3% Value2)
 	{
-		return
-			Value1.X == Value2.X && 
-			Value1.Y == Value2.Y && 
-			Value1.Z == Value2.Z;
+		pin_ptr<Vector3> PinnedValue1 = &Value1;
+		pin_ptr<Vector3> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Vector3::typeid)) == 0;
 	}
 };

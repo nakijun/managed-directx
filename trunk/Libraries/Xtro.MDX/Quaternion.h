@@ -12,7 +12,7 @@ public:
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
 		pin_ptr<float> PinnedX = &X;
-		memcpy(PinnedX, PinnedFloats, sizeof(float) * 4);
+		memcpy(PinnedX, PinnedFloats, Marshal::SizeOf(Quaternion::typeid));
 	}
 
 	Quaternion(array<Float16>^ Floats)
@@ -135,19 +135,17 @@ public:
 
 	virtual bool Equals(Quaternion Value)
 	{
-		return
-			X == Value.X &&
-			Y == Value.Y &&
-			Z == Value.Z &&
-			W == Value.W;
+		pin_ptr<float> PinnedThis = &X;
+		pin_ptr<Quaternion> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Quaternion::typeid)) == 0;
 	}
 
 	static bool Equals(Quaternion% Value1, Quaternion% Value2)
 	{
-		return
-			Value1.X == Value2.X && 
-			Value1.Y == Value2.Y && 
-			Value1.Z == Value2.Z && 
-			Value1.W == Value2.W;
+		pin_ptr<Quaternion> PinnedValue1 = &Value1;
+		pin_ptr<Quaternion> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Quaternion::typeid)) == 0;
 	}
 };

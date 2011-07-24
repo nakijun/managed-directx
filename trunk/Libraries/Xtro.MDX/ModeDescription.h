@@ -40,23 +40,17 @@ public:
 
 	virtual bool Equals(ModeDescription Value)
 	{
-		return
-			Width == Value.Width &&
-			Height == Value.Height &&
-			RefreshRate == Value.RefreshRate &&
-			Format == Value.Format &&
-			ScanlineOrdering == Value.ScanlineOrdering &&
-			Scaling == Value.Scaling;
+		pin_ptr<unsigned int> PinnedThis = &Width;
+		pin_ptr<ModeDescription> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(ModeDescription::typeid)) == 0;
 	}
 
 	static bool Equals(ModeDescription% Value1, ModeDescription% Value2)
 	{
-		return
-			Value1.Width == Value2.Width &&
-			Value1.Height == Value2.Height &&
-			Value1.RefreshRate == Value2.RefreshRate &&
-			Value1.Format == Value2.Format &&
-			Value1.ScanlineOrdering == Value2.ScanlineOrdering &&
-			Value1.Scaling == Value2.Scaling;
+		pin_ptr<ModeDescription> PinnedValue1 = &Value1;
+		pin_ptr<ModeDescription> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(ModeDescription::typeid)) == 0;
 	}
 };

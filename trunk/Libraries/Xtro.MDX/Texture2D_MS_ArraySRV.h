@@ -32,15 +32,17 @@ public:
 
 	virtual bool Equals(Texture2D_MS_ArraySRV Value)
 	{
-		return
-			FirstArraySlice == Value.FirstArraySlice &&
-			ArraySize == Value.ArraySize;
+		pin_ptr<unsigned int> PinnedThis = &FirstArraySlice;
+		pin_ptr<Texture2D_MS_ArraySRV> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Texture2D_MS_ArraySRV::typeid)) == 0;
 	}
 
 	static bool Equals(Texture2D_MS_ArraySRV% Value1, Texture2D_MS_ArraySRV% Value2)
 	{
-		return
-			Value1.FirstArraySlice == Value2.FirstArraySlice && 
-			Value1.ArraySize == Value2.ArraySize;
+		pin_ptr<Texture2D_MS_ArraySRV> PinnedValue1 = &Value1;
+		pin_ptr<Texture2D_MS_ArraySRV> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Texture2D_MS_ArraySRV::typeid)) == 0;
 	}
 };

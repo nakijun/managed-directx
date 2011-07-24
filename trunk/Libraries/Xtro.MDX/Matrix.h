@@ -115,7 +115,7 @@ public:
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
 		pin_ptr<float> PinnedValue11 = &Value11;
-		memcpy(PinnedValue11, PinnedFloats, 64); // 4 x 16 = 64
+		memcpy(PinnedValue11, PinnedFloats, Marshal::SizeOf(Matrix::typeid));
 	}
 		
 	Matrix(array<Float16>^ Floats)
@@ -359,43 +359,17 @@ public:
 
 	virtual bool Equals(Matrix Value)
 	{
-		return
-			Value11 == Value.Value11 &&
-			Value12 == Value.Value12 &&
-			Value13 == Value.Value13 &&
-			Value14 == Value.Value14 &&
-			Value11 == Value.Value21 &&
-			Value12 == Value.Value22 &&
-			Value13 == Value.Value23 &&
-			Value14 == Value.Value24 &&
-			Value11 == Value.Value31 &&
-			Value12 == Value.Value32 &&
-			Value13 == Value.Value33 &&
-			Value14 == Value.Value34 &&
-			Value11 == Value.Value41 &&
-			Value12 == Value.Value42 &&
-			Value13 == Value.Value43 &&
-			Value44 == Value.Value44;
+		pin_ptr<float> PinnedThis = &Value11;
+		pin_ptr<Matrix> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Matrix::typeid)) == 0;
 	}
 
 	static bool Equals(Matrix% Value1, Matrix% Value2)
 	{
-		return
-			Value1.Value11 == Value2.Value11 &&
-			Value1.Value12 == Value2.Value12 &&
-			Value1.Value13 == Value2.Value13 &&
-			Value1.Value14 == Value2.Value14 &&
-			Value1.Value11 == Value2.Value21 &&
-			Value1.Value12 == Value2.Value22 &&
-			Value1.Value13 == Value2.Value23 &&
-			Value1.Value14 == Value2.Value24 &&
-			Value1.Value11 == Value2.Value31 &&
-			Value1.Value12 == Value2.Value32 &&
-			Value1.Value13 == Value2.Value33 &&
-			Value1.Value14 == Value2.Value34 &&
-			Value1.Value11 == Value2.Value41 &&
-			Value1.Value12 == Value2.Value42 &&
-			Value1.Value13 == Value2.Value43 &&
-			Value1.Value44 == Value2.Value44;
+		pin_ptr<Matrix> PinnedValue1 = &Value1;
+		pin_ptr<Matrix> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Matrix::typeid)) == 0;
 	}
 };

@@ -1,4 +1,9 @@
-[StructLayout(LayoutKind::Sequential, Size = 60)]
+#if defined(_WIN64)
+[StructLayout(LayoutKind::Sequential, Size = 60 )]
+#else
+[StructLayout(LayoutKind::Sequential, Size = 64 )]
+#endif
+
 public value class SwapChainDescription : IEquatable<SwapChainDescription>
 {
 public:
@@ -45,27 +50,17 @@ public:
 
 	virtual bool Equals(SwapChainDescription Value)
 	{
-		return
-			BufferDescription == Value.BufferDescription &&
-			SampleDescription == Value.SampleDescription &&
-			BufferUsage == Value.BufferUsage &&
-			BufferCount == Value.BufferCount &&
-			OutputWindow == Value.OutputWindow &&
-			Windowed == Value.Windowed &&
-			SwapEffect == Value.SwapEffect &&
-			Flags == Value.Flags;
+		pin_ptr<ModeDescription> PinnedThis = &BufferDescription;
+		pin_ptr<SwapChainDescription> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SwapChainDescription::typeid)) == 0;
 	}
 
 	static bool Equals(SwapChainDescription% Value1, SwapChainDescription% Value2)
 	{
-		return
-			Value1.BufferDescription == Value2.BufferDescription &&
-			Value1.SampleDescription == Value2.SampleDescription &&
-			Value1.BufferUsage == Value2.BufferUsage &&
-			Value1.BufferCount == Value2.BufferCount &&
-			Value1.OutputWindow == Value2.OutputWindow &&
-			Value1.Windowed == Value2.Windowed &&
-			Value1.SwapEffect == Value2.SwapEffect &&
-			Value1.Flags == Value2.Flags;
+		pin_ptr<SwapChainDescription> PinnedValue1 = &Value1;
+		pin_ptr<SwapChainDescription> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(SwapChainDescription::typeid)) == 0;
 	}
 };

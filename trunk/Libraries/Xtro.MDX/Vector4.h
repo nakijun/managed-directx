@@ -12,7 +12,7 @@ public:
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
 		pin_ptr<float> PinnedX = &X;
-		memcpy(PinnedX, PinnedFloats, sizeof(float) * 4);
+		memcpy(PinnedX, PinnedFloats, Marshal::SizeOf(Vector4::typeid));
 	}
 
 	Vector4(array<Float16>^ Floats)
@@ -139,19 +139,17 @@ public:
 
 	virtual bool Equals(Vector4 Value)
 	{
-		return
-			X == Value.X &&
-			Y == Value.Y &&
-			Z == Value.Z &&
-			W == Value.W;
+		pin_ptr<float> PinnedThis = &X;
+		pin_ptr<Vector4> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Vector4::typeid)) == 0;
 	}
 
 	static bool Equals(Vector4% Value1, Vector4% Value2)
 	{
-		return
-			Value1.X == Value2.X && 
-			Value1.Y == Value2.Y && 
-			Value1.Z == Value2.Z && 
-			Value1.W == Value2.W;
+		pin_ptr<Vector4> PinnedValue1 = &Value1;
+		pin_ptr<Vector4> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(Vector4::typeid)) == 0;
 	}
 };
