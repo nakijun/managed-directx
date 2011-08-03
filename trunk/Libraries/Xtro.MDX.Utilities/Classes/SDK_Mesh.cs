@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
 using Xtro.MDX.DXGI;
 using Xtro.MDX.Generic;
 using Xtro.MDX.Direct3D10;
@@ -18,7 +15,7 @@ using Resource = Xtro.MDX.Direct3D10.Resource;
 #if WIN64
 using SizeT = System.Int32;
 #else
-using SizeT = System.Int64;
+
 #endif
 
 namespace Xtro.MDX.Utilities
@@ -50,19 +47,19 @@ namespace Xtro.MDX.Utilities
 
         public struct AnimationFrameData
         {
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = SDK_Mesh.MaxFrameName)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MaxFrameName)]
             public string FrameName;
             public ulong DataOffset;
         };
 
         public struct VertexElement
         {
-            ushort Stream;     // Stream index
-            ushort Offset;     // Offset in the stream in bytes
-            byte Type;       // Data type
-            byte Method;     // Processing method
-            byte Usage;      // Semantics
-            byte UsageIndex; // Semantic index
+            public ushort Stream;     // Stream index
+            public ushort Offset;     // Offset in the stream in bytes
+            public byte Type;       // Data type
+            public byte Method;     // Processing method
+            public byte Usage;      // Semantics
+            public byte UsageIndex; // Semantic index
         }
 
         public struct Header

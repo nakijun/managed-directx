@@ -461,7 +461,7 @@ namespace Xtro.MDX.Utilities
             // Enable keyboard input for all registered dialogs
             foreach (var Dialog in Dialogs)
             {
-                Dialog.EnableKeyboardInput(true);
+                Dialog.KeyboardInput = true;
             }
         }
     }

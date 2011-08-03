@@ -54,11 +54,28 @@ public:
 		return Result;
 	}
 
+	static int StateBlockMaskDisableAll([Out] StateBlockMask% Mask)
+	{
+		pin_ptr<StateBlockMask> PinnedMask = &Mask;
+		int Result = D3D10StateBlockMaskDisableAll((D3D10_STATE_BLOCK_MASK*)PinnedMask);
+
+		return Result;
+	}
+
 	static int StateBlockMaskDisableCapture(StateBlockMask% Mask, DeviceStateType StateType, unsigned int RangeStart, unsigned int RangeLength)
 	{
 		pin_ptr<StateBlockMask> PinnedMask = &Mask;
 
 		int Result = D3D10StateBlockMaskDisableCapture((D3D10_STATE_BLOCK_MASK*)PinnedMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
+
+		return Result;
+	}
+
+	static int StateBlockMaskEnableCapture(StateBlockMask% Mask, DeviceStateType StateType, unsigned int RangeStart, unsigned int RangeLength)
+	{
+		pin_ptr<StateBlockMask> PinnedMask = &Mask;
+
+		int Result = D3D10StateBlockMaskEnableCapture((D3D10_STATE_BLOCK_MASK*)PinnedMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
 
 		return Result;
 	}
