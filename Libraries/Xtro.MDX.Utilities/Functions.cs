@@ -2743,7 +2743,7 @@ namespace Xtro.MDX.Utilities
             var CounterData = GetState().CounterData;
 
             var Data = new UnmanagedMemory<float>(sizeof(float));
-            var F = 0f;
+            float F;
 
             var Counter = GetState().CounterGPU_Idle;
             if (Counter != null)
@@ -3234,7 +3234,6 @@ namespace Xtro.MDX.Utilities
             // Skip the check for various reasons
             if (GetState().IgnoreSizeChange || !GetState().DeviceCreated) return;
 
-            var DeviceSettings = GetDeviceSettings();
             CheckForBufferChange();
         }
 
@@ -3579,7 +3578,7 @@ namespace Xtro.MDX.Utilities
             case Format.BC3_Typeless:
             case Format.BC3_UNorm:
                 return Format.BC3_UNorm_SRGB;
-            };
+            }
 
             return Format;
         }
@@ -3738,6 +3737,128 @@ namespace Xtro.MDX.Utilities
             }
 
             return false;
+        }
+
+        public static void GetDesktopResolution(uint AdapterOrdinal, out uint Width, out uint Height)
+        {
+            var DeviceSettings = GetDeviceSettings();
+
+            var DeviceName = "";
+
+            var Enumeration = GetEnumeration();
+            var OutputInfo = Enumeration.GetOutputInfo(AdapterOrdinal, DeviceSettings.Output);
+            if (OutputInfo != null) DeviceName = OutputInfo.Description.DeviceName;
+
+            var DevMode = new Windows.DevMode();
+            Windows.EnumDisplaySettings(DeviceName, -2, ref DevMode);
+            Width = DevMode.dmPelsWidth;
+            Height = DevMode.dmPelsHeight;
+        }
+
+        public static Rectangle GetFullsceenClientRectangleAtModeChange()
+        {
+            return new Rectangle(0, 0, (int)GetState().FullScreenBackBufferWidthAtModeChange, (int)GetState().FullScreenBackBufferHeightAtModeChange);
+        }
+
+        public static Rectangle GetWindowClientRectangleAtModeChange()
+        {
+            return new Rectangle(0, 0, (int)GetState().WindowBackBufferWidthAtModeChange, (int)GetState().WindowBackBufferHeightAtModeChange);
+        }
+
+        public static int CreateDeviceFromSettings(DeviceSettings DeviceSettings, bool PreserveInput = false, bool ClipWindowToSingleAdapter = false)
+        {
+            int Result;
+
+            GetState().DeviceCreateCalled = true;
+
+            if (!PreserveInput)
+            {
+                // If not preserving the input, then find the closest valid to it
+                var MatchOptions = new MatchOptions
+                {
+                    AdapterOrdinal = MatchType.ClosestToInput,
+                    Output = MatchType.ClosestToInput,
+                    DeviceType = MatchType.ClosestToInput,
+                    Windowed = MatchType.ClosestToInput,
+                    AdapterFormat = MatchType.ClosestToInput,
+                    VertexProcessing = MatchType.ClosestToInput,
+                    Resolution = MatchType.ClosestToInput,
+                    BackBufferFormat = MatchType.ClosestToInput,
+                    BackBufferCount = MatchType.ClosestToInput,
+                    MultiSample = MatchType.ClosestToInput,
+                    SwapEffect = MatchType.ClosestToInput,
+                    DepthFormat = MatchType.ClosestToInput,
+                    StencilFormat = MatchType.ClosestToInput,
+                    PresentFlags = MatchType.ClosestToInput,
+                    RefreshRate = MatchType.ClosestToInput,
+                    PresentInterval = MatchType.ClosestToInput
+                };
+
+                Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
+                if (Result < 0) // the call will fail if no valid devices were found
+                {
+                    DisplayErrorMessage(Result);
+                    return Result;
+                }
+            }
+
+            // Change to a Direct3D device created from the new device settings.  
+            // If there is an existing device, then either reset or recreate the scene
+            Result = ChangeDevice(DeviceSettings, null, false, ClipWindowToSingleAdapter);
+            return Result < 0 ? Result : 0;
+        }
+
+        public static int SetTimer(Callbacks.Timer CallbackTimer, float TimeoutInSeconds, out uint IDEvent, object CallbackUserContext)
+        {
+            IDEvent = 0;
+
+            if (CallbackTimer == null) return ErrorBox((int)Error.InvalidArgument, "SetTimer");
+
+            var CurrentTimer = new State.Timer
+            {
+                CallbackTimer = CallbackTimer,
+                CallbackUserContext = CallbackUserContext,
+                TimeoutInSecs = TimeoutInSeconds,
+                Countdown = TimeoutInSeconds,
+                Enabled = true,
+                ID = GetState().TimerLastID + 1
+            };
+            GetState().TimerLastID = CurrentTimer.ID;
+
+            var Timers = GetState().Timers;
+            if (Timers == null)
+            {
+                Timers = new List<State.Timer>();
+                GetState().Timers = Timers;
+            }
+
+            Timers.Add(CurrentTimer);
+
+            IDEvent = CurrentTimer.ID;
+
+            return 0;
+        }
+
+        public static int KillTimer(uint IDEvent)
+        {
+            var Timers = GetState().Timers;
+            if (Timers == null) return (int)Error.False;
+
+            var Found = false;
+
+            for (var I = 0; I < Timers.Count; I++)
+            {
+                var CurrentTimer = Timers[I];
+                if (CurrentTimer.ID == IDEvent)
+                {
+                    CurrentTimer.Enabled = false;
+                    Timers[I] = CurrentTimer;
+                    Found = true;
+                    break;
+                }
+            }
+
+            return !Found ? ErrorBox((int)Error.InvalidArgument, "DXUTKillTimer") : 0;
         }
     }
 }

@@ -2,8 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* SettingsDialog
-
 * Tut10
 
 * GetHashCode içinde null kontrolü yap (ör:ShaderMacro struct)

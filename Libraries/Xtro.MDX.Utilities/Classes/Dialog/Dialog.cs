@@ -630,11 +630,11 @@ namespace Xtro.MDX.Utilities
             DefaultElements.Clear();
         }
 
-        public void Init(DialogResourceManager Manager, bool RegisterDialog, string ControlTextureFilename)
+        public void Init(DialogResourceManager Manager, bool RegisterDialog = true, string ControlTextureFilename = null)
         {
             this.Manager = Manager;
             if (RegisterDialog) Manager.RegisterDialog(this);
-            SetTexture(0, ControlTextureFilename);
+            if (!string.IsNullOrEmpty(ControlTextureFilename)) SetTexture(0, ControlTextureFilename);
             InitDefaultElements();
         }
 
@@ -1423,11 +1423,6 @@ namespace Xtro.MDX.Utilities
             return 0;
         }
 
-        public void EnableKeyboardInput(bool Enable)
-        {
-            KeyboardInput = Enable;
-        }
-
         public void SendEvent(Event Event, bool TriggeredByUser, Control Control)
         {
             // If no callback has been registered there's nowhere to send the event to
@@ -1580,14 +1575,11 @@ namespace Xtro.MDX.Utilities
             ComboBox.RemoveAllItems();
         }
 
-        public Element GetDefaultElement(ControlType ControlType, Element Element)
+        public Element GetDefaultElement(ControlType ControlType, uint Element)
         {
             foreach (var ElementHolder in DefaultElements)
             {
-                if (ElementHolder[0].ControlType == ControlType && ElementHolder[0].Element == Element)
-                {
-                    return ElementHolder[0].Element;
-                }
+                if (ElementHolder[0].ControlType == ControlType && ElementHolder[0].ElementNo == Element) return ElementHolder[0].Element;
             }
 
             return null;
@@ -1637,7 +1629,7 @@ namespace Xtro.MDX.Utilities
 
             TechniqueDescription TechniqueDescription;
             Manager.TechRenderUI.GetDescription(out TechniqueDescription);
-            for (var P = (uint)0; P < TechniqueDescription.Passes; ++P)
+            for (var P = (uint)0; P < TechniqueDescription.Passes; P++)
             {
                 Manager.TechRenderUI.GetPassByIndex(P).Apply(0);
                 Device.Draw(4, 0);

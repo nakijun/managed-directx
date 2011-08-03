@@ -512,12 +512,12 @@ namespace Xtro.MDX.Utilities
             if (Selected >= Items.Count) Selected = Items.Count - 1;
         }
 
-        public bool ContainsItem(string Text, uint Start)
+        public bool ContainsItem(string Text, uint Start = 0u)
         {
             return (-1 != FindItem(Text, Start));
         }
 
-        public int FindItem(string Text, uint Start = (uint)0)
+        public int FindItem(string Text, uint Start = 0u)
         {
             if (string.IsNullOrEmpty(Text)) return -1;
 

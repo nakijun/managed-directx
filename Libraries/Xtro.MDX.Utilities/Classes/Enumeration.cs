@@ -94,15 +94,15 @@ namespace Xtro.MDX.Utilities
         object IsDeviceAcceptableFunctionUserContext;
 
         public readonly List<Format> DepthStencilPossiblities = new List<Format>();
-/*
-        uint MinWidth = 640;
-        uint MaxWidth = uint.MaxValue;
-        uint MinHeight = 480;
-        uint MaxHeight = uint.MaxValue;
-        uint RefreshMin;
-        uint RefreshMax = uint.MaxValue;
-        uint MultisampleQualityMax;
-*/
+        /*
+                uint MinWidth = 640;
+                uint MaxWidth = uint.MaxValue;
+                uint MinHeight = 480;
+                uint MaxHeight = uint.MaxValue;
+                uint RefreshMin;
+                uint RefreshMax = uint.MaxValue;
+                uint MultisampleQualityMax;
+        */
         bool EnumerateAllAdapterFormats;
 
         public readonly List<AdapterInfo> AdapterInfos = new List<AdapterInfo>();
@@ -372,27 +372,27 @@ namespace Xtro.MDX.Utilities
         //
         // Use these calls and the IsDeviceAcceptable to control the contents of 
         // the enumeration object, which affects the device selection and the device settings dialog.
-/*
-        public void SetResolutionMinMax(uint MinWidth, uint MinHeight, uint MaxWidth, uint MaxHeight)
-        {
-            this.MinWidth = MinWidth;
-            this.MinHeight = MinHeight;
-            this.MaxWidth = MaxWidth;
-            this.MaxHeight = MaxHeight;
-        }
+        /*
+                public void SetResolutionMinMax(uint MinWidth, uint MinHeight, uint MaxWidth, uint MaxHeight)
+                {
+                    this.MinWidth = MinWidth;
+                    this.MinHeight = MinHeight;
+                    this.MaxWidth = MaxWidth;
+                    this.MaxHeight = MaxHeight;
+                }
 
-        public void SetRefreshMinMax(uint Min, uint Max)
-        {
-            RefreshMin = Min;
-            RefreshMax = Max;
-        }
+                public void SetRefreshMinMax(uint Min, uint Max)
+                {
+                    RefreshMin = Min;
+                    RefreshMax = Max;
+                }
 
-        public void SetMultisampleQualityMax(uint Max)
-        {
-            if (Max > 0xFFFF) Max = 0xFFFF;
-            MultisampleQualityMax = Max;
-        }
-*/
+                public void SetMultisampleQualityMax(uint Max)
+                {
+                    if (Max > 0xFFFF) Max = 0xFFFF;
+                    MultisampleQualityMax = Max;
+                }
+        */
         public void ResetPossibleDepthStencilFormats()
         {
             DepthStencilPossiblities.Clear();
