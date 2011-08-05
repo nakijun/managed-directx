@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows.Forms;
 using Xtro.MDX.Direct3D10;
 using Xtro.MDX.Direct3DX10;
 using Xtro.MDX.DXGI;
@@ -1068,24 +1069,14 @@ namespace Xtro.MDX.Utilities
             }
         }
 
-        public void Init(DialogResourceManager Manager)
-        {
-            Debug.Assert(Manager != null);
-            Dialog.Init(Manager, false);  // Don't register this dialog.
-            RevertModeDialog.Init(Manager, false); // Don't register this dialog.
-            ActiveDialog = Dialog;
-            CreateControls();
-        }
-
-        public void Init(DialogResourceManager Manager, string ControlTextureFileName)
+        public void Init(DialogResourceManager Manager, string ControlTextureFileName = null)
         {
             Debug.Assert(Manager != null);
             Dialog.Init(Manager, false, ControlTextureFileName);  // Don't register this dialog.
             RevertModeDialog.Init(Manager, false, ControlTextureFileName);   // Don't register this dialog.
             ActiveDialog = Dialog;
             CreateControls();
-        }
-
+        } 
 
         public int Refresh()
         {
@@ -1142,6 +1133,13 @@ namespace Xtro.MDX.Utilities
             //    Device->SetRenderState( D3DRS_FILLMODE, D3DFILL_SOLID );
             ActiveDialog.OnRender(ElapsedTime);
             StateBlock.Apply();
+        }
+
+        public int HandleKeyDownEvent(KeyEventArgs E)
+        {
+            ActiveDialog.HandleKeyDownEvent(E);
+            if (E.KeyCode == Keys.F2) SetActive(false);
+            return 0;
         }
 
         public int OnCreateDevice(Device Device)

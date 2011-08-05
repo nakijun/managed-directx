@@ -655,6 +655,12 @@
     <ClInclude Include="Byte16.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="EffectScalarVariable.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="SwitchToRef.h">
+      <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">
