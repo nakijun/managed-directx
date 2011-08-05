@@ -78,6 +78,8 @@ namespace Tutorial10
             MouseWheel += Form1_MouseWheel;
 
             ArcBall.DefaultForm = this;
+            UtilitiesFunctions.MediaSearchPath = @"C:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Samples\Media\";
+
             Camera = new ModelViewerCamera();
         }
 
@@ -179,8 +181,6 @@ namespace Tutorial10
 
         int OnDeviceCreated(Device Device, ref SurfaceDescription BackBufferSurfaceDescription, object UserContext)
         {
-            UtilitiesFunctions.MediaSearchPath = @"C:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Samples\Media\";
-
             var Result = DialogResourceManager.OnCreateDevice(Device);
             if (Result < 0) return Result;
             Result = SettingsDialog.OnCreateDevice(Device);
