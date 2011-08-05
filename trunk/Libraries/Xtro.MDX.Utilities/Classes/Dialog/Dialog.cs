@@ -1411,6 +1411,8 @@ namespace Xtro.MDX.Utilities
 
         public int SetTexture(uint Index, string Filename)
         {
+            if (Filename == null) Functions.FindSDK_MediaFileCch(out Filename, "UI\\dxutcontrols.dds");
+
             // Make sure the list is at least as large as the index being set
             for (var I = Textures.Count; I <= Index; I++)
             {
