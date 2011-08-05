@@ -20,6 +20,28 @@ EffectMatrixVariable^ EffectVariable::AsMatrix()
 	return Result;
 }
 
+EffectScalarVariable^ EffectVariable::AsScalar()
+{
+	ID3D10EffectScalarVariable* pResult = pEffectVariable->AsScalar();
+
+	EffectScalarVariable^ Result = nullptr;
+	if (pResult) 
+	{
+		try
+		{
+			try	{ Result = (EffectScalarVariable^)Interfaces[IntPtr(pResult)]; }
+			catch (InvalidCastException^)
+			{
+				Interfaces.Remove(IntPtr(pResult));
+				throw gcnew	KeyNotFoundException();
+			}
+		}
+		catch (KeyNotFoundException^) { Result = gcnew EffectScalarVariable(IntPtr(pResult)); }
+	}
+
+	return Result;
+}
+
 EffectVectorVariable^ EffectVariable::AsVector()
 {
 	ID3D10EffectVectorVariable* pResult = pEffectVariable->AsVector();

@@ -57,10 +57,10 @@ namespace Xtro.MDX.Utilities
         readonly List<int> Textures = new List<int>();   // Index into m_TextureCache;
         readonly List<int> Fonts = new List<int>();      // Index into m_FontCache;
 
-        readonly List<Control> Controls=new List<Control>();
-        readonly List<ElementHolder[]> DefaultElements=new List<ElementHolder[]>();
+        readonly List<Control> Controls = new List<Control>();
+        readonly List<ElementHolder[]> DefaultElements = new List<ElementHolder[]>();
 
-        readonly Element CaptionElement=new Element();  // Element for the caption
+        readonly Element CaptionElement = new Element();  // Element for the caption
 
         Dialog NextDialog;
         Dialog PrevDialog;
@@ -634,7 +634,7 @@ namespace Xtro.MDX.Utilities
         {
             this.Manager = Manager;
             if (RegisterDialog) Manager.RegisterDialog(this);
-            if (!string.IsNullOrEmpty(ControlTextureFilename)) SetTexture(0, ControlTextureFilename);
+            SetTexture(0, ControlTextureFilename);
             InitDefaultElements();
         }
 
@@ -815,7 +815,7 @@ namespace Xtro.MDX.Utilities
             return false;
         }
 
-        public bool HandleResizeEvent()
+        public bool HandleResizeEvent(EventArgs E)
         {
             // For invisible dialog, do not handle anything.
             if (!Visible) return false;
@@ -839,7 +839,7 @@ namespace Xtro.MDX.Utilities
             return false;
         }
 
-        public bool HandleMoveEvent()
+        public bool HandleMoveEvent(EventArgs E)
         {
             // For invisible dialog, do not handle anything.
             if (!Visible) return false;
@@ -1715,8 +1715,8 @@ namespace Xtro.MDX.Utilities
                 }
             }
         }
-    
-        public void SetCallback( Callbacks.GuiEvent Callback, object UserContext )
+
+        public void SetCallback(Callbacks.GuiEvent Callback, object UserContext = null)
         {
             CallbackEvent = Callback;
             CallbackEventUserContext = UserContext;

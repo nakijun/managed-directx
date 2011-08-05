@@ -19,7 +19,7 @@ namespace Xtro.MDX.Utilities
         protected int Selected;
         protected int Focused;
         protected int DropHeight;
-        protected ScrollBar ScrollBar;
+        protected ScrollBar ScrollBar = new ScrollBar();
         protected int ScrollBarWidth;
 
         protected bool Opened;

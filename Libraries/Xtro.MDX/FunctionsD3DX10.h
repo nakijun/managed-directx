@@ -540,6 +540,12 @@ public:
 		D3DXMatrixPerspectiveFovLH((D3DXMATRIX*)PinnedOut, FovY, Aspect, Z_Near, Z_Far);
 	}
 
+	static void MatrixRotationX([Out] Matrix% Out, float Angle)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixRotationX((D3DXMATRIX*)PinnedOut, Angle);
+	}
+
 	static void MatrixRotationY([Out] Matrix% Out, float Angle)
 	{
 		pin_ptr<Matrix> PinnedOut = &Out;

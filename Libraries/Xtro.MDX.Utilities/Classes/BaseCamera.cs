@@ -504,7 +504,7 @@ namespace Xtro.MDX.Utilities
             return View;
         }
 
-        public Matrix GetProjMatrix()
+        public Matrix GetProjectionMatrix()
         {
             return Projection;
         }

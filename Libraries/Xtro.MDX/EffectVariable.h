@@ -1,5 +1,6 @@
 ref class EffectMatrixVariable;
 ref class EffectVectorVariable;
+ref class EffectScalarVariable;
 ref class EffectShaderResourceVariable;
 
 public ref class EffectVariable : Interface
@@ -17,6 +18,7 @@ internal:
 
 public:
 	EffectMatrixVariable^ AsMatrix();
+	EffectScalarVariable^ AsScalar();
 	EffectVectorVariable^ AsVector();
 	EffectShaderResourceVariable^ AsShaderResource();
 };

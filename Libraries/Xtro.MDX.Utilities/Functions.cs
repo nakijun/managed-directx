@@ -3858,7 +3858,152 @@ namespace Xtro.MDX.Utilities
                 }
             }
 
-            return !Found ? ErrorBox((int)Error.InvalidArgument, "DXUTKillTimer") : 0;
+            return !Found ? ErrorBox((int)Error.InvalidArgument, "KillTimer") : 0;
+        }
+
+        public static string GetFrameStats(bool ShowFPS)
+        {
+            var FPS = (ShowFPS) ? GetState().FPS_Stats : "";
+            var FrameStats = string.Format(GetState().StaticFrameStats, FPS);
+            GetState().FrameStats = FrameStats;
+            return FrameStats;
+        }
+
+        public static bool IsVsyncEnabled()
+        {
+            var DeviceSettings = GetState().CurrentDeviceSettings;
+            if (DeviceSettings != null)
+            {
+                return (DeviceSettings.SyncInterval == 0);
+            }
+            return true;
+        }
+
+        public static string GetDeviceStats()
+        {
+            return GetState().DeviceStats;
+        }
+
+        public static int ToggleREF()
+        {
+            var DeviceSettings = GetDeviceSettings();
+            var OrginalDeviceSettings = GetDeviceSettings();
+
+            // Toggle between REF & HAL
+            object Object;
+            var Result = GetDevice().QueryInterface(typeof(SwitchToRef), out Object);
+            var SwitchToRef = (SwitchToRef)Object;
+            if (Result >= 0)
+            {
+                SwitchToRef.SetUseRef(SwitchToRef.GetUseRef() ? false : true);
+                if (SwitchToRef != null) SwitchToRef.Release();
+                return 0;
+            }
+
+            if (DeviceSettings.DriverType == DriverType.Hardware || DeviceSettings.DriverType == DriverType.Software) DeviceSettings.DriverType = DriverType.Reference;
+            else if (DeviceSettings.DriverType == DriverType.Reference) DeviceSettings.DriverType = DriverType.Hardware;
+
+            var MatchOptions = new MatchOptions
+            {
+                AdapterOrdinal = MatchType.PreserveInput,
+                DeviceType = MatchType.PreserveInput,
+                Windowed = MatchType.ClosestToInput,
+                AdapterFormat = MatchType.ClosestToInput,
+                VertexProcessing = MatchType.ClosestToInput,
+                Resolution = MatchType.ClosestToInput,
+                BackBufferFormat = MatchType.ClosestToInput,
+                BackBufferCount = MatchType.ClosestToInput,
+                MultiSample = MatchType.ClosestToInput,
+                SwapEffect = MatchType.ClosestToInput,
+                DepthFormat = MatchType.ClosestToInput,
+                StencilFormat = MatchType.ClosestToInput,
+                PresentFlags = MatchType.ClosestToInput,
+                RefreshRate = MatchType.ClosestToInput,
+                PresentInterval = MatchType.ClosestToInput
+            };
+
+            Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
+            if (Result >= 0)
+            {
+                // Create a Direct3D device using the new device settings.  
+                // If there is an existing device, then it will either reset or recreate the scene.
+                Result = ChangeDevice(DeviceSettings, null, false, false);
+
+                // If hr == E_ABORT, this means the app rejected the device settings in the ModifySettingsCallback so nothing changed
+                if (Result < 0 && (Result != (int)Error.Abort))
+                {
+                    // Failed creating device, try to switch back.
+                    var Result2 = ChangeDevice(OrginalDeviceSettings, null, false, false);
+                    if (Result2 < 0)
+                    {
+                        // If this failed, then shutdown
+                        Shutdown();
+                    }
+                }
+            }
+
+            return Result;
+        }
+
+        public static int ToggleWARP()
+        {
+            var DeviceSettings = GetDeviceSettings();
+            var OrginalDeviceSettings = GetDeviceSettings();
+
+            // Toggle between REF & HAL
+            object Object;
+            var Result = GetDevice().QueryInterface(typeof(SwitchToRef), out Object);
+            var SwitchToRef = (SwitchToRef)Object;
+            if (Result >= 0)
+            {
+                SwitchToRef.SetUseRef(SwitchToRef.GetUseRef() ? false : true);
+                if (SwitchToRef != null) SwitchToRef.Release();
+                return 0;
+            }
+
+            if (DeviceSettings.DriverType == DriverType.Hardware || DeviceSettings.DriverType == DriverType.Reference) DeviceSettings.DriverType = DriverType.Software;
+            else if (DeviceSettings.DriverType == DriverType.Software) DeviceSettings.DriverType = DriverType.Hardware;
+
+            var MatchOptions = new MatchOptions
+            {
+                AdapterOrdinal = MatchType.PreserveInput,
+                DeviceType = MatchType.PreserveInput,
+                Windowed = MatchType.ClosestToInput,
+                AdapterFormat = MatchType.ClosestToInput,
+                VertexProcessing = MatchType.ClosestToInput,
+                Resolution = MatchType.ClosestToInput,
+                BackBufferFormat = MatchType.ClosestToInput,
+                BackBufferCount = MatchType.ClosestToInput,
+                MultiSample = MatchType.ClosestToInput,
+                SwapEffect = MatchType.ClosestToInput,
+                DepthFormat = MatchType.ClosestToInput,
+                StencilFormat = MatchType.ClosestToInput,
+                PresentFlags = MatchType.ClosestToInput,
+                RefreshRate = MatchType.ClosestToInput,
+                PresentInterval = MatchType.ClosestToInput
+            };
+
+            Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
+            if (Result >= 0)
+            {
+                // Create a Direct3D device using the new device settings.  
+                // If there is an existing device, then it will either reset or recreate the scene.
+                Result = ChangeDevice(DeviceSettings, null, false, false);
+
+                // If hr == E_ABORT, this means the app rejected the device settings in the ModifySettingsCallback so nothing changed
+                if (Result < 0 && (Result != (int)Error.Abort))
+                {
+                    // Failed creating device, try to switch back.
+                    var Result2 = ChangeDevice(OrginalDeviceSettings, null, false, false);
+                    if (Result2 < 0)
+                    {
+                        // If this failed, then shutdown
+                        Shutdown();
+                    }
+                }
+            }
+
+            return Result;
         }
     }
 }

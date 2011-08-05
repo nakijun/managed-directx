@@ -66,7 +66,7 @@ namespace Xtro.MDX.Utilities
         protected ArrowState Arrow; // State of the arrows
         protected double ArrowTimeStamp;  // Timestamp of last arrow event.
 
-        public ScrollBar(Dialog Dialog)
+        public ScrollBar(Dialog Dialog = null)
             : base(Dialog)
         {
             Type = ControlType.ScrollBar;
