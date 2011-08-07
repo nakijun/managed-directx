@@ -25,7 +25,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			AlphaToCoverageEnable ^
+			(int)AlphaToCoverageEnable ^
 			BlendEnable.GetHashCode() ^
 			(int)SourceBlend ^
 			(int)DestinationBlend ^

@@ -73,7 +73,6 @@ namespace Xtro.MDX.Utilities
         string Buffer;    // Buffer to hold text
 
         // Uniscribe-specific
-        DialogResourceManager.FontNode[] FontNode;          // Font node for the font that this buffer uses
         bool AnalyseRequired;            // True if the string has changed since last analysis.
         IntPtr Analysis;  // Analysis for the current string
 
@@ -91,6 +90,8 @@ namespace Xtro.MDX.Utilities
 
         [DllImport("usp10.dll")]
         static extern int ScriptStringXtoCP(IntPtr Analysis, int X, out int Ch, out int Trailing);
+
+        public DialogResourceManager.FontNode[] FontNode;          // Font node for the font that this buffer uses
 
         public int GetTextSize()
         {

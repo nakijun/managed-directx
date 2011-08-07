@@ -14,11 +14,11 @@ internal:
 public:
 	bool SetUseRef(bool UseRef)
 	{
-		return pSwitchToRef->SetUseRef(UseRef);
+		return pSwitchToRef->SetUseRef(UseRef) != 0;
 	}
 
 	bool GetUseRef()
 	{
-		return pSwitchToRef->GetUseRef();
+		return pSwitchToRef->GetUseRef() != 0;
 	}
 };

@@ -3,14 +3,18 @@
 ----------------------------------------------------------------------
 
 * Tut10
-  beyond compare : OnD3D10ResizedSwapChain
 
 * .Release ve .Delete olan yerlerde =null da yap if içinde.
 
-* bizim kütüpanenin çalýþmasý için august2009 developer runtime yüklü olmasý lazým. august2009 distrubutable runtime yeterli deðil.
+* gerekenler : bu listeyi development ve deployment olarak iki farklý þekilde hazýrla.
+    - .net 4 framework
+    - vc++ runtime (x86 or x64) (current version is 2010 sp1. this can be updated in the future)
+    - august2009 distrubutable runtime
+    - D3D10Ref.DLL (ref kullanýlacaksa)
+    - D3D10SDKLayers.DLL (debug çalýþtýrýlacaksa)
+
    test metodundaki mesajlarý ona göre deðiþtir.
    googlecode daki gerekenler bilgisini ona göre deðiþtir.
-   sdk içinden developer runtime install'u bulmaya çalýþ. bulursan googlecode'a upload et insanlar yükleyebilsin diye.
    
 * GetHashCode içinde null kontrolü yap (ör:ShaderMacro struct)
 

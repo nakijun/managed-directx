@@ -45,10 +45,10 @@ public:
 			Data = gcnew UnmanagedMemory(Size);
 			Result = pObject->GetPrivateData(IID_Converter::ToNative(Name), PinnedSize, Data->pMemory);
 
-			if (Size == 4)
+			if (Size == sizeof(IntPtr))
 			{
 				void* pData = 0;
-				memcpy(&pData, Data->pMemory, 4);
+				memcpy(&pData, Data->pMemory, sizeof(IntPtr));
 
 				try
 				{
