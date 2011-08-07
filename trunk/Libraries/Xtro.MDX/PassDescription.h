@@ -6,7 +6,7 @@ internal:
 		Name = gcnew String(Native->Name);
 		Annotations = Native->Annotations;
 			
-		IA_InputSignature = gcnew UnmanagedMemory(Native->IAInputSignatureSize);
+		IA_InputSignature = gcnew UnmanagedMemory((unsigned int)Native->IAInputSignatureSize);
 		memcpy(IA_InputSignature->pMemory, Native->pIAInputSignature, IA_InputSignature->Size);
 			
 		StencilRef = Native->StencilRef;

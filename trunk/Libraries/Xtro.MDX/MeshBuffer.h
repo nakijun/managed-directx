@@ -18,7 +18,7 @@ public:
 		void* pData = 0;
 		int Result = pMeshBuffer->Map(&pData, &Size);
 
-		if (pData) Data = gcnew UnmanagedMemory(IntPtr(pData), Size);
+		if (pData) Data = gcnew UnmanagedMemory(IntPtr(pData), (unsigned int)Size);
 		else Data = nullptr;
 
 		return Result;

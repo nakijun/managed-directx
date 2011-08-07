@@ -54,7 +54,7 @@ namespace Tutorial10
         Dialog HUD = new Dialog();                  // manages the 3D UI
         Dialog SampleUI = new Dialog();             // dialog for sample specific controls
 
-        Font Font = null;         // Font for drawing text
+        Font D3DX10Font = null;         // Font for drawing text
         Sprite Sprite = null;       // Sprite for batching text drawing
         TextHelper TextHelper = null;
 
@@ -185,11 +185,11 @@ namespace Tutorial10
             if (Result < 0) return Result;
             Result = SettingsDialog.OnCreateDevice(Device);
             if (Result < 0) return Result;
-            Result = D3DX10Functions.CreateFontW(Device, 15, 0, (uint)FontWeight.Bold, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, "Arial", out Font);
+            Result = D3DX10Functions.CreateFontW(Device, 15, 0, (uint)FontWeight.Bold, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, "Arial", out D3DX10Font);
             if (Result < 0) return Result;
             Result = D3DX10Functions.CreateSprite(Device, 512, out Sprite);
             if (Result < 0) return Result;
-            TextHelper = new TextHelper(Font, Sprite, 15);
+            TextHelper = new TextHelper(D3DX10Font, Sprite, 15);
 
             var ShaderFlags = ShaderFlag.EnableStrictness;
 #if DEBUG
@@ -281,7 +281,7 @@ namespace Tutorial10
             DialogResourceManager.OnDestroyDevice();
             SettingsDialog.OnDestroyDevice();
             UtilitiesFunctions.GetGlobalResourceCache().OnDestroyDevice();
-            if (Font != null) Font.Release();
+            if (D3DX10Font != null) D3DX10Font.Release();
             if (Sprite != null) Sprite.Release();
             if (TextHelper != null) TextHelper.Delete();
             if (VertexLayout != null) VertexLayout.Release();
@@ -298,7 +298,7 @@ namespace Tutorial10
 
             // Setup the camera's projection parameters
             var AspectRatio = (float)BackBufferSurfaceDescription.Width / BackBufferSurfaceDescription.Height;
-            Camera.SetProjectionParameters(D3DX10Constants.PI / 4, AspectRatio, 0.1f, 5000.0f);
+            Camera.SetProjectionParameters((float)(D3DX10Constants.PI / 4), AspectRatio, 0.1f, 5000.0f);
             Camera.SetWindow((int)BackBufferSurfaceDescription.Width, (int)BackBufferSurfaceDescription.Height);
             Camera.SetButtonMasks(MouseKeys.Middle, MouseKeys.Wheel, MouseKeys.Left);
 

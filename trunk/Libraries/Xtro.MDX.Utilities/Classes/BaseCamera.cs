@@ -299,7 +299,7 @@ namespace Xtro.MDX.Utilities
             SetViewParameters(ref EyePoint, ref LookatPoint);
 
             // Setup the projection matrix
-            SetProjectionParameters(Constants.PI / 4, 1.0f, 1.0f, 1000.0f);
+            SetProjectionParameters((float)(Constants.PI / 4), 1.0f, 1.0f, 1000.0f);
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
             LastMousePosition = Cursor.Position;
