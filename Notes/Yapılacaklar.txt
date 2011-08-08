@@ -2,7 +2,8 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* SwapChainDescription, RasterizerDescription
+* StructLayout olanlarý tara ve kontrol et. Mümkünse hepsini sil. Gerekenlerde Pack=1 yada 4 kullan
+  Özellikle Byte2 gibi 4 byte olmayan field olanlarý iyi kontrol et. Bool ile ayný sorunu yaþýyo olabilirler.
 
 * Tut10
 
