@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential, Size = 40)]
 public value class RasterizerDescription : IEquatable<RasterizerDescription>
 {
 public:
@@ -8,10 +7,64 @@ public:
     int DepthBias;
     float DepthBiasClamp;
     float SlopeScaledDepthBias;
-    bool DepthClipEnable;
-    bool ScissorEnable;
-    bool MultisampleEnable;
-    bool AntialiasedLineEnable;
+private:
+    int BDepthClipEnable;
+    int BScissorEnable;
+    int BMultisampleEnable;
+    int BAntialiasedLineEnable;
+
+public:
+	property bool DepthClipEnable
+	{
+		bool get()
+		{
+			return BDepthClipEnable != 0;
+		}
+
+		void set(bool Value)
+		{
+			BDepthClipEnable = Value;
+		}
+	}
+
+	property bool ScissorEnable
+	{
+		bool get()
+		{
+			return BScissorEnable != 0;
+		}
+
+		void set(bool Value)
+		{
+			BScissorEnable = Value;
+		}
+	}
+
+	property bool MultisampleEnable
+	{
+		bool get()
+		{
+			return BMultisampleEnable != 0;
+		}
+
+		void set(bool Value)
+		{
+			BMultisampleEnable = Value;
+		}
+	}
+
+	property bool AntialiasedLineEnable
+	{
+		bool get()
+		{
+			return BAntialiasedLineEnable != 0;
+		}
+
+		void set(bool Value)
+		{
+			BAntialiasedLineEnable = Value;
+		}
+	}
 
 	static bool operator == (RasterizerDescription Left, RasterizerDescription Right)
 	{

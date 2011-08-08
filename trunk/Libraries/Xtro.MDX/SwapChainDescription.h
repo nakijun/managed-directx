@@ -1,9 +1,3 @@
-#if defined(_WIN64)
-[StructLayout(LayoutKind::Sequential, Size = 60 )]
-#else
-[StructLayout(LayoutKind::Sequential, Size = 64 )]
-#endif
-
 public value class SwapChainDescription : IEquatable<SwapChainDescription>
 {
 public:
