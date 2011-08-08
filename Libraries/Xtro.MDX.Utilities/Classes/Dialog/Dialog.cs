@@ -1260,11 +1260,11 @@ namespace Xtro.MDX.Utilities
                 var ShadowRectangle = Screen;
                 ShadowRectangle.Offset(1, 1);
                 var Color = new Color(0, 0, 0, Element.FontColor.Current.A);
-                Result = FontNode[0].Font.DrawTextW(Manager.Sprite, Text, Count, ref ShadowRectangle, Element.TextFormat, ref Color);
+                Result = FontNode[0].Font.DrawText(Manager.Sprite, Text, Count, ref ShadowRectangle, Element.TextFormat, ref Color);
                 if (Result < 0) return Result;
             }
 
-            Result = FontNode[0].Font.DrawTextW(Manager.Sprite, Text, Count, ref Screen, Element.TextFormat, ref Element.FontColor.Current);
+            Result = FontNode[0].Font.DrawText(Manager.Sprite, Text, Count, ref Screen, Element.TextFormat, ref Element.FontColor.Current);
             return Result < 0 ? Result : 0;
         }
 
@@ -1653,7 +1653,7 @@ namespace Xtro.MDX.Utilities
             // Since we are only computing the rectangle, we don't need a sprite.
             if (FontNode[0].Font != null)
             {
-                var Result = FontNode[0].Font.DrawTextW(null, Text, Count, ref Destination, TextFormat, ref Element.FontColor.Current);
+                var Result = FontNode[0].Font.DrawText(null, Text, Count, ref Destination, TextFormat, ref Element.FontColor.Current);
                 if (Result < 0) return Result;
             }
 

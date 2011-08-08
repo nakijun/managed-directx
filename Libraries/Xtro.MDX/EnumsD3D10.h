@@ -23,7 +23,7 @@ public enum class Blend
 	SourceColor = D3D10_BLEND_SRC_COLOR,
 	InvertSourceColor = D3D10_BLEND_INV_SRC_COLOR,
 	SourceAlpha = D3D10_BLEND_SRC_ALPHA,
-	InvertSourceAlpha = D3D10_BLEND_SRC_ALPHA,
+	InvertSourceAlpha = D3D10_BLEND_INV_SRC_ALPHA,
 	DestinationAlpha = D3D10_BLEND_DEST_ALPHA,
 	InvertDestinationAlpha = D3D10_BLEND_INV_DEST_ALPHA,
 	DestionationColor = D3D10_BLEND_DEST_COLOR,

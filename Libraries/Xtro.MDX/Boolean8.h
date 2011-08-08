@@ -1,15 +1,14 @@
-[StructLayout(LayoutKind::Sequential, Size = 32)]
 public value class Boolean8 : IEquatable<Boolean8>
 {
 private:
-	bool Value0;
-	bool Value1;
-	bool Value2;
-	bool Value3;
-	bool Value4;
-	bool Value5;
-	bool Value6;
-	bool Value7;
+	int Value0;
+	int Value1;
+	int Value2;
+	int Value3;
+	int Value4;
+	int Value5;
+	int Value6;
+	int Value7;
 
 public:
 	property bool default[int]
@@ -18,14 +17,14 @@ public:
 		{
 			switch (Index)
 			{
-			case 0 : return Value0;
-			case 1 : return Value1;
-			case 2 : return Value2;
-			case 3 : return Value3;
-			case 4 : return Value4;
-			case 5 : return Value5;
-			case 6 : return Value6;
-			case 7 : return Value7;
+			case 0 : return Value0 != 0;
+			case 1 : return Value1 != 0;
+			case 2 : return Value2 != 0;
+			case 3 : return Value3 != 0;
+			case 4 : return Value4 != 0;
+			case 5 : return Value5 != 0;
+			case 6 : return Value6 != 0;
+			case 7 : return Value7 != 0;
 			default : return 0;
 			}
 		}
@@ -52,7 +51,7 @@ public:
 		if (Booleans == nullptr || Booleans->Length < 8) return;
 
 		pin_ptr<bool> PinnedBooleans = &Booleans[0];
-		pin_ptr<bool> PinnedValue0 = &Value0;
+		pin_ptr<int> PinnedValue0 = &Value0;
 		memcpy(PinnedValue0, PinnedBooleans, Marshal::SizeOf(Boolean8::typeid));
 	}
 
@@ -80,14 +79,14 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			(int)Value0 ^
-			(int)Value1 ^
-			(int)Value2 ^
-			(int)Value3 ^
-			(int)Value4 ^
-			(int)Value5 ^
-			(int)Value6 ^
-			(int)Value7;
+			Value0 ^
+			Value1 ^
+			Value2 ^
+			Value3 ^
+			Value4 ^
+			Value5 ^
+			Value6 ^
+			Value7;
 	}
 
 	virtual bool Equals(System::Object^ Value) override
@@ -101,7 +100,7 @@ public:
 
 	virtual bool Equals(Boolean8 Value)
 	{
-		pin_ptr<bool> PinnedThis = &Value0;
+		pin_ptr<int> PinnedThis = &Value0;
 		pin_ptr<Boolean8> PinnedValue = &Value;
 
 		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Boolean8::typeid)) == 0;

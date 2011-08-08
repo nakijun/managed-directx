@@ -1,8 +1,8 @@
-[StructLayout(LayoutKind::Sequential, Size = 68)]
 public value class BlendDescription : IEquatable<BlendDescription>
 {
+private:
+	int BAlphaToCoverageEnable;
 public:
-	bool AlphaToCoverageEnable;
     Boolean8 BlendEnable;
     Blend SourceBlend;
     Blend DestinationBlend;
@@ -11,6 +11,19 @@ public:
     Blend DestinationBlendAlpha;
     Xtro::MDX::Direct3D10::BlendOperation BlendOperationAlpha;
 	Byte8 RenderTargetWriteMask;
+
+	property bool AlphaToCoverageEnable
+	{
+		bool get()
+		{
+			return BAlphaToCoverageEnable != 0;
+		}
+
+		void set(bool Value)
+		{
+			BAlphaToCoverageEnable = Value;
+		}
+	}
 
 	static bool operator == (BlendDescription Left, BlendDescription Right)
 	{
@@ -25,7 +38,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			(int)AlphaToCoverageEnable ^
+			BAlphaToCoverageEnable ^
 			BlendEnable.GetHashCode() ^
 			(int)SourceBlend ^
 			(int)DestinationBlend ^
@@ -47,7 +60,7 @@ public:
 
 	virtual bool Equals(BlendDescription Value)
 	{
-		pin_ptr<bool> PinnedAlphaToCoverageEnable = &AlphaToCoverageEnable;
+		pin_ptr<int> PinnedAlphaToCoverageEnable = &BAlphaToCoverageEnable;
 		pin_ptr<BlendDescription> PinnedValue = &Value;
 
 		return memcmp(PinnedAlphaToCoverageEnable, PinnedValue, Marshal::SizeOf(BlendDescription::typeid)) == 0;

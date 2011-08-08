@@ -2,6 +2,9 @@
 #include "Windows.h"
 #include "Microsoft DirectX SDK (August 2009)/Include/D3DX10.h"
 
+#undef DrawText
+#undef GetTextMetrics
+
 using namespace System;
 using namespace System::IO;
 using namespace System::Collections::Generic;

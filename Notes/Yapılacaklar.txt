@@ -2,6 +2,8 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
+* SwapChainDescription, RasterizerDescription
+
 * Tut10
 
 * .Release ve .Delete olan yerlerde =null da yap if içinde.
