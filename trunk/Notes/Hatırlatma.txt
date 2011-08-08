@@ -9,7 +9,7 @@
 
 * tüm enumlarý kontrol et. native halinde none olanlara bizde de ekle. olmayanlara fazladan ekleme
 
-* RasterizerDescription gibi içinde bool barýndýran ve FromNative/ToNative/Marshal iþlemine girmeyen struclarda StructLayout ve Size bilgisi ver.
+* RasterizerDescription, BlendDescription ve Boolean8 gibi içinde bool barýndýran ve FromNative/ToNative/Marshal iþlemine girmeyen struclarda bool'larý int yapýp üstlerine bool property koy.
 
 * mdx(c++) deki tüm if leri tara gerekeni "? :" yap
 

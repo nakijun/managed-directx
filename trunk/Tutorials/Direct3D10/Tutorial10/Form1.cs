@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
@@ -17,7 +18,9 @@ using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 using Xtro.MDX.Utilities;
 using Button = Xtro.MDX.Utilities.Button;
 using CheckBox = Xtro.MDX.Utilities.CheckBox;
+using Color = Xtro.MDX.Direct3DX10.Color;
 using Control = Xtro.MDX.Utilities.Control;
+using Font = Xtro.MDX.Direct3DX10.Font;
 using UtilitiesFunctions = Xtro.MDX.Utilities.Functions;
 
 namespace Tutorial10
@@ -39,8 +42,7 @@ namespace Tutorial10
             ChangeDevice = 3,
             ToggleSpin = 4,
             PuffScale = 5,
-            PuffStatic = 6,
-            ToggleWARP = 7
+            PuffStatic = 6
         }
 
         static double DegreeToRadian(double Degree)
@@ -127,7 +129,6 @@ namespace Tutorial10
             HUD.AddButton((int)ControlID.ToggleFullscreen, "Toggle full screen", 35, Y, 125, 22, 0, false, out CreatedButton);
             HUD.AddButton((int)ControlID.ChangeDevice, "Change device (F2)", 35, Y += 24, 125, 22, Keys.F2, false, out CreatedButton);
             HUD.AddButton((int)ControlID.ToggleREF, "Toggle REF (F3)", 35, Y += 24, 125, 22, Keys.F3, false, out CreatedButton);
-            HUD.AddButton((int)ControlID.ToggleWARP, "Toggle WARP (F4)", 35, Y += 24, 125, 22, Keys.F4, false, out CreatedButton);
 
             SampleUI.SetCallback(OnGUI_Event);
             Y = 10;
@@ -269,7 +270,7 @@ namespace Tutorial10
             D3DX10Functions.MatrixIdentity(out World);
 
             // Initialize the camera
-            Vector3 Eye = new Vector3(0.0f, 3.0f, -500.0f);
+            Vector3 Eye = new Vector3(0.0f, 0.0f, -800.0f);
             Vector3 At = new Vector3(0.0f, 1.0f, 0.0f);
             Camera.SetViewParameters(ref Eye, ref At);
 
@@ -673,8 +674,6 @@ namespace Tutorial10
                 UtilitiesFunctions.ToggleREF(); break;
             case (int)Form1.ControlID.ChangeDevice:
                 SettingsDialog.SetActive(!SettingsDialog.IsActive()); break;
-            case (int)Form1.ControlID.ToggleWARP:
-                UtilitiesFunctions.ToggleWARP(); break;
             case (int)Form1.ControlID.ToggleSpin:
                 {
                     Spinning = SampleUI.GetCheckBox((int)Form1.ControlID.ToggleSpin).Checked;

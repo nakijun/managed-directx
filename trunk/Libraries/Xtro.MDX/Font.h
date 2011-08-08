@@ -23,8 +23,10 @@ public:
 		RECT NativeRectangle = { Rectangle.Left, Rectangle.Top, Rectangle.Right, Rectangle.Bottom };
 		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedColor = &Color;
 
+		if (Count == -1 && String != nullptr) Count = String->Length;
+
 		IntPtr pString = Marshal::StringToHGlobalUni(String);
-		try	{ return pFont->DrawText(pSprite, (LPCTSTR)pString.ToPointer(), Count, &NativeRectangle, (unsigned int)Format, ((D3DXCOLOR*)PinnedColor)[0]); }
+		try	{ return pFont->DrawTextW(pSprite, (LPCTSTR)pString.ToPointer(), Count, &NativeRectangle, (unsigned int)Format, ((D3DXCOLOR*)PinnedColor)[0]); }
 		finally { Marshal::FreeHGlobal(pString); }
 	}
 

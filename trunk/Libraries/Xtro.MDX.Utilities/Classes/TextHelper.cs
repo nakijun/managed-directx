@@ -104,42 +104,6 @@ namespace Xtro.MDX.Utilities
             }
         }
 
-        public int DrawFormattedTextLine(string Message, params object[] Arguments)
-        {
-            return DrawTextLine(string.Format(Message, Arguments));
-        }
-
-        public int DrawTextLine(string Message)
-        {
-            if (Font == null) return Functions.ErrorBox((int)Error.InvalidArgument, "DrawTextLine");
-
-            var Rectangle = new Rectangle(Point.X, Point.Y, 0, 0);
-
-            var Result = Font.DrawTextW(Sprite, Message, -1, ref Rectangle, FontDrawFlag.NoClip, ref Color);
-            if (Result < 0) return Functions.ErrorBox(Result, "DrawText");
-
-            Point.Y += LineHeight;
-
-            return 0;
-        }
-
-        public int DrawFormattedTextLine(ref Rectangle Rectangle, FontDrawFlag Flags, string Message, params object[] Arguments)
-        {
-            return DrawTextLine(ref Rectangle, Flags, string.Format(Message, Arguments));
-        }
-
-        public int DrawTextLine(ref Rectangle Rectangle, FontDrawFlag Flags, string Message)
-        {
-            if (Font == null) return Functions.ErrorBox((int)Error.InvalidArgument, "DrawTextLine");
-
-            var Result = Font.DrawTextW(Sprite, Message, -1, ref Rectangle, Flags, ref Color);
-            if (Result < 0) return Functions.ErrorBox(Result, "DrawText");
-
-            Point.Y += LineHeight;
-
-            return 0;
-        }
-
         public void End()
         {
             if (Sprite != null)
@@ -168,6 +132,41 @@ namespace Xtro.MDX.Utilities
                 if (OriginalBlendState != null) OriginalBlendState.Release();
                 if (Device != null) Device.Release();
             }
+        }
+        public int DrawFormattedTextLine(string Message, params object[] Arguments)
+        {
+            return DrawTextLine(string.Format(Message, Arguments));
+        }
+
+        public int DrawTextLine(string Message)
+        {
+            if (Font == null) return Functions.ErrorBox((int)Error.InvalidArgument, "DrawTextLine");
+
+            var Rectangle = new Rectangle(Point.X, Point.Y, -Point.X, -Point.Y);
+
+            var Result = Font.DrawText(Sprite, Message, -1, ref Rectangle, FontDrawFlag.NoClip, ref Color);
+            if (Result < 0) return Functions.ErrorBox(Result, "DrawText");
+
+            Point.Y += LineHeight;
+
+            return 0;
+        }
+
+        public int DrawFormattedTextLine(ref Rectangle Rectangle, FontDrawFlag Flags, string Message, params object[] Arguments)
+        {
+            return DrawTextLine(ref Rectangle, Flags, string.Format(Message, Arguments));
+        }
+
+        public int DrawTextLine(ref Rectangle Rectangle, FontDrawFlag Flags, string Message)
+        {
+            if (Font == null) return Functions.ErrorBox((int)Error.InvalidArgument, "DrawTextLine");
+
+            var Result = Font.DrawText(Sprite, Message, -1, ref Rectangle, Flags, ref Color);
+            if (Result < 0) return Functions.ErrorBox(Result, "DrawText");
+
+            Point.Y += LineHeight;
+
+            return 0;
         }
     }
 }
