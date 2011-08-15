@@ -10,7 +10,7 @@ namespace Xtro.MDX.Utilities
         public struct Item
         {
             public string Text;
-            public object Data;
+            public string Data;
 
             public Rectangle ActiveRectangle;
             public bool Visible;
@@ -470,7 +470,7 @@ namespace Xtro.MDX.Utilities
             }
         }
 
-        public int AddItem(string Text, object Data)
+        public int AddItem(string Text, string Data)
         {
             // Validate parameters
             if (string.IsNullOrEmpty(Text)) return (int)Error.InvalidArgument;
@@ -531,7 +531,7 @@ namespace Xtro.MDX.Utilities
             return -1;
         }
 
-        public object GetItemData(string Text)
+        public string GetItemData(string Text)
         {
             var I = FindItem(Text);
             if (I == -1) return null;
@@ -540,7 +540,7 @@ namespace Xtro.MDX.Utilities
             return Item == null ? null : Item[0].Data;
         }
 
-        public object GetItemData(int Index)
+        public string GetItemData(int Index)
         {
             if (Index < 0 || Index >= Items.Count) return null;
 
@@ -569,7 +569,7 @@ namespace Xtro.MDX.Utilities
             return Selected;
         }
 
-        public object GetSelectedData()
+        public string GetSelectedData()
         {
             if (Selected < 0) return null;
 
@@ -615,7 +615,7 @@ namespace Xtro.MDX.Utilities
             return 0;
         }
 
-        public int SetSelectedByData(object Data)
+        public int SetSelectedByData(string Data)
         {
             for (var I = 0; I < Items.Count; I++)
             {
