@@ -3749,10 +3749,9 @@ namespace Xtro.MDX.Utilities
             var OutputInfo = Enumeration.GetOutputInfo(AdapterOrdinal, DeviceSettings.Output);
             if (OutputInfo != null) DeviceName = OutputInfo.Description.DeviceName;
 
-            var DevMode = new Windows.DevMode();
-            Windows.EnumDisplaySettings(DeviceName, -2, ref DevMode);
-            Width = DevMode.dmPelsWidth;
-            Height = DevMode.dmPelsHeight;
+            var ScreenMode = Screen.AllScreens.First(X => X.DeviceName == DeviceName);
+            Width = (uint)ScreenMode.Bounds.Width;
+            Height = (uint)ScreenMode.Bounds.Height;
         }
 
         public static Rectangle GetFullsceenClientRectangleAtModeChange()

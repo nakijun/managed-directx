@@ -36,14 +36,14 @@ namespace Xtro.MDX.Utilities
         //public const int ID_RefreshRateLabel = 12;
         //public const int ID_BackBufferFormat = 13;
         //public const int ID_BackBufferFormatLabel = 14;
-        public const int ID_DepthStencil = 15;
-        public const int ID_DepthStencilLabel = 16;
+        //public const int ID_DepthStencil = 15;
+        //public const int ID_DepthStencilLabel = 16;
         //public const int ID_MultiSampleType = 17;
         //public const int ID_MultiSampleTypeLabel = 18;
         //public const int ID_MultiSampleQuality = 19;
         //public const int ID_MultiSampleQualityLabel = 20;
-        public const int ID_VertexProcessing = 21;
-        public const int ID_VertexProcessingLabel = 22;
+        //public const int ID_VertexProcessing = 21;
+        //public const int ID_VertexProcessingLabel = 22;
         //public const int ID_PresentInterval = 23;
         //public const int ID_PresentIntervalLabel = 24;
         //public const int ID_DeviceClip = 25;
@@ -118,7 +118,7 @@ namespace Xtro.MDX.Utilities
             Dialog.AddRadioButton(ID_Windowed, ID_WindowedGroup, "Windowed", 240, 115, 300, 16, false, 0, false, out CreatedRadioButton);
             CheckBox CreatedCheckBox;
             //Dialog.AddCheckBox(ID_DeviceClip, "Clip to device when window spans across multiple monitors", 250, 136, 400, 16, false, 0, false, out CreatedCheckBox);
-            //Dialog.AddRadioButton(ID_FullScreen, ID_WindowedGroup, "Full Screen", 240, 157, 300, 16, false, 0, false, out CreatedRadioButton);
+            Dialog.AddRadioButton(ID_FullScreen, ID_WindowedGroup, "Full Screen", 240, 157, 300, 16, false, 0, false, out CreatedRadioButton);
 
             // DXUTSETTINGSDLG_ADAPTER_FORMAT
             Dialog.AddStatic(ID_AdapterFormatLabel, "Adapter Format", 10, 175, 180, 23, false, out CreatedStatic);
@@ -141,8 +141,8 @@ namespace Xtro.MDX.Utilities
             //Dialog.AddComboBox(ID_BackBufferFormat, 200, 260, 300, 23, 0, false, out CreatedComboBox);
 
             // DXUTSETTINGSDLG_DEPTH_STENCIL
-            Dialog.AddStatic(ID_DepthStencilLabel, "Depth/Stencil Format", 10, 285, 180, 23, false, out CreatedStatic);
-            Dialog.AddComboBox(ID_DepthStencil, 200, 285, 300, 23, 0, false, out CreatedComboBox);
+            //Dialog.AddStatic(ID_DepthStencilLabel, "Depth/Stencil Format", 10, 285, 180, 23, false, out CreatedStatic);
+            //Dialog.AddComboBox(ID_DepthStencil, 200, 285, 300, 23, 0, false, out CreatedComboBox);
 
             // DXUTSETTINGSDLG_MULTISAMPLE_TYPE
             //Dialog.AddStatic(ID_MultiSampleTypeLabel, "Multisample Type", 10, 310, 180, 23, false, out CreatedStatic);
@@ -153,8 +153,8 @@ namespace Xtro.MDX.Utilities
             //Dialog.AddComboBox(ID_MultiSampleQuality, 200, 335, 300, 23, 0, false, out CreatedComboBox);
 
             // DXUTSETTINGSDLG_VERTEX_PROCESSING
-            Dialog.AddStatic(ID_VertexProcessingLabel, "Vertex Processing", 10, 360, 180, 23, false, out CreatedStatic);
-            Dialog.AddComboBox(ID_VertexProcessing, 200, 360, 300, 23, 0, false, out CreatedComboBox);
+            //Dialog.AddStatic(ID_VertexProcessingLabel, "Vertex Processing", 10, 360, 180, 23, false, out CreatedStatic);
+            //Dialog.AddComboBox(ID_VertexProcessing, 200, 360, 300, 23, 0, false, out CreatedComboBox);
 
             // DXUTSETTINGSDLG_PRESENT_INTERVAL
             //Dialog.AddStatic(ID_PresentIntervalLabel, "Vertical Sync", 10, 385, 180, 23, false, out CreatedStatic);
@@ -233,9 +233,9 @@ namespace Xtro.MDX.Utilities
 
             for (var I = 0; I < RefreshRateComboBox.GetNumberOfItems(); I++)
             {
-                var Rate = (Rational[])RefreshRateComboBox.GetItemData(I);
+                var Rate = RefreshRateComboBox.GetItemData(I);
 
-                if (Rate != null && Rate[0].Numerator == RefreshRate.Numerator && Rate[0].Denominator == RefreshRate.Denominator)
+                if (Rate != null && Rate == RefreshRate.Numerator + "|" + RefreshRate.Denominator)
                 {
                     RefreshRateComboBox.SetSelectedByIndex((uint)I);
                     return;
@@ -278,7 +278,7 @@ namespace Xtro.MDX.Utilities
 
             var CurrentResolution = MakeLong((short)DeviceSettings.SwapChainDescription.BufferDescription.Width, (short)DeviceSettings.SwapChainDescription.BufferDescription.Height);
 
-            ResolutionComboBox.SetSelectedByData(CurrentResolution);
+            ResolutionComboBox.SetSelectedByData(CurrentResolution.ToString());
 
             var Result = OnResolutionChanged();
             if (Result < 0) return Result;
@@ -289,7 +289,7 @@ namespace Xtro.MDX.Utilities
                 ResolutionComboBox.RemoveAllItems();
                 AddResolution(Width, Height);
 
-                ResolutionComboBox.SetSelectedByData(MakeLong((short)Width, (short)Height));
+                ResolutionComboBox.SetSelectedByData(MakeLong((short)Width, (short)Height).ToString());
 
                 Result = OnResolutionChanged();
                 if (Result < 0) return Result;
@@ -302,7 +302,7 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_Adapter);
 
-            return (uint)ComboBox.GetSelectedData();
+            return Convert.ToUInt32(ComboBox.GetSelectedData());
         }
 
         Enumeration.AdapterInfo GetCurrentAdapterInfo()
@@ -323,7 +323,7 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_DeviceType);
 
-            if (!ComboBox.ContainsItem(DeviceType.ToString())) ComboBox.AddItem(DeviceType.ToString(), DeviceType);
+            if (!ComboBox.ContainsItem(DeviceType.ToString())) ComboBox.AddItem(DeviceType.ToString(), ((uint)DeviceType).ToString());
         }
 
         void SetWindowed(bool Windowed)
@@ -339,14 +339,14 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_DeviceType);
 
-            return (DriverType)ComboBox.GetSelectedData();
+            return (DriverType)Convert.ToUInt32(ComboBox.GetSelectedData());
         }
 
         void AddAdapterOutput(string Name, uint Output)
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_AdapterOutput);
 
-            if (!ComboBox.ContainsItem(Name)) ComboBox.AddItem(Name, Output);
+            if (!ComboBox.ContainsItem(Name)) ComboBox.AddItem(Name, Output.ToString());
         }
 
         // ReSharper disable UnusedMember.Local
@@ -355,7 +355,7 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_AdapterOutput);
 
-            return (uint)ComboBox.GetSelectedData();
+            return Convert.ToUInt32(ComboBox.GetSelectedData());
         }
 
         int OnAdapterOutputChanged()
@@ -407,7 +407,7 @@ namespace Xtro.MDX.Utilities
                 if (DeviceCombo.Windowed == Windowed) AddBackBufferFormat(DeviceCombo.BackBufferFormat);
             }
 
-            BackBufferFormatComboBox.SetSelectedByData(DeviceSettings.SwapChainDescription.BufferDescription.Format);
+            BackBufferFormatComboBox.SetSelectedByData(((uint)DeviceSettings.SwapChainDescription.BufferDescription.Format).ToString());
 
             Result = OnBackBufferFormatChanged();
             if (Result < 0) return Result;
@@ -430,17 +430,15 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_BackBufferFormat);
 
-            return (Format)ComboBox.GetSelectedData();
+            return (Format)Convert.ToUInt32(ComboBox.GetSelectedData());
         }
 
-        // ReSharper disable UnusedMember.Local
-        void AddDepthStencilBufferFormat(Format Format)
-        // ReSharper restore UnusedMember.Local
-        {
-            var ComboBox = Dialog.GetComboBox(ID_DepthStencil);
+        //void AddDepthStencilBufferFormat(Format Format)
+        //{
+        //    var ComboBox = Dialog.GetComboBox(ID_DepthStencil);
 
-            if (!ComboBox.ContainsItem(Format.ToString())) ComboBox.AddItem(Format.ToString(), Format);
-        }
+        //    if (!ComboBox.ContainsItem(Format.ToString())) ComboBox.AddItem(Format.ToString(), ((uint)Format).ToString());
+        //}
 
         int OnBackBufferFormatChanged()
         {
@@ -458,17 +456,17 @@ namespace Xtro.MDX.Utilities
                     var MultisampleCountCombo = Dialog.GetComboBox(ID_D3D10_MultiSampleCount);
                     MultisampleCountCombo.RemoveAllItems();
                     foreach (var MultiSampleCount in DeviceCombo.MultiSampleCounts) AddMultisampleCount(MultiSampleCount);
-                    MultisampleCountCombo.SetSelectedByData(DeviceSettings.SwapChainDescription.SampleDescription.Count);
+                    MultisampleCountCombo.SetSelectedByData(DeviceSettings.SwapChainDescription.SampleDescription.Count.ToString());
 
                     var Result = OnMultisampleTypeChanged();
                     if (Result < 0) return Result;
 
                     var PresentIntervalComboBox = Dialog.GetComboBox(ID_D3D10_PresentInterval);
                     PresentIntervalComboBox.RemoveAllItems();
-                    PresentIntervalComboBox.AddItem("On", 1);
-                    PresentIntervalComboBox.AddItem("Off", 0);
+                    PresentIntervalComboBox.AddItem("On", "1");
+                    PresentIntervalComboBox.AddItem("Off", "0");
 
-                    PresentIntervalComboBox.SetSelectedByData(DeviceSettings.SyncInterval);
+                    PresentIntervalComboBox.SetSelectedByData(DeviceSettings.SyncInterval.ToString());
 
                     Result = OnPresentIntervalChanged();
                     if (Result < 0) return Result;
@@ -492,7 +490,7 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_PresentInterval);
 
-            return (uint)ComboBox.GetSelectedData();
+            return Convert.ToUInt32(ComboBox.GetSelectedData());
         }
 
         Enumeration.DeviceSettingsCombo GetCurrentDeviceSettingsCombo()
@@ -501,29 +499,25 @@ namespace Xtro.MDX.Utilities
             return Enumeration.GetDeviceSettingsCombo(DeviceSettings.AdapterOrdinal,/*DeviceSettings.DriverType,DeviceSettings.Output,*/DeviceSettings.SwapChainDescription.BufferDescription.Format, DeviceSettings.SwapChainDescription.Windowed);
         }
 
-        // ReSharper disable UnusedMember.Local
-        void AddVertexProcessingType(uint Type)
-        // ReSharper restore UnusedMember.Local
-        {
-            var ComboBox = Dialog.GetComboBox(ID_VertexProcessing);
+        //void AddVertexProcessingType(uint Type)
+        //{
+        //    var ComboBox = Dialog.GetComboBox(ID_VertexProcessing);
 
-            if (!ComboBox.ContainsItem(Type.ToString())) ComboBox.AddItem(Type.ToString(), Type);
-        }
+        //    if (!ComboBox.ContainsItem(Type.ToString())) ComboBox.AddItem(Type.ToString(), Type.ToString());
+        //}
 
-        // ReSharper disable UnusedMember.Local
-        uint GetSelectedVertexProcessingType()
-        // ReSharper restore UnusedMember.Local
-        {
-            var ComboBox = Dialog.GetComboBox(ID_VertexProcessing);
+        //uint GetSelectedVertexProcessingType()
+        //{
+        //    var ComboBox = Dialog.GetComboBox(ID_VertexProcessing);
 
-            return (uint)ComboBox.GetSelectedData();
-        }
+        //    return (uint)ComboBox.GetSelectedData();
+        //}
 
         uint GetSelectedMultisampleCount()
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_MultiSampleCount);
 
-            return (uint)ComboBox.GetSelectedData();
+            return Convert.ToUInt32(ComboBox.GetSelectedData());
         }
 
         int OnMultisampleTypeChanged()
@@ -554,7 +548,7 @@ namespace Xtro.MDX.Utilities
                 AddMultisampleQuality(Quality);
             }
 
-            MultisampleQualityCombo.SetSelectedByData(DeviceSettings.SwapChainDescription.SampleDescription.Quality);
+            MultisampleQualityCombo.SetSelectedByData(DeviceSettings.SwapChainDescription.SampleDescription.Quality.ToString());
 
             var Result = OnMultisampleQualityChanged();
             return Result < 0 ? Result : 0;
@@ -564,7 +558,7 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_MultiSampleQuality);
 
-            return (uint)ComboBox.GetSelectedData();
+            return Convert.ToUInt32(ComboBox.GetSelectedData());
         }
 
         int OnMultisampleQualityChanged()
@@ -581,21 +575,21 @@ namespace Xtro.MDX.Utilities
             var QualityText = Quality.ToString();
 
             if (!ComboBox.ContainsItem(QualityText))
-                ComboBox.AddItem(QualityText, Quality);
+                ComboBox.AddItem(QualityText, Quality.ToString());
         }
 
         void AddMultisampleCount(uint Count)
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_MultiSampleCount);
 
-            if (!ComboBox.ContainsItem(Count.ToString())) ComboBox.AddItem(Count.ToString(), Count);
+            if (!ComboBox.ContainsItem(Count.ToString())) ComboBox.AddItem(Count.ToString(), Count.ToString());
         }
 
         void AddBackBufferFormat(Format Format)
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_BackBufferFormat);
 
-            if (!ComboBox.ContainsItem(Format.ToString())) ComboBox.AddItem(Format.ToString(), Format);
+            if (!ComboBox.ContainsItem(Format.ToString())) ComboBox.AddItem(Format.ToString(), ((uint)Format).ToString());
         }
 
         int OnWindowedFullScreenChanged()
@@ -632,7 +626,7 @@ namespace Xtro.MDX.Utilities
                 AddAdapterOutput(OutputInfo.Description.DeviceName, OutputInfo.OutputOrdinal);
             }
 
-            OutputComboBox.SetSelectedByData(DeviceSettings.Output);
+            OutputComboBox.SetSelectedByData(DeviceSettings.Output.ToString());
 
             var Result = OnAdapterOutputChanged();
             return Result < 0 ? Result : 0;
@@ -669,20 +663,18 @@ namespace Xtro.MDX.Utilities
                 AddDeviceType(DeviceInfo.DeviceType);
             }
 
-            DeviceTypeComboBox.SetSelectedByData(DeviceSettings.DriverType);
+            DeviceTypeComboBox.SetSelectedByData(((uint)DeviceSettings.DriverType).ToString());
 
             var Result = OnDeviceTypeChanged();
             return Result < 0 ? Result : 0;
         }
 
-        // ReSharper disable UnusedMember.Local
-        Format GetSelectedDepthStencilBufferFormat()
-        // ReSharper restore UnusedMember.Local
-        {
-            var ComboBox = Dialog.GetComboBox(ID_DepthStencil);
+        //Format GetSelectedDepthStencilBufferFormat()
+        //{
+        //    var ComboBox = Dialog.GetComboBox(ID_DepthStencil);
 
-            return (Format)ComboBox.GetSelectedData();
-        }
+        //    return (Format)ComboBox.GetSelectedData();
+        //}
 
         public void ShowControlSet()
         {
@@ -694,14 +686,14 @@ namespace Xtro.MDX.Utilities
             //Dialog.GetControl(ID_RefreshRateLabel).SetVisible(false);
             //Dialog.GetControl(ID_BackBufferFormat).SetVisible(false);
             //Dialog.GetControl(ID_BackBufferFormatLabel).SetVisible(false);
-            Dialog.GetControl(ID_DepthStencil).SetVisible(false);
-            Dialog.GetControl(ID_DepthStencilLabel).SetVisible(false);
+            //Dialog.GetControl(ID_DepthStencil).SetVisible(false);
+            //Dialog.GetControl(ID_DepthStencilLabel).SetVisible(false);
             //Dialog.GetControl(ID_MultiSampleType).SetVisible(false);
             //Dialog.GetControl(ID_MultiSampleTypeLabel).SetVisible(false);
             //Dialog.GetControl(ID_MultiSampleQuality).SetVisible(false);
             //Dialog.GetControl(ID_MultiSampleQualityLabel).SetVisible(false);
-            Dialog.GetControl(ID_VertexProcessing).SetVisible(false);
-            Dialog.GetControl(ID_VertexProcessingLabel).SetVisible(false);
+            //Dialog.GetControl(ID_VertexProcessing).SetVisible(false);
+            //Dialog.GetControl(ID_VertexProcessingLabel).SetVisible(false);
             //Dialog.GetControl(ID_PresentInterval).SetVisible(false);
             //Dialog.GetControl(ID_PresentIntervalLabel).SetVisible(false);
             //Dialog.GetControl(ID_DeviceClip).SetVisible(false);
@@ -748,7 +740,7 @@ namespace Xtro.MDX.Utilities
                 AddAdapter(AdapterInfo.UniqueDescription, AdapterInfo.AdapterOrdinal);
             }
 
-            AdapterComboBox.SetSelectedByData(DeviceSettings.AdapterOrdinal);
+            AdapterComboBox.SetSelectedByData(DeviceSettings.AdapterOrdinal.ToString());
 
             var CheckBox = Dialog.GetCheckBox(ID_D3D10_DebugDevice);
             CheckBox.Checked = 0 != (DeviceSettings.CreateFlags & CreateDeviceFlag.Debug);
@@ -761,7 +753,7 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_Adapter);
 
-            if (!ComboBox.ContainsItem(Description)) ComboBox.AddItem(Description, Adapter);
+            if (!ComboBox.ContainsItem(Description)) ComboBox.AddItem(Description, Adapter.ToString());
         }
 
         // ReSharper disable UnusedMember.Local
@@ -770,7 +762,7 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_AdapterFormat);
 
-            if (!ComboBox.ContainsItem(Format.ToString())) ComboBox.AddItem(Format.ToString(), Format);
+            if (!ComboBox.ContainsItem(Format.ToString())) ComboBox.AddItem(Format.ToString(), ((uint)Format).ToString());
         }
 
         // ReSharper disable UnusedMember.Local
@@ -779,7 +771,7 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_AdapterFormat);
 
-            return (Format)ComboBox.GetSelectedData();
+            return (Format)Convert.ToUInt32(ComboBox.GetSelectedData());
         }
 
         void OnDebugDeviceChanged()
@@ -823,16 +815,16 @@ namespace Xtro.MDX.Utilities
             //    OnRefreshRateChanged(); break;
             //case ID_BackBufferFormat:
             //    OnBackBufferFormatChanged(); break;
-            case ID_DepthStencil:
-                throw new NotImplementedException();
+            //case ID_DepthStencil:
+            //    throw new NotImplementedException();
             //OnDepthStencilBufferFormatChanged();
             //break;
             //case ID_MultiSampleType:
             //    OnMultisampleTypeChanged(); break;
             //case ID_MultiSampleQuality:
             //    OnMultisampleQualityChanged(); break;
-            case ID_VertexProcessing:
-                throw new NotImplementedException();
+            //case ID_VertexProcessing:
+            //    throw new NotImplementedException();
             //OnVertexProcessingChanged(); 
             //break;
             //case ID_PresentInterval:
@@ -986,10 +978,10 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_Resolution);
 
-            var ResolutionData = MakeLong((short)Width, (short)Height);
+            var ResolutionData = (uint)MakeLong((short)Width, (short)Height);
             var Resolution = string.Format("{0} by {1}", Width, Height);
 
-            if (!ComboBox.ContainsItem(Resolution)) ComboBox.AddItem(Resolution, ResolutionData);
+            if (!ComboBox.ContainsItem(Resolution)) ComboBox.AddItem(Resolution, ResolutionData.ToString());
         }
 
         int OnResolutionChanged()
@@ -1025,7 +1017,7 @@ namespace Xtro.MDX.Utilities
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_Resolution);
 
-            var Resolution = (uint)ComboBox.GetSelectedData();
+            var Resolution = Convert.ToUInt32(ComboBox.GetSelectedData());
 
             Width = Resolution & 0xffff;
             Height = (Resolution >> 16) & 0xffff;
@@ -1065,7 +1057,7 @@ namespace Xtro.MDX.Utilities
 
             if (!ComboBox.ContainsItem(RefreshRateText))
             {
-                ComboBox.AddItem(RefreshRateText, new[] { RefreshRate });
+                ComboBox.AddItem(RefreshRateText, RefreshRate.Numerator + "|" + RefreshRate.Denominator);
             }
         }
 
@@ -1076,7 +1068,7 @@ namespace Xtro.MDX.Utilities
             RevertModeDialog.Init(Manager, false, ControlTextureFileName);   // Don't register this dialog.
             ActiveDialog = Dialog;
             CreateControls();
-        } 
+        }
 
         public int Refresh()
         {
@@ -1115,7 +1107,7 @@ namespace Xtro.MDX.Utilities
                 AddAdapter(AdapterInfo.UniqueDescription, AdapterInfo.AdapterOrdinal);
             }
 
-            AdapterCombo.SetSelectedByData(DeviceSettings.AdapterOrdinal);
+            AdapterCombo.SetSelectedByData(DeviceSettings.AdapterOrdinal.ToString());
 
             var Result = OnAPIVersionChanged(true);
             if (Result < 0) return Result;
