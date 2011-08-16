@@ -36,6 +36,11 @@ namespace Xtro.MDX.Utilities
                 var DestinationColor = new Color(States[(int)State]);
                 D3DX10Functions.ColorLerp(out Current, ref Current, ref DestinationColor, (float)(1.0f - Math.Pow(Rate, 30 * ElapsedTime)));
             }
+
+            public void Clone(ref BlendColor Target)
+            {
+                Target.States = (uint[])States.Clone();
+            }
         };
 
         public uint Texture;          // Index of the texture for this Element 
@@ -69,6 +74,22 @@ namespace Xtro.MDX.Utilities
         {
             TextureColor.Current = new Color(TextureColor.States[(int)ControlState.Hidden]);
             FontColor.Current = new Color(FontColor.States[(int)ControlState.Hidden]);
+        }
+
+        public Element Clone()
+        {
+            var Result = new Element
+            {         
+                Font = Font,
+                TextFormat = TextFormat,
+                Texture = Texture,
+                TextureRectangle = TextureRectangle
+            };
+
+            FontColor.Clone(ref Result.FontColor);
+            TextureColor.Clone(ref Result.TextureColor);
+
+            return Result;
         }
     }
 }
