@@ -441,6 +441,7 @@ namespace Xtro.MDX.Utilities
 
             ButtonRectangle = BoundingBox;
             ButtonRectangle.X = ButtonRectangle.Right - ButtonRectangle.Height;
+            ButtonRectangle.Width -= ButtonRectangle.X - BoundingBox.X;
 
             TextRectangle = BoundingBox;
             TextRectangle.Width = ButtonRectangle.Left - TextRectangle.Left;

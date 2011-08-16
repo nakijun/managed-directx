@@ -152,13 +152,15 @@ namespace Xtro.MDX.Utilities
 
         public void SetLocation(int X, int Y)
         {
-            this.X = X; this.Y = Y;
+            this.X = X; 
+            this.Y = Y;
             UpdateRectangles();
         }
 
         public void SetSize(int Width, int Height)
         {
-            this.Width = Width; this.Height = Height;
+            this.Width = Width;
+            this.Height = Height;
             UpdateRectangles();
         }
 
@@ -211,11 +213,12 @@ namespace Xtro.MDX.Utilities
             // Update the data
             var CurrentElement = Elements[(int)ElementNo];
             CurrentElement.Font = Element.Font;
-            CurrentElement.FontColor = Element.FontColor;
             CurrentElement.TextFormat = Element.TextFormat;
             CurrentElement.Texture = Element.Texture;
-            CurrentElement.TextureColor = Element.TextureColor;
             CurrentElement.TextureRectangle = Element.TextureRectangle;
+
+            Element.FontColor.Clone(ref CurrentElement.FontColor);
+            Element.TextureColor.Clone(ref CurrentElement.TextureColor);
 
             return 0;
         }

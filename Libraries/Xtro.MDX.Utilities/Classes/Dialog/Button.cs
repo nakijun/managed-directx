@@ -120,7 +120,7 @@ namespace Xtro.MDX.Utilities
             else if (HasFocus) State = ControlState.Focus;
 
             // Background fill layer
-            //TODO: remove magic numbers
+            //xTODO: remove magic numbers
             var Element = Elements[0];
 
             var BlendRate = (State == ControlState.Pressed) ? 0.0f : 0.8f;

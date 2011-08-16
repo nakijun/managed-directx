@@ -104,12 +104,12 @@ namespace Xtro.MDX.Utilities
                 var Bottom = 1.0f - (Y + Height) * 2.0f / Manager.BackBufferHeight;
 
                 var Vertices = new[]
-                    {
-                        new ScreenVertex{X= Left,Y=  Top,    Z=0.5f,Color=new Color( ColorTopLeft) ,TU= 0.0f,TV= 0.0f},
-                        new ScreenVertex{X= Right, Y=Top,   Z= 0.5f, Color=new Color( ColorTopRight ), TU=1.0f, TV=0.0f},
-                        new ScreenVertex{X= Left,  Y=Bottom, Z=0.5f, Color=new Color( ColorBottomLeft ), TU=0.0f, TV=1.0f},
-                        new ScreenVertex{X= Right, Y=Bottom, Z=0.5f, Color=new Color( ColorBottomRight ), TU=1.0f, TV=1.0f}
-                    };
+                {
+                    new ScreenVertex{ X = Left,  Y = Top,    Z=0.5f,  Color=new Color( ColorTopLeft) ,TU= 0.0f,TV= 0.0f},
+                    new ScreenVertex{ X = Right, Y = Top,    Z= 0.5f, Color=new Color( ColorTopRight ), TU=1.0f, TV=0.0f},
+                    new ScreenVertex{ X = Left,  Y = Bottom, Z=0.5f,  Color=new Color( ColorBottomLeft ), TU=0.0f, TV=1.0f},
+                    new ScreenVertex{ X = Right, Y = Bottom, Z=0.5f,  Color=new Color( ColorBottomRight ), TU=1.0f, TV=1.0f}
+                };
 
                 UnmanagedMemory VertexBuffer;
                 if ((Manager.VertexBufferScreenQuad.Map(Map.WriteDiscard, 0, out VertexBuffer)) >= 0)
@@ -144,7 +144,7 @@ namespace Xtro.MDX.Utilities
             Manager.TechRenderUI.GetPassByIndex(0).Apply(0);
 
             // Render the caption if it's enabled.
-            if (!EnableCaption)
+            if (EnableCaption)
             {
                 // DrawSprite will offset the rect down by
                 // m_nCaptionHeight, so adjust the rect higher
@@ -648,7 +648,7 @@ namespace Xtro.MDX.Utilities
             if (Functions.GetAutomation() && E.Button == MouseButtons.Left) Manager.EnableKeyboardInputForAllDialogs();
 
             // If caption is enable, check for clicks in the caption area.
-            if (!EnableCaption)
+            if (EnableCaption)
             {
                 if (E.Button == MouseButtons.Left)
                 {
@@ -670,7 +670,7 @@ namespace Xtro.MDX.Utilities
             var MousePoint = E.Location;
 
             // If caption is enabled, offset the Y coordinate by the negative of its height.
-            if (!EnableCaption) MousePoint.Y -= CaptionHeight;
+            if (EnableCaption) MousePoint.Y -= CaptionHeight;
 
             // If a control is in focus, it belongs to this dialog, and it's enabled, then give
             // it the first chance at handling the message.
@@ -771,7 +771,7 @@ namespace Xtro.MDX.Utilities
             if (!Visible) return false;
 
             // If caption is enable, check for clicks in the caption area.
-            if (!EnableCaption)
+            if (EnableCaption)
             {
                 if (E.Button == MouseButtons.Left && Drag)
                 {
@@ -796,7 +796,7 @@ namespace Xtro.MDX.Utilities
             MousePoint.Y -= Y;
 
             // If caption is enabled, offset the Y coordinate by the negative of its height.
-            if (!EnableCaption) MousePoint.Y -= CaptionHeight;
+            if (EnableCaption) MousePoint.Y -= CaptionHeight;
 
             // If a control is in focus, it belongs to this dialog, and it's enabled, then give
             // it the first chance at handling the message.
@@ -944,7 +944,7 @@ namespace Xtro.MDX.Utilities
             MousePoint.Y -= Y;
 
             // If caption is enabled, offset the Y coordinate by the negative of its height.
-            if (!EnableCaption) MousePoint.Y -= CaptionHeight;
+            if (EnableCaption) MousePoint.Y -= CaptionHeight;
 
             // If a control is in focus, it belongs to this dialog, and it's enabled, then give
             // it the first chance at handling the message.
@@ -984,7 +984,7 @@ namespace Xtro.MDX.Utilities
             MousePoint.Y -= Y;
 
             // If caption is enabled, offset the Y coordinate by the negative of its height.
-            if (!EnableCaption) MousePoint.Y -= CaptionHeight;
+            if (EnableCaption) MousePoint.Y -= CaptionHeight;
 
             // If a control is in focus, it belongs to this dialog, and it's enabled, then give
             // it the first chance at handling the message.
@@ -1196,7 +1196,7 @@ namespace Xtro.MDX.Utilities
             Screen.Offset(Screen.Width / 2, Screen.Height / 2);
 
             // If caption is enabled, offset the Y position by its height.
-            if (!EnableCaption) Screen.Offset(0, CaptionHeight);
+            if (EnableCaption) Screen.Offset(0, CaptionHeight);
 
             var TextureNode = GetTexture(Element.Texture);
             if (TextureNode == null) return (int)Error.Fail;
@@ -1244,7 +1244,7 @@ namespace Xtro.MDX.Utilities
             Screen.Offset(X, Y);
 
             // If caption is enabled, offset the Y position by its height.
-            if (!EnableCaption) Screen.Offset(0, CaptionHeight);
+            if (EnableCaption) Screen.Offset(0, CaptionHeight);
 
             var BackBufferWidth = (float)Manager.BackBufferWidth;
             var BackBufferHeight = (float)Manager.BackBufferHeight;
@@ -1339,7 +1339,7 @@ namespace Xtro.MDX.Utilities
             {
                 if (DefaultElements[I][0].ControlType == ControlType && DefaultElements[I][0].ElementNo == ElementNo)
                 {
-                    DefaultElements[I][0].Element = Element;
+                    DefaultElements[I][0].Element = Element.Clone();
 
                     return 0;
                 }
@@ -1350,7 +1350,7 @@ namespace Xtro.MDX.Utilities
             {
                 ControlType = ControlType,
                 ElementNo = ElementNo,
-                Element = Element
+                Element = Element.Clone()
             };
 
             DefaultElements.Add(new[] { NewHolder });
@@ -1364,7 +1364,7 @@ namespace Xtro.MDX.Utilities
 
             var Dialog = Control.Dialog;
 
-            // Cycle through dialogs in the loop to find the next control. Note
+            // Cycle through dialogs in the loop to find the next control. xNote
             // that if only one control exists in all looped dialogs it will
             // be the returned 'next' control.
             while (Index >= Dialog.Controls.Count)
@@ -1382,7 +1382,7 @@ namespace Xtro.MDX.Utilities
 
             var Dialog = Control.Dialog;
 
-            // Cycle through dialogs in the loop to find the next control. Note
+            // Cycle through dialogs in the loop to find the next control. xNote
             // that if only one control exists in all looped dialogs it will
             // be the returned 'previous' control.
             while (Index < 0)
@@ -1593,7 +1593,7 @@ namespace Xtro.MDX.Utilities
             ScreenRectangle.Offset(X, Y);
 
             // If caption is enabled, offset the Y position by its height.
-            if (!EnableCaption) ScreenRectangle.Offset(0, CaptionHeight);
+            if (EnableCaption) ScreenRectangle.Offset(0, CaptionHeight);
 
             var Device = Manager.GetDevice();
 
