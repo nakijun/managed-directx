@@ -19,7 +19,7 @@ namespace Xtro.MDX.Utilities
             public uint[] States; // Modulate colors for all possible control states
             public Color Current;
 
-            public void Init(uint DefaultColor, uint DisabledColor = (uint)13172864, uint HiddenColor = (uint)0)
+            public void Init(uint DefaultColor, uint DisabledColor = 3363864704, uint HiddenColor = (uint)0)
             {
                 for (var I = 0; I < Control.MaximumStates; I++)
                 {

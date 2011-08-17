@@ -368,7 +368,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             const int ScrollBarStartX = 196;
             const int ScrollBarStartY = 191;
-            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 21, 22, 32);
+            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 21, 22, 11);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.TextureColor.States[(int)ControlState.Disabled] = (uint)SystemColor.FromArgb(255, 200, 200, 200).ToArgb();
 
@@ -378,7 +378,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTScrollBar - Up Arrow
             //-------------------------------------
-            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 1, 22, 21);
+            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 1, 22, 20);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.TextureColor.States[(int)ControlState.Disabled] = (uint)SystemColor.FromArgb(255, 200, 200, 200).ToArgb();
 
@@ -389,7 +389,7 @@ namespace Xtro.MDX.Utilities
             //-------------------------------------
             // CDXUTScrollBar - Down Arrow
             //-------------------------------------
-            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 32, 22, 53);
+            TextureRectangle = new Rectangle(ScrollBarStartX + 0, ScrollBarStartY + 32, 22, 21);
             Element.SetTexture(0, new[] { TextureRectangle });
             Element.TextureColor.States[(int)ControlState.Disabled] = (uint)SystemColor.FromArgb(255, 200, 200, 200).ToArgb();
 
