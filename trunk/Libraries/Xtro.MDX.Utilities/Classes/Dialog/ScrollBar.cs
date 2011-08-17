@@ -70,6 +70,7 @@ namespace Xtro.MDX.Utilities
             : base(Dialog)
         {
             Type = ControlType.ScrollBar;
+            this.Dialog = Dialog;
 
             ShowThumb = true;
             PageSize = 1;
@@ -158,7 +159,9 @@ namespace Xtro.MDX.Utilities
             if (Drag)
             {
                 ThumbRectangle.Height += Point.Y - ThumbOffsetY - ThumbRectangle.Top;
+                var OldY = ThumbRectangle.Y;
                 ThumbRectangle.Y = Point.Y - ThumbOffsetY;
+                ThumbRectangle.Height += OldY - ThumbRectangle.Y;
                 if (ThumbRectangle.Top < TrackRectangle.Top) ThumbRectangle.Offset(0, TrackRectangle.Top - ThumbRectangle.Top);
                 else if (ThumbRectangle.Bottom > TrackRectangle.Bottom) ThumbRectangle.Offset(0, TrackRectangle.Bottom - ThumbRectangle.Bottom);
 

@@ -19,7 +19,7 @@ namespace Xtro.MDX.Utilities
         protected int Selected;
         protected int Focused;
         protected int DropHeight;
-        protected ScrollBar ScrollBar = new ScrollBar();
+        protected ScrollBar ScrollBar;
         protected int ScrollBarWidth;
 
         protected bool Opened;
@@ -34,6 +34,8 @@ namespace Xtro.MDX.Utilities
         public ComboBox(Dialog Dialog)
             : base(Dialog)
         {
+            ScrollBar = new ScrollBar(Dialog);
+
             Type = ControlType.ComboBox;
 
             DropHeight = 100;
@@ -358,7 +360,7 @@ namespace Xtro.MDX.Utilities
                         continue;
                     }
 
-                    Item[0].ActiveRectangle = new Rectangle(DropdownTextRectangle.X, CurrentY, DropdownTextRectangle.Width, CurrentY + Font[0].Height);
+                    Item[0].ActiveRectangle = new Rectangle(DropdownTextRectangle.X, CurrentY, DropdownTextRectangle.Width, Font[0].Height);
                     CurrentY += Font[0].Height;
 
                     //debug
@@ -371,7 +373,7 @@ namespace Xtro.MDX.Utilities
                     {
                         if (I == Focused)
                         {
-                            var DrawRectangle = new Rectangle(DropdownRectangle.X, Item[0].ActiveRectangle.Y - 2, DropdownRectangle.Width, Item[0].ActiveRectangle.Bottom + 2);
+                            var DrawRectangle = new Rectangle(DropdownRectangle.X, Item[0].ActiveRectangle.Y - 2, DropdownRectangle.Width, Item[0].ActiveRectangle.Height + 2);
                             Dialog.DrawSprite(SelectionElement, ref DrawRectangle, NearButtonDepth);
                             Dialog.DrawText(Item[0].Text, SelectionElement, ref Item[0].ActiveRectangle);
                         }
@@ -454,7 +456,9 @@ namespace Xtro.MDX.Utilities
             DropdownTextRectangle = DropdownRectangle;
             DropdownTextRectangle.X += (int)(0.1f * DropdownRectangle.Width);
             DropdownTextRectangle.Width -= (int)(0.1f * DropdownRectangle.Width);
+            var OldY = DropdownTextRectangle.Y;
             DropdownTextRectangle.Y += (int)(0.1f * DropdownRectangle.Height);
+            DropdownTextRectangle.Height -= DropdownTextRectangle.Y - OldY;
             DropdownTextRectangle.Height -= (int)(0.1f * DropdownRectangle.Height);
 
             // Update the scrollbar's rects

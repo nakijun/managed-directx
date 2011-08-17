@@ -440,6 +440,13 @@ namespace Tutorial10
 
         bool HandleDialogResizeEvent(EventArgs E)
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleResizeEvent(E);
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleResizeEvent(E);
             if (NoFurtherProcessing) return false;
@@ -472,6 +479,13 @@ namespace Tutorial10
 
         bool HandleDialogActivatedEvent()
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleActivatedEvent();
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleActivatedEvent();
             if (NoFurtherProcessing) return false;
@@ -489,6 +503,13 @@ namespace Tutorial10
 
         bool HandleDialogDeactivatedEvent()
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleDeactivateEvent();
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleDeactivateEvent();
             if (NoFurtherProcessing) return false;
@@ -536,6 +557,13 @@ namespace Tutorial10
 
         bool HandleDialogMouseDownAndDoubleClickEvent(MouseEventArgs E)
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleMouseDownAndDoubleClickEvent(E);
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleMouseDownAndDoubleClickEvent(E);
             if (NoFurtherProcessing) return false;
@@ -560,6 +588,13 @@ namespace Tutorial10
 
         bool HandleDialogMouseUpEvent(MouseEventArgs E)
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleMouseUpEvent(E);
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleMouseUpEvent(E);
             if (NoFurtherProcessing) return false;
@@ -579,6 +614,13 @@ namespace Tutorial10
 
         bool HandleDialogMouseWheelEvent(MouseEventArgs E)
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleMouseWheelEvent(E);
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleMouseWheelEvent(E);
             if (NoFurtherProcessing) return false;
@@ -598,6 +640,13 @@ namespace Tutorial10
 
         bool HandleDialogMouseMoveEvent(MouseEventArgs E)
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleMouseMoveEvent(E);
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleMouseMoveEvent(E);
             if (NoFurtherProcessing) return false;
@@ -617,6 +666,13 @@ namespace Tutorial10
 
         bool HandleDialogMoveEvent(EventArgs E)
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleMoveEvent(E);
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleMoveEvent(E);
             if (NoFurtherProcessing) return false;
@@ -632,6 +688,13 @@ namespace Tutorial10
 
         bool HandleDialogMouseCaptureChangedEvent(EventArgs E)
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleMouseCaptureChangedEvent(E);
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleMouseCaptureChangedEvent(E);
             if (NoFurtherProcessing) return false;
@@ -647,6 +710,13 @@ namespace Tutorial10
 
         bool HandleDialogKeyUpEvent(KeyEventArgs E)
         {
+            // Pass messages to settings dialog if its active
+            if (SettingsDialog.IsActive())
+            {
+                SettingsDialog.HandleKeyUpEvent(E);
+                return false;
+            }
+
             // Give the dialogs a chance to handle the message first
             var NoFurtherProcessing = HUD.HandleKeyUpEvent(E);
             if (NoFurtherProcessing) return false;

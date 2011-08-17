@@ -1134,6 +1134,66 @@ namespace Xtro.MDX.Utilities
             return 0;
         }
 
+        public int HandleActivatedEvent()
+        {
+            ActiveDialog.HandleActivatedEvent();
+            return 0;
+        }
+
+        public int HandleDeactivateEvent()
+        {
+            ActiveDialog.HandleDeactivateEvent();
+            return 0;
+        }
+
+        public int HandleKeyUpEvent(KeyEventArgs E)
+        {
+            ActiveDialog.HandleKeyUpEvent(E);
+            return 0;
+        }
+
+        public int HandleMouseCaptureChangedEvent(EventArgs E)
+        {
+            ActiveDialog.HandleMouseCaptureChangedEvent(E);
+            return 0;
+        }
+
+        public int HandleMouseDownAndDoubleClickEvent(MouseEventArgs E)
+        {
+            ActiveDialog.HandleMouseDownAndDoubleClickEvent(E);
+            return 0;
+        }
+
+        public int HandleMouseMoveEvent(MouseEventArgs E)
+        {
+            ActiveDialog.HandleMouseMoveEvent(E);
+            return 0;
+        }
+
+        public int HandleMouseUpEvent(MouseEventArgs E)
+        {
+            ActiveDialog.HandleMouseUpEvent(E);
+            return 0;
+        }
+
+        public int HandleMouseWheelEvent(MouseEventArgs E)
+        {
+            ActiveDialog.HandleMouseWheelEvent(E);
+            return 0;
+        }
+
+        public int HandleMoveEvent(EventArgs E)
+        {
+            ActiveDialog.HandleMoveEvent(E);
+            return 0;
+        }
+
+        public int HandleResizeEvent(EventArgs E)
+        {
+            ActiveDialog.HandleResizeEvent(E);
+            return 0;
+        }
+
         public int OnCreateDevice(Device Device)
         {
             if (Device == null) return Functions.ErrorBox((int)Error.InvalidArgument, "SettingsDialog.OnCreateDevice");
