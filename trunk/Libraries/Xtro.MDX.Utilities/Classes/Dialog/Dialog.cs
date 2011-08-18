@@ -668,6 +668,8 @@ namespace Xtro.MDX.Utilities
             if (!MouseInput) return false;
 
             var MousePoint = E.Location;
+            MousePoint.X -= X;
+            MousePoint.Y -= Y;
 
             // If caption is enabled, offset the Y coordinate by the negative of its height.
             if (EnableCaption) MousePoint.Y -= CaptionHeight;

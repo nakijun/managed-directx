@@ -3886,7 +3886,7 @@ namespace Xtro.MDX.Utilities
         public static int ToggleREF()
         {
             var DeviceSettings = GetDeviceSettings();
-            var OrginalDeviceSettings = GetDeviceSettings();
+            var OrginalDeviceSettings = DeviceSettings.Copy();
 
             // Toggle between REF & HAL
             object Object;
@@ -3895,7 +3895,7 @@ namespace Xtro.MDX.Utilities
             if (Result >= 0)
             {
                 SwitchToRef.SetUseRef(SwitchToRef.GetUseRef() ? false : true);
-                if (SwitchToRef != null) SwitchToRef.Release();
+                SwitchToRef.Release();
                 return 0;
             }
 

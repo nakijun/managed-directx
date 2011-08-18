@@ -877,7 +877,7 @@ namespace Xtro.MDX.Utilities
                         // set appropriate global device settings to that of the current device
                         // settings.  These will get set to the user-defined settings once the
                         // user accepts the mode change
-                        var Settings = DeviceSettings;
+                        var Settings = DeviceSettings.Copy();
                         DeviceSettings.SwapChainDescription.BufferDescription.Width = CurrentSettings.SwapChainDescription.BufferDescription.Width;
                         DeviceSettings.SwapChainDescription.BufferDescription.Height = CurrentSettings.SwapChainDescription.BufferDescription.Height;
                         DeviceSettings.SwapChainDescription.BufferDescription.RefreshRate.Denominator = CurrentSettings.SwapChainDescription.BufferDescription.RefreshRate.Denominator;
