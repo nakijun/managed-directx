@@ -101,7 +101,7 @@ namespace TestMDX
             Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
 
             Adapter Adapter;
-            Factory.EnumAdapters(0, out Adapter);
+            Factory.EnumerateAdapters(0, out Adapter);
 
             Output Output;
             Adapter.EnumerateOutputs(0, out Output);

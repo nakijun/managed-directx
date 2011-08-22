@@ -344,7 +344,7 @@ namespace Xtro.MDX.Utilities
         {
             Device Device;
             Adapter Adapter = null;
-            if (DeviceCombo.DeviceType == DriverType.Hardware) Functions.GetFactory().EnumAdapters(DeviceCombo.AdapterInfo.AdapterOrdinal, out Adapter);
+            if (DeviceCombo.DeviceType == DriverType.Hardware) Functions.GetFactory().EnumerateAdapters(DeviceCombo.AdapterInfo.AdapterOrdinal, out Adapter);
 
             if (D3D10Functions.CreateDevice(Adapter, DeviceCombo.DeviceType, null, 0, out Device) < 0) return;
 
@@ -433,7 +433,7 @@ namespace Xtro.MDX.Utilities
             for (var I = (uint)0; ; I++)
             {
                 Adapter Adapter;
-                Result = Factory.EnumAdapters(I, out Adapter);
+                Result = Factory.EnumerateAdapters(I, out Adapter);
                 if (Result < 0) break; // DXGIERR_NOT_FOUND is expected when the end of the list is hit
 
                 var AdapterInfo = new AdapterInfo
