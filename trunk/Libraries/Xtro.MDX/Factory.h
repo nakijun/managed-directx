@@ -48,7 +48,7 @@ public:
 		return Result;
 	}
 
-	int EnumAdapters(unsigned int AdapterIndex, [Out] Adapter^% Adapter)
+	int EnumerateAdapters(unsigned int AdapterIndex, [Out] Adapter^% Adapter)
 	{
 		IDXGIAdapter* pAdapter = 0;
 		int Result = pFactory->EnumAdapters(AdapterIndex, &pAdapter);
