@@ -143,7 +143,7 @@ namespace Xtro.MDX.Utilities
 
             if (FontNode[0].Font != null) FontNode[0].Font.Release();
 
-            var Result = D3DX10Functions.CreateFontW(Device, FontNode[0].Height, 0, (uint)FontNode[0].Weight, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, FontNode[0].Face, out FontNode[0].Font);
+            var Result = D3DX10Functions.CreateFont(Device, FontNode[0].Height, 0, (uint)FontNode[0].Weight, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, FontNode[0].Face, out FontNode[0].Font);
 
             return Result < 0 ? Result : 0;
         }
