@@ -4,6 +4,8 @@
 
 #undef DrawText
 #undef GetTextMetrics
+#undef D3DX10CreateFont
+#undef D3DX10CreateFontIndirect
 
 using namespace System;
 using namespace System::IO;

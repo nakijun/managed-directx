@@ -414,7 +414,7 @@ public:
 		Description.ToNative(&NativeDescription);
 
 		ID3DX10Font* pFont = 0;
-		int Result = D3DX10CreateFontIndirect(pDevice, &NativeDescription, &pFont);
+		int Result = D3DX10CreateFontIndirectW(pDevice, &NativeDescription, &pFont);
 
 		if (pFont)
 		{
@@ -434,7 +434,7 @@ public:
 		ID3DX10Font* pFont = 0;
 
 		IntPtr pFaceName = Marshal::StringToHGlobalUni(FaceName);
-		try { Result = D3DX10CreateFont(pDevice, Height, Width, Weight, MipLevels, Italic, (unsigned int)CharSet, (unsigned int)OutputPrecision, (unsigned int)Quality, (unsigned int)PitchAndFamily, (LPCWSTR)pFaceName.ToPointer(), &pFont); }		
+		try { Result = D3DX10CreateFontW(pDevice, Height, Width, Weight, MipLevels, Italic, (unsigned int)CharSet, (unsigned int)OutputPrecision, (unsigned int)Quality, (unsigned int)PitchAndFamily, (LPCWSTR)pFaceName.ToPointer(), &pFont); }		
 		finally { Marshal::FreeHGlobal(pFaceName); }
 
 		if (pFont)
