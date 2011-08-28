@@ -153,14 +153,7 @@ public:
 		}
 	}
 
-	void RS_GetViewports([Out] unsigned int% NumberOfViewports)
-	{
-		pin_ptr<unsigned int> PinnedNumberOfViewports = &NumberOfViewports;
-
-		pDevice->RSGetViewports(PinnedNumberOfViewports, 0);
-	}
-
-	void RS_GetViewports(unsigned int NumberOfViewports, array<Viewport>^% Viewports)
+	void RS_GetViewports(unsigned int% NumberOfViewports, array<Viewport>^ Viewports)
 	{
 		pin_ptr<unsigned int> PinnedNumberOfViewports = &NumberOfViewports;
 		pin_ptr<Viewport> PinnedViewports = Viewports != nullptr && Viewports->Length > 0 ? &Viewports[0] : nullptr;
@@ -173,6 +166,46 @@ public:
 		pin_ptr<Viewport> PinnedViewports = Viewports != nullptr && Viewports->Length > 0 ? &Viewports[0] : nullptr;
 
 		pDevice->RSSetViewports(NumberOfViewports, (D3D10_VIEWPORT*)PinnedViewports);
+	}
+
+	void RS_GetScissorRectangles(unsigned int% NumberOfRectangles, array<System::Drawing::Rectangle>^ Rectangles)
+	{
+		pin_ptr<unsigned int> PinnedNumberOfRectangles = &NumberOfRectangles;
+		RECT* NativeRectangles = Rectangles != nullptr && Rectangles->Length > 0 ? new RECT[Rectangles->Length] : 0;
+
+		pDevice->RSGetScissorRects(PinnedNumberOfRectangles, NativeRectangles);
+
+		if (Rectangles != nullptr && Rectangles->Length > 0)
+		{
+			for (int RectangleNo = 0; RectangleNo < Rectangles->Length; RectangleNo++)
+			{
+				RECT* NativeRectangle = &NativeRectangles[RectangleNo];
+				Rectangles[RectangleNo].X = NativeRectangle->left;
+				Rectangles[RectangleNo].Y = NativeRectangle->top;
+				Rectangles[RectangleNo].Width = NativeRectangle->right - NativeRectangle->left;
+				Rectangles[RectangleNo].Height = NativeRectangle->bottom - NativeRectangle->top;
+			}
+		}
+	}
+
+	void RS_SetScissorRectangles(unsigned int NumberOfRectangles, array<System::Drawing::Rectangle>^ Rectangles)
+	{
+		RECT* NativeRectangles = 0;
+		if (Rectangles != nullptr && Rectangles->Length > 0)
+		{
+			NativeRectangles = new RECT[Rectangles->Length];
+
+			for (int RectangleNo = 0; RectangleNo < Rectangles->Length; RectangleNo++)
+			{
+				RECT* NativeRectangle = &NativeRectangles[RectangleNo];
+				NativeRectangle->left = Rectangles[RectangleNo].X;
+				NativeRectangle->top = Rectangles[RectangleNo].Y;
+				NativeRectangle->right = Rectangles[RectangleNo].Right;
+				NativeRectangle->bottom = Rectangles[RectangleNo].Bottom;
+			}
+		}
+
+		pDevice->RSSetScissorRects(NumberOfRectangles, NativeRectangles);
 	}
 
 	void IA_GetInputLayout([Out] InputLayout^% InputLayout)
@@ -200,6 +233,19 @@ public:
 		ID3D10RasterizerState* pRasterizerState = RasterizerState == nullptr ? 0 : RasterizerState->pRasterizerState;
 
 		pDevice->RSSetState(pRasterizerState);
+	}
+
+	void RS_GetState([Out] RasterizerState^% RasterizerState)
+	{
+		ID3D10RasterizerState* pRasterizerState = 0;
+		pDevice->RSGetState(&pRasterizerState);
+
+		if (pRasterizerState)
+		{
+			try { RasterizerState = (Xtro::MDX::Direct3D10::RasterizerState^)Interfaces[IntPtr(pRasterizerState)]; }
+			catch (KeyNotFoundException^) { RasterizerState = gcnew Xtro::MDX::Direct3D10::RasterizerState(IntPtr(pRasterizerState)); }					
+		}
+		else RasterizerState = nullptr;
 	}
 
 	void PS_SetShaderResources(unsigned int StartSlot, unsigned int NumberOfViews, array<ShaderResourceView^>^ ShaderResourceViews)

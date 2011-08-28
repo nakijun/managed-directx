@@ -58,6 +58,19 @@ public:
 		else Target = nullptr;
 	}
 
+	int GetContainingOutput([Out] Output^% Output)
+	{
+		IDXGIOutput* pOutput = 0;
+		return pSwapChain->GetContainingOutput(&pOutput);
+
+		if (pOutput)
+		{	
+			try { Output = (Xtro::MDX::DXGI::Output^)Interfaces[IntPtr(pOutput)]; }
+			catch (KeyNotFoundException^) { Output = gcnew Xtro::MDX::DXGI::Output(IntPtr(pOutput)); }
+		}
+		else Output = nullptr;
+	}
+
 	int GetFullscreenState([Out] bool% Fullscreen)
 	{
 		pin_ptr<bool> PinnedFullscreen = &Fullscreen;
