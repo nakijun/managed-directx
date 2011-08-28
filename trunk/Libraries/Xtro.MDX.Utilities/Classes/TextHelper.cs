@@ -87,13 +87,13 @@ namespace Xtro.MDX.Utilities
             if (Sprite != null)
             {
                 var Viewports = new Viewport[Constants.ViewportAndScissorRectangleObjectCountPerPipeline];
-                const uint ViewportCount = 1;
+                uint ViewportCount = 1;
                 Device Device;
                 Sprite.GetDevice(out Device);
                 if (Device != null)
                 {
                     // Set projection
-                    Device.RS_GetViewports(ViewportCount, ref Viewports);
+                    Device.RS_GetViewports(ref ViewportCount, Viewports);
                     Matrix ProjectionMatrix;
                     D3DX10Functions.MatrixOrthoOffCenterLH(out ProjectionMatrix, Viewports[0].TopLeftX, Viewports[0].TopLeftX + Viewports[0].Width, Viewports[0].TopLeftY, Viewports[0].TopLeftY + Viewports[0].Height, 0.1f, 10);
                     Sprite.SetProjectionTransform(ref ProjectionMatrix);
