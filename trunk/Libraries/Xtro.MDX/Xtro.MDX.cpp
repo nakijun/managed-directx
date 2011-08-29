@@ -105,6 +105,7 @@ namespace Direct3D10
 	#include "InputLayout.h"
 	#include "BlendState.h"
 	#include "Buffer.h"
+	#include "Texture1D_Description.h"
 	#include "Texture2D_Description.h"
 	#include "Texture1D.h"
 	#include "Texture2D.h"

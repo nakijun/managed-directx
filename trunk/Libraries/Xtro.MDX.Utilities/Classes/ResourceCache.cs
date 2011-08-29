@@ -114,7 +114,7 @@ namespace Xtro.MDX.Utilities
                     Texture2D_Description CopyDescription;
                     Texture.GetDescription(out CopyDescription);
                     CopyDescription.Format = Functions.MakeTypeless(CopyDescription.Format);
-                    Result = Device.CreateTexture2D(ref CopyDescription, out CopyTexture);
+                    Result = Device.CreateTexture2D(ref CopyDescription, null, out CopyTexture);
                     if (Result < 0) return Result;
 
                     Device.CopyResource(CopyTexture, Texture);
