@@ -168,7 +168,7 @@ namespace Tutorial06
             DepthStencilDescription.BindFlags = BindFlag.DepthStencil;
             DepthStencilDescription.CPU_AccessFlags = 0;
             DepthStencilDescription.MiscellaneousFlags = 0;
-            Result = Device.CreateTexture2D(ref DepthStencilDescription, out DepthStencil);
+            Result = Device.CreateTexture2D(ref DepthStencilDescription, null, out DepthStencil);
             if (Result < 0) throw new Exception("Device.CreateTexture2D has failed : " + Result);
 
             // Create the depth stencil view

@@ -179,11 +179,11 @@ public:
 		{
 			for (int RectangleNo = 0; RectangleNo < Rectangles->Length; RectangleNo++)
 			{
-				RECT* NativeRectangle = &NativeRectangles[RectangleNo];
-				Rectangles[RectangleNo].X = NativeRectangle->left;
-				Rectangles[RectangleNo].Y = NativeRectangle->top;
-				Rectangles[RectangleNo].Width = NativeRectangle->right - NativeRectangle->left;
-				Rectangles[RectangleNo].Height = NativeRectangle->bottom - NativeRectangle->top;
+				RECT* pNativeRectangle = &NativeRectangles[RectangleNo];
+				Rectangles[RectangleNo].X = pNativeRectangle->left;
+				Rectangles[RectangleNo].Y = pNativeRectangle->top;
+				Rectangles[RectangleNo].Width = pNativeRectangle->right - pNativeRectangle->left;
+				Rectangles[RectangleNo].Height = pNativeRectangle->bottom - pNativeRectangle->top;
 			}
 		}
 	}
@@ -197,11 +197,11 @@ public:
 
 			for (int RectangleNo = 0; RectangleNo < Rectangles->Length; RectangleNo++)
 			{
-				RECT* NativeRectangle = &NativeRectangles[RectangleNo];
-				NativeRectangle->left = Rectangles[RectangleNo].X;
-				NativeRectangle->top = Rectangles[RectangleNo].Y;
-				NativeRectangle->right = Rectangles[RectangleNo].Right;
-				NativeRectangle->bottom = Rectangles[RectangleNo].Bottom;
+				RECT* pNativeRectangle = &NativeRectangles[RectangleNo];
+				pNativeRectangle->left = Rectangles[RectangleNo].X;
+				pNativeRectangle->top = Rectangles[RectangleNo].Y;
+				pNativeRectangle->right = Rectangles[RectangleNo].Right;
+				pNativeRectangle->bottom = Rectangles[RectangleNo].Bottom;
 			}
 		}
 
@@ -361,30 +361,20 @@ public:
 		return Result;
 	}
 
-	int CreateTexture2D(Texture2D_Description% Description, [Out] Texture2D^% Texture2D)
+	int CreateTexture2D(Texture2D_Description% Description, array<SubResourceData>^ InitialData, [Out] Texture2D^% Texture2D)
 	{
 		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
 
-		ID3D10Texture2D* pTexture2D = 0;
-		int Result = pDevice->CreateTexture2D((D3D10_TEXTURE2D_DESC*)PinnedDescription, 0, &pTexture2D);
-
-		if (pTexture2D)
+		D3D10_SUBRESOURCE_DATA* pInitialData = 0;
+		if (InitialData != nullptr && InitialData->Length > 0)
 		{
-			try { Texture2D = (Xtro::MDX::Direct3D10::Texture2D^)Interfaces[IntPtr(pTexture2D)]; }
-			catch (KeyNotFoundException^) { Texture2D = gcnew Xtro::MDX::Direct3D10::Texture2D(IntPtr(pTexture2D)); }					
+			pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
+
+			for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+			{
+				InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+			}
 		}
-		else Texture2D = nullptr;
-
-		return Result;
-	}
-
-	int CreateTexture2D(Texture2D_Description% Description, SubResourceData% InitialData, [Out] Texture2D^% Texture2D)
-	{
-		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
-
-		D3D10_SUBRESOURCE_DATA NativeInitialData;
-		InitialData.ToNative(&NativeInitialData);
-		D3D10_SUBRESOURCE_DATA* pInitialData = &NativeInitialData;
 
 		ID3D10Texture2D* pTexture2D = 0;
 		int Result = pDevice->CreateTexture2D((D3D10_TEXTURE2D_DESC*)PinnedDescription, pInitialData, &pTexture2D);
@@ -399,22 +389,68 @@ public:
 		return Result;
 	}
 
-	int CreateTexture2D(Texture2D_Description% Description)
+	int CreateTexture2D(Texture2D_Description% Description, array<SubResourceData>^ InitialData)
 	{
 		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
 
-		return pDevice->CreateTexture2D((D3D10_TEXTURE2D_DESC*)PinnedDescription, 0, 0);
-	}
+		D3D10_SUBRESOURCE_DATA* pInitialData = 0;
+		if (InitialData != nullptr && InitialData->Length > 0)
+		{
+			pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
 
-	int CreateTexture2D(Texture2D_Description% Description, SubResourceData% InitialData)
-	{
-		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
-
-		D3D10_SUBRESOURCE_DATA NativeInitialData;
-		InitialData.ToNative(&NativeInitialData);
-		D3D10_SUBRESOURCE_DATA* pInitialData = &NativeInitialData;
+			for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+			{
+				InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+			}
+		}
 
 		return pDevice->CreateTexture2D((D3D10_TEXTURE2D_DESC*)PinnedDescription, pInitialData, 0);
+	}
+
+	int CreateTexture1D(Texture1D_Description% Description, array<SubResourceData>^ InitialData, [Out] Texture1D^% Texture1D)
+	{
+		pin_ptr<Texture1D_Description> PinnedDescription = &Description;
+
+		D3D10_SUBRESOURCE_DATA* pInitialData = 0;
+		if (InitialData != nullptr && InitialData->Length > 0)
+		{
+			pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
+
+			for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+			{
+				InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+			}
+		}
+
+		ID3D10Texture1D* pTexture1D = 0;
+		int Result = pDevice->CreateTexture1D((D3D10_TEXTURE1D_DESC*)PinnedDescription, pInitialData, &pTexture1D);
+
+		if (pTexture1D)
+		{
+			try { Texture1D = (Xtro::MDX::Direct3D10::Texture1D^)Interfaces[IntPtr(pTexture1D)]; }
+			catch (KeyNotFoundException^) { Texture1D = gcnew Xtro::MDX::Direct3D10::Texture1D(IntPtr(pTexture1D)); }					
+		}
+		else Texture1D = nullptr;
+
+		return Result;
+	}
+
+	int CreateTexture1D(Texture1D_Description% Description, array<SubResourceData>^ InitialData)
+	{
+		pin_ptr<Texture1D_Description> PinnedDescription = &Description;
+
+		D3D10_SUBRESOURCE_DATA* pInitialData = 0;
+		if (InitialData != nullptr && InitialData->Length > 0)
+		{
+			pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
+
+			for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+			{
+				InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+			}
+		}
+
+		return pDevice->CreateTexture1D((D3D10_TEXTURE1D_DESC*)PinnedDescription, pInitialData, 0);
 	}
 
 	void IA_SetVertexBuffers(unsigned int StartSlot, unsigned int NumberOfBuffers, array<Buffer^>^ VertexBuffers, array<unsigned int>^ Strides, array<unsigned int>^ Offsets)

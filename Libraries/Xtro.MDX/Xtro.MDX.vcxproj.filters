@@ -661,6 +661,9 @@
     <ClInclude Include="SwitchToRef.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
+    <ClInclude Include="Texture1D_Description.h">
+      <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">
