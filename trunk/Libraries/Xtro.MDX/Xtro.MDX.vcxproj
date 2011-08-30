@@ -166,6 +166,8 @@
     <ClInclude Include="EffectScalarVariable.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FontDescription.h" />
+    <ClInclude Include="MappedTexture2D.h" />
+    <ClInclude Include="MappedTexture3D.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshBuffer.h" />
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h" />
@@ -275,6 +277,7 @@
     <ClInclude Include="Texture2D_MS_SRV.h" />
     <ClInclude Include="Texture2D_SRV.h" />
     <ClInclude Include="Texture3D.h" />
+    <ClInclude Include="Texture3D_Description.h" />
     <ClInclude Include="Texture3D_SRV.h" />
     <ClInclude Include="TextureCubeSRV.h" />
     <ClInclude Include="TextureLoadInfo.h" />

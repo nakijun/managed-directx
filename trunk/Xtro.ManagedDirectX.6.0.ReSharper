@@ -3,6 +3,10 @@
     <ExternalPath IsNull="False">
     </ExternalPath>
     <Sharing>SOLUTION</Sharing>
+    <CSS>
+      <FormatSettings />
+      <Naming2 />
+    </CSS>
     <CSharp>
       <FormatSettings>
         <EXPLICIT_INTERNAL_MODIFIER>False</EXPLICIT_INTERNAL_MODIFIER>
@@ -58,6 +62,13 @@
         <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Other" />
       </Naming2>
     </CSharp>
+    <HTML>
+      <FormatSettings />
+    </HTML>
+    <JavaScript>
+      <FormatSettings />
+      <Naming2 />
+    </JavaScript>
     <VB>
       <FormatSettings />
       <ImportsSettings />
@@ -69,12 +80,12 @@
     <Web>
       <Naming2 />
     </Web>
-    <Xaml>
-      <Naming2 />
-    </Xaml>
     <XML>
       <FormatSettings />
     </XML>
+    <Xaml>
+      <Naming2 />
+    </Xaml>
     <GenerateMemberBody />
     <Naming2>
       <EventHandlerPatternLong>$object$_$event$</EventHandlerPatternLong>

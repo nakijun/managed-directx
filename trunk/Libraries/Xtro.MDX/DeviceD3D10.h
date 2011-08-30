@@ -407,6 +407,52 @@ public:
 		return pDevice->CreateTexture2D((D3D10_TEXTURE2D_DESC*)PinnedDescription, pInitialData, 0);
 	}
 
+	int CreateTexture3D(Texture3D_Description% Description, array<SubResourceData>^ InitialData, [Out] Texture3D^% Texture3D)
+	{
+		pin_ptr<Texture3D_Description> PinnedDescription = &Description;
+
+		D3D10_SUBRESOURCE_DATA* pInitialData = 0;
+		if (InitialData != nullptr && InitialData->Length > 0)
+		{
+			pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
+
+			for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+			{
+				InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+			}
+		}
+
+		ID3D10Texture3D* pTexture3D = 0;
+		int Result = pDevice->CreateTexture3D((D3D10_TEXTURE3D_DESC*)PinnedDescription, pInitialData, &pTexture3D);
+
+		if (pTexture3D)
+		{
+			try { Texture3D = (Xtro::MDX::Direct3D10::Texture3D^)Interfaces[IntPtr(pTexture3D)]; }
+			catch (KeyNotFoundException^) { Texture3D = gcnew Xtro::MDX::Direct3D10::Texture3D(IntPtr(pTexture3D)); }					
+		}
+		else Texture3D = nullptr;
+
+		return Result;
+	}
+
+	int CreateTexture3D(Texture3D_Description% Description, array<SubResourceData>^ InitialData)
+	{
+		pin_ptr<Texture3D_Description> PinnedDescription = &Description;
+
+		D3D10_SUBRESOURCE_DATA* pInitialData = 0;
+		if (InitialData != nullptr && InitialData->Length > 0)
+		{
+			pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
+
+			for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+			{
+				InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+			}
+		}
+
+		return pDevice->CreateTexture3D((D3D10_TEXTURE3D_DESC*)PinnedDescription, pInitialData, 0);
+	}
+
 	int CreateTexture1D(Texture1D_Description% Description, array<SubResourceData>^ InitialData, [Out] Texture1D^% Texture1D)
 	{
 		pin_ptr<Texture1D_Description> PinnedDescription = &Description;

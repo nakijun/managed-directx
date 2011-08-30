@@ -1,7 +1,7 @@
 public value class AdapterDescription : IEquatable<AdapterDescription>
 {
 internal:
-	void FromNative(DXGI_ADAPTER_DESC* Native)
+	inline void FromNative(DXGI_ADAPTER_DESC* Native)
 	{
 		Description = gcnew String(Native->Description);
 			

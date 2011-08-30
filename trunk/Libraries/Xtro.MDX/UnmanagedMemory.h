@@ -42,8 +42,6 @@ public:
 
 	UnmanagedMemory(IntPtr Pointer, unsigned int Size)
 	{
-		if (Size < 1) throw gcnew ArgumentException("Positive number required.", "Size");
-		
 		FSize = Size;
 
 		pMemory = (unsigned char*)Pointer.ToPointer();
@@ -61,6 +59,8 @@ public:
 
 	UnmanagedMemoryStream^ GetStream()
 	{
+		if (FSize < 1) throw gcnew Exception("Operation can not be performed while size is unknown.");
+		
 		return Stream == nullptr ? Stream = gcnew UnmanagedMemoryStream(pMemory, FSize, FSize, FileAccess::ReadWrite) : Stream;
 	}
 
@@ -135,6 +135,8 @@ public:
 
 	bool Equals(UnmanagedMemory^ Value)
 	{
+		if ((FSize < 1) || (Value->FSize < 1)) throw gcnew Exception("Operation can not be performed while size is unknown.");
+		
 		if (Value == nullptr) return false;
 		if (FSize != Value->FSize) return false;
 		if (pMemory != Value->pMemory) return true;
@@ -172,6 +174,8 @@ public:
 
 	void CopyTo(UnmanagedMemory^ Target)
 	{
+		if (FSize < 1) throw gcnew Exception("Operation can not be performed while size is unknown.");
+		
 		if (Target == nullptr) throw gcnew ArgumentException("Parameter can not be null", "Target");
 
 		memcpy(Target->pMemory, pMemory, FSize);
