@@ -24,10 +24,10 @@ public:
 		Size = PinnedDescription->ByteWidth;
 	}
 
-	int Map(Map MapType, unsigned int MapFlags, [Out] UnmanagedMemory^% Data)
+	int Map(Map MapType, MapFlag MapFlags, [Out] UnmanagedMemory^% Data)
 	{
 		void* pData = 0;
-		int Result = pBuffer->Map((D3D10_MAP)MapType, MapFlags, &pData);
+		int Result = pBuffer->Map((D3D10_MAP)MapType, (unsigned int)MapFlags, &pData);
 
 		if (Size < 0)
 		{

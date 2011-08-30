@@ -17,4 +17,14 @@ public:
 		pin_ptr<Texture2D_Description> PinnedDescription = &Description;
 		pTexture2D->GetDesc((D3D10_TEXTURE2D_DESC*)PinnedDescription);
 	}
+
+	int Map(unsigned int Subresource, Map MapType, MapFlag MapFlags, [Out] MappedTexture2D% MappedTexture2D, unsigned int DataSize)
+	{
+		D3D10_MAPPED_TEXTURE2D NativeMappedTexture2D;
+		int Result = pTexture2D->Map(Subresource, (D3D10_MAP)MapType, (unsigned int)MapFlags, &NativeMappedTexture2D);
+
+		MappedTexture2D.FromNative(&NativeMappedTexture2D);
+
+		return Result;
+	}
 };

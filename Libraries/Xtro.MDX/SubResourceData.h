@@ -2,13 +2,9 @@ public value class SubResourceData : IEquatable<SubResourceData>
 {
 internal:
 	/*
-	Native system memory size is unknown. We can't load from native struct
-	void FromNative(D3D10_SUBRESOURCE_DATA* Native)
+	inline void FromNative(D3D10_SUBRESOURCE_DATA* Native)
 	{
-		SystemMemory = gcnew array<Byte>(Native->??);
-		pin_ptr<Byte> PinnedSystemMemory = &SystemMemory[0];
-		memcpy(PinnedSystemMemory, Native->pSysMem, SystemMemory->Length);
-
+		SystemMemory = gcnew UnmanagedMemory(IntPtr(Native->pSysMem), 0);
 		SystemMemoryPitch = Native->SysMemPitch;
 		SystemMemorySlicePitch = Native->SysMemSlicePitch;
 	}

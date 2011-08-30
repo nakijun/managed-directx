@@ -1,7 +1,7 @@
 public value class PassDescription : IEquatable<PassDescription>
 {
 internal:				 
-	void FromNative(D3D10_PASS_DESC* Native)
+	inline void FromNative(D3D10_PASS_DESC* Native)
 	{
 		Name = gcnew String(Native->Name);
 		Annotations = Native->Annotations;
