@@ -30,6 +30,22 @@ public:
 		return Result;
 	}
 	
+	EffectTechnique^ GetTechniqueByIndex(unsigned int Index)
+	{
+		ID3D10EffectTechnique* pResult;
+
+		pResult = pEffect->GetTechniqueByIndex(Index);
+
+		EffectTechnique^ Result = nullptr;
+		if (pResult) 
+		{
+			try { Result = (EffectTechnique^)Interfaces[IntPtr(pResult)]; }
+			catch (KeyNotFoundException^) { Result = gcnew EffectTechnique(IntPtr(pResult)); }
+		}
+
+		return Result;
+	}
+	
 	EffectVariable^ GetVariableByName(String^ Name)
 	{
 		ID3D10EffectVariable* pResult;

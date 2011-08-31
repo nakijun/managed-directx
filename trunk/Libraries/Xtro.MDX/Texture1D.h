@@ -18,14 +18,19 @@ public:
 		pTexture1D->GetDesc((D3D10_TEXTURE1D_DESC*)PinnedDescription);
 	}
 
-	int Map(unsigned int Subresource, Map MapType, MapFlag MapFlags, [Out] UnmanagedMemory^% Data, unsigned int DataSize)
+	int Map(unsigned int Subresource, Map MapType, MapFlag MapFlags, [Out] UnmanagedMemory^% Data)
 	{
 		void* pData = 0;
 		int Result = pTexture1D->Map(Subresource, (D3D10_MAP)MapType, (unsigned int)MapFlags, &pData);
 
-		if (pData) Data = gcnew UnmanagedMemory(IntPtr(pData), DataSize);
+		if (pData) Data = gcnew UnmanagedMemory(IntPtr(pData), 0);
 		else Data = nullptr;
 
 		return Result;
+	}
+
+	void Unmap(unsigned int Subresource)
+	{
+		pTexture1D->Unmap(Subresource);
 	}
 };
