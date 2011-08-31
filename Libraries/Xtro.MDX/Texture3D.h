@@ -18,7 +18,7 @@ public:
 		pTexture3D->GetDesc((D3D10_TEXTURE3D_DESC*)PinnedDescription);
 	}
 
-	int Map(unsigned int Subresource, Map MapType, MapFlag MapFlags, [Out] MappedTexture3D% MappedTexture3D, unsigned int DataSize)
+	int Map(unsigned int Subresource, Map MapType, MapFlag MapFlags, [Out] MappedTexture3D% MappedTexture3D)
 	{
 		D3D10_MAPPED_TEXTURE3D NativeMappedTexture3D;
 		int Result = pTexture3D->Map(Subresource, (D3D10_MAP)MapType, (unsigned int)MapFlags, &NativeMappedTexture3D);
@@ -26,5 +26,10 @@ public:
 		MappedTexture3D.FromNative(&NativeMappedTexture3D);
 
 		return Result;
+	}
+
+	void Unmap(unsigned int Subresource)
+	{
+		pTexture3D->Unmap(Subresource);
 	}
 };
