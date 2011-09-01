@@ -132,6 +132,13 @@ public:
 	{
 		unsigned int get() { return FSize; }
 	}
+		
+	void InitSize(unsigned int Size)
+	{
+		if (FSize > 0) throw gcnew Exception("Operation can not be performed. Size is already defined.");
+
+		FSize = Size;
+	}
 
 	bool Equals(UnmanagedMemory^ Value)
 	{

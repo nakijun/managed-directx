@@ -2,8 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* Texture1D-2D-3D Map metodlarýnda size hesaplayýp unmanagedmemory'ye bildirmeye çalýþ. http://www.gamedev.net/topic/609658-how-to-get-size-of-a-mapped-subresource-of-a-texture/
-
 * StructLayout olanlarý tara ve kontrol et. Mümkünse hepsini sil. Gerekenlerde Pack=1 yada 4 kullan
   Özellikle Byte2 gibi 4 byte olmayan field olanlarý iyi kontrol et. Bool ile ayný sorunu yaþýyo olabilirler.
 
