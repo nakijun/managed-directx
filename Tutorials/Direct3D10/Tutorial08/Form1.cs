@@ -303,6 +303,12 @@ namespace Tutorial08
             if (VertexLayout != null) VertexLayout.Release();
             if (TextureResourceView != null) TextureResourceView.Release();
             if (Effect != null) Effect.Release();
+
+            VertexBuffer = null;
+            IndexBuffer = null;
+            VertexLayout = null;
+            TextureResourceView = null;
+            Effect = null;
         }
 
         int OnSwapChainResized(Device Device, SwapChain SwapChain, ref SurfaceDescription BackBufferSurfaceDescription, object UserContext)

@@ -2,21 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* StructLayout olanlarý tara ve kontrol et. Mümkünse hepsini sil. Gerekenlerde Pack=1 yada 4 kullan
-  Özellikle Byte2 gibi 4 byte olmayan field olanlarý iyi kontrol et. Bool ile ayný sorunu yaþýyo olabilirler.
-
-* .Release ve .Delete olan yerlerde =null da yap if içinde.
-
-* gerekenler : bu listeyi development ve deployment olarak iki farklý þekilde hazýrla.
-    - .net 4 framework
-    - vc++ runtime (x86 or x64) (current version is 2010 sp1. this can be updated in the future)
-    - august2009 distrubutable runtime
-    - D3D10Ref.DLL (ref kullanýlacaksa)
-    - D3D10SDKLayers.DLL (debug çalýþtýrýlacaksa)
-
-   test metodundaki mesajlarý ona göre deðiþtir.
-   googlecode daki gerekenler bilgisini ona göre deðiþtir.
-   
 * GetHashCode içinde null kontrolü yap (ör:ShaderMacro struct)
 
 * FontCharacterSet gibi DX'e ait olmayanlarý Windows yada Base namespace'e taþý.

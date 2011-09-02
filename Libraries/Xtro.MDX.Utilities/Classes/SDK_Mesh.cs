@@ -1031,6 +1031,7 @@ namespace Xtro.MDX.Utilities
                             }
 
                             MaterialPairArray[M].DiffuseResourceView.Release();
+                            MaterialPairArray[M].DiffuseResourceView = null;
                         }
                         if (MaterialPairArray[M].NormalResourceView != null)
                         {
@@ -1042,6 +1043,7 @@ namespace Xtro.MDX.Utilities
                             }
 
                             MaterialPairArray[M].NormalResourceView.Release();
+                            MaterialPairArray[M].NormalResourceView = null;
                         }
                         if (MaterialPairArray[M].SpecularResourceView != null)
                         {
@@ -1053,6 +1055,7 @@ namespace Xtro.MDX.Utilities
                             }
 
                             MaterialPairArray[M].SpecularResourceView.Release();
+                            MaterialPairArray[M].SpecularResourceView = null;
                         }
                     }
                 }
@@ -1060,11 +1063,13 @@ namespace Xtro.MDX.Utilities
                 for (var I = 0; I < Header.NumberOfVertexBuffers; I++)
                 {
                     if (VertexBufferPairArray[I].VertexBuffer != null) VertexBufferPairArray[I].VertexBuffer.Release();
+                    VertexBufferPairArray[I].VertexBuffer = null;
                 }
 
                 for (var I = 0; I < Header.NumberOfIndexBuffers; I++)
                 {
                     if (IndexBufferPairArray[I].IndexBuffer != null) IndexBufferPairArray[I].IndexBuffer.Release();
+                    IndexBufferPairArray[I].IndexBuffer = null;
                 }
             }
 
@@ -1073,6 +1078,7 @@ namespace Xtro.MDX.Utilities
                 for (var I = 0; I < Header.NumberOfIndexBuffers; I++)
                 {
                     if (AdjacencyIndexBufferPairArray[I].IndexBuffer != null) AdjacencyIndexBufferPairArray[I].IndexBuffer.Release();
+                    AdjacencyIndexBufferPairArray[I].IndexBuffer = null;
                 }
             }
 

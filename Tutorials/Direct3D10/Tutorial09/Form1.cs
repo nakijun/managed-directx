@@ -209,6 +209,9 @@ namespace Tutorial09
             if (VertexLayout != null) VertexLayout.Release();
             if (Effect != null) Effect.Release();
             Mesh.Delete();
+
+            VertexLayout = null;
+            Effect = null;
         }
 
         int OnSwapChainResized(Device Device, SwapChain SwapChain, ref SurfaceDescription BackBufferSurfaceDescription, object UserContext)

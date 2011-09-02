@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential, Size = 16)]
 public value class Byte16 : IEquatable<Byte16>
 {
 private:

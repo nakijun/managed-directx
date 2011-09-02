@@ -290,6 +290,12 @@ namespace Tutorial11
             if (VertexLayout != null) VertexLayout.Release();
             if (Effect != null) Effect.Release();
             Mesh.Delete();
+
+            D3DX10Font = null;
+            Sprite = null;
+            TextHelper = null;
+            VertexLayout = null;
+            Effect = null;
         }
 
         int OnSwapChainResized(Device Device, SwapChain SwapChain, ref SurfaceDescription BackBufferSurfaceDescription, object UserContext)

@@ -1,4 +1,3 @@
-[StructLayout(LayoutKind::Sequential, Size = 76)]
 public value class StateBlockMask : IEquatable<StateBlockMask>
 {
 public:
