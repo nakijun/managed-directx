@@ -18,9 +18,9 @@ namespace Tutorial06
             catch
             {
 #if DEBUG
-                MessageBox.Show("Xtro.MDX (debug runtime) can not be loaded. Possibly, DirectX 10 (August 2009) (debug runtime) is not available.");
+                MessageBox.Show("Xtro.MDX (debug runtime) can not be loaded. Possibly, VC++ 2010 SP1 redistributable or DirectX 10 (August 2009) (debug runtime) is not installed.");
 #else
-                MessageBox.Show("Xtro.MDX can not be loaded. Possibly, DirectX 10 (August 2009) is not available.");
+                MessageBox.Show("Xtro.MDX can not be loaded. Possibly, VC++ 2010 SP1 redistributable or DirectX 10 (August 2009) is not installed.");
 #endif     
                 return;
             }
