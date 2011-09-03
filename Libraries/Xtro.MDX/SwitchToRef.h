@@ -1,4 +1,4 @@
-public ref class SwitchToRef : DeviceChild
+public ref class SwitchToRef sealed : DeviceChild
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10SwitchToRef);

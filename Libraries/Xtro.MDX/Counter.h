@@ -1,4 +1,4 @@
-public ref class Counter : Asynchronous
+public ref class Counter sealed : Asynchronous
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Counter);

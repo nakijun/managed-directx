@@ -1,5 +1,5 @@
 
-* cast için as kullanmaktan vazgeç
+* Bütün struct parametrelerini ref yap
 
 * struct larýn public contsructorlarý olmasýn. DirectX C++ tanýmlarýnda bulunan constructorlar hariç. 
 

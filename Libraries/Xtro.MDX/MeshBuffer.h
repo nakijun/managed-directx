@@ -1,4 +1,4 @@
-public ref class MeshBuffer : Unknown
+public ref class MeshBuffer sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10MeshBuffer);

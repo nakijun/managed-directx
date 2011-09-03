@@ -1,4 +1,4 @@
-public ref class Texture3D : Resource
+public ref class Texture3D sealed : Resource
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Texture3D);

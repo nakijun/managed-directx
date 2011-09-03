@@ -1,4 +1,4 @@
-public ref class Blob : Unknown
+public ref class Blob sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Blob);

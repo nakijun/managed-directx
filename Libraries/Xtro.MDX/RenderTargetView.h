@@ -1,4 +1,4 @@
-public ref class RenderTargetView : View
+public ref class RenderTargetView sealed : View
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10RenderTargetView);

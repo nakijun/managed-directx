@@ -1,5 +1,5 @@
 generic<typename T> where T : value class
-public ref class UnmanagedMemory : Xtro::MDX::UnmanagedMemory
+public ref class UnmanagedMemory sealed : Xtro::MDX::UnmanagedMemory
 {
 public:
 	UnmanagedMemory(unsigned int Size) : Xtro::MDX::UnmanagedMemory(Size)

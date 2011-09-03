@@ -1,4 +1,4 @@
-public ref class EffectVectorVariable : EffectVariable
+public ref class EffectVectorVariable sealed : EffectVariable
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectVectorVariable);

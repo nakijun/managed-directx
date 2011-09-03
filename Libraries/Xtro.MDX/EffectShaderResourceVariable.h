@@ -1,4 +1,4 @@
-public ref class EffectShaderResourceVariable : EffectVariable
+public ref class EffectShaderResourceVariable sealed : EffectVariable
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectShaderResourceVariable);

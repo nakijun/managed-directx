@@ -35,7 +35,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			SystemMemory->GetHashCode() ^
+			SystemMemory == nullptr ? 1 : SystemMemory->GetHashCode() ^
 			(int)SystemMemoryPitch ^
 			(int)SystemMemorySlicePitch;
 	}

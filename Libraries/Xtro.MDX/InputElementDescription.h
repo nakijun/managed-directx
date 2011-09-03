@@ -43,7 +43,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			SemanticName->GetHashCode() ^
+			SemanticName == nullptr ? 1 : SemanticName->GetHashCode() ^
 			SemanticIndex ^
 			(int)Format ^
 			InputSlot ^

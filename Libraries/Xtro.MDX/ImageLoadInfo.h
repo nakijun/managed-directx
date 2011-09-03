@@ -12,7 +12,7 @@ internal:
 		Native->MipLevels = MipLevels;
 		Native->Usage = (D3D10_USAGE)Usage;
 		Native->BindFlags = (unsigned int)BindFlags;
-		Native->CpuAccessFlags = (unsigned int)CPU_AccessFlags;
+		Native->CpuAccessFlags = (unsigned int)CpuAccessFlags;
 		Native->MiscFlags = (unsigned int)MiscellaneousFlags;
 		Native->Format = (DXGI_FORMAT)Format;
 		Native->Filter = (unsigned int)Filter;
@@ -42,7 +42,7 @@ public:
 	unsigned int MipLevels;
 	Direct3D10::Usage Usage;
 	BindFlag BindFlags;
-	CPU_AccessFlag CPU_AccessFlags;
+	CpuAccessFlag CpuAccessFlags;
 	ResourceMiscellaneousFlag MiscellaneousFlags;
 	Format Format;
 	FilterFlag Filter;
@@ -61,7 +61,7 @@ public:
 			Result.MipLevels = D3DX10_DEFAULT;
 			Result.Usage = (Direct3D10::Usage) D3DX10_DEFAULT;
 			Result.BindFlags = (BindFlag)D3DX10_DEFAULT;
-			Result.CPU_AccessFlags = (CPU_AccessFlag)D3DX10_DEFAULT;
+			Result.CpuAccessFlags = (CpuAccessFlag)D3DX10_DEFAULT;
 			Result.MiscellaneousFlags = (ResourceMiscellaneousFlag)D3DX10_DEFAULT;
 			Result.Format = (Direct3D10::Format)DXGI_FORMAT_FROM_FILE;
 			Result.Filter = (FilterFlag)D3DX10_DEFAULT;
@@ -91,7 +91,7 @@ public:
 			(int)MipLevels ^
 			(int)Usage ^
 			(int)BindFlags ^
-			(int)CPU_AccessFlags ^
+			(int)CpuAccessFlags ^
 			(int)MiscellaneousFlags ^
 			(int)Format ^
 			(int)Filter ^
@@ -121,7 +121,7 @@ public:
 			MipLevels == Value.MipLevels &&
 			Usage == Value.Usage &&
 			BindFlags == Value.BindFlags &&
-			CPU_AccessFlags == Value.CPU_AccessFlags &&
+			CpuAccessFlags == Value.CpuAccessFlags &&
 			MiscellaneousFlags == Value.MiscellaneousFlags &&
 			Format == Value.Format &&
 			Filter == Value.Filter &&
@@ -141,7 +141,7 @@ public:
 			Value1.MipLevels == Value2.MipLevels &&
 			Value1.Usage == Value2.Usage &&
 			Value1.BindFlags == Value2.BindFlags &&
-			Value1.CPU_AccessFlags == Value2.CPU_AccessFlags &&
+			Value1.CpuAccessFlags == Value2.CpuAccessFlags &&
 			Value1.MiscellaneousFlags == Value2.MiscellaneousFlags &&
 			Value1.Format == Value2.Format &&
 			Value1.Filter == Value2.Filter &&

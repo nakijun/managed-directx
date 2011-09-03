@@ -1,4 +1,4 @@
-public ref class RasterizerState : DeviceChild
+public ref class RasterizerState sealed : DeviceChild
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10RasterizerState);

@@ -7,7 +7,7 @@ public:
 	Format Format;
 	Usage Usage;
 	BindFlag BindFlags;
-	CPU_AccessFlag CPU_AccessFlags;
+	CpuAccessFlag CpuAccessFlags;
 	ResourceMiscellaneousFlag MiscellaneousFlags;
 
 	static bool operator == (Texture1D_Description Left, Texture1D_Description Right)
@@ -29,7 +29,7 @@ public:
 			(int)Format ^
 			(int)Usage ^
 			(int)BindFlags ^
-			(int)CPU_AccessFlags ^
+			(int)CpuAccessFlags ^
 			(int)MiscellaneousFlags;
 	}
 

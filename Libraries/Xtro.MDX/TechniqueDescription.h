@@ -26,7 +26,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			Name->GetHashCode() ^
+			Name == nullptr ? 1 : Name->GetHashCode() ^
 			(int)Passes ^
 			(int)Annotations;
 	}

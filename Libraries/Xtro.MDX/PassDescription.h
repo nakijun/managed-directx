@@ -63,9 +63,9 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			Name->GetHashCode() ^
+			Name == nullptr ? 1 : Name->GetHashCode() ^
 			Annotations ^
-			IA_InputSignature->GetHashCode() ^
+			(IA_InputSignature == nullptr ? 1 : IA_InputSignature->GetHashCode()) ^
 			StencilRef ^
 			SampleMask ^
 			BlendFactor.GetHashCode();

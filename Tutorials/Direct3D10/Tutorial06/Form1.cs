@@ -166,7 +166,7 @@ namespace Tutorial06
             DepthStencilDescription.SampleDescription.Quality = 0;
             DepthStencilDescription.Usage = Usage.Default;
             DepthStencilDescription.BindFlags = BindFlag.DepthStencil;
-            DepthStencilDescription.CPU_AccessFlags = 0;
+            DepthStencilDescription.CpuAccessFlags = 0;
             DepthStencilDescription.MiscellaneousFlags = 0;
             Result = Device.CreateTexture2D(ref DepthStencilDescription, null, out DepthStencil);
             if (Result < 0) throw new Exception("Device.CreateTexture2D has failed : " + Result);
@@ -313,7 +313,7 @@ namespace Tutorial06
                 ByteWidth = (uint)Vertices.Size,
                 Usage = Usage.Default,
                 BindFlags = BindFlag.VertexBuffer,
-                CPU_AccessFlags = 0,
+                CpuAccessFlags = 0,
                 MiscellaneousFlags = 0
             };
 
@@ -353,7 +353,7 @@ namespace Tutorial06
                 ByteWidth = (uint)Indices.Size,
                 Usage = Usage.Default,
                 BindFlags = BindFlag.IndexBuffer,
-                CPU_AccessFlags = 0,
+                CpuAccessFlags = 0,
                 MiscellaneousFlags = 0
             };
 

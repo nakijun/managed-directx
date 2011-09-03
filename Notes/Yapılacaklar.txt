@@ -2,22 +2,12 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* GetHashCode içinde null kontrolü yap (ör:ShaderMacro struct)
+* bikaç tutorial daha yap
 
-* FontCharacterSet gibi DX'e ait olmayanlarý Windows yada Base namespace'e taþý.
-
-* gereksiz switch'leri if e çevir.
-
-* tüm E_OUTOFMEMORY leri implement et. C++ da tara. C#'a ekle try içinde
-  gerekli assertleri de yap.
+* structure'larý yap
+  interface'leri yap
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
-
-* doðal çift yönlü(method yok) : (default sequential olduðundan bu açýklama gereksiz kaldý) doðrudan native fonksiyonlara geçebilecek (içinde String^ gibi þeyler olmayan, basit tipler ve sequential struct'lar içeren) struclar [StructLayout(LayoutKind::Sequential)] olmalý. Ör : Viewport
-  çift yönlü(ToNative+FromNative) : (default sequential olduðundan bu açýklama gereksiz kaldý) Sequential olmayan struct içeren struct'larýn ToNative ve FromNative metodu (internal olarak lazýmsa).
-  çift yönlü(Marshal+FromNative) : içinde String^ veya struct*(ör:ImageLoadInfo) olanlarýn ShaderMacro'daki gibi Marshal/Unmarshal ve FromNative metodlarý olmalý (internal olarak lazýmsa). FontDescription'da marshal yerine ToNative var çünkü native versiyondaki FaceName boyu sabit, yeri memory'den alýnmýþ bi string.
-
-* tüm son classlarý sealed yap : public ref class Factory sealed : Object
 
 * dx dökümanýnda tüm method parametrelerini kontrol et.
     struct larý hep ref '%' (gereken durumlarda da out)olarak geçirdiðimiz için null alabilen durumlarda metodun o parametresi olmayan versiyonu yapýlacak.
@@ -32,11 +22,5 @@
           ResetCaretBlink  
       AddEditBox
       AddListBox
-
-* bikaç tutorial daha yap
-
-* enum larý yap
-
-* structure larý yap
 
 * XInput : DXUT_GAMEPAD, EnableXInput

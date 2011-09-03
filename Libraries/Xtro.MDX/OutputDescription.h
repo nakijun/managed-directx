@@ -35,7 +35,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			DeviceName->GetHashCode() ^
+			DeviceName == nullptr ? 1 : DeviceName->GetHashCode() ^
 			DesktopCoordinates.GetHashCode() ^
 			AttachedToDesktop.GetHashCode() ^
 			(int)Rotation ^

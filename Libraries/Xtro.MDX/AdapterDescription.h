@@ -39,7 +39,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			Description->GetHashCode() ^
+			Description == nullptr ? 1 : Description->GetHashCode() ^
 			VendorId ^
 			DeviceId ^
 			SubSystemId ^

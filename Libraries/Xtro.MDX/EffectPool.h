@@ -1,4 +1,4 @@
-public ref class EffectPool : Unknown
+public ref class EffectPool sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectPool);
