@@ -169,7 +169,7 @@ namespace Xtro.MDX.Utilities
             LoadInfo.MipLevels = 1;
             LoadInfo.Usage = Usage.Default;
             LoadInfo.BindFlags = BindFlag.ShaderResource;
-            LoadInfo.CPU_AccessFlags = 0;
+            LoadInfo.CpuAccessFlags = 0;
             LoadInfo.MiscellaneousFlags = 0;
             LoadInfo.Format = Functions.MakeTypeless(SourceInfo.Format);
             LoadInfo.Filter = FilterFlag.None;
@@ -282,7 +282,7 @@ namespace Xtro.MDX.Utilities
             BufferDescription.ByteWidth = (uint)Marshal.SizeOf(typeof(Dialog.ScreenVertex)) * 4;
             BufferDescription.Usage = Usage.Dynamic;
             BufferDescription.BindFlags = BindFlag.VertexBuffer;
-            BufferDescription.CPU_AccessFlags = CPU_AccessFlag.Write;
+            BufferDescription.CpuAccessFlags = CpuAccessFlag.Write;
             BufferDescription.MiscellaneousFlags = 0;
             Result = Device.CreateBuffer(ref BufferDescription, out VertexBufferScreenQuad);
 

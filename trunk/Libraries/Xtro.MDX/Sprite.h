@@ -1,4 +1,4 @@
-public ref class Sprite : Unknown
+public ref class Sprite sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10Sprite);

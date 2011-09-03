@@ -546,15 +546,8 @@ namespace Xtro.MDX.Utilities
 
             // Store device description
             string DeviceStats = null;
-            switch (DeviceType)
-            {
-            case DriverType.Reference:
-                DeviceStats = "REFERENCE";
-                break;
-            case DriverType.Hardware:
-                DeviceStats = "HARDWARE";
-                break;
-            }
+            if (DeviceType == DriverType.Reference) DeviceStats = "REFERENCE";
+            else if (DeviceType == DriverType.Hardware) DeviceStats = "HARDWARE";
 
             if (DeviceType == DriverType.Hardware)
             {
@@ -627,7 +620,7 @@ namespace Xtro.MDX.Utilities
                     },
                     Usage = Usage.Default,
                     BindFlags = BindFlag.DepthStencil,
-                    CPU_AccessFlags = 0,
+                    CpuAccessFlags = 0,
                     MiscellaneousFlags = 0
                 };
                 Result = Device.CreateTexture2D(ref DepthStencilDescription, null, out DepthStencil);
@@ -2478,7 +2471,9 @@ namespace Xtro.MDX.Utilities
         {
             if (Enumeration.Singular == null) new Enumeration();
 
+            // ReSharper disable PossibleNullReferenceException
             if ((!Enumeration.Singular.HasEnumerated || ForceEnumerate))
+            // ReSharper restore PossibleNullReferenceException
             {
                 Enumeration.Singular.SetEnumerateAllAdapterFormats(EnumerateAllAdapterFormats, false);
                 Callbacks.IsDeviceAcceptable CallbackIsDeviceAcceptable;

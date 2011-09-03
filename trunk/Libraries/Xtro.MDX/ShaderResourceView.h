@@ -1,4 +1,4 @@
-public ref class ShaderResourceView : View
+public ref class ShaderResourceView sealed : View
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10ShaderResourceView);

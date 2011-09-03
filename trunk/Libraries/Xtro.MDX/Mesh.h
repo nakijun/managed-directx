@@ -1,4 +1,4 @@
-public ref class Mesh : Unknown
+public ref class Mesh sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10Mesh);

@@ -1,4 +1,4 @@
-public ref class BlendState : DeviceChild
+public ref class BlendState sealed : DeviceChild
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10BlendState);

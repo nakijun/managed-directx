@@ -44,7 +44,7 @@ public:
 			TextureCoordinates.GetHashCode() ^
 			TextureSize.GetHashCode() ^
 			ColorModulate.GetHashCode() ^
-			Texture->GetHashCode() ^
+			(Texture == nullptr ? 1 : Texture->GetHashCode()) ^
 			TextureIndex;
 	}
 

@@ -21,7 +21,7 @@ namespace Xtro.MDX.Utilities
             public ResourceMiscellaneousFlag MiscellaneousFlags;
             public Usage Usage;
             public Format Format;
-            public CPU_AccessFlag CpuAccessFlags;
+            public CpuAccessFlag CpuAccessFlags;
             public BindFlag BindFlags;
             public ShaderResourceView ShaderResourceView;
         };
@@ -69,7 +69,7 @@ namespace Xtro.MDX.Utilities
                     Entry.MipLevels == LoadInfo[0].MipLevels &&
                     Entry.Usage == LoadInfo[0].Usage &&
                     Entry.Format == LoadInfo[0].Format &&
-                    Entry.CpuAccessFlags == LoadInfo[0].CPU_AccessFlags &&
+                    Entry.CpuAccessFlags == LoadInfo[0].CpuAccessFlags &&
                     Entry.BindFlags == LoadInfo[0].BindFlags &&
                     Entry.MiscellaneousFlags == LoadInfo[0].MiscellaneousFlags)
                 {
@@ -91,7 +91,7 @@ namespace Xtro.MDX.Utilities
                 MipLevels = LoadInfo[0].MipLevels,
                 Usage = LoadInfo[0].Usage,
                 Format = LoadInfo[0].Format,
-                CpuAccessFlags = LoadInfo[0].CPU_AccessFlags,
+                CpuAccessFlags = LoadInfo[0].CpuAccessFlags,
                 BindFlags = LoadInfo[0].BindFlags,
                 MiscellaneousFlags = LoadInfo[0].MiscellaneousFlags
             };

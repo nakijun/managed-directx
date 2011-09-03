@@ -1,4 +1,4 @@
-public ref class Include : Interface
+public ref class Include sealed : Interface
 {
 private:
 	//static Guid IID = IID_Converter::ToManaged(IID_ID3D10Include);

@@ -1,4 +1,4 @@
-public ref class SwapChain : Object
+public ref class SwapChain sealed : Object
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_IDXGISwapChain);

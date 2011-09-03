@@ -33,7 +33,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			Data->GetHashCode() ^
+			Data == nullptr ? 1 : Data->GetHashCode() ^
 			(int)RowPitch ^
 			(int)DepthPitch;
 	}

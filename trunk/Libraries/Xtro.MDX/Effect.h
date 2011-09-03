@@ -1,4 +1,4 @@
-public ref class Effect : Unknown
+public ref class Effect sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Effect);

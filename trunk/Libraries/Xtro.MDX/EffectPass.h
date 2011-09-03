@@ -1,4 +1,4 @@
-public ref class EffectPass : Interface
+public ref class EffectPass sealed : Interface
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10EffectPass);

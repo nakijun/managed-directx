@@ -1,4 +1,4 @@
-public ref class Font : Unknown
+public ref class Font sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3DX10Font);

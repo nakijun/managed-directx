@@ -1,4 +1,4 @@
-public ref class Device : Object
+public ref class Device sealed : Object
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_IDXGIDevice);

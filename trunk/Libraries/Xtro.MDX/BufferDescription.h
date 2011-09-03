@@ -4,7 +4,7 @@ public:
 	unsigned int ByteWidth;
 	Usage Usage;
 	BindFlag BindFlags;
-	CPU_AccessFlag CPU_AccessFlags;
+	CpuAccessFlag CpuAccessFlags;
 	ResourceMiscellaneousFlag MiscellaneousFlags;
 
 	static bool operator == (BufferDescription Left, BufferDescription Right)
@@ -23,7 +23,7 @@ public:
 			ByteWidth ^
 			(int)Usage ^
 			(int)BindFlags ^
-			(int)CPU_AccessFlags ^
+			(int)CpuAccessFlags ^
 			(int)MiscellaneousFlags;
 	}
 

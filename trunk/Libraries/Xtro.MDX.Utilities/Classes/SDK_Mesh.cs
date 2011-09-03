@@ -329,7 +329,7 @@ namespace Xtro.MDX.Utilities
             BufferDescription.ByteWidth = (uint)Header.SizeBytes;
             BufferDescription.Usage = Usage.Default;
             BufferDescription.BindFlags = BindFlag.VertexBuffer;
-            BufferDescription.CPU_AccessFlags = 0;
+            BufferDescription.CpuAccessFlags = 0;
             BufferDescription.MiscellaneousFlags = 0;
 
             if (LoaderCallbacks != null && LoaderCallbacks.Length > 0 && LoaderCallbacks[0].CreateVertexBuffer != null) LoaderCallbacks[0].CreateVertexBuffer(Device, out HeaderPair.VertexBuffer, BufferDescription, Vertices, LoaderCallbacks[0].Context);
@@ -353,7 +353,7 @@ namespace Xtro.MDX.Utilities
             BufferDescription.ByteWidth = (uint)Header.SizeBytes;
             BufferDescription.Usage = Usage.Default;
             BufferDescription.BindFlags = BindFlag.IndexBuffer;
-            BufferDescription.CPU_AccessFlags = 0;
+            BufferDescription.CpuAccessFlags = 0;
             BufferDescription.MiscellaneousFlags = 0;
 
             if (LoaderCallbacks != null && LoaderCallbacks.Length > 0 && LoaderCallbacks[0].CreateVertexBuffer != null) LoaderCallbacks[0].CreateIndexBuffer(Device, out HeaderPair.IndexBuffer, BufferDescription, Indices, LoaderCallbacks[0].Context);
@@ -1250,7 +1250,7 @@ namespace Xtro.MDX.Utilities
                 BufferDescription.ByteWidth = AdjacencyIndices.Size;
                 BufferDescription.Usage = Usage.Immutable;
                 BufferDescription.BindFlags = BindFlag.IndexBuffer;
-                BufferDescription.CPU_AccessFlags = 0;
+                BufferDescription.CpuAccessFlags = 0;
                 BufferDescription.MiscellaneousFlags = 0;
 
                 var InitData = new SubResourceData { SystemMemory = AdjacencyIndices };
@@ -1332,10 +1332,8 @@ namespace Xtro.MDX.Utilities
 
             switch ((IndexType)IndexBufferHeader.IndexType)
             {
-            case IndexType.x16:
-                return Format.R16_UInt;
-            case IndexType.x32:
-                return Format.R32_UInt;
+            case IndexType.x16: return Format.R16_UInt;
+            case IndexType.x32: return Format.R32_UInt;
             }
             return Format.R16_UInt;
         }

@@ -462,12 +462,6 @@
     <ClInclude Include="EffectVectorVariable.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="EnumsD3D10.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="EnumsD3DX10.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="FunctionsD3D10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -672,6 +666,15 @@
     </ClInclude>
     <ClInclude Include="MappedTexture2D.h">
       <Filter>Direct3D10\Resource\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Enums.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumsD3DX10.h">
+      <Filter>Direct3DX10</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumsD3D10.h">
+      <Filter>Direct3D10</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

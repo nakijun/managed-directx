@@ -1,4 +1,4 @@
-public ref class Device : Unknown
+public ref class Device sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Device);

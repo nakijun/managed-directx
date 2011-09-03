@@ -1,4 +1,4 @@
-public ref class StateBlock : Unknown
+public ref class StateBlock sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10StateBlock);

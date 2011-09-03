@@ -256,7 +256,7 @@ namespace Tutorial04
                 ByteWidth = (uint)Vertices.Size,
                 Usage = Usage.Default,
                 BindFlags = BindFlag.VertexBuffer,
-                CPU_AccessFlags = 0,
+                CpuAccessFlags = 0,
                 MiscellaneousFlags = 0
             };
 
@@ -296,7 +296,7 @@ namespace Tutorial04
                 ByteWidth = (uint)Indices.Size,
                 Usage = Usage.Default,
                 BindFlags = BindFlag.IndexBuffer,
-                CPU_AccessFlags = 0,
+                CpuAccessFlags = 0,
                 MiscellaneousFlags = 0
             };
 

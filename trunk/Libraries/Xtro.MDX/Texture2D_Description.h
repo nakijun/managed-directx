@@ -9,7 +9,7 @@ public:
 	SampleDescription SampleDescription;
 	Usage Usage;
 	BindFlag BindFlags;
-	CPU_AccessFlag CPU_AccessFlags;
+	CpuAccessFlag CpuAccessFlags;
 	ResourceMiscellaneousFlag MiscellaneousFlags;
 
 	static bool operator == (Texture2D_Description Left, Texture2D_Description Right)
@@ -33,7 +33,7 @@ public:
 			SampleDescription.GetHashCode() ^
 			(int)Usage ^
 			(int)BindFlags ^
-			(int)CPU_AccessFlags ^
+			(int)CpuAccessFlags ^
 			(int)MiscellaneousFlags;
 	}
 

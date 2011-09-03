@@ -1,60 +1,31 @@
-/// <summary>
-/// Error codes that can be returned by Direct3DX
-/// </summary>
+[Flags]
+public enum class ChannelFlag
+{
+	Red = D3DX10_CHANNEL_RED,
+    Blue = D3DX10_CHANNEL_BLUE,
+    Green = D3DX10_CHANNEL_GREEN,
+    Alpha = D3DX10_CHANNEL_ALPHA,
+    Luminance = D3DX10_CHANNEL_LUMINANCE 
+};
+
+public enum class CpuOptimization
+{
+	None = D3DX_NOT_OPTIMIZED,
+    _3D_Now = D3DX_3DNOW_OPTIMIZED,
+    SSE2 = D3DX_SSE2_OPTIMIZED,
+    SSE = D3DX_SSE_OPTIMIZED 
+};
+
 public enum class Error
 {
-    /// <summary>
-    /// The index buffer cannot be modified.
-    /// <para>(Also see DirectX SDK:  D3DX10_ERR_CANNOT_MODIFY_INDEX_BUFFER )</para>
-    /// </summary>
     CannotModifyIndexBuffer = D3DX10_ERR_CANNOT_MODIFY_INDEX_BUFFER,
-
-    /// <summary>
-    /// The mesh is invalid. 
-    /// <para>(Also see DirectX SDK:  D3DX10_ERR_INVALID_MESH )</para>
-    /// </summary>
 	InvalidMesh = D3DX10_ERR_INVALID_MESH, 
-	
-    /// <summary>
-    /// Attribute sort (D3DXMESHOPT_ATTRSORT) is not supported as an optimization technique. 
-    /// <para>(Also see DirectX SDK:  D3DX10_ERR_CANNOT_ATTR_SORT )</para>
-    /// </summary>
 	CannotAttributeSort = D3DX10_ERR_CANNOT_ATTR_SORT, 
-	
-    /// <summary>
-    /// Skinning is not supported. 
-    /// <para>(Also see DirectX SDK:  D3DX10_ERR_SKINNING_NOT_SUPPORTED )</para>
-    /// </summary>
 	SkinningNotSupported = D3DX10_ERR_SKINNING_NOT_SUPPORTED, 
-	
-    /// <summary>
-    /// Too many influences specified. 
-    /// <para>(Also see DirectX SDK:  D3DX10_ERR_TOO_MANY_INFLUENCES )</para>
-    /// </summary>
 	TooManyInfluences = D3DX10_ERR_TOO_MANY_INFLUENCES, 
-	
-    /// <summary>
-    /// The data is invalid. 
-    /// <para>(Also see DirectX SDK:  D3DX10_ERR_INVALID_DATA )</para>
-    /// </summary>
 	InvalidData = D3DX10_ERR_INVALID_DATA, 
-	
-    /// <summary>
-    /// The mesh has no data. 
-    /// <para>(Also see DirectX SDK:  D3DX10_ERR_LOADED_MESH_HAS_NO_DATA )</para>
-    /// </summary>
 	MeshHasNoData = D3DX10_ERR_LOADED_MESH_HAS_NO_DATA, 
-	
-    /// <summary>
-    /// A fragment with that name already exists. 
-    /// <para>(Also see DirectX SDK:  D3DX10_ERR_DUPLICATE_NAMED_FRAGMENT )</para>
-    /// </summary>
 	DuplicateNamedFragment = D3DX10_ERR_DUPLICATE_NAMED_FRAGMENT, 
-	
-    /// <summary>
-    /// The last item cannot be deleted. 
-    /// <para>(Also see DirectX SDK:  D3DX10_ERR_CANNOT_REMOVE_LAST_ITEM )</para>
-    /// </summary>
 	CannotRemoveLastItem = D3DX10_ERR_CANNOT_REMOVE_LAST_ITEM, 
 };
 
@@ -77,106 +48,6 @@ public enum class FilterFlag
 	SRGB = D3DX10_FILTER_SRGB
 };
 
-public enum class FontCharacterSet
-{
-	Ansi = ANSI_CHARSET,
-	Default = DEFAULT_CHARSET,
-	Symbol = SYMBOL_CHARSET,
-	ShiftJIS = SHIFTJIS_CHARSET,
-	Hangul = HANGUL_CHARSET,
-	GB2312 = GB2312_CHARSET,
-	ChineseBig5 = CHINESEBIG5_CHARSET,
-	Oem = OEM_CHARSET,
-	Johab = JOHAB_CHARSET,
-	Hebrew = HEBREW_CHARSET,
-	Arabic = ARABIC_CHARSET,
-	Greek = GREEK_CHARSET,
-	Turkish = TURKISH_CHARSET,
-	Vietnamese = VIETNAMESE_CHARSET,
-	Thai = THAI_CHARSET,
-	EastEurope = EASTEUROPE_CHARSET,
-	Russian = RUSSIAN_CHARSET,
-	Baltic = BALTIC_CHARSET,
-	Mac = MAC_CHARSET
-};
-
-[Flags]
-public enum class FontDrawFlag
-{
-	Top = DT_TOP,
-	CalculateRectange = DT_CALCRECT,
-	Left = DT_LEFT,
-	Center = DT_CENTER,
-	Right = DT_RIGHT,
-	VerticalCenter = DT_VCENTER,
-	Bottom = DT_BOTTOM,
-	WordBreak = DT_WORDBREAK,
-	SingleLine = DT_SINGLELINE,
-	ExpandTabs = DT_EXPANDTABS,
-	NoClip = DT_NOCLIP,
-	RtlReading = DT_RTLREADING,
-};
-
-[Flags]
-public enum class FontPitchAndFamily
-{
-	Default = DEFAULT_PITCH,
-	Fixed = FIXED_PITCH,
-	Variable = VARIABLE_PITCH,
-	Mono = MONO_FONT,
-	DontCare = FF_DONTCARE,
-	Roman = FF_ROMAN,
-	Swiss = FF_SWISS,
-	Modern = FF_MODERN,
-	Script = FF_SCRIPT,
-	Decorative = FF_DECORATIVE,
-};
-
-public enum class FontPrecision
-{
-	Default = OUT_DEFAULT_PRECIS,
-	String = OUT_STRING_PRECIS,
-	Character = OUT_CHARACTER_PRECIS,
-	Stroke = OUT_STROKE_PRECIS,
-	TrueType = OUT_TT_PRECIS,
-	Device = OUT_DEVICE_PRECIS,
-	Raster = OUT_RASTER_PRECIS,
-	TrueTypeOnly = OUT_TT_ONLY_PRECIS,
-	Outline = OUT_OUTLINE_PRECIS,
-	ScreenOutline = OUT_SCREEN_OUTLINE_PRECIS,
-	PostScriptOnly = OUT_PS_ONLY_PRECIS,
-};
-
-public enum class FontQuality
-{
-	Default = DEFAULT_QUALITY,
-	Draft = DRAFT_QUALITY,
-	Proof = PROOF_QUALITY,
-	NonAntialiased = NONANTIALIASED_QUALITY,
-	Antialiased = ANTIALIASED_QUALITY,
-	ClearType = CLEARTYPE_QUALITY,
-	ClearTypeNatural = CLEARTYPE_NATURAL_QUALITY,
-};
-
-public enum class FontWeight
-{
-	DoNotCare = FW_DONTCARE,
-	Thin = FW_THIN,
-	ExtraLight = FW_EXTRALIGHT,
-	UltraLight = FW_ULTRALIGHT,
-	Light = FW_LIGHT,
-	Normal = FW_NORMAL,
-	Regular = FW_REGULAR,
-	Medium = FW_MEDIUM,
-	SemiBold = FW_SEMIBOLD,
-	DemiBold = FW_DEMIBOLD,
-	Bold = FW_BOLD,
-	ExtraBold = FW_EXTRABOLD,
-	UltraBold = FW_ULTRABOLD,
-	Heavy = FW_HEAVY,
-	Black = FW_BLACK,
-};
-
 public enum class ImageFileFormat
 {
 	BMP = D3DX10_IFF_BMP,
@@ -197,6 +68,37 @@ public enum class MeshFlag
 };
 
 [Flags]
+public enum class MeshDiscardFlag
+{
+    AttiributeBuffer = D3DX10_MESH_DISCARD_ATTRIBUTE_BUFFER,
+    AttiributeTable = D3DX10_MESH_DISCARD_ATTRIBUTE_TABLE,
+    PointerReps = D3DX10_MESH_DISCARD_POINTREPS,
+    Adjacency = D3DX10_MESH_DISCARD_ADJACENCY,
+    DeviceBuffers = D3DX10_MESH_DISCARD_DEVICE_BUFFERS
+};
+
+public enum class MeshOptimization
+{
+    Compact = D3DX10_MESHOPT_COMPACT,
+    AttributeSort = D3DX10_MESHOPT_ATTR_SORT,
+    VertexCache = D3DX10_MESHOPT_VERTEX_CACHE,
+    StripReorder = D3DX10_MESHOPT_STRIP_REORDER,
+    IgnoreVertices = D3DX10_MESHOPT_IGNORE_VERTS,
+    DoNotSplit = D3DX10_MESHOPT_DO_NOT_SPLIT,
+    DeviceIndependent = D3DX10_MESHOPT_DEVICE_INDEPENDENT
+};
+
+[Flags]
+public enum class NormalMapFlag
+{
+    MirrorU = D3DX10_NORMALMAP_MIRROR_U,
+    MirrorV = D3DX10_NORMALMAP_MIRROR_V,
+    Mirror = D3DX10_NORMALMAP_MIRROR,
+    InvertSign = D3DX10_NORMALMAP_INVERTSIGN,
+    ComputeOcclusion = D3DX10_NORMALMAP_COMPUTE_OCCLUSION
+};
+
+[Flags]
 public enum class SpriteFlag
 {
 	SortTexture = D3DX10_SPRITE_SORT_TEXTURE,
@@ -204,4 +106,10 @@ public enum class SpriteFlag
 	SortDepthFrontToBack = D3DX10_SPRITE_SORT_DEPTH_FRONT_TO_BACK,
 	SaveState = D3DX10_SPRITE_SAVE_STATE,
 	AddReferenceTextures = D3DX10_SPRITE_ADDREF_TEXTURES
+};
+
+[Flags]
+public enum class SaveTextureFlag
+{
+	UseInputBlob = D3DX10_STF_USEINPUTBLOB
 };

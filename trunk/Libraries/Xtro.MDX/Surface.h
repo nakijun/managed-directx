@@ -1,4 +1,4 @@
-public ref class Surface : DeviceSubObject
+public ref class Surface sealed : DeviceSubObject
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_IDXGISurface);

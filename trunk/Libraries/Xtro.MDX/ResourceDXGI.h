@@ -1,4 +1,4 @@
-public ref class Resource : DeviceSubObject
+public ref class Resource sealed : DeviceSubObject
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_IDXGIResource);

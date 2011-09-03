@@ -19,6 +19,7 @@ namespace Xtro
 {
 namespace MDX
 {
+	#include "Enums.h"
 	#include "Interface.h"
 	#include "IID_Converter.h"
 	#include "Unknown.h"

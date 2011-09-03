@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial10", "Tutorials\Dir
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial11", "Tutorials\Direct3D10\Tutorial11\Tutorial11.csproj", "{5435EFB0-D10E-441B-9AF2-DADE44369C50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial12", "Tutorials\Direct3D10\Tutorial12\Tutorial12.csproj", "{46035401-0199-47DF-A901-0F3FF77C8E8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +239,18 @@ Global
 		{5435EFB0-D10E-441B-9AF2-DADE44369C50}.Release|x64.Build.0 = Release|x64
 		{5435EFB0-D10E-441B-9AF2-DADE44369C50}.Release|x86.ActiveCfg = Release|x86
 		{5435EFB0-D10E-441B-9AF2-DADE44369C50}.Release|x86.Build.0 = Release|x86
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Debug|x64.ActiveCfg = Debug|x64
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Debug|x64.Build.0 = Debug|x64
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Debug|x86.ActiveCfg = Debug|x86
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Debug|x86.Build.0 = Debug|x86
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Release|x64.ActiveCfg = Release|x64
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Release|x64.Build.0 = Release|x64
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Release|x86.ActiveCfg = Release|x86
+		{46035401-0199-47DF-A901-0F3FF77C8E8E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -258,6 +272,7 @@ Global
 		{8B6F4B42-0071-4458-9B2D-323C37A65BFC} = {313C9716-B43C-4374-BE57-814CA8368A4A}
 		{0EE401DD-6039-4B3F-BBAB-847830F961AB} = {313C9716-B43C-4374-BE57-814CA8368A4A}
 		{5435EFB0-D10E-441B-9AF2-DADE44369C50} = {313C9716-B43C-4374-BE57-814CA8368A4A}
+		{46035401-0199-47DF-A901-0F3FF77C8E8E} = {313C9716-B43C-4374-BE57-814CA8368A4A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

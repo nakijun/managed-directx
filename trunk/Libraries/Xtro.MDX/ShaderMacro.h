@@ -36,7 +36,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			(Name == nullptr ? 1 : Name->GetHashCode()) ^
+			Name == nullptr ? 1 : Name->GetHashCode() ^
 			(Definition == nullptr ? 1 : Definition->GetHashCode());
 	}
 
