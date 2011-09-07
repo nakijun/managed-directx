@@ -37,7 +37,7 @@ public:
 		return
 			DeviceName == nullptr ? 1 : DeviceName->GetHashCode() ^
 			DesktopCoordinates.GetHashCode() ^
-			AttachedToDesktop.GetHashCode() ^
+			(int)AttachedToDesktop ^
 			(int)Rotation ^
 			Monitor.GetHashCode();
 	}

@@ -103,22 +103,22 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			(int)Value0 ^
-			(int)Value1 ^
-			(int)Value2 ^
-			(int)Value3 ^
-			(int)Value4 ^
-			(int)Value5 ^
-			(int)Value6 ^
-			(int)Value7 ^
-			(int)Value8 ^
-			(int)Value9 ^
-			(int)Value10 ^
-			(int)Value11 ^
-			(int)Value12 ^
-			(int)Value13 ^
-			(int)Value14 ^
-			(int)Value15;
+			Value0 ^
+			Value1 ^
+			Value2 ^
+			Value3 ^
+			Value4 ^
+			Value5 ^
+			Value6 ^
+			Value7 ^
+			Value8 ^
+			Value9 ^
+			Value10 ^
+			Value11 ^
+			Value12 ^
+			Value13 ^
+			Value14 ^
+			Value15;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

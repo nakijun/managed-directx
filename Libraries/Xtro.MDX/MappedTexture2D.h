@@ -31,7 +31,7 @@ public:
 	{
 		return
 			Data == nullptr ? 1 : Data->GetHashCode() ^
-			(int)RowPitch;
+			RowPitch;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

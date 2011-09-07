@@ -47,10 +47,10 @@ public:
 	{
 		return
 			Height ^
-			(int)Width ^
+			Width ^
 			(int)Weight ^
-			(int)MipLevels ^
-			Italic.GetHashCode() ^
+			MipLevels ^
+			(int)Italic ^
 			(int)CharacterSet ^
 			(int)OutputPrecision ^
 			(int)Quality ^

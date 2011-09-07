@@ -185,7 +185,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\Libraries\Xtro.MDX\Xtro.MDX.vcxproj">
       <Project>{044D1601-01D1-46D9-BDE9-E610AF329F8B}</Project>
-      <Name>Xtro.MDX %28Libraries\Xtro.MDX%29</Name>
+      <Name>Xtro.MDX</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

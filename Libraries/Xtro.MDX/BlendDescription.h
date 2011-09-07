@@ -1,8 +1,7 @@
 public value class BlendDescription : IEquatable<BlendDescription>
 {
-private:
-	int BAlphaToCoverageEnable;
 public:
+	bool AlphaToCoverageEnable;
     Boolean8 BlendEnable;
     Blend SourceBlend;
     Blend DestinationBlend;
@@ -11,19 +10,6 @@ public:
     Blend DestinationBlendAlpha;
     Xtro::MDX::Direct3D10::BlendOperation BlendOperationAlpha;
 	Byte8 RenderTargetWriteMask;
-
-	property bool AlphaToCoverageEnable
-	{
-		bool get()
-		{
-			return BAlphaToCoverageEnable != 0;
-		}
-
-		void set(bool Value)
-		{
-			BAlphaToCoverageEnable = Value;
-		}
-	}
 
 	static bool operator == (BlendDescription Left, BlendDescription Right)
 	{
@@ -38,7 +24,7 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			BAlphaToCoverageEnable ^
+			(int)AlphaToCoverageEnable ^
 			BlendEnable.GetHashCode() ^
 			(int)SourceBlend ^
 			(int)DestinationBlend ^
@@ -60,10 +46,10 @@ public:
 
 	virtual bool Equals(BlendDescription Value)
 	{
-		pin_ptr<int> PinnedAlphaToCoverageEnable = &BAlphaToCoverageEnable;
+		pin_ptr<bool> PinnedThis = &AlphaToCoverageEnable;
 		pin_ptr<BlendDescription> PinnedValue = &Value;
 
-		return memcmp(PinnedAlphaToCoverageEnable, PinnedValue, Marshal::SizeOf(BlendDescription::typeid)) == 0;
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(BlendDescription::typeid)) == 0;
 	}
 
 	static bool Equals(BlendDescription% Value1, BlendDescription% Value2)

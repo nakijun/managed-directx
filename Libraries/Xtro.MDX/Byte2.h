@@ -61,8 +61,8 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			(int)Value0 ^
-			(int)Value1;
+			Value0 ^
+			Value1;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

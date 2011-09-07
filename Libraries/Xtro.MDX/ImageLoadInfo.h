@@ -84,11 +84,11 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			(int)Width ^
-			(int)Height ^
-			(int)Depth ^
-			(int)FirstMipLevel ^
-			(int)MipLevels ^
+			Width ^
+			Height ^
+			Depth ^
+			FirstMipLevel ^
+			MipLevels ^
 			(int)Usage ^
 			(int)BindFlags ^
 			(int)CpuAccessFlags ^
@@ -96,7 +96,7 @@ public:
 			(int)Format ^
 			(int)Filter ^
 			(int)MipFilter ^
-			SourceInfo.GetHashCode();
+			(SourceInfo.HasValue ? SourceInfo.Value.GetHashCode() : 1);
 	}
 
 	virtual bool Equals(System::Object^ Value) override

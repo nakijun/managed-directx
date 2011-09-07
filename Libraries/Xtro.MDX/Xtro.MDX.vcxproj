@@ -161,6 +161,9 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantsD3D10.h" />
+    <ClInclude Include="DepthStencilDescription.h" />
+    <ClInclude Include="DepthStencilOperationDescription.h" />
+    <ClInclude Include="DepthStencilState.h" />
     <ClInclude Include="DeviceChild_ForwardedMethods.h" />
     <ClInclude Include="DeviceDXGI.h" />
     <ClInclude Include="EffectScalarVariable.h" />

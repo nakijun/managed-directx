@@ -633,6 +633,26 @@ public:
 		return Result;
 	}
 
+	int CreateDepthStencilState(DepthStencilDescription% DepthStencilDescription, [Out] DepthStencilState^% DepthStencilState)
+	{
+		pin_ptr<Xtro::MDX::Direct3D10::DepthStencilDescription> PinnedDepthStencilDescription = &DepthStencilDescription;
+
+		D3D10_DEPTH_STENCIL_DESC dsDesc;
+		memcpy(&dsDesc, PinnedDepthStencilDescription, sizeof(D3D10_DEPTH_STENCIL_DESC));
+
+		ID3D10DepthStencilState* pDepthStencilState = 0;
+		int Result = pDevice->CreateDepthStencilState((D3D10_DEPTH_STENCIL_DESC*)PinnedDepthStencilDescription, &pDepthStencilState);
+
+		if (pDepthStencilState)
+		{
+			try { DepthStencilState = (Xtro::MDX::Direct3D10::DepthStencilState^)Interfaces[IntPtr(pDepthStencilState)]; }
+			catch (KeyNotFoundException^) { DepthStencilState = gcnew Xtro::MDX::Direct3D10::DepthStencilState(IntPtr(pDepthStencilState)); }					
+		}
+		else DepthStencilState = nullptr;
+
+		return Result;
+	}
+
 	void OM_GetBlendState([Out] BlendState^% BlendState, [Out] Float4% BlendFactor, [Out] unsigned int% SampleMask)
 	{
 		pin_ptr<Float4> PinnedBlendFactor = &BlendFactor;
@@ -655,5 +675,12 @@ public:
 		pin_ptr<Float4> PinnedBlendFactor = &BlendFactor;
 
 		pDevice->OMSetBlendState(pBlendState, (float*)PinnedBlendFactor, SampleMask);
+	}
+
+	void OM_SetDepthStencilState(DepthStencilState^ DepthStencilState, unsigned int StencilReference)
+	{
+		ID3D10DepthStencilState* pDepthStencilState = DepthStencilState == nullptr ? 0 : DepthStencilState->pDepthStencilState;
+
+		pDevice->OMSetDepthStencilState(pDepthStencilState, StencilReference);
 	}
 };

@@ -2,7 +2,9 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* bikaç tutorial daha yap
+* dumanlý tank
+
+* fixed func emu örneði yap
 
 * structure'larý yap
   interface'leri yap

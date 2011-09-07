@@ -15,7 +15,8 @@ public:
 
 	virtual int GetHashCode() override
 	{
-		return UnusedField_NothingToDefine;
+		return
+			UnusedField_NothingToDefine;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

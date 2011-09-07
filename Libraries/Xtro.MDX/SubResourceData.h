@@ -36,8 +36,8 @@ public:
 	{
 		return
 			SystemMemory == nullptr ? 1 : SystemMemory->GetHashCode() ^
-			(int)SystemMemoryPitch ^
-			(int)SystemMemorySlicePitch;
+			SystemMemoryPitch ^
+			SystemMemorySlicePitch;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

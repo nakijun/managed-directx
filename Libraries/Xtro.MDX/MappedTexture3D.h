@@ -34,8 +34,8 @@ public:
 	{
 		return
 			Data == nullptr ? 1 : Data->GetHashCode() ^
-			(int)RowPitch ^
-			(int)DepthPitch;
+			RowPitch ^
+			DepthPitch;
 	}
 
 	virtual bool Equals(System::Object^ Value) override
