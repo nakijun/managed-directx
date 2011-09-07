@@ -9,8 +9,8 @@
 
 * warningleri temizle. (release/debug - x32 / x64 olarak 4 derlemeyi de kontrol et)
 
-* RasterizerDescription, BlendDescription ve Boolean8 gibi
-   içinde peþ peþe bool barýndýran ve peþ peþe olanlarýn sayýsý 4'ü tamamlamayan
+* RasterizerDescription, DepthStencilDescription ve Boolean8 gibi
+   içinde peþ peþe bool(yada unsigned char) barýndýran +
    FromNative/ToNative/Marshal iþlemine girmeyen struclarda
    bool'larý int yapýp üstlerine bool property koy.
 

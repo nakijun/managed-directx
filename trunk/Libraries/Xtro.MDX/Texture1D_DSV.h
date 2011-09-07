@@ -15,7 +15,8 @@ public:
 
 	virtual int GetHashCode() override
 	{
-		return MipSlice;
+		return
+			MipSlice;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

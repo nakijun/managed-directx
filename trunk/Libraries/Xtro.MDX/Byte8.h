@@ -79,14 +79,14 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			(int)Value0 ^
-			(int)Value1 ^
-			(int)Value2 ^
-			(int)Value3 ^
-			(int)Value4 ^
-			(int)Value5 ^
-			(int)Value6 ^
-			(int)Value7;
+			Value0 ^
+			Value1 ^
+			Value2 ^
+			Value3 ^
+			Value4 ^
+			Value5 ^
+			Value6 ^
+			Value7;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

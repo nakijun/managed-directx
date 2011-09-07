@@ -67,8 +67,8 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			SourceBox.GetHashCode() ^
-			DestinationBox.GetHashCode() ^
+			(SourceBox.HasValue ? SourceBox.Value.GetHashCode() : 1) ^
+			(DestinationBox.HasValue ? DestinationBox.Value.GetHashCode() : 1) ^
 			SourceFirstMip ^
 			DestinationFirstMip ^
 			NumberOfMips ^

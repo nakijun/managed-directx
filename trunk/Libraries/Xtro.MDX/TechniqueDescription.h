@@ -27,8 +27,8 @@ public:
 	{
 		return
 			Name == nullptr ? 1 : Name->GetHashCode() ^
-			(int)Passes ^
-			(int)Annotations;
+			Passes ^
+			Annotations;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

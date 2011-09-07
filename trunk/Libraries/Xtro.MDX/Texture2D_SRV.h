@@ -16,7 +16,9 @@ public:
 
 	virtual int GetHashCode() override
 	{
-		return MipLevels;
+		return 
+			MostDetailedMip ^
+			MipLevels;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

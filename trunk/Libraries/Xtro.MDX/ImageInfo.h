@@ -24,11 +24,11 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			(int)Width ^
-			(int)Height ^
-			(int)Depth ^
-			(int)ArraySize ^
-			(int)MipLevels ^
+			Width ^
+			Height ^
+			Depth ^
+			ArraySize ^
+			MipLevels ^
 			(int)MiscellaneousFlags ^
 			(int)Format ^
 			(int)ResourceDimension ^

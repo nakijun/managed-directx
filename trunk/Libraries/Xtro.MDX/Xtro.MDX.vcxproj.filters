@@ -676,6 +676,15 @@
     <ClInclude Include="EnumsD3D10.h">
       <Filter>Direct3D10</Filter>
     </ClInclude>
+    <ClInclude Include="DepthStencilState.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilDescription.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilOperationDescription.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">

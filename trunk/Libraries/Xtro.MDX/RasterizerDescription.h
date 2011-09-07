@@ -81,14 +81,14 @@ public:
 		return
 			(int)FillMode ^
 			(int)CullMode ^
-			FrontCounterClockwise.GetHashCode() ^
+			(int)FrontCounterClockwise ^
 			DepthBias ^
 			(int)DepthBiasClamp ^
 			(int)SlopeScaledDepthBias ^
-			DepthClipEnable.GetHashCode() ^
-			ScissorEnable.GetHashCode() ^
-			MultisampleEnable.GetHashCode() ^
-			AntialiasedLineEnable.GetHashCode();
+			BDepthClipEnable ^
+			BScissorEnable ^
+			BMultisampleEnable ^
+			BAntialiasedLineEnable;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

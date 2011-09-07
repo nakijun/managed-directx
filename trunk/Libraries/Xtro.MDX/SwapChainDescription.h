@@ -28,7 +28,7 @@ public:
 			(int)BufferUsage ^
 			BufferCount ^
 			OutputWindow.GetHashCode() ^
-			Windowed.GetHashCode() ^
+			(int)Windowed ^
 			(int)SwapEffect ^
 			(int)Flags;
 	}
