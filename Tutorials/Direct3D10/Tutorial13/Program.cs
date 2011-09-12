@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
+using UtilitiesFunctions = Xtro.MDX.Utilities.Functions;
 
 using Xtro.MDX.DXGI;
 
@@ -39,6 +39,7 @@ namespace Tutorial13
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+            UtilitiesFunctions.DestroyState();
         }
     }
 }

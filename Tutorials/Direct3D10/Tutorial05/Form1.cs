@@ -436,7 +436,7 @@ namespace Tutorial05
             if (RenderTargetView != null) RenderTargetView.Release();
             if (DepthStencil != null) DepthStencil.Release();
             if (DepthStencilView != null) DepthStencilView.Release();
-            // DX tutorial bug. if (SwapChain != null) SwapChain.Release();
+            if (SwapChain != null) SwapChain.Release();
             if (Device != null) Device.Release();
         }
     }

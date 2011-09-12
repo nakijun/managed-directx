@@ -123,6 +123,7 @@ namespace Direct3D10
 	#include "RasterizerDescription.h"
 	#include "RasterizerState.h"
 	#include "DepthStencilState.h"
+	#include "Box.h"
 	#include "DeviceD3D10.h"
 	#include "DeviceChild_ForwardedMethods.h"
 	#include "StateBlockMask.h"
@@ -138,7 +139,6 @@ namespace Direct3D10
 	#include "Effect.h"
 	#include "EffectPool.h"
 	#include "Blob.h"
-	#include "Box.h"
 	#include "Asynchronous.h"
 	#include "Counter.h"
 }

@@ -104,7 +104,7 @@ namespace Tutorial14
         InputLayout QuadLayout;
         Buffer ScreenQuadVertexBuffer;
         SDK_Mesh Mesh = new SDK_Mesh();
-        ShaderResourceView[] ScreenRecourceView = new ShaderResourceView[2];
+        ShaderResourceView[] ScreenResourceView = new ShaderResourceView[2];
 
         uint SceneDepthStencilMode;
         DepthStencilState[] DepthStencilStates = new DepthStencilState[DepthStencilModes.Length]; // Depth Stencil states for non-FX 
@@ -155,7 +155,7 @@ namespace Tutorial14
                 UtilitiesFunctions.SetCallbackDeviceDestroyed(OnDeviceDestroyed, null);
                 UtilitiesFunctions.SetCallbackFrameRender(OnFrameRender, null);
                 UtilitiesFunctions.SetCallbackFrameMove(OnFrameMove, null);
-                UtilitiesFunctions.SetCallbackModifyDeviceSettings(OnModifyDeviceSettings, null);
+                UtilitiesFunctions.SetCallbackDeviceChanging(OnModifyDeviceSettings, null);
 
                 UtilitiesFunctions.Initialize(true);
                 UtilitiesFunctions.SetCursorSettings(true, true);
@@ -224,7 +224,10 @@ namespace Tutorial14
                 // do something
             }
             // if FormClosing event throws an exception, Closing gets canceled. So we handle the exception.
-            catch (Exception Ex) { MessageBox.Show(Ex.ToString()); }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.ToString());
+            }
         }
 
         void Application_Idle(object Sender, EventArgs E)
@@ -406,7 +409,7 @@ namespace Tutorial14
             {
                 Result = UtilitiesFunctions.FindSDK_MediaFileCch(out DestinationPath, ScreenTextures[I]);
                 if (Result < 0) return Result;
-                Result = D3DX10Functions.CreateShaderResourceViewFromFile(Device, DestinationPath, out ScreenRecourceView[I]);
+                Result = D3DX10Functions.CreateShaderResourceViewFromFile(Device, DestinationPath, out ScreenResourceView[I]);
                 if (Result < 0) return Result;
             }
 
@@ -431,7 +434,7 @@ namespace Tutorial14
             if (Effect != null) Effect.Release();
             if (ScreenQuadVertexBuffer != null) ScreenQuadVertexBuffer.Release();
 
-            foreach (var S in ScreenRecourceView)
+            foreach (var S in ScreenResourceView)
             {
                 S.Release();
             }
@@ -461,7 +464,7 @@ namespace Tutorial14
         {
             var Result = DialogResourceManager.OnResizedSwapChain(Device, ref BackBufferSurfaceDescription);
             if (Result < 0) return Result;
-            Result = SettingsDialog.OnResizedSwapChain(Device, BackBufferSurfaceDescription);
+            Result = SettingsDialog.OnResizedSwapChain(Device, ref BackBufferSurfaceDescription);
             if (Result < 0) return Result;
 
             // Setup the camera's projection parameters
@@ -571,7 +574,7 @@ namespace Tutorial14
             // Render the screen space quad
             //
             var Technique = TechniqueQuad[QuadRenderMode];
-            DiffuseVariable.SetResource(ScreenRecourceView[0]);
+            DiffuseVariable.SetResource(ScreenResourceView[0]);
             var Stride = (uint)Marshal.SizeOf(typeof(ScreenVertex));
             uint Offset = 0;
             var Buffers = new[] { ScreenQuadVertexBuffer };
@@ -595,7 +598,7 @@ namespace Tutorial14
             //  Look at the FX file for the state settings
             //
             Technique = TechniqueRenderWithStencil;
-            DiffuseVariable.SetResource(ScreenRecourceView[1]);
+            DiffuseVariable.SetResource(ScreenResourceView[1]);
             Device.IA_SetInputLayout(QuadLayout);
             Device.IA_SetVertexBuffers(0, 1, Buffers, new[] { Stride }, new[] { Offset });
             Device.IA_SetPrimitiveTopology(PrimitiveTopology.TriangleStrip);

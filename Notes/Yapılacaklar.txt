@@ -2,9 +2,13 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* dumanlý tank
+* duman yok
+
+* IA_SetVertexBuffers da, for sonundaki nullptr kontrollü atamyý benzer yerlerde kontrol et / düzelt.
 
 * fixed func emu örneði yap
+
+* Reshaper hatalarýný gider.
 
 * structure'larý yap
   interface'leri yap

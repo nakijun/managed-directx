@@ -98,7 +98,7 @@ namespace Tutorial13
                 UtilitiesFunctions.SetCallbackDeviceDestroyed(OnDeviceDestroyed, null);
                 UtilitiesFunctions.SetCallbackFrameRender(OnFrameRender, null);
                 UtilitiesFunctions.SetCallbackFrameMove(OnFrameMove, null);
-                UtilitiesFunctions.SetCallbackModifyDeviceSettings(OnModifyDeviceSettings, null);
+                UtilitiesFunctions.SetCallbackDeviceChanging(OnModifyDeviceSettings, null);
 
                 UtilitiesFunctions.Initialize(true);
                 UtilitiesFunctions.SetCursorSettings(true, true);
@@ -154,7 +154,10 @@ namespace Tutorial13
                 // do something
             }
             // if FormClosing event throws an exception, Closing gets canceled. So we handle the exception.
-            catch (Exception Ex) { MessageBox.Show(Ex.ToString()); }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.ToString());
+            }
         }
 
         void Application_Idle(object Sender, EventArgs E)
@@ -299,7 +302,7 @@ namespace Tutorial13
         {
             var Result = DialogResourceManager.OnResizedSwapChain(Device, ref BackBufferSurfaceDescription);
             if (Result < 0) return Result;
-            Result = SettingsDialog.OnResizedSwapChain(Device, BackBufferSurfaceDescription);
+            Result = SettingsDialog.OnResizedSwapChain(Device, ref BackBufferSurfaceDescription);
             if (Result < 0) return Result;
 
             // Setup the camera's projection parameters

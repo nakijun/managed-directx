@@ -301,10 +301,5 @@ namespace Xtro.MDX.Utilities
             Timers = null;
             Functions.Shutdown();
         }
-
-        ~State()
-        {
-            Delete();
-        }
     }
 }

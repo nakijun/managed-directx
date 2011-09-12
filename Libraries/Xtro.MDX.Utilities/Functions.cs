@@ -49,16 +49,6 @@ namespace Xtro.MDX.Utilities
             return 0;
         }
 
-        static Functions()
-        {
-            AppDomain.CurrentDomain.DomainUnload += OnDomainUnload;
-        }
-
-        static void OnDomainUnload(object Sender, EventArgs E)
-        {
-            DestroyState();
-        }
-
         public static void CreateState()
         {
             if (State == null) State = new State();
@@ -118,7 +108,7 @@ namespace Xtro.MDX.Utilities
             GetState().FrameMoveFunctionUserContext = UserContext;
         }
 
-        public static void SetCallbackModifyDeviceSettings(Callbacks.ModifyDeviceSettings Callback, object UserContext)
+        public static void SetCallbackDeviceChanging(Callbacks.ModifyDeviceSettings Callback, object UserContext)
         {
             GetState().ModifyDeviceSettingsFunction = Callback;
             GetState().ModifyDeviceSettingsFunctionUserContext = UserContext;
@@ -532,7 +522,7 @@ namespace Xtro.MDX.Utilities
 
             var MultiSampleText = " (MS" + DeviceSettings.SwapChainDescription.SampleDescription.Count + ", Q" + DeviceSettings.SwapChainDescription.SampleDescription.Quality + ")";
 
-            GetState().StaticFrameStats = "D3D10 Vsync " + ((DeviceSettings.SyncInterval == 0) ? "off" : "on") + " (" +
+            GetState().StaticFrameStats = "D3D10 {0} Vsync " + ((DeviceSettings.SyncInterval == 0) ? "off" : "on") + " (" +
                 DeviceSettings.SwapChainDescription.BufferDescription.Width + "x" + DeviceSettings.SwapChainDescription.BufferDescription.Height + "), " +
                 FormatText + MultiSampleText;
         }
@@ -1401,9 +1391,14 @@ namespace Xtro.MDX.Utilities
         }
 
 
-        public static bool IsInGammaCorrectMode()
+        public static bool GetIsInGammaCorrectMode()
         {
             return GetState().IsInGammaCorrectMode;
+        }
+
+        public static void SetIsInGammaCorrectMode(bool GammaCorrect)
+        {
+            GetState().IsInGammaCorrectMode = GammaCorrect;
         }
 
         public static int Initialize(bool ShowMessageBoxOnError = true)
@@ -3526,7 +3521,7 @@ namespace Xtro.MDX.Utilities
 
         public static Format MakeTypeless(Format Format)
         {
-            if (!IsInGammaCorrectMode()) return Format;
+            if (!GetIsInGammaCorrectMode()) return Format;
 
             switch (Format)
             {
@@ -3553,7 +3548,7 @@ namespace Xtro.MDX.Utilities
 
         public static Format MakeSRGB(Format Format)
         {
-            if (!IsInGammaCorrectMode()) return Format;
+            if (!GetIsInGammaCorrectMode()) return Format;
 
             switch (Format)
             {
@@ -3937,6 +3932,17 @@ namespace Xtro.MDX.Utilities
             }
 
             return Result;
+        }
+
+        public static void DisplaySwitchingToREF_Warning()
+        {
+            if (GetShowMessageBoxOnError())
+            {
+                var Result = MessageBox.Show("This program needs to use the Direct3D reference device.  This device implements the entire Direct3D feature set, but runs very slowly.  Do you wish to continue?", "", MessageBoxButtons.YesNo);
+
+                // User choose not to continue
+                if (Result == DialogResult.No) Shutdown(1);
+            }
         }
     }
 }
