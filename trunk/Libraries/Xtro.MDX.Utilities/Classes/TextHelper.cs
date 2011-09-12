@@ -23,11 +23,6 @@ namespace Xtro.MDX.Utilities
             Init(Font, Sprite, LineHeight);
         }
 
-        ~TextHelper()
-        {
-            Delete();
-        }
-
         public void Delete()
         {
             if (FontBlendState != null)

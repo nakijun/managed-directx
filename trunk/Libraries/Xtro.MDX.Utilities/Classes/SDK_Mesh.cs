@@ -199,9 +199,57 @@ namespace Xtro.MDX.Utilities
             public Texture2D DiffuseTexture;
             public Texture2D NormalTexture;
             public Texture2D SpecularTexture;
-            public ShaderResourceView DiffuseResourceView;
-            public ShaderResourceView NormalResourceView;
-            public ShaderResourceView SpecularResourceView;
+
+            ShaderResourceView FDiffuseResourceView;
+            ShaderResourceView FNormalResourceView;
+            ShaderResourceView FSpecularResourceView;
+
+            public ShaderResourceView DiffuseResourceView
+            {
+                get { return FDiffuseResourceView; }
+                set
+                {
+                    FDiffuseResourceView = value;
+                    DiffuseResourceViewError = false;
+                }
+            }
+            public ShaderResourceView NormalResourceView
+            {
+                get { return FNormalResourceView; }
+                set
+                {
+                    FNormalResourceView = value;
+                    DiffuseResourceViewError = false;
+                }
+            }
+            public ShaderResourceView SpecularResourceView
+            {
+                get { return FSpecularResourceView; }
+                set
+                {
+                    FSpecularResourceView = value;
+                    DiffuseResourceViewError = false;
+                }
+            }
+
+            public bool DiffuseResourceViewError {get; private set;}
+            public void SetDiffuseResourceViewError()
+            {
+                FDiffuseResourceView = null;
+                DiffuseResourceViewError = true;
+            }
+            public bool NormalResourceViewError {get; private set;}
+            public void SetNormalResourceViewError()
+            {
+                FNormalResourceView = null;
+                NormalResourceViewError = true;
+            }
+            public bool SpecularResourceViewError {get; private set;}
+            public void SetSpecularResourceViewError()
+            {
+                FSpecularResourceView = null;
+                SpecularResourceViewError = true;
+            }
         };
         public struct AnimationFileHeader
         {
@@ -279,9 +327,22 @@ namespace Xtro.MDX.Utilities
                     var Size = Marshal.SizeOf(typeof(Material));
                     var Material = (Material)Marshal.PtrToStructure(new IntPtr(Materials.Pointer.ToInt64() + M * Size), typeof(Material));
 
-                    if (!string.IsNullOrEmpty(Material.DiffuseTexture)) LoaderCallbacks[0].CreateTextureFromFile(Device, Material.DiffuseTexture, out MaterialPairs[M].DiffuseResourceView, LoaderCallbacks[0].Context);
-                    if (!string.IsNullOrEmpty(Material.NormalTexture)) LoaderCallbacks[0].CreateTextureFromFile(Device, Material.NormalTexture, out MaterialPairs[M].NormalResourceView, LoaderCallbacks[0].Context);
-                    if (!string.IsNullOrEmpty(Material.SpecularTexture)) LoaderCallbacks[0].CreateTextureFromFile(Device, Material.SpecularTexture, out MaterialPairs[M].SpecularResourceView, LoaderCallbacks[0].Context);
+                    ShaderResourceView Out;
+                    if (!string.IsNullOrEmpty(Material.DiffuseTexture))
+                    {
+                        LoaderCallbacks[0].CreateTextureFromFile(Device, Material.DiffuseTexture, out Out, LoaderCallbacks[0].Context);
+                        MaterialPairs[M].DiffuseResourceView = Out;
+                    }
+                    if (!string.IsNullOrEmpty(Material.NormalTexture))
+                    {
+                        LoaderCallbacks[0].CreateTextureFromFile(Device, Material.NormalTexture, out Out, LoaderCallbacks[0].Context);
+                        MaterialPairs[M].NormalResourceView = Out;
+                    }
+                    if (!string.IsNullOrEmpty(Material.SpecularTexture))
+                    {
+                        LoaderCallbacks[0].CreateTextureFromFile(Device, Material.SpecularTexture, out Out, LoaderCallbacks[0].Context);
+                        MaterialPairs[M].SpecularResourceView = Out;
+                    }
                 }
             }
             else
@@ -301,21 +362,25 @@ namespace Xtro.MDX.Utilities
                     var Size = Marshal.SizeOf(typeof(Material));
                     var Material = (Material)Marshal.PtrToStructure(new IntPtr(Materials.Pointer.ToInt64() + M * Size), typeof(Material));
 
+                    ShaderResourceView Out;
                     string TexturePath;
                     if (!string.IsNullOrEmpty(Material.DiffuseTexture))
                     {
                         TexturePath = Path + Material.DiffuseTexture;
-                        if (Functions.GetGlobalResourceCache().CreateTextureFromFile(Device, TexturePath, null, out MaterialPairs[M].DiffuseResourceView, true) < 0) MaterialPairs[M].DiffuseResourceView = null;// ERROR_RESOURCE_VALUE;
+                        if (Functions.GetGlobalResourceCache().CreateTextureFromFile(Device, TexturePath, null, out Out, true) < 0) MaterialPairs[M].SetDiffuseResourceViewError();// ERROR_RESOURCE_VALUE;
+                        else MaterialPairs[M].DiffuseResourceView = Out;
                     }
                     if (!string.IsNullOrEmpty(Material.NormalTexture))
                     {
                         TexturePath = Path + Material.NormalTexture;
-                        if (Functions.GetGlobalResourceCache().CreateTextureFromFile(Device, TexturePath, null, out MaterialPairs[M].NormalResourceView, true) < 0) MaterialPairs[M].NormalResourceView = null;// ERROR_RESOURCE_VALUE;
+                        if (Functions.GetGlobalResourceCache().CreateTextureFromFile(Device, TexturePath, null, out Out, true) < 0) MaterialPairs[M].SetNormalResourceViewError();// ERROR_RESOURCE_VALUE;
+                        else MaterialPairs[M].NormalResourceView = Out;
                     }
                     if (!string.IsNullOrEmpty(Material.SpecularTexture))
                     {
                         TexturePath = Path + Material.SpecularTexture;
-                        if (Functions.GetGlobalResourceCache().CreateTextureFromFile(Device, TexturePath, null, out MaterialPairs[M].SpecularResourceView, true) < 0) MaterialPairs[M].SpecularResourceView = null;// ERROR_RESOURCE_VALUE;
+                        if (Functions.GetGlobalResourceCache().CreateTextureFromFile(Device, TexturePath, null, out Out, true) < 0) MaterialPairs[M].SetSpecularResourceViewError();// ERROR_RESOURCE_VALUE;
+                        else MaterialPairs[M].SpecularResourceView = Out;
                     }
                 }
             }
@@ -635,7 +700,9 @@ namespace Xtro.MDX.Utilities
                 Quaternion.X = Data.Orientation.X;
                 Quaternion.Y = Data.Orientation.Y;
                 Quaternion.Z = Data.Orientation.Z;
+// ReSharper disable CompareOfFloatsByEqualityOperator
                 if (Quaternion.W == 0 && Quaternion.X == 0 && Quaternion.Y == 0 && Quaternion.Z == 0) D3DX10Functions.QuaternionIdentity(out Quaternion);
+// ReSharper restore CompareOfFloatsByEqualityOperator
                 D3DX10Functions.QuaternionNormalize(out Quaternion, ref Quaternion);
                 D3DX10Functions.MatrixRotationQuaternion(out QuaternionMatrix, ref Quaternion);
                 LocalTransform = (QuaternionMatrix * Translate);
@@ -783,9 +850,9 @@ namespace Xtro.MDX.Utilities
                     var Material = (Material)Marshal.PtrToStructure(new IntPtr(MaterialArray.Pointer.ToInt64() + Subset.MaterialID * Size), typeof(Material));
 
                     var MaterialPair = MaterialPairArray[Subset.MaterialID];
-                    if (Diffuse != null && MaterialPair.DiffuseResourceView != null) Diffuse.SetResource(MaterialPair.DiffuseResourceView);
-                    if (Normal != null && MaterialPair.NormalResourceView != null) Normal.SetResource(MaterialPair.NormalResourceView);
-                    if (Specular != null && MaterialPair.SpecularResourceView != null) Specular.SetResource(MaterialPair.SpecularResourceView);
+                    if (Diffuse != null && !MaterialPair.DiffuseResourceViewError) Diffuse.SetResource(MaterialPair.DiffuseResourceView);
+                    if (Normal != null && !MaterialPair.NormalResourceViewError) Normal.SetResource(MaterialPair.NormalResourceView);
+                    if (Specular != null && !MaterialPair.SpecularResourceViewError) Specular.SetResource(MaterialPair.SpecularResourceView);
                     if (DiffuseVector != null) DiffuseVector.SetFloatVector((float[])Material.Diffuse);
                     if (SpecularVector != null) SpecularVector.SetFloatVector((float[])Material.Specular);
 
@@ -873,9 +940,9 @@ namespace Xtro.MDX.Utilities
                 Device.IA_SetPrimitiveTopology(PrimitiveType);
 
                 var MaterialPair = MaterialPairArray[Subset.MaterialID];
-                if (DiffuseSlot != InvalidSamplerSlot && MaterialPair.DiffuseResourceView != null) Device.PS_SetShaderResources(DiffuseSlot, 1, new[] { MaterialPair.DiffuseResourceView });
-                if (NormalSlot != InvalidSamplerSlot && MaterialPair.NormalResourceView != null) Device.PS_SetShaderResources(NormalSlot, 1, new[] { MaterialPair.NormalResourceView });
-                if (SpecularSlot != InvalidSamplerSlot && MaterialPair.SpecularResourceView != null) Device.PS_SetShaderResources(SpecularSlot, 1, new[] { MaterialPair.SpecularResourceView });
+                if (DiffuseSlot != InvalidSamplerSlot && !MaterialPair.DiffuseResourceViewError) Device.PS_SetShaderResources(DiffuseSlot, 1, new[] { MaterialPair.DiffuseResourceView });
+                if (NormalSlot != InvalidSamplerSlot && !MaterialPair.NormalResourceViewError) Device.PS_SetShaderResources(NormalSlot, 1, new[] { MaterialPair.NormalResourceView });
+                if (SpecularSlot != InvalidSamplerSlot && !MaterialPair.SpecularResourceViewError) Device.PS_SetShaderResources(SpecularSlot, 1, new[] { MaterialPair.SpecularResourceView });
 
                 var IndexCount = (uint)Subset.IndexCount;
                 var IndexStart = (uint)Subset.IndexStart;
@@ -921,11 +988,6 @@ namespace Xtro.MDX.Utilities
 
             // Render our siblings
             if (FrameHeaderData.SiblingFrame != InvalidFrame) RenderFrame(FrameHeaderData.SiblingFrame, Adjacent, Device, DiffuseSlot, NormalSlot, SpecularSlot);
-        }
-
-        ~SDK_Mesh()
-        {
-            Delete();
         }
 
         public int Create(Device Device, string FileName, bool CreateAdjacencyIndices = false, CallbacksStruct[] LoaderCallbacks = null)
@@ -1021,7 +1083,7 @@ namespace Xtro.MDX.Utilities
                     for (var M = 0; M < Header.NumberOfMaterials; M++)
                     {
                         Resource Resource;
-                        if (MaterialPairArray[M].DiffuseResourceView != null)
+                        if (MaterialPairArray[M].DiffuseResourceView != null && !MaterialPairArray[M].DiffuseResourceViewError)
                         {
                             MaterialPairArray[M].DiffuseResourceView.GetResource(out Resource);
                             if (Resource != null)
@@ -1033,7 +1095,7 @@ namespace Xtro.MDX.Utilities
                             MaterialPairArray[M].DiffuseResourceView.Release();
                             MaterialPairArray[M].DiffuseResourceView = null;
                         }
-                        if (MaterialPairArray[M].NormalResourceView != null)
+                        if (MaterialPairArray[M].NormalResourceView != null && !MaterialPairArray[M].NormalResourceViewError)
                         {
                             MaterialPairArray[M].NormalResourceView.GetResource(out Resource);
                             if (Resource != null)
@@ -1045,7 +1107,7 @@ namespace Xtro.MDX.Utilities
                             MaterialPairArray[M].NormalResourceView.Release();
                             MaterialPairArray[M].NormalResourceView = null;
                         }
-                        if (MaterialPairArray[M].SpecularResourceView != null)
+                        if (MaterialPairArray[M].SpecularResourceView != null && !MaterialPairArray[M].SpecularResourceViewError)
                         {
                             MaterialPairArray[M].SpecularResourceView.GetResource(out Resource);
                             if (Resource != null)
@@ -1204,7 +1266,7 @@ namespace Xtro.MDX.Utilities
                 var Layout = new[]
                 {
                     new InputElementDescription{ SemanticName = "POSITION", Format = Format.R32G32B32_Float, InputSlotClass = InputClassification.InputPerVertexData },
-                    new InputElementDescription{ SemanticName = "END", Format = Format.R8_UInt, InputSlotClass = InputClassification.InputPerVertexData },
+                    new InputElementDescription{ SemanticName = "END", Format = Format.R8_UInt, InputSlotClass = InputClassification.InputPerVertexData }
                 };
 
                 Layout[1].AlignedByteOffset = (uint)(Stride - 1);
@@ -1273,7 +1335,7 @@ namespace Xtro.MDX.Utilities
             RenderFrame(0, false, Device, DiffuseSlot, NormalSlot, SpecularSlot);
         }
 
-        public void Render(Device Device, EffectTechnique Technique, EffectShaderResourceVariable Diffuse, EffectShaderResourceVariable Normal, EffectShaderResourceVariable Specular, EffectVectorVariable DiffuseVector, EffectVectorVariable SpecularVector)
+        public void Render(Device Device, EffectTechnique Technique, EffectShaderResourceVariable Diffuse = null, EffectShaderResourceVariable Normal = null, EffectShaderResourceVariable Specular = null, EffectVectorVariable DiffuseVector = null, EffectVectorVariable SpecularVector = null)
         {
             RenderFrame(0, false, Device, Technique, Diffuse, Normal, Specular, DiffuseVector, SpecularVector);
         }
@@ -1527,17 +1589,17 @@ namespace Xtro.MDX.Utilities
 
                     if (!string.IsNullOrEmpty(Material.DiffuseTexture))
                     {
-                        if (MaterialPairArray[I].DiffuseResourceView == null) OutstandingResources++;
+                        if (MaterialPairArray[I].DiffuseResourceView == null && !MaterialPairArray[I].DiffuseResourceViewError) OutstandingResources++;
                     }
 
                     if (!string.IsNullOrEmpty(Material.NormalTexture))
                     {
-                        if (MaterialPairArray[I].NormalResourceView == null) OutstandingResources++;
+                        if (MaterialPairArray[I].NormalResourceView == null && !MaterialPairArray[I].NormalResourceViewError) OutstandingResources++;
                     }
 
                     if (!string.IsNullOrEmpty(Material.SpecularTexture))
                     {
-                        if (MaterialPairArray[I].SpecularResourceView == null) OutstandingResources++;
+                        if (MaterialPairArray[I].SpecularResourceView == null && !MaterialPairArray[I].SpecularResourceViewError) OutstandingResources++;
                     }
                 }
             }

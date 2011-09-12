@@ -203,7 +203,7 @@ namespace Xtro.MDX.Utilities
                     };
 
                     // Swap perferred modes for apps running in linear space
-                    if (!Functions.IsInGammaCorrectMode())
+                    if (!Functions.GetIsInGammaCorrectMode())
                     {
                         BackBufferFormats[0] = Format.R8G8B8A8_UNorm;
                         BackBufferFormats[1] = Format.R8G8B8A8_UNorm_SRGB;
@@ -265,7 +265,7 @@ namespace Xtro.MDX.Utilities
                 };
 
                 // Swap perferred modes for apps running in linear space
-                if (!Functions.IsInGammaCorrectMode())
+                if (!Functions.GetIsInGammaCorrectMode())
                 {
                     BackBufferFormats[0] = Format.R8G8B8A8_UNorm;
                     BackBufferFormats[1] = Format.R8G8B8A8_UNorm_SRGB;
@@ -313,7 +313,7 @@ namespace Xtro.MDX.Utilities
             };
 
             // Swap perferred modes for apps running in linear space
-            if (!Functions.IsInGammaCorrectMode())
+            if (!Functions.GetIsInGammaCorrectMode())
             {
                 AllowedAdapterFormats[0] = Format.R8G8B8A8_UNorm;
                 AllowedAdapterFormats[1] = Format.R8G8B8A8_UNorm_SRGB;

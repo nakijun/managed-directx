@@ -37,7 +37,7 @@
             this.ClientSize = new System.Drawing.Size(640, 480);
             this.KeyPreview = true;
             this.Name = "Form1";
-            this.Text = "Direct3D 10 Tutorial 14: State Management";
+            this.Text = "SoftParticles";
             this.Activated += new System.EventHandler(this.Form1_Activated);
             this.Deactivate += new System.EventHandler(this.Form1_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);

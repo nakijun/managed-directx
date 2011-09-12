@@ -511,7 +511,7 @@ public:
 			{
 				unsigned int VertexBufferCount = VertexBuffers->Length;
 				pVertexBuffers = new ID3D10Buffer*[VertexBufferCount];
-				for (unsigned int VertexBufferNo = 0; VertexBufferNo < VertexBufferCount; VertexBufferNo++) pVertexBuffers[VertexBufferNo] = VertexBuffers[VertexBufferNo]->pBuffer;
+				for (unsigned int VertexBufferNo = 0; VertexBufferNo < VertexBufferCount; VertexBufferNo++) pVertexBuffers[VertexBufferNo] = VertexBuffers[VertexBufferNo] == nullptr ? 0 : VertexBuffers[VertexBufferNo]->pBuffer;
 			}
 
 			pDevice->IASetVertexBuffers(StartSlot, NumberOfBuffers, pVertexBuffers, PinnedStrides, PinnedOffsets);
@@ -682,5 +682,22 @@ public:
 		ID3D10DepthStencilState* pDepthStencilState = DepthStencilState == nullptr ? 0 : DepthStencilState->pDepthStencilState;
 
 		pDevice->OMSetDepthStencilState(pDepthStencilState, StencilReference);
+	}
+
+	void UpdateSubresource(Resource^ DestinationResource, unsigned int DestinationSubresource, UnmanagedMemory^ SourceData, unsigned int SourceRowPitch, unsigned int SourceDepthPitch)
+	{
+		ID3D10Resource* pDestinationResource = DestinationResource == nullptr ? 0 : DestinationResource->pResource;
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+
+		pDevice->UpdateSubresource(pDestinationResource, DestinationSubresource, 0, pSourceData, SourceRowPitch, SourceDepthPitch);
+	}
+
+	void UpdateSubresource(Resource^ DestinationResource, unsigned int DestinationSubresource, Box% DestinationBox, UnmanagedMemory^ SourceData, unsigned int SourceRowPitch, unsigned int SourceDepthPitch)
+	{
+		ID3D10Resource* pDestinationResource = DestinationResource == nullptr ? 0 : DestinationResource->pResource;
+		pin_ptr<Box> PinnedDestinationBox = &DestinationBox;
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+
+		pDevice->UpdateSubresource(pDestinationResource, DestinationSubresource, (D3D10_BOX*)PinnedDestinationBox, pSourceData, SourceRowPitch, SourceDepthPitch);
 	}
 };

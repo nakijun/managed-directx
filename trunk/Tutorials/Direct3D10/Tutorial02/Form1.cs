@@ -251,7 +251,7 @@ namespace Tutorial02
             if (VertexLayout != null) VertexLayout.Release();
             if (Effect != null) Effect.Release();
             if (RenderTargetView != null) RenderTargetView.Release();
-            // DX tutorial bug. if (SwapChain != null) SwapChain.Release();
+            if (SwapChain != null) SwapChain.Release();
             if (Device != null) Device.Release();
         }
     }

@@ -586,6 +586,14 @@ public:
 		D3DXVec3Transform((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
 	}
 	
+	static void Vector3TransformNormal([Out] Vector3% Out, Vector3% Vector, Matrix% Matrix)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		D3DXVec3TransformNormal((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
+	}
+	
 	static void Vector3Normalize([Out] Vector3% Out, Vector3% Vector)
 	{
 		pin_ptr<Vector3> PinnedOut = &Out;

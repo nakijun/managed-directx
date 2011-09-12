@@ -35,13 +35,6 @@ namespace Xtro.MDX.Utilities
             Singular = this;
         }
 
-        ~ResourceCache()
-        {
-            OnDestroyDevice();
-
-            TextureCache.Clear();
-        }
-
         public int CreateTextureFromFile(Device Device, string SourceFile, ImageLoadInfo[] LoadInfo, out ShaderResourceView OutputResourceView, bool SRGB = false)
         {
             int Result;

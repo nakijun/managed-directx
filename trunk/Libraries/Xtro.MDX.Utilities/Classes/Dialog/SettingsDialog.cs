@@ -1209,7 +1209,7 @@ namespace Xtro.MDX.Utilities
             return Result < 0 ? Result : 0;
         }
 
-        public int OnResizedSwapChain(Device Device, SurfaceDescription BackBufferSurfaceDescription)
+        public int OnResizedSwapChain(Device Device, ref SurfaceDescription BackBufferSurfaceDescription)
         {
             Dialog.SetLocation(0, 0);
             Dialog.SetSize((int)BackBufferSurfaceDescription.Width, (int)BackBufferSurfaceDescription.Height);

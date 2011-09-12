@@ -64,7 +64,7 @@ namespace Tutorial09
                 UtilitiesFunctions.SetCallbackDeviceDestroyed(OnDeviceDestroyed, null);
                 UtilitiesFunctions.SetCallbackFrameRender(OnFrameRender, null);
                 UtilitiesFunctions.SetCallbackFrameMove(OnFrameMove, null);
-                UtilitiesFunctions.SetCallbackModifyDeviceSettings(OnModifyDeviceSettings, null);
+                UtilitiesFunctions.SetCallbackDeviceChanging(OnModifyDeviceSettings, null);
 
                 UtilitiesFunctions.Initialize(true);
                 UtilitiesFunctions.SetCursorSettings(true, true);
@@ -89,7 +89,10 @@ namespace Tutorial09
                 // do something
             }
             // if FormClosing event throws an exception, Closing gets canceled. So we handle the exception.
-            catch (Exception Ex) { MessageBox.Show(Ex.ToString()); }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.ToString());
+            }
         }
 
         void Application_Idle(object Sender, EventArgs E)
