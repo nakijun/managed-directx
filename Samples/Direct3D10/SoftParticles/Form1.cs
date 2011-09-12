@@ -1096,7 +1096,7 @@ namespace SoftParticles
 
         float RPercent()
         {
-            var Ret = (float)((new Random().Next(32768) % 20000) - 10000);
+            var Ret = (float)(new Random().Next(20000) - 10000);
             return Ret / 10000.0f;
         }
 
@@ -1144,10 +1144,8 @@ namespace SoftParticles
 
             for (uint I = 0; I < MaximumParticles; I++)
             {
-                ParticleVertex Out;
-                CpuParticles.Get(I, out Out);
-                Out.Life = -1;	//kill all particles
-                CpuParticles.Set(I, ref Out);
+                var Temp = new ParticleVertex { Life = -1 };//kill all particles
+                CpuParticles.Set(I, ref Temp);
             }
 
             CpuParticleIndices = new UnmanagedMemory<uint>(MaximumParticles*4);
