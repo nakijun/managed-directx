@@ -1299,7 +1299,7 @@ namespace SoftParticles
                     Depths.Get((uint)J, out D); Depths.Set((uint)I, ref D);
                     Depths.Set((uint)J, ref H);
 
-                    uint II;
+                    int II;
                     Indices.Get((uint)I, out Index);
                     Indices.Get((uint)J, out II); Indices.Set((uint)I, ref D);
                     Indices.Set((uint)J, ref Index);
@@ -1394,11 +1394,9 @@ namespace SoftParticles
                     P.Life += TimeDelta / ParticleLifeSpan;
                     P.Size = ParticleMinSize + (ParticleMaxSize - ParticleMinSize) * P.Life;
 
-                    if (P.Life > 0.99f)
-                    {
-                        P.Life = -1;
-                        CpuParticles.Set(I, ref P);
-                    }
+                    if (P.Life > 0.99f) P.Life = -1;
+
+                    CpuParticles.Set(I, ref P);
                 }
             }
         }
