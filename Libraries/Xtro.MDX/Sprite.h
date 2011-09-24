@@ -36,7 +36,10 @@ public:
 		{
 			unsigned int ElementCount = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
 			pSprites = new D3DX10_SPRITE[ElementCount];
-			for (unsigned int ElementNo = 0; ElementNo < ElementCount; ElementNo++) Sprites[ElementNo].ToNative(&pSprites[ElementNo]);
+			for (unsigned int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+			{
+				Sprites[ElementNo].ToNative(&pSprites[ElementNo]);
+			}
 		}
 
 		return pSprite->DrawSpritesBuffered(pSprites, SpriteCount);

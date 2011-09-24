@@ -2,10 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* duman yok
-
-* IA_SetVertexBuffers da, for sonundaki nullptr kontrollü atamyý benzer yerlerde kontrol et / düzelt.
-
 * fixed func emu örneði yap
 
 * Reshaper hatalarýný gider.
