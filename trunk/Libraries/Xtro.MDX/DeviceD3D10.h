@@ -142,7 +142,10 @@ public:
 			if (RenderTargetViews != nullptr && RenderTargetViews->Length > 0)
 			{
 				ppRenderTargetViews = new ID3D10RenderTargetView*[RenderTargetViews->Length];
-				for (int RenderTargetViewNo = 0; RenderTargetViewNo < RenderTargetViews->Length; RenderTargetViewNo++) ppRenderTargetViews[RenderTargetViewNo] = RenderTargetViews[RenderTargetViewNo] == nullptr ? 0 : RenderTargetViews[RenderTargetViewNo]->pRenderTargetView;
+				for (int RenderTargetViewNo = 0; RenderTargetViewNo < RenderTargetViews->Length; RenderTargetViewNo++)
+				{
+					ppRenderTargetViews[RenderTargetViewNo] = RenderTargetViews[RenderTargetViewNo] == nullptr ? 0 : RenderTargetViews[RenderTargetViewNo]->pRenderTargetView;
+				}
 			}
 
 			pDevice->OMSetRenderTargets(NumberOfViews, ppRenderTargetViews, pDepthStencilView);
@@ -256,7 +259,10 @@ public:
 			if (ShaderResourceViews != nullptr && ShaderResourceViews->Length > 0)
 			{
 				ppShaderResourceViews = new ID3D10ShaderResourceView*[ShaderResourceViews->Length];
-				for (int ShaderResourceViewNo = 0; ShaderResourceViewNo < ShaderResourceViews->Length; ShaderResourceViewNo++) ppShaderResourceViews[ShaderResourceViewNo] = ShaderResourceViews[ShaderResourceViewNo] == nullptr ? 0 : ShaderResourceViews[ShaderResourceViewNo]->pShaderResourceView;
+				for (int ShaderResourceViewNo = 0; ShaderResourceViewNo < ShaderResourceViews->Length; ShaderResourceViewNo++)
+				{
+					ppShaderResourceViews[ShaderResourceViewNo] = ShaderResourceViews[ShaderResourceViewNo] == nullptr ? 0 : ShaderResourceViews[ShaderResourceViewNo]->pShaderResourceView;
+				}
 			}
 
 			pDevice->PSSetShaderResources(StartSlot, NumberOfViews, ppShaderResourceViews);
@@ -282,7 +288,10 @@ public:
 			{
 				ElementCount = InputElementDescriptions->Length;
 				pInputElementDescriptions = new D3D10_INPUT_ELEMENT_DESC[ElementCount];
-				for (int ElementNo = 0; ElementNo < ElementCount; ElementNo++) InputElementDescriptions[ElementNo].Marshal(&pInputElementDescriptions[ElementNo]);
+				for (int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+				{
+					InputElementDescriptions[ElementNo].Marshal(&pInputElementDescriptions[ElementNo]);
+				}
 			}
 
 			Result = pDevice->CreateInputLayout(pInputElementDescriptions, NumberOfElements, pShaderBytecodeWithInputSignature, BytecodeLength, &pInputLayout);
@@ -291,7 +300,10 @@ public:
 		{
 			if (InputElementDescriptions != nullptr)
 			{
-				for (int ElementNo = 0; ElementNo < ElementCount; ElementNo++) InputElementDescriptions[ElementNo].Unmarshal();
+				for (int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+				{
+					InputElementDescriptions[ElementNo].Unmarshal();
+				}
 			}
 			if (pInputElementDescriptions) delete[] pInputElementDescriptions;
 		}
@@ -511,7 +523,10 @@ public:
 			{
 				unsigned int VertexBufferCount = VertexBuffers->Length;
 				pVertexBuffers = new ID3D10Buffer*[VertexBufferCount];
-				for (unsigned int VertexBufferNo = 0; VertexBufferNo < VertexBufferCount; VertexBufferNo++) pVertexBuffers[VertexBufferNo] = VertexBuffers[VertexBufferNo] == nullptr ? 0 : VertexBuffers[VertexBufferNo]->pBuffer;
+				for (unsigned int VertexBufferNo = 0; VertexBufferNo < VertexBufferCount; VertexBufferNo++)
+				{
+					pVertexBuffers[VertexBufferNo] = VertexBuffers[VertexBufferNo] == nullptr ? 0 : VertexBuffers[VertexBufferNo]->pBuffer;
+				}
 			}
 
 			pDevice->IASetVertexBuffers(StartSlot, NumberOfBuffers, pVertexBuffers, PinnedStrides, PinnedOffsets);

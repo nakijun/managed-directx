@@ -230,7 +230,10 @@ public:
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				{
+					Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+				}
 			}
 
 			Result = D3DX10CreateEffectFromFile((LPCWSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, pEffectPool, 0, &pEffect, &pErrors, 0);
@@ -242,7 +245,10 @@ public:
 
 			if (Defines != nullptr)
 			{
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Unmarshal();
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				{
+					Defines[DefineNo].Unmarshal();
+				}
 			}
 			if (pDefines) delete[] pDefines;
 		}
@@ -281,7 +287,10 @@ public:
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				{
+					Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+				}
 			}
 
 			Result = D3DX10CreateEffectFromFile((LPCWSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, pEffectPool, 0, &pEffect, 0, 0);
@@ -293,7 +302,10 @@ public:
 
 			if (Defines != nullptr)
 			{
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Unmarshal();
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				{
+					Defines[DefineNo].Unmarshal();
+				}
 			}
 			if (pDefines) delete[] pDefines;
 		}
@@ -327,7 +339,10 @@ public:
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				{
+					Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+				}
 			}
 
 			Result = D3DX10CreateEffectFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, pEffectPool, 0, &pEffect, &pErrors, 0);
@@ -339,7 +354,10 @@ public:
 
 			if (Defines != nullptr)
 			{
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Unmarshal();
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				{
+					Defines[DefineNo].Unmarshal();
+				}
 			}
 			if (pDefines) delete[] pDefines;
 		}
@@ -379,7 +397,10 @@ public:
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				{
+					Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+				}
 			}
 
 			Result = D3DX10CreateEffectFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, pEffectPool, 0, &pEffect, 0, 0);
@@ -391,7 +412,10 @@ public:
 
 			if (Defines != nullptr)
 			{
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++) Defines[DefineNo].Unmarshal();
+				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				{
+					Defines[DefineNo].Unmarshal();
+				}
 			}
 			if (pDefines) delete[] pDefines;
 		}
@@ -478,7 +502,10 @@ public:
 			if (Declaration != nullptr && Declaration->Length > 0)
 			{
 				pDeclaration = new D3D10_INPUT_ELEMENT_DESC[Declaration->Length];
-				for (int DeclarationNo = 0; DeclarationNo < Declaration->Length; DeclarationNo++) Declaration[DeclarationNo].Marshal(&pDeclaration[DeclarationNo]);
+				for (int DeclarationNo = 0; DeclarationNo < Declaration->Length; DeclarationNo++)
+				{
+					Declaration[DeclarationNo].Marshal(&pDeclaration[DeclarationNo]);
+				}
 			}
 
 			Result = D3DX10CreateMesh(pDevice, pDeclaration, DeclarationCount, (LPCSTR)pPositionSemantic.ToPointer(), VertexCount, FaceCount, (unsigned int)Options, &pMesh);
@@ -489,7 +516,10 @@ public:
 
 			if (Declaration != nullptr)
 			{
-				for (int DeclarationNo = 0; DeclarationNo < Declaration->Length; DeclarationNo++) Declaration[DeclarationNo].Unmarshal();
+				for (int DeclarationNo = 0; DeclarationNo < Declaration->Length; DeclarationNo++)
+				{
+					Declaration[DeclarationNo].Unmarshal();
+				}
 			}
 			if (pDeclaration) delete[] pDeclaration;
 		}
