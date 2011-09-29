@@ -59,6 +59,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Direct3D10", "Direct3D10", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftParticles", "Samples\Direct3D10\SoftParticles\SoftParticles.csproj", "{F989ADB8-F596-4079-A258-C5AFE1E82227}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FixedFuncEMU", "Samples\Direct3D10\FixedFuncEMU\FixedFuncEMU.csproj", "{645B115E-EE1D-4EFF-94C8-2860F9A32F35}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -295,6 +297,18 @@ Global
 		{F989ADB8-F596-4079-A258-C5AFE1E82227}.Release|x64.Build.0 = Release|x64
 		{F989ADB8-F596-4079-A258-C5AFE1E82227}.Release|x86.ActiveCfg = Release|x86
 		{F989ADB8-F596-4079-A258-C5AFE1E82227}.Release|x86.Build.0 = Release|x86
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Debug|x64.ActiveCfg = Debug|x64
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Debug|x64.Build.0 = Debug|x64
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Debug|x86.ActiveCfg = Debug|x86
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Debug|x86.Build.0 = Debug|x86
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Release|x64.ActiveCfg = Release|x64
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Release|x64.Build.0 = Release|x64
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Release|x86.ActiveCfg = Release|x86
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -321,6 +335,7 @@ Global
 		{D8028B32-699D-45E4-9CD8-FD5B10F9D548} = {313C9716-B43C-4374-BE57-814CA8368A4A}
 		{8C37AC43-B934-4FDC-8025-FEDD076540EB} = {313C9716-B43C-4374-BE57-814CA8368A4A}
 		{F989ADB8-F596-4079-A258-C5AFE1E82227} = {F57CFB8C-282C-42C6-B18B-A934518BB5EC}
+		{645B115E-EE1D-4EFF-94C8-2860F9A32F35} = {F57CFB8C-282C-42C6-B18B-A934518BB5EC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
