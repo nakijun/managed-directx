@@ -21,4 +21,11 @@ public:
 	EffectScalarVariable^ AsScalar();
 	EffectVectorVariable^ AsVector();
 	EffectShaderResourceVariable^ AsShaderResource();
+
+	int SetRawValue(UnmanagedMemory^ Data, unsigned int Offset, unsigned int Count)
+	{
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
+
+		return pEffectVariable->SetRawValue(pData, Offset, Count);
+	}
 };
