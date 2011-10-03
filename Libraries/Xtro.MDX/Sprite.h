@@ -32,17 +32,24 @@ public:
 	{
 		D3DX10_SPRITE* pSprites = 0;
 
-		if (Sprites != nullptr && Sprites->Length > 0)
+		try
 		{
-			unsigned int ElementCount = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
-			pSprites = new D3DX10_SPRITE[ElementCount];
-			for (unsigned int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+			if (Sprites != nullptr && Sprites->Length > 0)
 			{
-				Sprites[ElementNo].ToNative(&pSprites[ElementNo]);
+				unsigned int ElementCount = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
+				pSprites = new D3DX10_SPRITE[ElementCount];
+				for (unsigned int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+				{
+					Sprites[ElementNo].ToNative(&pSprites[ElementNo]);
+				}
 			}
-		}
 
-		return pSprite->DrawSpritesBuffered(pSprites, SpriteCount);
+			return pSprite->DrawSpritesBuffered(pSprites, SpriteCount);
+		}
+		finally
+		{
+			if (pSprites) delete[] pSprites;
+		}
 	}
 
 	int Flush()

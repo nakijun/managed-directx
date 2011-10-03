@@ -16,4 +16,14 @@ public:
 	{
 		return pEffectScalarVariable->SetFloat(Value);
 	}
+
+	int SetInt(unsigned int Value)
+	{
+		return pEffectScalarVariable->SetInt(Value);
+	}
+
+	int SetBool(bool Value)
+	{
+		return pEffectScalarVariable->SetInt(Value);
+	}
 };
