@@ -2,10 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* noktalý küre görünmüyo.
-
-* tank dumaný
-
 * Reshaper hatalarýný gider.
 
 * structure'larý yap
