@@ -394,7 +394,7 @@ namespace FixedFuncEMU
             ViewportHeight = Effect.GetVariableByName( "g_viewportHeight" ).AsScalar();
             ViewportWidth = Effect.GetVariableByName( "g_viewportWidth" ).AsScalar();
             NearPlane = Effect.GetVariableByName( "g_nearPlane" ).AsScalar();
-            PointSize = Effect.GetVariableByName( "ointSize" ).AsScalar();
+            PointSize = Effect.GetVariableByName( "g_pointSize" ).AsScalar();
             EnableLighting = Effect.GetVariableByName( "g_bEnableLighting" ).AsScalar();
             EnableClipping = Effect.GetVariableByName( "g_bEnableClipping" ).AsScalar();
             FogModeVariable = Effect.GetVariableByName( "g_fogMode" ).AsScalar();

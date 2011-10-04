@@ -1094,9 +1094,10 @@ namespace SoftParticles
             if (HandleDialogKeyUpEvent(e)) return;
         }
 
+        Random Random = new Random();
         float RPercent()
         {
-            var Ret = (float)(new Random().Next(20000) - 10000);
+            var Ret = (float)(Random.Next(20000) - 10000);
             return Ret / 10000.0f;
         }
 
@@ -1273,7 +1274,7 @@ namespace SoftParticles
             //  of the region of array a that is to be sorted
             int I = Lo, J = Hi;
             float H;
-            int Index;
+            uint Index;
             float X;
             Depths.Get((uint)((Lo + Hi) / 2), out X);
 
@@ -1299,9 +1300,9 @@ namespace SoftParticles
                     Depths.Get((uint)J, out D); Depths.Set((uint)I, ref D);
                     Depths.Set((uint)J, ref H);
 
-                    int II;
+                    uint II;
                     Indices.Get((uint)I, out Index);
-                    Indices.Get((uint)J, out II); Indices.Set((uint)I, ref D);
+                    Indices.Get((uint)J, out II); Indices.Set((uint)I, ref II);
                     Indices.Set((uint)J, ref Index);
                     I++; J--;
                 }
