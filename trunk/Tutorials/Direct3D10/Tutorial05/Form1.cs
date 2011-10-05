@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+﻿// ReSharper disable CSharpWarnings::CS0197
+using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-
 using Xtro.MDX;
 using Xtro.MDX.Generic;
 using Xtro.MDX.DXGI;
@@ -25,43 +17,36 @@ using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 
 namespace Tutorial05
 {
-    public partial class Form1 : Form
+    sealed partial class Form1 : Form
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        static extern IntPtr PostMessage(IntPtr Wnd, int Msg, int ParamW, int ParamL);
 
         [DllImport("kernel32.dll")]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [System.Security.SuppressUnmanagedCodeSecurity]
         static extern uint GetTickCount();
 
         struct SimpleVertex
         {
             public Vector3 Position;
             public Vector4 Color;
-
-            public SimpleVertex(Vector3 Position, Vector4 Color)
-            {
-                this.Position = Position;
-                this.Color = Color;
-            }
         };
 
-        DriverType DriverType = DriverType.Null;
-        Device Device = null;
-        SwapChain SwapChain = null;
-        RenderTargetView RenderTargetView = null;
-        Texture2D DepthStencil = null;
-        DepthStencilView DepthStencilView = null;
-        Effect Effect = null;
-        EffectTechnique Technique = null;
+        Device Device;
+        SwapChain SwapChain;
+        RenderTargetView RenderTargetView;
+        Texture2D DepthStencil;
+        DepthStencilView DepthStencilView;
+        Effect Effect;
+        EffectTechnique Technique;
         TechniqueDescription TechniqueDescription;
-        InputLayout VertexLayout = null;
-        Buffer VertexBuffer = null;
-        Buffer IndexBuffer = null;
-        EffectMatrixVariable WorldVariable = null;
-        EffectMatrixVariable ViewVariable = null;
-        EffectMatrixVariable ProjectionVariable = null;
+        InputLayout VertexLayout;
+        Buffer VertexBuffer;
+        Buffer IndexBuffer;
+        EffectMatrixVariable WorldVariable;
+        EffectMatrixVariable ViewVariable;
+        EffectMatrixVariable ProjectionVariable;
         Matrix World1;
         Matrix World2;
         Matrix View;
@@ -72,12 +57,12 @@ namespace Tutorial05
             InitializeComponent();
         }
 
-        private void Form1_Shown(object sender, EventArgs e)
+        private void Form1_Shown(object Sender, EventArgs E)
         {
             if (InitDevice()) Application.Idle += Application_Idle;
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form1_FormClosing(object Sender, FormClosingEventArgs E)
         {
             Application.Idle -= Application_Idle;
 
@@ -97,7 +82,9 @@ namespace Tutorial05
             catch (Exception Ex) { Application_Exception(Sender, new ThreadExceptionEventArgs(Ex)); }
         }
 
-        void Application_Exception(object Sender, ThreadExceptionEventArgs E)
+        // ReSharper disable UnusedParameter.Local
+        static void Application_Exception(object Sender, ThreadExceptionEventArgs E)
+        // ReSharper restore UnusedParameter.Local
         {
             MessageBox.Show(E.Exception.ToString());
             Application.Exit();
@@ -105,8 +92,6 @@ namespace Tutorial05
 
         bool InitDevice()
         {
-            var ClientSize = this.ClientSize;
-
             CreateDeviceFlag CreateDeviceFlags = 0;
 #if DEBUG
             CreateDeviceFlags |= CreateDeviceFlag.Debug;
@@ -114,24 +99,35 @@ namespace Tutorial05
 
             DriverType[] DriverTypes = { DriverType.Hardware, DriverType.Reference };
 
-            SwapChainDescription SwapChainDescription = new SwapChainDescription();
-            SwapChainDescription.BufferCount = 1;
-            SwapChainDescription.BufferDescription.Width = (uint)ClientSize.Width;
-            SwapChainDescription.BufferDescription.Height = (uint)ClientSize.Height;
-            SwapChainDescription.BufferDescription.Format = Format.R8G8B8A8_UNorm;
-            SwapChainDescription.BufferDescription.RefreshRate.Numerator = 60;
-            SwapChainDescription.BufferDescription.RefreshRate.Denominator = 1;
-            SwapChainDescription.BufferUsage = UsageFlag.RenderTargetOutput;
-            SwapChainDescription.OutputWindow = Handle;
-            SwapChainDescription.SampleDescription.Count = 1;
-            SwapChainDescription.SampleDescription.Quality = 0;
-            SwapChainDescription.Windowed = true;
-
-            int Result = 0;
-
-            for (int DriverTypeIndex = 0; DriverTypeIndex < DriverTypes.Length; DriverTypeIndex++)
+            var SwapChainDescription = new SwapChainDescription
             {
-                Result = Functions.CreateDeviceAndSwapChain(null, DriverTypes[DriverTypeIndex], null, CreateDeviceFlags, ref SwapChainDescription, out SwapChain, out Device);
+                BufferCount = 1,
+                BufferDescription =
+                {
+                    Width = (uint)ClientSize.Width,
+                    Height = (uint)ClientSize.Height,
+                    Format = Format.R8G8B8A8_UNorm,
+                    RefreshRate =
+                    {
+                        Numerator = 60,
+                        Denominator = 1
+                    }
+                },
+                BufferUsage = UsageFlag.RenderTargetOutput,
+                OutputWindow = Handle,
+                SampleDescription =
+                {
+                    Count = 1,
+                    Quality = 0
+                },
+                Windowed = true
+            };
+
+            var Result = 0;
+
+            foreach (var Type in DriverTypes)
+            {
+                Result = Functions.CreateDeviceAndSwapChain(null, Type, null, CreateDeviceFlags, ref SwapChainDescription, out SwapChain, out Device);
                 if (Result >= 0) break;
             }
 
@@ -143,8 +139,7 @@ namespace Tutorial05
             Result = SwapChain.GetBuffer(0, typeof(Texture2D), out Surface);
             if (Result < 0) throw new Exception("SwapChain.GetBuffer has failed : " + Result);
 
-            Texture2D BackBuffer;
-            BackBuffer = (Texture2D)Surface;
+            var BackBuffer = (Texture2D)Surface;
 
             Result = Device.CreateRenderTargetView(BackBuffer, out RenderTargetView);
             if (Result < 0) throw new Exception("Device.CreateRenderTargetView has failed : " + Result);
@@ -168,32 +163,35 @@ namespace Tutorial05
             if (Result < 0) throw new Exception("Device.CreateTexture2D has failed : " + Result);
 
             // Create the depth stencil view
-            DepthStencilViewDescription DepthStencilViewDescription = new DepthStencilViewDescription
+            var DepthStencilViewDescription = new DepthStencilViewDescription
             {
                 Format = DepthStencilDescription.Format,
-                ViewDimension = DepthStencilViewDimension.Texture2D
+                ViewDimension = DepthStencilViewDimension.Texture2D,
+                Texture2D =
+                {
+                    MipSlice = 0
+                }
             };
-            DepthStencilViewDescription.Texture2D.MipSlice = 0;
             Result = Device.CreateDepthStencilView(DepthStencil, ref DepthStencilViewDescription, out DepthStencilView);
             if (Result < 0) throw new Exception("Device.CreateDepthStencilView has failed : " + Result);
 
-            Device.OM_SetRenderTargets(1,new [] { RenderTargetView }, DepthStencilView);
+            Device.OM_SetRenderTargets(1, new[] { RenderTargetView }, DepthStencilView);
 
             // Setup the viewport
-            Viewport Viewport = new Viewport()
-            {
-                TopLeftX = 0,
-                TopLeftY = 0,
-                Width = (uint)ClientSize.Width,
-                Height = (uint)ClientSize.Height,
-                MinDepth = 0.0f,
-                MaxDepth = 1.0f
-            };
+            var Viewport = new Viewport
+                {
+                    TopLeftX = 0,
+                    TopLeftY = 0,
+                    Width = (uint)ClientSize.Width,
+                    Height = (uint)ClientSize.Height,
+                    MinDepth = 0.0f,
+                    MaxDepth = 1.0f
+                };
             Device.RS_SetViewports(1, new[] { Viewport });
 
             // Create the effect
 
-            ShaderFlag ShaderFlags = ShaderFlag.EnableStrictness;
+            var ShaderFlags = ShaderFlag.EnableStrictness;
 #if DEBUG
             // Set the ShaderFlag.Debug flag to embed debug information in the shaders.
             // Setting this flag improves the shader debugging experience, but still allows 
@@ -205,10 +203,10 @@ namespace Tutorial05
             Result = D3DX10Functions.CreateEffectFromFile("Tutorial05.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
             if (Result == (int)Error.FileNotFound)
             {
-                MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
+                MessageBox.Show(@"The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", @"Error", MessageBoxButtons.OK);
                 return false;
             }
-            else if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
+            if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
 
             // Obtain the technique
             Technique = Effect.GetTechniqueByName("Render");
@@ -249,40 +247,37 @@ namespace Tutorial05
             PassDescription PassDescription;
             Result = Technique.GetPassByIndex(0).GetDescription(out PassDescription);
             if (Result < 0) throw new Exception("GetDescription has failed : " + Result);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Size, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, PassDescription.IA_InputSignature.Size, out VertexLayout);
             if (Result < 0) throw new Exception("Device.CreateInputLayout has failed : " + Result);
 
             // Set the input layout
             Device.IA_SetInputLayout(VertexLayout);
 
-            SubResourceData InitData;
-            BufferDescription BufferDescription;
-
             // Create vertex buffer
 
-            var VertexCount = (uint)8;
-            int VertexSize = Marshal.SizeOf(typeof(SimpleVertex));
+            const uint VertexCount = 8;
+            var VertexSize = Marshal.SizeOf(typeof(SimpleVertex));
             var Vertices = new UnmanagedMemory<SimpleVertex>((uint)(VertexSize * VertexCount));
-            Vertices.Write(new SimpleVertex[]
+            Vertices.Write(new[]
             {
-                new SimpleVertex(new Vector3(-1.0f, 1.0f, -1.0f), new Vector4(0.0f, 0.0f, 1.0f, 1.0f)),
-                new SimpleVertex(new Vector3(1.0f, 1.0f, -1.0f), new Vector4(0.0f, 1.0f, 0.0f, 1.0f)),
-                new SimpleVertex(new Vector3(1.0f, 1.0f, 1.0f), new Vector4(0.0f, 1.0f, 1.0f, 1.0f)),
-                new SimpleVertex(new Vector3(-1.0f, 1.0f, 1.0f), new Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-                new SimpleVertex(new Vector3(-1.0f, -1.0f, -1.0f), new Vector4(1.0f, 0.0f, 1.0f, 1.0f)),
-                new SimpleVertex(new Vector3(1.0f, -1.0f, -1.0f), new Vector4(1.0f, 1.0f, 0.0f, 1.0f)),
-                new SimpleVertex(new Vector3(1.0f, -1.0f, 1.0f), new Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
-                new SimpleVertex(new Vector3(-1.0f, -1.0f, 1.0f), new Vector4(0.0f, 0.0f, 0.0f, 1.0f))
+                new SimpleVertex{Position = new Vector3(-1.0f, 1.0f, -1.0f), Color = new Vector4(0.0f, 0.0f, 1.0f, 1.0f)},
+                new SimpleVertex{Position = new Vector3(1.0f, 1.0f, -1.0f), Color = new Vector4(0.0f, 1.0f, 0.0f, 1.0f)},
+                new SimpleVertex{Position = new Vector3(1.0f, 1.0f, 1.0f), Color = new Vector4(0.0f, 1.0f, 1.0f, 1.0f)},
+                new SimpleVertex{Position = new Vector3(-1.0f, 1.0f, 1.0f), Color = new Vector4(1.0f, 0.0f, 0.0f, 1.0f)},
+                new SimpleVertex{Position = new Vector3(-1.0f, -1.0f, -1.0f), Color = new Vector4(1.0f, 0.0f, 1.0f, 1.0f)},
+                new SimpleVertex{Position = new Vector3(1.0f, -1.0f, -1.0f), Color = new Vector4(1.0f, 1.0f, 0.0f, 1.0f)},
+                new SimpleVertex{Position = new Vector3(1.0f, -1.0f, 1.0f), Color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f)},
+                new SimpleVertex{Position = new Vector3(-1.0f, -1.0f, 1.0f), Color = new Vector4(0.0f, 0.0f, 0.0f, 1.0f)}
             });
-            InitData = new SubResourceData
+            var InitData = new SubResourceData
             {
                 SystemMemory = Vertices,
                 SystemMemoryPitch = 0,
                 SystemMemorySlicePitch = 0
             };
-            BufferDescription = new BufferDescription
+            var BufferDescription = new BufferDescription
             {
-                ByteWidth = (uint)Vertices.Size,
+                ByteWidth = Vertices.Size,
                 Usage = Usage.Default,
                 BindFlags = BindFlag.VertexBuffer,
                 CpuAccessFlags = 0,
@@ -293,13 +288,13 @@ namespace Tutorial05
             if (Result < 0) throw new Exception("Device.CreateBuffer has failed : " + Result);
 
             // Set vertex buffer
-            Device.IA_SetVertexBuffers(0,1, new [] { VertexBuffer }, new uint[] { (uint)(BufferDescription.ByteWidth / 8) }, new uint[] { 0 });
+            Device.IA_SetVertexBuffers(0, 1, new[] { VertexBuffer }, new[] { BufferDescription.ByteWidth / 8 }, new uint[] { 0 });
 
             // Create index buffer
 
-            var IndexCount = (uint)36;
+            const uint IndexCount = 36;
             var Indices = new UnmanagedMemory<int>(sizeof(int) * IndexCount);
-            Indices.Write(new int[] 
+            Indices.Write(new[] 
             {
                 3, 1, 0,
                 2, 1, 3,
@@ -322,7 +317,7 @@ namespace Tutorial05
             };
             BufferDescription = new BufferDescription
             {
-                ByteWidth = (uint)Indices.Size,
+                ByteWidth = Indices.Size,
                 Usage = Usage.Default,
                 BindFlags = BindFlag.IndexBuffer,
                 CpuAccessFlags = 0,
@@ -343,25 +338,25 @@ namespace Tutorial05
             D3DX10Functions.MatrixIdentity(out World2);
 
             // Initialize the view matrix
-            Vector3 Eye = new Vector3(0.0f, 1.0f, -10.0f);
-            Vector3 At = new Vector3(0.0f, 1.0f, 0.0f);
-            Vector3 Up = new Vector3(0.0f, 1.0f, 0.0f);
+            var Eye = new Vector3(0.0f, 1.0f, -10.0f);
+            var At = new Vector3(0.0f, 1.0f, 0.0f);
+            var Up = new Vector3(0.0f, 1.0f, 0.0f);
             D3DX10Functions.MatrixLookAtLH(out View, ref Eye, ref At, ref Up);
 
             // Initialize the projection matrix
-            float FovY = (float)D3DX10Constants.PI * 0.25f;
+            const float FovY = (float)D3DX10Constants.PI * 0.25f;
             D3DX10Functions.MatrixPerspectiveFovLH(out Projection, FovY, ClientSize.Width / (float)ClientSize.Height, 0.1f, 100.0f);
 
             return true;
         }
 
-        float Time = 0.0f;
-        uint TimeStart = 0;
+        float Time;
+        uint TimeStart;
 
         void Render()
         {
             // Update our time
-            uint TimeCurrent = GetTickCount();
+            var TimeCurrent = GetTickCount();
             if (TimeStart == 0) TimeStart = TimeCurrent;
             Time = (TimeCurrent - TimeStart) / 1000.0f;
 
@@ -383,16 +378,14 @@ namespace Tutorial05
             D3DX10Functions.MatrixMultiply(out World2, ref World2, ref OrbitMatrix);
 
             // Clear the backbuffer
-            Float4 ClearColor = new Float4(new[]{0.0f, 0.125f, 0.3f, 1.0f}); //red,green,blue,alpha
+            var ClearColor = new Float4(new[] { 0.0f, 0.125f, 0.3f, 1.0f }); //red,green,blue,alpha
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 
             // Clear the depth buffer to 1.0 (max depth)
             Device.ClearDepthStencilView(DepthStencilView, ClearFlag.Depth, 1.0f, 0);
 
-            int Result = 0;
-
             // Update variables for the first cube
-            Result = WorldVariable.SetMatrix((float[])World1);
+            var Result = WorldVariable.SetMatrix((float[])World1);
             if (Result < 0) throw new Exception("WorldVariable.SetMatrix has failed : " + Result);
             Result = ViewVariable.SetMatrix((float[])View);
             if (Result < 0) throw new Exception("ViewVariable.SetMatrix has failed : " + Result);
@@ -441,3 +434,4 @@ namespace Tutorial05
         }
     }
 }
+// ReSharper restore CSharpWarnings::CS0197

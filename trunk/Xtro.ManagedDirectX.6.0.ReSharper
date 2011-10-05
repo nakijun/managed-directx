@@ -131,6 +131,7 @@
       <Abbreviation Text="SRGB" />
       <Abbreviation Text="FOV" />
       <Abbreviation Text="UI" />
+      <Abbreviation Text="HUD" />
     </Naming2>
   </CodeStyleSettings>
   <Daemon.SolutionSettings>

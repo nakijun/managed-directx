@@ -9,24 +9,24 @@ using Resource = Xtro.MDX.Direct3D10.Resource;
 
 namespace Xtro.MDX.Utilities
 {
-    public class ResourceCache
+    public sealed class ResourceCache
     {
-        public struct TextureStruct
+        struct TextureStruct
         {
-            public string Source;
-            public uint Width;
-            public uint Height;
-            public uint Depth;
-            public uint MipLevels;
-            public ResourceMiscellaneousFlag MiscellaneousFlags;
-            public Usage Usage;
-            public Format Format;
-            public CpuAccessFlag CpuAccessFlags;
-            public BindFlag BindFlags;
-            public ShaderResourceView ShaderResourceView;
+            internal string Source;
+            internal uint Width;
+            internal uint Height;
+            //internal uint Depth;
+            internal uint MipLevels;
+            internal ResourceMiscellaneousFlag MiscellaneousFlags;
+            internal Usage Usage;
+            internal Format Format;
+            internal CpuAccessFlag CpuAccessFlags;
+            internal BindFlag BindFlags;
+            internal ShaderResourceView ShaderResourceView;
         };
 
-        List<TextureStruct> TextureCache = new List<TextureStruct>();
+        readonly List<TextureStruct> TextureCache = new List<TextureStruct>();
 
         internal static ResourceCache Singular;
 
@@ -89,7 +89,7 @@ namespace Xtro.MDX.Utilities
                 MiscellaneousFlags = LoadInfo[0].MiscellaneousFlags
             };
 
-            //Create the rexture
+            //Create the texture
             Resource Resource;
             Result = D3DX10Functions.CreateTextureFromFile(Device, SourceFile, ref LoadInfo[0], out Resource);
             if (Result < 0) return Result;

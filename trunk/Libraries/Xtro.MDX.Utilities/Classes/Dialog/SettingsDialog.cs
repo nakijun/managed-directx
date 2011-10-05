@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using Xtro.MDX.Direct3D10;
-using Xtro.MDX.Direct3DX10;
 using Xtro.MDX.DXGI;
 using Device = Xtro.MDX.Direct3D10.Device;
 using D3D10Functions = Xtro.MDX.Direct3D10.Functions;
@@ -15,7 +14,7 @@ namespace Xtro.MDX.Utilities
         StateBlock StateBlock;
         Dialog ActiveDialog;
         Dialog Dialog = new Dialog();
-        Dialog RevertModeDialog = new Dialog();
+        readonly Dialog RevertModeDialog = new Dialog();
         int RevertModeTimeout;
         uint IDEvent;
         bool Active;
@@ -77,9 +76,7 @@ namespace Xtro.MDX.Utilities
         // ReSharper restore UnusedMember.Local
         {
             // Using an accessor function gives control of the construction order
-            if (StaticDialog == null) StaticDialog = new SettingsDialog();
-
-            return StaticDialog;
+            return StaticDialog ?? (StaticDialog = new SettingsDialog());
         }
 
         void CreateControls()
@@ -1209,7 +1206,7 @@ namespace Xtro.MDX.Utilities
             return Result < 0 ? Result : 0;
         }
 
-        public int OnResizedSwapChain(Device Device, ref SurfaceDescription BackBufferSurfaceDescription)
+        public int OnResizedSwapChain(/*Device Device,*/ ref SurfaceDescription BackBufferSurfaceDescription)
         {
             Dialog.SetLocation(0, 0);
             Dialog.SetSize((int)BackBufferSurfaceDescription.Width, (int)BackBufferSurfaceDescription.Height);

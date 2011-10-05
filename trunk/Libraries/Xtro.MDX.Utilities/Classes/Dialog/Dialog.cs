@@ -12,7 +12,7 @@ using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 
 namespace Xtro.MDX.Utilities
 {
-    public class Dialog
+    public sealed class Dialog
     {
         public struct ElementHolder
         {
@@ -1189,7 +1189,9 @@ namespace Xtro.MDX.Utilities
         public int DrawSprite(Element Element, ref Rectangle DestinationRectangle, float Depth)
         {
             // No need to draw fully transparent layers
+            // ReSharper disable CompareOfFloatsByEqualityOperator
             if (Element.TextureColor.Current.A == 0) return 0;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
 
             var TextureRectangle = Element.TextureRectangle;
 
@@ -1240,7 +1242,9 @@ namespace Xtro.MDX.Utilities
             int Result;
 
             // No need to draw fully transparent layers
+            // ReSharper disable CompareOfFloatsByEqualityOperator
             if (Element.FontColor.Current.A == 0) return 0;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
 
             var Screen = Destination;
             Screen.Offset(X, Y);
@@ -1609,13 +1613,12 @@ namespace Xtro.MDX.Utilities
                 new ScreenVertex{X= Left,Y=     Top,Z= 0.5f, Color =Color,TU= 0.0f,TV= 0.0f },
                 new ScreenVertex{X= Right,Y=    Top,Z= 0.5f,Color =Color, TU=1.0f, TV=0.0f },
                 new ScreenVertex{X= Left, Y= Bottom,Z= 0.5f,Color =Color, TU=0.0f, TV=1.0f },
-                new ScreenVertex{X= Right,Y= Bottom,Z= 0.5f,Color =Color, TU=1.0f, TV=1.0f },
+                new ScreenVertex{X= Right,Y= Bottom,Z= 0.5f,Color =Color, TU=1.0f, TV=1.0f }
             };
-            UnmanagedMemory<ScreenVertex> VertexBuffer;
             UnmanagedMemory Temp;
             if (Manager.VertexBufferScreenQuad.Map(Map.WriteDiscard, 0, out Temp) >= 0)
             {
-                VertexBuffer = new UnmanagedMemory<ScreenVertex>(Temp.Pointer, Temp.Size);
+                var VertexBuffer = new UnmanagedMemory<ScreenVertex>(Temp.Pointer, Temp.Size);
                 VertexBuffer.Write(Vertices);
                 Manager.VertexBufferScreenQuad.Unmap();
             }

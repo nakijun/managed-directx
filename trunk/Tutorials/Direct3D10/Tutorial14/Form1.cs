@@ -1,5 +1,5 @@
-﻿using System;
-using System.Drawing;
+﻿// ReSharper disable CSharpWarnings::CS0197
+using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
@@ -9,9 +9,7 @@ using Xtro.MDX.DXGI;
 using Xtro.MDX.Direct3D10;
 using D3D10Usage = Xtro.MDX.Direct3D10.Usage;
 using Device = Xtro.MDX.Direct3D10.Device;
-using Functions = Xtro.MDX.Direct3D10.Functions;
 using Buffer = Xtro.MDX.Direct3D10.Buffer;
-using Error = Xtro.MDX.Direct3D10.Error;
 using Xtro.MDX.Direct3DX10;
 using D3DX10Constants = Xtro.MDX.Direct3DX10.Constants;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
@@ -26,15 +24,11 @@ using UtilitiesFunctions = Xtro.MDX.Utilities.Functions;
 
 namespace Tutorial14
 {
-    public partial class Form1 : Form
+    sealed partial class Form1 : Form
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
-        [DllImport("kernel32.dll")]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        static extern uint GetTickCount();
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        static extern IntPtr PostMessage(IntPtr Wnd, int Msg, int ParamW, int ParamL);
 
         enum ControlID
         {
@@ -73,7 +67,7 @@ namespace Tutorial14
 
             "DepthOff/StencilIncOnPass",
             "DepthLess/StencilIncOnPass",
-            "DepthGreater/StencilIncOnPass",
+            "DepthGreater/StencilIncOnPass"
         };
 
         static readonly string[] RasterizerModes =
@@ -84,53 +78,55 @@ namespace Tutorial14
 
             "CullOff/FillWire",
             "CullFront/FillWire",
-            "CullBack/FillWire",
+            "CullBack/FillWire"
         };
 
-        ModelViewerCamera Camera;
-        DialogResourceManager DialogResourceManager = new DialogResourceManager();// manager for shared resources of dialogs
-        SettingsDialog SettingsDialog = new SettingsDialog();       // Device settings dialog
-        Dialog HUD = new Dialog();                  // manages the 3D UI
-        Dialog SampleUI = new Dialog();             // dialog for sample specific controls
+        readonly ModelViewerCamera Camera;
+        readonly DialogResourceManager DialogResourceManager = new DialogResourceManager();// manager for shared resources of dialogs
+        readonly SettingsDialog SettingsDialog = new SettingsDialog();       // Device settings dialog
+        readonly Dialog HUD = new Dialog();                  // manages the 3D UI
+        readonly Dialog SampleUI = new Dialog();             // dialog for sample specific controls
 
         Matrix World;
         bool Spinning = true;
-        Font D3DX10Font = null;         // Font for drawing text
-        Sprite Sprite = null;       // Sprite for batching text drawing
-        TextHelper TextHelper = null;
+        Font Font2;         // Font for drawing text
+        Sprite Sprite;       // Sprite for batching text drawing
+        TextHelper TextHelper;
 
         Effect Effect;
         InputLayout SceneLayout;
         InputLayout QuadLayout;
         Buffer ScreenQuadVertexBuffer;
-        SDK_Mesh Mesh = new SDK_Mesh();
-        ShaderResourceView[] ScreenResourceView = new ShaderResourceView[2];
+        readonly SDK_Mesh Mesh = new SDK_Mesh();
+        readonly ShaderResourceView[] ScreenResourceView = new ShaderResourceView[2];
 
         uint SceneDepthStencilMode;
-        DepthStencilState[] DepthStencilStates = new DepthStencilState[DepthStencilModes.Length]; // Depth Stencil states for non-FX 
+        readonly DepthStencilState[] DepthStencilStates = new DepthStencilState[DepthStencilModes.Length]; // Depth Stencil states for non-FX 
         // depth stencil state managment
         uint SceneRasterizerMode;
-        RasterizerState[] RasterStates = new RasterizerState[RasterizerModes.Length];  // Rasterizer states for non-FX 
+        readonly RasterizerState[] RasterStates = new RasterizerState[RasterizerModes.Length];  // Rasterizer states for non-FX 
         // rasterizer state management
         uint QuadRenderMode;
-        EffectTechnique[] TechniqueQuad = new EffectTechnique[QuadTechniques.Length]; // Quad Techniques from the FX file for 
+        readonly EffectTechnique[] TechniqueQuad = new EffectTechnique[QuadTechniques.Length]; // Quad Techniques from the FX file for 
         // FX based alpha blend state management
         EffectTechnique TechniqueScene;             // FX technique for rendering the scene
         EffectTechnique TechniqueRenderWithStencil; // FX technique for rendering using FX based depth
         // stencil state management
 
-        EffectShaderResourceVariable DiffuseVariable = null;
-        EffectMatrixVariable WorldVariable = null;
-        EffectMatrixVariable ViewVariable = null;
-        EffectMatrixVariable ProjectionVariable = null;
+        EffectShaderResourceVariable DiffuseVariable;
+        EffectMatrixVariable WorldVariable;
+        EffectMatrixVariable ViewVariable;
+        EffectMatrixVariable ProjectionVariable;
 
         struct ScreenVertex
         {
+            // ReSharper disable NotAccessedField.Local
             public Vector4 Position;
             public Vector2 Texture;
+            // ReSharper restore NotAccessedField.Local
         };
 
-        public Form1()
+        internal Form1()
         {
             InitializeComponent();
 
@@ -157,7 +153,7 @@ namespace Tutorial14
                 UtilitiesFunctions.SetCallbackFrameMove(OnFrameMove, null);
                 UtilitiesFunctions.SetCallbackDeviceChanging(OnModifyDeviceSettings, null);
 
-                UtilitiesFunctions.Initialize(true);
+                UtilitiesFunctions.Initialize();
                 UtilitiesFunctions.SetCursorSettings(true, true);
                 Init();
                 UtilitiesFunctions.SetWindow(this);
@@ -184,7 +180,7 @@ namespace Tutorial14
             Button CreatedButton;
             HUD.AddButton((int)ControlID.ToggleFullscreen, "Toggle full screen", 35, Y, 125, 22, 0, false, out CreatedButton);
             HUD.AddButton((int)ControlID.ChangeDevice, "Change device (F2)", 35, Y += 24, 125, 22, Keys.F2, false, out CreatedButton);
-            HUD.AddButton((int)ControlID.ToggleREF, "Toggle REF (F3)", 35, Y += 24, 125, 22, Keys.F3, false, out CreatedButton);
+            HUD.AddButton((int)ControlID.ToggleREF, "Toggle REF (F3)", 35, Y + 24, 125, 22, Keys.F3, false, out CreatedButton);
 
             SampleUI.SetCallback(OnGUI_Event);
 
@@ -211,7 +207,7 @@ namespace Tutorial14
 
             Y += 24;
             CheckBox CreatedCheckBox;
-            SampleUI.AddCheckBox((int)ControlID.ToggleSpin, "Toggle Spinning", 35, Y += 24, 125, 22, Spinning, 0, false, out CreatedCheckBox);
+            SampleUI.AddCheckBox((int)ControlID.ToggleSpin, "Toggle Spinning", 35, Y + 24, 125, 22, Spinning, 0, false, out CreatedCheckBox);
         }
 
         private void Form1_FormClosing(object Sender, FormClosingEventArgs E)
@@ -247,7 +243,7 @@ namespace Tutorial14
             Application.Exit();
         }
 
-        bool IsDeviceAcceptable(uint Adapter, uint Output, DriverType DeviceType, Format BackBufferFormat, bool Windowed, object UserContext)
+        static bool IsDeviceAcceptable(uint Adapter, uint Output, DriverType DeviceType, Format BackBufferFormat, bool Windowed, object UserContext)
         {
             return true;
         }
@@ -258,11 +254,11 @@ namespace Tutorial14
             if (Result < 0) return Result;
             Result = SettingsDialog.OnCreateDevice(Device);
             if (Result < 0) return Result;
-            Result = D3DX10Functions.CreateFont(Device, 15, 0, (uint)FontWeight.Bold, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, "Arial", out D3DX10Font);
+            Result = D3DX10Functions.CreateFont(Device, 15, 0, (uint)FontWeight.Bold, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, "Arial", out Font2);
             if (Result < 0) return Result;
             Result = D3DX10Functions.CreateSprite(Device, 512, out Sprite);
             if (Result < 0) return Result;
-            TextHelper = new TextHelper(D3DX10Font, Sprite, 15);
+            TextHelper = new TextHelper(Font2, Sprite);
 
             var ShaderFlags = ShaderFlag.EnableStrictness;
 #if DEBUG
@@ -330,7 +326,7 @@ namespace Tutorial14
             // Create the input layout
             PassDescription PassDescription;
             TechniqueScene.GetPassByIndex(0).GetDescription(out PassDescription);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Size, out SceneLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, PassDescription.IA_InputSignature.Size, out SceneLayout);
             if (Result < 0) return Result;
 
             // Load the mesh
@@ -344,7 +340,7 @@ namespace Tutorial14
             var ScreenQuadLayout = new[]
             {
                 new InputElementDescription{SemanticName= "POSITION",SemanticIndex= 0,Format=Format.R32G32B32A32_Float, InputSlotClass=InputClassification.InputPerVertexData },
-                new InputElementDescription{SemanticName=  "TEXCOORD", SemanticIndex= 0, Format=Format.R32G32_Float,AlignedByteOffset= 16, InputSlotClass=InputClassification.InputPerVertexData  },
+                new InputElementDescription{SemanticName=  "TEXCOORD", SemanticIndex= 0, Format=Format.R32G32_Float,AlignedByteOffset= 16, InputSlotClass=InputClassification.InputPerVertexData  }
             };
 
             TechniqueQuad[0].GetPassByIndex(0).GetDescription(out PassDescription);
@@ -353,7 +349,7 @@ namespace Tutorial14
             if (Result < 0) return Result;
             QuadLayout = InputLayout;
 
-            const float Size = 1.0f;
+            const float Size2 = 1.0f;
 
             const uint VertexCount = 4;
             var VertexSize = Marshal.SizeOf(typeof(ScreenVertex));
@@ -362,22 +358,22 @@ namespace Tutorial14
             {
                 new ScreenVertex
                 {
-                    Position = new Vector4( -Size, Size, 0.0f, 1.0f ),
+                    Position = new Vector4( -Size2, Size2, 0.0f, 1.0f ),
                     Texture = new Vector2( 0.0f, 0.0f ),
                 },
                 new ScreenVertex
                 {
-                    Position = new Vector4( Size, Size, 0.0f, 1.0f ),
+                    Position = new Vector4( Size2, Size2, 0.0f, 1.0f ),
                     Texture = new Vector2( 1.0f, 0.0f ),
                 },
                 new ScreenVertex
                 {
-                    Position = new Vector4( -Size, -Size, 0.0f, 1.0f ),
+                    Position = new Vector4( -Size2, -Size2, 0.0f, 1.0f ),
                     Texture = new Vector2( 0.0f, 1.0f ),
                 },
                 new ScreenVertex
                 {
-                    Position = new Vector4( Size, -Size, 0.0f, 1.0f ),
+                    Position = new Vector4( Size2, -Size2, 0.0f, 1.0f ),
                     Texture = new Vector2( 1.0f, 1.0f )
                 }
             });
@@ -414,8 +410,8 @@ namespace Tutorial14
             }
 
             // Initialize the camera
-            Vector3 Eye = new Vector3(0.0f, 0.0f, -800.0f);
-            Vector3 At = new Vector3(0.0f, 1.0f, 0.0f);
+            var Eye = new Vector3(0.0f, 0.0f, -800.0f);
+            var At = new Vector3(0.0f, 1.0f, 0.0f);
             Camera.SetViewParameters(ref Eye, ref At);
 
             return 0;
@@ -426,7 +422,7 @@ namespace Tutorial14
             DialogResourceManager.OnDestroyDevice();
             SettingsDialog.OnDestroyDevice();
             UtilitiesFunctions.GetGlobalResourceCache().OnDestroyDevice();
-            if (D3DX10Font != null) D3DX10Font.Release();
+            if (Font2 != null) Font2.Release();
             if (Sprite != null) Sprite.Release();
             if (TextHelper != null) TextHelper.Delete();
             if (SceneLayout != null) SceneLayout.Release();
@@ -451,7 +447,7 @@ namespace Tutorial14
                 R.Release();
             }
 
-            D3DX10Font = null;
+            Font2 = null;
             Sprite = null;
             TextHelper = null;
             SceneLayout = null;
@@ -464,7 +460,7 @@ namespace Tutorial14
         {
             var Result = DialogResourceManager.OnResizedSwapChain(Device, ref BackBufferSurfaceDescription);
             if (Result < 0) return Result;
-            Result = SettingsDialog.OnResizedSwapChain(Device, ref BackBufferSurfaceDescription);
+            Result = SettingsDialog.OnResizedSwapChain(/*Device,*/ ref BackBufferSurfaceDescription);
             if (Result < 0) return Result;
 
             // Setup the camera's projection parameters
@@ -546,8 +542,8 @@ namespace Tutorial14
                     Mesh.MeshPairArray[0].Subsets.Get(S, out SubsetIndex);
 
                     // UnmanagedMemory.Get is not working for MarshalAs structs
-                    var Size = Marshal.SizeOf(typeof(SDK_Mesh.Subset));
-                    var Subset = (SDK_Mesh.Subset)Marshal.PtrToStructure(new IntPtr(Mesh.SubsetArray.Pointer.ToInt64() + SubsetIndex * Size), typeof(SDK_Mesh.Subset));
+                    var SizeOfSubset = Marshal.SizeOf(typeof(SDK_Mesh.Subset));
+                    var Subset = (SDK_Mesh.Subset)Marshal.PtrToStructure(new IntPtr(Mesh.SubsetArray.Pointer.ToInt64() + SubsetIndex * SizeOfSubset), typeof(SDK_Mesh.Subset));
 
                     var PrimitiveType = SDK_Mesh.GetPrimitiveType((PrimitiveType)Subset.PrimitiveType);
                     Device.IA_SetPrimitiveTopology(PrimitiveType);
@@ -576,7 +572,7 @@ namespace Tutorial14
             var Technique = TechniqueQuad[QuadRenderMode];
             DiffuseVariable.SetResource(ScreenResourceView[0]);
             var Stride = (uint)Marshal.SizeOf(typeof(ScreenVertex));
-            uint Offset = 0;
+            const uint Offset = 0;
             var Buffers = new[] { ScreenQuadVertexBuffer };
 
             Device.IA_SetInputLayout(QuadLayout);
@@ -661,14 +657,14 @@ namespace Tutorial14
             World = Rotation * World;
         }
 
-        bool OnModifyDeviceSettings(DeviceSettings DeviceSettings, object UserContext)
+        static bool OnModifyDeviceSettings(DeviceSettings DeviceSettings, object UserContext)
         {
             DeviceSettings.AutoDepthStencilFormat = Format.D24_UNorm_S8_UInt;
 
             return true;
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void Form1_Paint(object Sender, PaintEventArgs E)
         {
             UtilitiesFunctions.HandlePaintEvent();
         }
@@ -690,24 +686,24 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_Resize(object sender, EventArgs e)
+        private void Form1_Resize(object Sender, EventArgs E)
         {
-            if (HandleDialogResizeEvent(e)) return;
+            if (HandleDialogResizeEvent(E)) return;
 
             UtilitiesFunctions.HandleResizeEvent();
         }
 
-        private void Form1_ResizeBegin(object sender, EventArgs e)
+        private void Form1_ResizeBegin(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeBeginEvent();
         }
 
-        private void Form1_ResizeEnd(object sender, EventArgs e)
+        private void Form1_ResizeEnd(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeEndEvent();
         }
 
-        private void Form1_CursorChanged(object sender, EventArgs e)
+        private void Form1_CursorChanged(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleCursorChangedEvent();
         }
@@ -729,7 +725,7 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_Activated(object sender, EventArgs e)
+        private void Form1_Activated(object Sender, EventArgs E)
         {
             if (HandleDialogActivatedEvent()) return;
 
@@ -753,7 +749,7 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_Deactivate(object sender, EventArgs e)
+        private void Form1_Deactivate(object Sender, EventArgs E)
         {
             if (HandleDialogDeactivatedEvent()) return;
 
@@ -781,13 +777,13 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void Form1_KeyDown(object Sender, KeyEventArgs E)
         {
-            if (e.KeyCode == Keys.F1) Camera.Reset();
+            if (E.KeyCode == Keys.F1) Camera.Reset();
 
-            if (HandleDialogKeyDownEvent(e)) return;
+            if (HandleDialogKeyDownEvent(E)) return;
 
-            UtilitiesFunctions.HandleKeyDownEvent(e);
+            UtilitiesFunctions.HandleKeyDownEvent(E);
         }
 
         bool HandleDialogMouseDownAndDoubleClickEvent(MouseEventArgs E)
@@ -811,14 +807,14 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        private void Form1_MouseDown(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseDownAndDoubleClickEvent(e)) return;
+            if (HandleDialogMouseDownAndDoubleClickEvent(E)) return;
         }
 
-        private void Form1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void Form1_MouseDoubleClick(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseDownAndDoubleClickEvent(e)) return;
+            if (HandleDialogMouseDownAndDoubleClickEvent(E)) return;
         }
 
         bool HandleDialogMouseUpEvent(MouseEventArgs E)
@@ -842,9 +838,9 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        private void Form1_MouseUp(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseUpEvent(e)) return;
+            if (HandleDialogMouseUpEvent(E)) return;
         }
 
         bool HandleDialogMouseWheelEvent(MouseEventArgs E)
@@ -868,9 +864,9 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_MouseWheel(object sender, MouseEventArgs e)
+        private void Form1_MouseWheel(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseWheelEvent(e)) return;
+            if (HandleDialogMouseWheelEvent(E)) return;
         }
 
         bool HandleDialogMouseMoveEvent(MouseEventArgs E)
@@ -894,9 +890,9 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        private void Form1_MouseMove(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseMoveEvent(e)) return;
+            if (HandleDialogMouseMoveEvent(E)) return;
         }
 
         bool HandleDialogMoveEvent(EventArgs E)
@@ -916,9 +912,9 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_Move(object sender, EventArgs e)
+        private void Form1_Move(object Sender, EventArgs E)
         {
-            if (HandleDialogMoveEvent(e)) return;
+            if (HandleDialogMoveEvent(E)) return;
         }
 
         bool HandleDialogMouseCaptureChangedEvent(EventArgs E)
@@ -938,9 +934,9 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_MouseCaptureChanged(object sender, EventArgs e)
+        private void Form1_MouseCaptureChanged(object Sender, EventArgs E)
         {
-            if (HandleDialogMouseCaptureChangedEvent(e)) return;
+            if (HandleDialogMouseCaptureChangedEvent(E)) return;
         }
 
         bool HandleDialogKeyUpEvent(KeyEventArgs E)
@@ -964,9 +960,9 @@ namespace Tutorial14
             return false;
         }
 
-        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        private void Form1_KeyUp(object Sender, KeyEventArgs E)
         {
-            if (HandleDialogKeyUpEvent(e)) return;
+            if (HandleDialogKeyUpEvent(E)) return;
         }
 
         void OnGUI_Event(Event Event, int ControlID, Control Control, object UserContext)
@@ -1065,7 +1061,7 @@ namespace Tutorial14
         ComparisonFunction.Greater,
         ComparisonFunction.Less,
         ComparisonFunction.Less,
-        ComparisonFunction.Greater,
+        ComparisonFunction.Greater
     };
 
             var FailOperation = new[] 
@@ -1080,7 +1076,7 @@ namespace Tutorial14
 
         StencilOperation.Keep,
         StencilOperation.Keep,
-        StencilOperation.Keep,
+        StencilOperation.Keep
     };
 
             var PassOperation = new[]
@@ -1095,7 +1091,7 @@ namespace Tutorial14
 
         StencilOperation.Increment,
         StencilOperation.Increment,
-        StencilOperation.Increment,
+        StencilOperation.Increment
     };
 
             for (var I = 0; I < DepthStencilModes.Length; I++)
@@ -1185,3 +1181,4 @@ namespace Tutorial14
         }
     }
 }
+// ReSharper restore CSharpWarnings::CS0197

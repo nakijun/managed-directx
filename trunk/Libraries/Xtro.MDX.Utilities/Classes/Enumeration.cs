@@ -94,15 +94,6 @@ namespace Xtro.MDX.Utilities
         object IsDeviceAcceptableFunctionUserContext;
 
         public readonly List<Format> DepthStencilPossiblities = new List<Format>();
-        /*
-                uint MinWidth = 640;
-                uint MaxWidth = uint.MaxValue;
-                uint MinHeight = 480;
-                uint MaxHeight = uint.MaxValue;
-                uint RefreshMin;
-                uint RefreshMax = uint.MaxValue;
-                uint MultisampleQualityMax;
-        */
         bool EnumerateAllAdapterFormats;
 
         public readonly List<AdapterInfo> AdapterInfos = new List<AdapterInfo>();

@@ -5,7 +5,7 @@ using Color = Xtro.MDX.Direct3DX10.Color;
 
 namespace Xtro.MDX.Utilities
 {
-    public class ComboBox : Button
+    public sealed class ComboBox : Button
     {
         public struct Item
         {
@@ -16,20 +16,20 @@ namespace Xtro.MDX.Utilities
             public bool Visible;
         };
 
-        protected int Selected;
-        protected int Focused;
-        protected int DropHeight;
-        protected ScrollBar ScrollBar;
-        protected int ScrollBarWidth;
+        int Selected;
+        int Focused;
+        int DropHeight;
+        readonly ScrollBar ScrollBar;
+        int ScrollBarWidth;
 
-        protected bool Opened;
+        bool Opened;
 
-        protected Rectangle TextRectangle;
-        protected Rectangle ButtonRectangle;
-        protected Rectangle DropdownRectangle;
-        protected Rectangle DropdownTextRectangle;
+        Rectangle TextRectangle;
+        Rectangle ButtonRectangle;
+        Rectangle DropdownRectangle;
+        Rectangle DropdownTextRectangle;
 
-        protected readonly List<Item[]> Items = new List<Item[]>();
+        readonly List<Item[]> Items = new List<Item[]>();
 
         public ComboBox(Dialog Dialog)
             : base(Dialog)

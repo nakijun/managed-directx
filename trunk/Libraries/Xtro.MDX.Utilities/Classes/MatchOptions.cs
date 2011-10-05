@@ -1,6 +1,6 @@
 ﻿namespace Xtro.MDX.Utilities
 {
-    public class MatchOptions
+    public sealed class MatchOptions
     {
         public MatchType AdapterOrdinal;
         public MatchType Output;

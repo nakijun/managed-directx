@@ -3,7 +3,7 @@ using Xtro.MDX.Direct3D10;
 
 namespace Xtro.MDX.Utilities
 {
-    public class DeviceSettings
+    public sealed class DeviceSettings
     {
         public uint AdapterOrdinal;
         public DriverType DriverType;

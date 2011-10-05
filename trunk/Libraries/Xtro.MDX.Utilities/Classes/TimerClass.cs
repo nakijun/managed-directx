@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Xtro.MDX.Utilities
+﻿namespace Xtro.MDX.Utilities
 {
     public sealed class TimerClass
     {

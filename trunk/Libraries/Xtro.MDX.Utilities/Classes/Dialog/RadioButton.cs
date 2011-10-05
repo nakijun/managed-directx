@@ -3,11 +3,11 @@ using System.Windows.Forms;
 
 namespace Xtro.MDX.Utilities
 {
-    public class RadioButton : CheckBox
+    public sealed class RadioButton : CheckBox
     {
         public uint ButtonGroup;
 
-        protected void SetCheckedInternal(bool Checked, bool ClearGroup, bool FromInput)
+        void SetCheckedInternal(bool Checked, bool ClearGroup, bool FromInput)
         {
             if (Checked && ClearGroup) Dialog.ClearRadioButtonGroup(ButtonGroup);
 

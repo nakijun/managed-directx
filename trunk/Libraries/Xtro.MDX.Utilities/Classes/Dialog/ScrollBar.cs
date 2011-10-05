@@ -4,14 +4,14 @@ using System.Windows.Forms;
 
 namespace Xtro.MDX.Utilities
 {
-    public class ScrollBar : Control
+    public sealed class ScrollBar : Control
     {
         // Minimum scroll bar thumb size
-        protected const int ScrollBarMinimumThumbSize = 8;
+        const int ScrollBarMinimumThumbSize = 8;
 
         // Delay and repeat period when clicking on the scroll bar arrows
-        protected const float ScrollBarArrowClickDelay = 0.33f;
-        protected const float ScrollBarArrowClickRepeat = 0.05f;
+        const float ScrollBarArrowClickDelay = 0.33f;
+        const float ScrollBarArrowClickRepeat = 0.05f;
 
         // ARROWSTATE indicates the state of the arrow buttons.
         // CLEAR            No arrow is down.
@@ -19,7 +19,7 @@ namespace Xtro.MDX.Utilities
         // CLICKED_DOWN     Down arrow is clicked.
         // HELD_UP          Up arrow is held down for sustained period.
         // HELD_DOWN        Down arrow is held down for sustained period.
-        protected enum ArrowState
+        enum ArrowState
         {
             Clear,
             ClickedUp,
@@ -28,7 +28,7 @@ namespace Xtro.MDX.Utilities
             HeldDown
         };
 
-        protected void UpdateThumbRectangle()
+        void UpdateThumbRectangle()
         {
             if (End - Start > PageSize)
             {
@@ -46,25 +46,25 @@ namespace Xtro.MDX.Utilities
             }
         }
 
-        protected void Cap()  // Clips position at boundaries. Ensures it stays within legal range.
+        void Cap()  // Clips position at boundaries. Ensures it stays within legal range.
         {
             if (Position < Start || End - Start <= PageSize) Position = Start;
             else if (Position + PageSize > End) Position = End - PageSize;
         }
 
-        protected bool ShowThumb;
-        protected bool Drag;
-        protected Rectangle UpButtonRectangle;
-        protected Rectangle DownButtonRectangle;
-        protected Rectangle TrackRectangle;
-        protected Rectangle ThumbRectangle;
-        protected int Position;  // Position of the first displayed item
-        protected int PageSize;  // How many items are displayable in one page
-        protected int Start;     // First item
-        protected int End;       // The index after the last item
-        protected Point LastMouse;// Last mouse position
-        protected ArrowState Arrow; // State of the arrows
-        protected double ArrowTimeStamp;  // Timestamp of last arrow event.
+        bool ShowThumb;
+        bool Drag;
+        Rectangle UpButtonRectangle;
+        Rectangle DownButtonRectangle;
+        Rectangle TrackRectangle;
+        Rectangle ThumbRectangle;
+        int Position;  // Position of the first displayed item
+        int PageSize;  // How many items are displayable in one page
+        int Start;     // First item
+        int End;       // The index after the last item
+        Point LastMouse;// Last mouse position
+        ArrowState Arrow; // State of the arrows
+        double ArrowTimeStamp;  // Timestamp of last arrow event.
 
         public ScrollBar(Dialog Dialog = null)
             : base(Dialog)

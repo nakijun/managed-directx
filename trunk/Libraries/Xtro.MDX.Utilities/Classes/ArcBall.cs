@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Xtro.MDX.Direct3DX10;
@@ -140,9 +139,11 @@ namespace Xtro.MDX.Utilities
 
         public virtual void HandleMouseMove(MouseEventArgs E)
         {
-            if (E.Button == MouseButtons.Left) OnMove(E.X, E.Y);
-            else if (E.Button == MouseButtons.Middle || E.Button == MouseButtons.Right)
+            switch (E.Button)
             {
+            case MouseButtons.Left: OnMove(E.X, E.Y); break;
+            case MouseButtons.Right:
+            case MouseButtons.Middle:
                 // Normalize based on size of window and bounding sphere radius
                 var DeltaX = (LastMouse.X - E.X) * RadiusTranslation / Width;
                 var DeltaY = (LastMouse.Y - E.Y) * RadiusTranslation / Height;
@@ -152,7 +153,7 @@ namespace Xtro.MDX.Utilities
                     D3DX10Functions.MatrixTranslation(out TranslationDelta, -2 * DeltaX, 2 * DeltaY, 0.0f);
                     D3DX10Functions.MatrixMultiply(out Translation, ref Translation, ref TranslationDelta);
                 }
-                else  // E.Button == MouseButtons.Middle
+                else // E.Button == MouseButtons.Middle
                 {
                     D3DX10Functions.MatrixTranslation(out TranslationDelta, 0.0f, 0.0f, 5 * DeltaY);
                     D3DX10Functions.MatrixMultiply(out Translation, ref Translation, ref TranslationDelta);
@@ -161,6 +162,7 @@ namespace Xtro.MDX.Utilities
                 // Store mouse coordinate
                 LastMouse.X = E.X;
                 LastMouse.Y = E.Y;
+                break;
             }
         }
 

@@ -1,16 +1,12 @@
-﻿using System;
+﻿// ReSharper disable CSharpWarnings::CS0197
+using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
 using Xtro.MDX;
-using Xtro.MDX.Generic;
 using Xtro.MDX.DXGI;
 using Xtro.MDX.Direct3D10;
-using D3D10Usage = Xtro.MDX.Direct3D10.Usage;
 using Device = Xtro.MDX.Direct3D10.Device;
-using Functions = Xtro.MDX.Direct3D10.Functions;
-using Buffer = Xtro.MDX.Direct3D10.Buffer;
-using Error = Xtro.MDX.Direct3D10.Error;
 using Xtro.MDX.Direct3DX10;
 using D3DX10Constants = Xtro.MDX.Direct3DX10.Constants;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
@@ -19,15 +15,11 @@ using UtilitiesFunctions = Xtro.MDX.Utilities.Functions;
 
 namespace Tutorial09
 {
-    public partial class Form1 : Form
+    sealed partial class Form1 : Form
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
-        [DllImport("kernel32.dll")]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        static extern uint GetTickCount();
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        static extern IntPtr PostMessage(IntPtr Wnd, int Msg, int ParamW, int ParamL);
 
         static double DegreeToRadian(double Degree)
         {
@@ -37,11 +29,11 @@ namespace Tutorial09
         Effect Effect;
         InputLayout VertexLayout;
         EffectTechnique Technique;
-        SDK_Mesh Mesh = new SDK_Mesh();
-        EffectShaderResourceVariable DiffuseVariable = null;
-        EffectMatrixVariable WorldVariable = null;
-        EffectMatrixVariable ViewVariable = null;
-        EffectMatrixVariable ProjectionVariable = null;
+        readonly SDK_Mesh Mesh = new SDK_Mesh();
+        EffectShaderResourceVariable DiffuseVariable;
+        EffectMatrixVariable WorldVariable;
+        EffectMatrixVariable ViewVariable;
+        EffectMatrixVariable ProjectionVariable;
         Matrix World;
         Matrix View;
         Matrix Projection;
@@ -66,7 +58,7 @@ namespace Tutorial09
                 UtilitiesFunctions.SetCallbackFrameMove(OnFrameMove, null);
                 UtilitiesFunctions.SetCallbackDeviceChanging(OnModifyDeviceSettings, null);
 
-                UtilitiesFunctions.Initialize(true);
+                UtilitiesFunctions.Initialize();
                 UtilitiesFunctions.SetCursorSettings(true, true);
                 UtilitiesFunctions.SetWindow(this);
                 UtilitiesFunctions.CreateDevice(true, 640, 480);
@@ -112,7 +104,7 @@ namespace Tutorial09
             Application.Exit();
         }
 
-        bool IsDeviceAcceptable(uint Adapter, uint Output, DriverType DeviceType, Format BackBufferFormat, bool Windowed, object UserContext)
+        static bool IsDeviceAcceptable(uint Adapter, uint Output, DriverType DeviceType, Format BackBufferFormat, bool Windowed, object UserContext)
         {
             return true;
         }
@@ -181,7 +173,7 @@ namespace Tutorial09
             // Create the input layout
             PassDescription PassDescription;
             Technique.GetPassByIndex(0).GetDescription(out PassDescription);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Size, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, PassDescription.IA_InputSignature.Size, out VertexLayout);
             if (Result < 0) return Result;
 
             // Set the input layout
@@ -195,9 +187,9 @@ namespace Tutorial09
             D3DX10Functions.MatrixIdentity(out World);
 
             // Initialize the view matrix
-            Vector3 Eye = new Vector3(0.0f, 3.0f, -500.0f);
-            Vector3 At = new Vector3(0.0f, 1.0f, 0.0f);
-            Vector3 Up = new Vector3(0.0f, 1.0f, 0.0f);
+            var Eye = new Vector3(0.0f, 3.0f, -500.0f);
+            var At = new Vector3(0.0f, 1.0f, 0.0f);
+            var Up = new Vector3(0.0f, 1.0f, 0.0f);
             D3DX10Functions.MatrixLookAtLH(out View, ref Eye, ref At, ref Up);
 
             // Update Variables that never change
@@ -227,7 +219,7 @@ namespace Tutorial09
             return 0;
         }
 
-        void OnReleasingSwapChain(object UserContext)
+        static void OnReleasingSwapChain(object UserContext)
         {
         }
 
@@ -236,7 +228,7 @@ namespace Tutorial09
             //
             // Clear the back buffer
             //
-            Float4 ClearColor = new Float4(new[]{0.0f, 0.125f, 0.3f, 1.0f}); //red,green,blue,alpha
+            var ClearColor = new Float4(new[] { 0.0f, 0.125f, 0.3f, 1.0f }); //red,green,blue,alpha
             var RenderTargetView = UtilitiesFunctions.GetRenderTargetView();
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 
@@ -275,8 +267,8 @@ namespace Tutorial09
                     Mesh.MeshPairArray[0].Subsets.Get(S, out SubsetIndex);
 
                     // UnmanagedMemory.Get is not working for MarshalAs structs
-                    var Size = Marshal.SizeOf(typeof(SDK_Mesh.Subset));
-                    var Subset = (SDK_Mesh.Subset)Marshal.PtrToStructure(new IntPtr(Mesh.SubsetArray.Pointer.ToInt64() + SubsetIndex * Size), typeof(SDK_Mesh.Subset));
+                    var SizeOfSubset = Marshal.SizeOf(typeof(SDK_Mesh.Subset));
+                    var Subset = (SDK_Mesh.Subset)Marshal.PtrToStructure(new IntPtr(Mesh.SubsetArray.Pointer.ToInt64() + SubsetIndex * SizeOfSubset), typeof(SDK_Mesh.Subset));
 
                     var PrimitiveType = SDK_Mesh.GetPrimitiveType((PrimitiveType)Subset.PrimitiveType);
                     Device.IA_SetPrimitiveTopology(PrimitiveType);
@@ -299,49 +291,50 @@ namespace Tutorial09
             D3DX10Functions.MatrixRotationY(out World, (float)(60 * DegreeToRadian(Time)));
         }
 
-        bool OnModifyDeviceSettings(DeviceSettings DeviceSettings, object UserContext)
+        static bool OnModifyDeviceSettings(DeviceSettings DeviceSettings, object UserContext)
         {
             return true;
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void Form1_Paint(object Sender, PaintEventArgs E)
         {
             UtilitiesFunctions.HandlePaintEvent();
         }
 
-        private void Form1_Resize(object sender, EventArgs e)
+        private void Form1_Resize(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeEvent();
         }
 
-        private void Form1_ResizeBegin(object sender, EventArgs e)
+        private void Form1_ResizeBegin(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeBeginEvent();
         }
 
-        private void Form1_ResizeEnd(object sender, EventArgs e)
+        private void Form1_ResizeEnd(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeEndEvent();
         }
 
-        private void Form1_CursorChanged(object sender, EventArgs e)
+        private void Form1_CursorChanged(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleCursorChangedEvent();
         }
 
-        private void Form1_Activated(object sender, EventArgs e)
+        private void Form1_Activated(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleActivatedEvent();
         }
 
-        private void Form1_Deactivate(object sender, EventArgs e)
+        private void Form1_Deactivate(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleDeactivateEvent();
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void Form1_KeyDown(object Sender, KeyEventArgs E)
         {
-            UtilitiesFunctions.HandleKeyDownEvent(e);
+            UtilitiesFunctions.HandleKeyDownEvent(E);
         }
     }
 }
+// ReSharper restore CSharpWarnings::CS0197

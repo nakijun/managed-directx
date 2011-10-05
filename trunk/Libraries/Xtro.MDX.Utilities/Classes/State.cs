@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Xtro.MDX.DXGI;
 using Xtro.MDX.Direct3D10;
@@ -142,13 +141,11 @@ namespace Xtro.MDX.Utilities
         int FCurrentFrameNumber;
         public int CurrentFrameNumber { get { lock (Lock) return FCurrentFrameNumber; } set { lock (Lock) FCurrentFrameNumber = value; } }
 
-        bool FHandleEscape=true;
+        bool FHandleEscape = true;
         public bool HandleEscape { get { lock (Lock) return FHandleEscape; } set { lock (Lock) FHandleEscape = value; } }
-        bool FHandleAltEnter=true;
-        public bool HandleAltEnter { get { lock (Lock) return FHandleAltEnter; } set { lock (Lock) FHandleAltEnter = value; } }
-        bool FHandlePause=true;
+        bool FHandlePause = true;
         public bool HandlePause { get { lock (Lock) return FHandlePause; } set { lock (Lock) FHandlePause = value; } }
-        bool FShowMessageBoxOnError=true;
+        bool FShowMessageBoxOnError = true;
         public bool ShowMessageBoxOnError { get { lock (Lock) return FShowMessageBoxOnError; } set { lock (Lock) FShowMessageBoxOnError = value; } }
         bool FNoStats;
         public bool NoStats { get { lock (Lock) return FNoStats; } set { lock (Lock) FNoStats = value; } }
@@ -160,9 +157,7 @@ namespace Xtro.MDX.Utilities
         public bool ConstantFrameTime { get { lock (Lock) return FConstantFrameTime; } set { lock (Lock) FConstantFrameTime = value; } }
         float FTimePerFrame;
         public float TimePerFrame { get { lock (Lock) return FTimePerFrame; } set { lock (Lock) FTimePerFrame = value; } }
-        bool FWireframeMode;
-        public bool WireframeMode { get { lock (Lock) return FWireframeMode; } set { lock (Lock) FWireframeMode = value; } }
-        bool FAutoChangeAdapter=true;
+        bool FAutoChangeAdapter = true;
         public bool AutoChangeAdapter { get { lock (Lock) return FAutoChangeAdapter; } set { lock (Lock) FAutoChangeAdapter = value; } }
         bool FWindowCreatedWithDefaultPositions;
         public bool WindowCreatedWithDefaultPositions { get { lock (Lock) return FWindowCreatedWithDefaultPositions; } set { lock (Lock) FWindowCreatedWithDefaultPositions = value; } }
@@ -187,7 +182,7 @@ namespace Xtro.MDX.Utilities
         public bool DeviceObjectsCreated { get { lock (Lock) return FDeviceObjectsCreated; } set { lock (Lock) FDeviceObjectsCreated = value; } }
         bool FDeviceObjectsReset;
         public bool DeviceObjectsReset { get { lock (Lock) return FDeviceObjectsReset; } set { lock (Lock) FDeviceObjectsReset = value; } }
-        bool FActive=true;
+        bool FActive = true;
         public bool Active { get { lock (Lock) return FActive; } set { lock (Lock) FActive = value; } }
         bool FRenderingPaused;
         public bool RenderingPaused { get { lock (Lock) return FRenderingPaused; } set { lock (Lock) FRenderingPaused = value; } }
@@ -197,22 +192,16 @@ namespace Xtro.MDX.Utilities
         public int PauseRenderingCount { get { lock (Lock) return FPauseRenderingCount; } set { lock (Lock) FPauseRenderingCount = value; } }
         int FPauseTimeCount;
         public int PauseTimeCount { get { lock (Lock) return FPauseTimeCount; } set { lock (Lock) FPauseTimeCount = value; } }
-        bool FDeviceLost;
-        public bool DeviceLost { get { lock (Lock) return FDeviceLost; } set { lock (Lock) FDeviceLost = value; } }
-        bool FNotifyOnMouseMove;
-        public bool NotifyOnMouseMove { get { lock (Lock) return FNotifyOnMouseMove; } set { lock (Lock) FNotifyOnMouseMove = value; } }
         bool FAutomation;
         public bool Automation { get { lock (Lock) return FAutomation; } set { lock (Lock) FAutomation = value; } }
         bool FInSizeMove;
         public bool InSizeMove { get { lock (Lock) return FInSizeMove; } set { lock (Lock) FInSizeMove = value; } }
         uint FTimerLastID;
         public uint TimerLastID { get { lock (Lock) return FTimerLastID; } set { lock (Lock) FTimerLastID = value; } }
-        bool FAppCalledWasKeyPressed;
-        public bool AppCalledWasKeyPressed { get { lock (Lock) return FAppCalledWasKeyPressed; } set { lock (Lock) FAppCalledWasKeyPressed = value; } }
 
         bool FReleasingSwapChain;
         public bool ReleasingSwapChain { get { lock (Lock) return FReleasingSwapChain; } set { lock (Lock) FReleasingSwapChain = value; } }
-        bool FIsInGammaCorrectMode=true;
+        bool FIsInGammaCorrectMode = true;
         public bool IsInGammaCorrectMode { get { lock (Lock) return FIsInGammaCorrectMode; } set { lock (Lock) FIsInGammaCorrectMode = value; } }
 
         Callbacks.ModifyDeviceSettings FModifyDeviceSettingsFunction;
@@ -257,16 +246,10 @@ namespace Xtro.MDX.Utilities
 
         List<Timer> FTimers;
         public List<Timer> Timers { get { lock (Lock) return FTimers; } set { lock (Lock) FTimers = value; } }
-        readonly bool[] FKeys = new bool[256];
-        public bool[] Keys { get { lock (Lock) return FKeys; } }
-        readonly bool[] FLastKeys = new bool[256];
-        public bool[] LastKeys { get { lock (Lock) return FLastKeys; } }
-        readonly bool[] FMouseButtons = new bool[5];
-        public bool[] MouseButtons { get { lock (Lock) return FMouseButtons; } }
         string FStaticFrameStats;
         public string StaticFrameStats { get { lock (Lock) return FStaticFrameStats; } set { lock (Lock) FStaticFrameStats = value; } }
-        string FFPS_Stats;
-        public string FPS_Stats { get { lock (Lock) return FFPS_Stats; } set { lock (Lock) FFPS_Stats = value; } }
+        string FFpsStats;
+        public string FpsStats { get { lock (Lock) return FFpsStats; } set { lock (Lock) FFpsStats = value; } }
         string FFrameStats;
         public string FrameStats { get { lock (Lock) return FFrameStats; } set { lock (Lock) FFrameStats = value; } }
         string FDeviceStats;
