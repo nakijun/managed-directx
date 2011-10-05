@@ -1,5 +1,5 @@
-﻿using System;
-using System.Drawing;
+﻿// ReSharper disable CSharpWarnings::CS0197
+using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
@@ -9,16 +9,13 @@ using Xtro.MDX.DXGI;
 using Xtro.MDX.Direct3D10;
 using D3D10Usage = Xtro.MDX.Direct3D10.Usage;
 using Device = Xtro.MDX.Direct3D10.Device;
-using Functions = Xtro.MDX.Direct3D10.Functions;
 using Buffer = Xtro.MDX.Direct3D10.Buffer;
-using Error = Xtro.MDX.Direct3D10.Error;
 using UtilitiesError = Xtro.MDX.Utilities.Error;
 using Xtro.MDX.Direct3DX10;
 using D3DX10Constants = Xtro.MDX.Direct3DX10.Constants;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 using Xtro.MDX.Utilities;
 using Button = Xtro.MDX.Utilities.Button;
-using CheckBox = Xtro.MDX.Utilities.CheckBox;
 using Color = Xtro.MDX.Direct3DX10.Color;
 using UtilitiesComboBox = Xtro.MDX.Utilities.ComboBox;
 using Control = Xtro.MDX.Utilities.Control;
@@ -27,7 +24,7 @@ using UtilitiesFunctions = Xtro.MDX.Utilities.Functions;
 
 namespace SoftParticles
 {
-    public enum ParticleTechnique
+    enum ParticleTechnique
     {
         VolumeSoft = 0x0,
         VolumeHard,
@@ -37,15 +34,11 @@ namespace SoftParticles
         BillboardHard
     };
 
-    public partial class Form1 : Form
+    sealed partial class Form1 : Form
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
-        [DllImport("kernel32.dll")]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        static extern uint GetTickCount();
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        static extern IntPtr PostMessage(IntPtr Wnd, int Msg, int ParamW, int ParamL);
 
         const uint MaximumParticles = 500;
 
@@ -54,38 +47,40 @@ namespace SoftParticles
             public Vector3 Position;
             public Vector3 Velocity;
             public float Life;
+// ReSharper disable NotAccessedField.Local
             public float Size;
+// ReSharper restore NotAccessedField.Local
         };
 
-        ModelViewerCamera Camera;
-        DialogResourceManager DialogResourceManager = new DialogResourceManager();// manager for shared resources of dialogs
-        SettingsDialog SettingsDialog = new SettingsDialog();       // Device settings dialog
-        Dialog HUD = new Dialog();                  // manages the 3D UI
-        Dialog SampleUI = new Dialog();             // dialog for sample specific controls
+        readonly ModelViewerCamera Camera;
+        readonly DialogResourceManager DialogResourceManager = new DialogResourceManager();// manager for shared resources of dialogs
+        readonly SettingsDialog SettingsDialog = new SettingsDialog();       // Device settings dialog
+        readonly Dialog HUD = new Dialog();                  // manages the 3D UI
+        readonly Dialog SampleUI = new Dialog();             // dialog for sample specific controls
 
         UnmanagedMemory<ParticleVertex> CpuParticles;
         UnmanagedMemory<uint> CpuParticleIndices;
         UnmanagedMemory<float> ParticleDepthArray;
-        SDK_Mesh ObjectMesh = new SDK_Mesh();
-        SDK_Mesh SkyMesh = new SDK_Mesh();
+        readonly SDK_Mesh ObjectMesh = new SDK_Mesh();
+        readonly SDK_Mesh SkyMesh = new SDK_Mesh();
 
-        Font D3DX10Font = null;         // Font for drawing text
-        Sprite Sprite = null;       // Sprite for batching text drawing
-        TextHelper TextHelper = null;
+        Font Font2;         // Font for drawing text
+        Sprite Sprite;       // Sprite for batching text drawing
+        TextHelper TextHelper;
         Effect Effect;
         InputLayout SceneVertexLayout;
         InputLayout ParticleVertexLayout;
 
         Texture2D DepthStencilTexture;
-        DepthStencilView DepthStencilDSV;
-        ShaderResourceView DepthStencilSRV;
+        DepthStencilView DepthStencilView;
+        ShaderResourceView DepthStencilShaderResourceView;
 
-        Buffer ParticleVB;
-        Buffer ParticleIB;
-        ShaderResourceView ParticleTextureRV;
+        Buffer ParticleVertexBuffer;
+        Buffer ParticleIndexBuffer;
+        ShaderResourceView ParticleTextureResourceView;
         Texture3D NoiseVolume;
-        ShaderResourceView NoiseVolumeRV;
-        ShaderResourceView ColorGradTextureRV;
+        ShaderResourceView NoiseVolumeResourceView;
+        ShaderResourceView ColorGradTextureResourceView;
 
         EffectTechnique RenderScene;
         EffectTechnique RenderSky;
@@ -95,46 +90,48 @@ namespace SoftParticles
         EffectTechnique RenderVolumeParticlesHard;
         EffectTechnique RenderVolumeParticlesSoft;
         EffectTechnique RenderBillboardParticlesODepthSoft;
+// ReSharper disable InconsistentNaming
         EffectTechnique RenderVolumeParticlesSoftMSAA;
         EffectTechnique RenderVolumeParticlesHardMSAA;
         EffectTechnique RenderBillboardParticlesSoftMSAA;
         EffectTechnique RenderBillboardParticlesODepthSoftMSAA;
-        EffectMatrixVariable WorldViewProj;
-        EffectMatrixVariable WorldView;
-        EffectMatrixVariable World;
-        EffectMatrixVariable InvView;
-        EffectMatrixVariable InvProj;
-        EffectScalarVariable FadeDistanceVar;
-        EffectScalarVariable SizeZScale;
-        EffectVectorVariable ViewLightDir1;
-        EffectVectorVariable ViewLightDir2;
-        EffectVectorVariable WorldLightDir1;
-        EffectVectorVariable WorldLightDir2;
-        EffectVectorVariable EyePt;
-        EffectVectorVariable ViewDir;
-        EffectVectorVariable OctaveOffsets;
-        EffectVectorVariable ScreenSize;
+        // ReSharper restore InconsistentNaming
+        EffectMatrixVariable WorldViewProjVariable;
+        EffectMatrixVariable WorldViewVariable;
+        EffectMatrixVariable WorldVariable;
+        EffectMatrixVariable InvViewVariable;
+        EffectMatrixVariable InvProjVariable;
+        EffectScalarVariable FadeDistanceVariable;
+        EffectScalarVariable SizeZScaleVariable;
+        EffectVectorVariable ViewLightDir1Variable;
+        EffectVectorVariable ViewLightDir2Variable;
+        EffectVectorVariable WorldLightDir1Variable;
+        EffectVectorVariable WorldLightDir2Variable;
+        EffectVectorVariable EyePtVariable;
+        EffectVectorVariable ViewDirVariable;
+        EffectVectorVariable OctaveOffsetsVariable;
+        EffectVectorVariable ScreenSizeVariable;
         EffectShaderResourceVariable DiffuseTexture;
         EffectShaderResourceVariable NormalTexture;
         EffectShaderResourceVariable ColorGradient;
         EffectShaderResourceVariable VolumeDiffTexture;
         EffectShaderResourceVariable VolumeNormTexture;
         EffectShaderResourceVariable DepthTexture;
+// ReSharper disable InconsistentNaming
         EffectShaderResourceVariable DepthMSAATexture;
+// ReSharper restore InconsistentNaming
 
         int BackBufferWidth = 640;
         int BackBufferHeight = 480;
         int SampleCount = 1;
 
-        float FadeDistance = 1.0f;
-        float ParticleLifeSpan = 5.0f;
-        float EmitRate = 0.015f;
+        const float FadeDistance = 1.0f;
+        const float ParticleLifeSpan = 5.0f;
+        const float EmitRate = 0.015f;
 
-        float ParticleVel = 3.0f;
-        float ParticleMaxSize = 1.25f;
-        float ParticleMinSize = 1.0f;
-        bool AnimateParticles = true;
-
+        const float ParticleVel = 3.0f;
+        const float ParticleMaxSize = 1.25f;
+        const float ParticleMinSize = 1.0f;
 
         ParticleTechnique ParticleTechnique = ParticleTechnique.VolumeSoft;
         Vector3 LightDir1 = new Vector3(1.705f, 5.557f, -9.380f);
@@ -147,11 +144,6 @@ namespace SoftParticles
             ToggleREF = 3,
             ChangeDevice = 4,
             Technique = 5
-        }
-
-        static double DegreeToRadian(double Degree)
-        {
-            return Degree * D3DX10Constants.PI / 180.0f;
         }
 
         public Form1()
@@ -185,7 +177,7 @@ namespace SoftParticles
                 UtilitiesFunctions.SetCallbackFrameRender(OnFrameRender, null);
 
                 Init();
-                UtilitiesFunctions.Initialize(true);
+                UtilitiesFunctions.Initialize();
                 UtilitiesFunctions.SetCursorSettings(true, true);
                 UtilitiesFunctions.SetWindow(this);
                 UtilitiesFunctions.CreateDevice(true, 640, 480);
@@ -209,24 +201,26 @@ namespace SoftParticles
             Button CreatedButton;
             HUD.AddButton((int)ControlID.ToggleFullscreen, "Toggle full screen", 35, Y, 125, 22, 0, false, out CreatedButton);
             HUD.AddButton((int)ControlID.ChangeDevice, "Change device (F2)", 35, Y += 24, 125, 22, Keys.F2, false, out CreatedButton);
-            HUD.AddButton((int)ControlID.ToggleREF, "Toggle REF (F3)", 35, Y += 24, 125, 22, Keys.F3, false, out CreatedButton);
+            HUD.AddButton((int)ControlID.ToggleREF, "Toggle REF (F3)", 35, Y + 24, 125, 22, Keys.F3, false, out CreatedButton);
 
             SampleUI.SetCallback(OnGUI_Event);
-            Y = 10;
 
             UtilitiesComboBox ComboBox;
 
             Static CreatedStatic;
             SampleUI.AddStatic((int)ControlID.Static, "(T)echnique", 0, 0, 105, 25, false, out CreatedStatic);
             SampleUI.AddComboBox((int)ControlID.Technique, 0, 25, 140, 24, Keys.T, false, out ComboBox);
-            if (ComboBox != null) ComboBox.SetDropHeight(80);
+            if (ComboBox != null)
+            {
+                ComboBox.SetDropHeight(80);
 
-            ComboBox.AddItem("Volume Soft", ((int)ParticleTechnique.VolumeSoft).ToString());
-            ComboBox.AddItem("Volume Hard", ((int)ParticleTechnique.VolumeHard).ToString());
-            ComboBox.AddItem("Depth Sprites Soft", ((int)ParticleTechnique.BillboardDepthSoft).ToString());
-            ComboBox.AddItem("Depth Sprites Hard", ((int)ParticleTechnique.BillboardDepth).ToString());
-            ComboBox.AddItem("Billboard Soft", ((int)ParticleTechnique.BillboardSoft).ToString());
-            ComboBox.AddItem("Billboard Hard", ((int)ParticleTechnique.BillboardHard).ToString());
+                ComboBox.AddItem("Volume Soft", ((int)ParticleTechnique.VolumeSoft).ToString());
+                ComboBox.AddItem("Volume Hard", ((int)ParticleTechnique.VolumeHard).ToString());
+                ComboBox.AddItem("Depth Sprites Soft", ((int)ParticleTechnique.BillboardDepthSoft).ToString());
+                ComboBox.AddItem("Depth Sprites Hard", ((int)ParticleTechnique.BillboardDepth).ToString());
+                ComboBox.AddItem("Billboard Soft", ((int)ParticleTechnique.BillboardSoft).ToString());
+                ComboBox.AddItem("Billboard Hard", ((int)ParticleTechnique.BillboardHard).ToString());
+            }
         }
 
         bool FirstTime = true;
@@ -261,7 +255,7 @@ namespace SoftParticles
             D3DX10Functions.Vector3Normalize(out Dir, ref Dir);
 
             var Device = UtilitiesFunctions.GetDevice();
-            AdvanceParticles(Device, Time, ElapsedTime);
+            AdvanceParticles(/*Device,*/ Time, ElapsedTime);
             SortParticleBuffer(Eye, Dir);
             UpdateParticleBuffers(Device);
 
@@ -272,7 +266,7 @@ namespace SoftParticles
                 var V = new Vector4(-(float)(Time * 0.05), 0, 0, 0);
                 OctaveOffsets.Set(I, ref V);
             }
-            this.OctaveOffsets.SetFloatVectorArray(OctaveOffsets, 0, 4);
+            OctaveOffsetsVariable.SetFloatVectorArray(OctaveOffsets, 0, 4);
         }
 
         void OnGUI_Event(Event Event, int ControlID, Control Control, object UserContext)
@@ -327,7 +321,7 @@ namespace SoftParticles
             Application.Exit();
         }
 
-        bool IsDeviceAcceptable(uint Adapter, uint Output, DriverType DeviceType, Format BackBufferFormat, bool Windowed, object UserContext)
+        static bool IsDeviceAcceptable(uint Adapter, uint Output, DriverType DeviceType, Format BackBufferFormat, bool Windowed, object UserContext)
         {
             return true;
         }
@@ -338,12 +332,12 @@ namespace SoftParticles
             if (Result < 0) return Result;
             Result = SettingsDialog.OnCreateDevice(Device);
             if (Result < 0) return Result;
-            Result = D3DX10Functions.CreateFont(Device, 15, 0, (uint)FontWeight.Bold, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, "Arial", out D3DX10Font);
+            Result = D3DX10Functions.CreateFont(Device, 15, 0, (uint)FontWeight.Bold, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, "Arial", out Font2);
             if (Result < 0) return Result;
 
             Result = D3DX10Functions.CreateSprite(Device, 512, out Sprite);
             if (Result < 0) return Result;
-            TextHelper = new TextHelper(D3DX10Font,Sprite, 15);
+            TextHelper = new TextHelper(Font2,Sprite);
 
             // Read the D3DX effect file
             string DestinationPath;
@@ -376,21 +370,21 @@ namespace SoftParticles
             RenderBillboardParticlesODepthSoftMSAA = Effect.GetTechniqueByName("RenderBillboardParticles_ODepthSoft_MSAA");
 
             // Obtain the parameter handles
-            WorldViewProj = Effect.GetVariableByName("g_mWorldViewProj").AsMatrix();
-            WorldView = Effect.GetVariableByName("g_mWorldView").AsMatrix();
-            World = Effect.GetVariableByName("g_mWorld").AsMatrix();
-            InvView = Effect.GetVariableByName("g_mInvView").AsMatrix();
-            InvProj = Effect.GetVariableByName("g_mInvProj").AsMatrix();
-            FadeDistanceVar = Effect.GetVariableByName("g_fFadeDistance").AsScalar();
-            SizeZScale = Effect.GetVariableByName("g_fSizeZScale").AsScalar();
-            ViewLightDir1 = Effect.GetVariableByName("g_vViewLightDir1").AsVector();
-            ViewLightDir2 = Effect.GetVariableByName("g_vViewLightDir2").AsVector();
-            WorldLightDir1 = Effect.GetVariableByName("g_vWorldLightDir1").AsVector();
-            WorldLightDir2 = Effect.GetVariableByName("g_vWorldLightDir2").AsVector();
-            EyePt = Effect.GetVariableByName("g_vEyePt").AsVector();
-            ViewDir = Effect.GetVariableByName("g_vViewDir").AsVector();
-            OctaveOffsets = Effect.GetVariableByName("g_OctaveOffsets").AsVector();
-            ScreenSize = Effect.GetVariableByName("g_vScreenSize").AsVector();
+            WorldViewProjVariable = Effect.GetVariableByName("g_mWorldViewProj").AsMatrix();
+            WorldViewVariable = Effect.GetVariableByName("g_mWorldView").AsMatrix();
+            WorldVariable = Effect.GetVariableByName("g_mWorld").AsMatrix();
+            InvViewVariable = Effect.GetVariableByName("g_mInvView").AsMatrix();
+            InvProjVariable = Effect.GetVariableByName("g_mInvProj").AsMatrix();
+            FadeDistanceVariable = Effect.GetVariableByName("g_fFadeDistance").AsScalar();
+            SizeZScaleVariable = Effect.GetVariableByName("g_fSizeZScale").AsScalar();
+            ViewLightDir1Variable = Effect.GetVariableByName("g_vViewLightDir1").AsVector();
+            ViewLightDir2Variable = Effect.GetVariableByName("g_vViewLightDir2").AsVector();
+            WorldLightDir1Variable = Effect.GetVariableByName("g_vWorldLightDir1").AsVector();
+            WorldLightDir2Variable = Effect.GetVariableByName("g_vWorldLightDir2").AsVector();
+            EyePtVariable = Effect.GetVariableByName("g_vEyePt").AsVector();
+            ViewDirVariable = Effect.GetVariableByName("g_vViewDir").AsVector();
+            OctaveOffsetsVariable = Effect.GetVariableByName("g_OctaveOffsets").AsVector();
+            ScreenSizeVariable = Effect.GetVariableByName("g_vScreenSize").AsVector();
             DiffuseTexture = Effect.GetVariableByName("g_txDiffuse").AsShaderResource();
             NormalTexture = Effect.GetVariableByName("g_txNormal").AsShaderResource();
             ColorGradient = Effect.GetVariableByName("g_txColorGradient").AsShaderResource();
@@ -440,12 +434,12 @@ namespace SoftParticles
             // Load the Particle Texture
             Result = UtilitiesFunctions.FindSDK_MediaFileCch(out DestinationPath, "SoftParticles\\smokevol1.dds");
             if (Result < 0) return Result;
-            Result = D3DX10Functions.CreateShaderResourceViewFromFile(Device, DestinationPath, out ParticleTextureRV);
+            Result = D3DX10Functions.CreateShaderResourceViewFromFile(Device, DestinationPath, out ParticleTextureResourceView);
             if (Result < 0) return Result;
 
             Result = UtilitiesFunctions.FindSDK_MediaFileCch(out DestinationPath, "SoftParticles\\colorgradient.dds");
             if (Result < 0) return Result;
-            Result = D3DX10Functions.CreateShaderResourceViewFromFile(Device, DestinationPath, out ColorGradTextureRV);
+            Result = D3DX10Functions.CreateShaderResourceViewFromFile(Device, DestinationPath, out ColorGradTextureResourceView);
             if (Result < 0) return Result;
 
             // Setup the camera's view parameters
@@ -454,7 +448,7 @@ namespace SoftParticles
             Camera.SetViewParameters(ref Eye, ref At);
             Camera.SetRadius(10.0f, 1.0f, 20.0f);
 
-            FadeDistanceVar.SetFloat(FadeDistance);
+            FadeDistanceVariable.SetFloat(FadeDistance);
 
             // Enable/Disable MSAA settings from the settings dialog based on whether we have dx10.1 
             // support or not.
@@ -471,18 +465,18 @@ namespace SoftParticles
             DialogResourceManager.OnDestroyDevice();
             SettingsDialog.OnDestroyDevice();
             UtilitiesFunctions.GetGlobalResourceCache().OnDestroyDevice();
-            if (D3DX10Font != null) D3DX10Font.Release();
+            if (Font2 != null) Font2.Release();
             if (Sprite != null) Sprite.Release();
             if (TextHelper != null) TextHelper.Delete();
             if (Effect != null) Effect.Release();
             if (SceneVertexLayout != null) SceneVertexLayout.Release();
             if (ParticleVertexLayout != null) ParticleVertexLayout.Release();
-            if (ParticleVB != null) ParticleVB.Release();
-            if (ParticleIB != null) ParticleIB.Release();
-            if(ParticleTextureRV!=null)ParticleTextureRV.Release();
+            if (ParticleVertexBuffer != null) ParticleVertexBuffer.Release();
+            if (ParticleIndexBuffer != null) ParticleIndexBuffer.Release();
+            if(ParticleTextureResourceView!=null)ParticleTextureResourceView.Release();
             if(NoiseVolume!=null)NoiseVolume.Release();
-            if(NoiseVolumeRV!=null)NoiseVolumeRV.Release();
-            if(ColorGradTextureRV!=null)ColorGradTextureRV.Release();
+            if(NoiseVolumeResourceView!=null)NoiseVolumeResourceView.Release();
+            if(ColorGradTextureResourceView!=null)ColorGradTextureResourceView.Release();
 
             ObjectMesh.Delete();
             SkyMesh.Delete();
@@ -491,37 +485,37 @@ namespace SoftParticles
             CpuParticleIndices=null;
             ParticleDepthArray=null;
 
-            D3DX10Font = null;
+            Font2 = null;
             Sprite = null;
             TextHelper = null;
             Effect = null;
             SceneVertexLayout = null;
             ParticleVertexLayout =null;
-            ParticleVB = null;
-            ParticleIB = null;
-            ParticleTextureRV=null;
+            ParticleVertexBuffer = null;
+            ParticleIndexBuffer = null;
+            ParticleTextureResourceView=null;
             NoiseVolume=null;
-            NoiseVolumeRV=null;
-            ColorGradTextureRV=null;
+            NoiseVolumeResourceView=null;
+            ColorGradTextureResourceView=null;
         }
 
         int OnSwapChainResized(Device Device, SwapChain SwapChain, ref SurfaceDescription BackBufferSurfaceDescription, object UserContext)
         {
             var Result = DialogResourceManager.OnResizedSwapChain(Device, ref BackBufferSurfaceDescription);
             if (Result < 0) return Result;
-            Result = SettingsDialog.OnResizedSwapChain(Device, ref BackBufferSurfaceDescription);
+            Result = SettingsDialog.OnResizedSwapChain(/*Device,*/ ref BackBufferSurfaceDescription);
             if (Result < 0) return Result;
 
             // Setup the camera's projection parameters
-            var NearPlane = 0.1f;
-            var FarPlane = 150.0f;
+            const float NearPlane = 0.1f;
+            const float FarPlane = 150.0f;
             var AspectRatio = BackBufferSurfaceDescription.Width / (float)BackBufferSurfaceDescription.Height;
             Camera.SetProjectionParameters(54.43f * ((float)D3DX10Constants.PI / 180.0f), AspectRatio, NearPlane, FarPlane);
             Camera.SetWindow((int)BackBufferSurfaceDescription.Width, (int)BackBufferSurfaceDescription.Height);
             Camera.SetButtonMasks(0, MouseKeys.Wheel, MouseKeys.Right | MouseKeys.Left);
 
             // Set the effect variable
-            SizeZScale.SetFloat(1.0f / (FarPlane - NearPlane));
+            SizeZScaleVariable.SetFloat(1.0f / (FarPlane - NearPlane));
 
             HUD.SetLocation((int)BackBufferSurfaceDescription.Width - 170, 0);
             HUD.SetSize(170, 170);
@@ -557,7 +551,7 @@ namespace SoftParticles
                         }
                 };
 
-            Result = Device.CreateDepthStencilView(DepthStencilTexture, ref DepthStencilViewDescription, out DepthStencilDSV);
+            Result = Device.CreateDepthStencilView(DepthStencilTexture, ref DepthStencilViewDescription, out DepthStencilView);
             if (Result < 0) return Result;
 
             // Create the shader resource view
@@ -574,7 +568,7 @@ namespace SoftParticles
                                 MostDetailedMip = 0
                             }
                     };
-                Result = Device.CreateShaderResourceView(DepthStencilTexture, ref ShaderResourceViewDescription, out DepthStencilSRV);
+                Result = Device.CreateShaderResourceView(DepthStencilTexture, ref ShaderResourceViewDescription, out DepthStencilShaderResourceView);
                 if (Result < 0) return Result;
 
             }
@@ -596,8 +590,8 @@ namespace SoftParticles
             DialogResourceManager.OnReleasingSwapChain();
 
             if (DepthStencilTexture != null) DepthStencilTexture.Release();
-            if (DepthStencilDSV != null) DepthStencilDSV.Release();
-            if (DepthStencilSRV != null) DepthStencilSRV.Release();
+            if (DepthStencilView != null) DepthStencilView.Release();
+            if (DepthStencilShaderResourceView != null) DepthStencilShaderResourceView.Release();
         }
 
         void OnFrameRender(Device Device, double Time, float ElapsedTime, object UserContext)
@@ -606,8 +600,8 @@ namespace SoftParticles
 
             var RenderTargetView = UtilitiesFunctions.GetRenderTargetView();
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
-            Device.ClearDepthStencilView(DepthStencilDSV, ClearFlag.Depth, 1, 0);
-            Device.OM_SetRenderTargets(1, new[] { RenderTargetView }, DepthStencilDSV);
+            Device.ClearDepthStencilView(DepthStencilView, ClearFlag.Depth, 1, 0);
+            Device.OM_SetRenderTargets(1, new[] { RenderTargetView }, DepthStencilView);
 
             // If the settings dialog is being shown, then
             // render it instead of rendering the app's scene
@@ -619,13 +613,11 @@ namespace SoftParticles
 
             // Get the projection & view matrix from the camera class
             Matrix World;
-            Matrix View;
-            Matrix Proj;
             Matrix InvView;
             Matrix InvProj;
             D3DX10Functions.MatrixIdentity(out World);
-            Proj = Camera.GetProjectionMatrix();
-            View = Camera.GetViewMatrix();
+            var Proj = Camera.GetProjectionMatrix();
+            var View = Camera.GetViewMatrix();
             var WorldViewProj = World * View * Proj;
             var WorldView = World * View;
             D3DX10Functions.MatrixInverse(out InvView, ref View);
@@ -662,20 +654,20 @@ namespace SoftParticles
                     Y = Vec3.Y,
                     Z = Vec3.Z
                 };
-            var ScreenSize = new[] { (float)BackBufferWidth, (float)BackBufferHeight };
+            var ScreenSize = new[] { BackBufferWidth, (float)BackBufferHeight };
 
-            this.WorldViewProj.SetMatrix((float[])WorldViewProj);
-            this.WorldView.SetMatrix((float[])WorldView);
-            this.World.SetMatrix((float[])World);
-            this.InvView.SetMatrix((float[])InvView);
-            this.InvProj.SetMatrix((float[])InvProj);
-            this.ViewLightDir1.SetFloatVector((float[])ViewLightDir1);
-            this.WorldLightDir1.SetFloatVector((float[])WorldLightDir1);
-            this.ViewLightDir2.SetFloatVector((float[])ViewLightDir2);
-            this.WorldLightDir2.SetFloatVector((float[])WorldLightDir2);
-            this.ViewDir.SetFloatVector((float[])ViewDir);
-            this.EyePt.SetFloatVector((float[])EyePt);
-            this.ScreenSize.SetFloatVector(ScreenSize);
+            WorldViewProjVariable.SetMatrix((float[])WorldViewProj);
+            WorldViewVariable.SetMatrix((float[])WorldView);
+            WorldVariable.SetMatrix((float[])World);
+            InvViewVariable.SetMatrix((float[])InvView);
+            InvProjVariable.SetMatrix((float[])InvProj);
+            ViewLightDir1Variable.SetFloatVector((float[])ViewLightDir1);
+            WorldLightDir1Variable.SetFloatVector((float[])WorldLightDir1);
+            ViewLightDir2Variable.SetFloatVector((float[])ViewLightDir2);
+            WorldLightDir2Variable.SetFloatVector((float[])WorldLightDir2);
+            ViewDirVariable.SetFloatVector((float[])ViewDir);
+            EyePtVariable.SetFloatVector((float[])EyePt);
+            ScreenSizeVariable.SetFloatVector(ScreenSize);
 
             // Render the scene
             Device.IA_SetInputLayout(SceneVertexLayout);
@@ -706,7 +698,7 @@ namespace SoftParticles
                 case ParticleTechnique.VolumeSoft:
                     ParticleTech = RenderVolumeParticlesSoft;
                     break;
-                };
+                }
             }
             else
             {
@@ -730,7 +722,7 @@ namespace SoftParticles
                 case ParticleTechnique.VolumeSoft:
                     ParticleTech = RenderVolumeParticlesSoftMSAA;
                     break;
-                };
+                }
             }
 
             if (ParticleTechnique.BillboardHard != ParticleTechnique && ParticleTechnique.BillboardDepth != ParticleTechnique)
@@ -738,37 +730,40 @@ namespace SoftParticles
                 // Unbind the depth stencil texture from the device
                 Device.OM_SetRenderTargets(1, new[] { RenderTargetView }, null);
                 // Bind it instead as a shader resource view
-                if (1 == SampleCount) DepthTexture.SetResource(DepthStencilSRV);
-                else DepthMSAATexture.SetResource(DepthStencilSRV);
+                if (1 == SampleCount) DepthTexture.SetResource(DepthStencilShaderResourceView);
+                else DepthMSAATexture.SetResource(DepthStencilShaderResourceView);
             }
 
             // Render the particles
             Device.IA_SetInputLayout(ParticleVertexLayout);
-            var Buffers = new[] { ParticleVB };
+            var Buffers = new[] { ParticleVertexBuffer };
             var Stride = new[] { (uint)Marshal.SizeOf(typeof(ParticleVertex)) };
             var Offset = new[] { 0u };
             Device.IA_SetVertexBuffers(0, 1, Buffers, Stride, Offset);
             Device.IA_SetPrimitiveTopology(PrimitiveTopology.PointList);
-            Device.IA_SetIndexBuffer(ParticleIB, Format.R32_UInt, 0);
+            Device.IA_SetIndexBuffer(ParticleIndexBuffer, Format.R32_UInt, 0);
 
             if (ParticleTechnique.VolumeHard == ParticleTechnique || ParticleTechnique.VolumeSoft == ParticleTechnique)
             {
-                VolumeDiffTexture.SetResource(NoiseVolumeRV);
+                VolumeDiffTexture.SetResource(NoiseVolumeResourceView);
                 VolumeNormTexture.SetResource(null);
             }
             else
             {
-                VolumeDiffTexture.SetResource(ParticleTextureRV);
+                VolumeDiffTexture.SetResource(ParticleTextureResourceView);
             }
-            ColorGradient.SetResource(ColorGradTextureRV);
+            ColorGradient.SetResource(ColorGradTextureResourceView);
 
-            TechniqueDescription TechniqueDescription;
-            ParticleTech.GetDescription(out TechniqueDescription);
-
-            for (uint P = 0; P < TechniqueDescription.Passes; ++P)
+            if (ParticleTech != null)
             {
-                ParticleTech.GetPassByIndex(P).Apply(0);
-                Device.DrawIndexed(MaximumParticles, 0, 0);
+                TechniqueDescription TechniqueDescription;
+                ParticleTech.GetDescription(out TechniqueDescription);
+
+                for (uint P = 0; P < TechniqueDescription.Passes; ++P)
+                {
+                    ParticleTech.GetPassByIndex(P).Apply(0);
+                    Device.DrawIndexed(MaximumParticles, 0, 0);
+                }
             }
 
             // unbind the depth from the resource so we can set it as depth next time around
@@ -793,7 +788,7 @@ namespace SoftParticles
             TextHelper.End();
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void Form1_Paint(object Sender, PaintEventArgs E)
         {
             UtilitiesFunctions.HandlePaintEvent();
         }
@@ -815,24 +810,24 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_Resize(object sender, EventArgs e)
+        private void Form1_Resize(object Sender, EventArgs E)
         {
-            if (HandleDialogResizeEvent(e)) return;
+            if (HandleDialogResizeEvent(E)) return;
 
             UtilitiesFunctions.HandleResizeEvent();
         }
 
-        private void Form1_ResizeBegin(object sender, EventArgs e)
+        private void Form1_ResizeBegin(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeBeginEvent();
         }
 
-        private void Form1_ResizeEnd(object sender, EventArgs e)
+        private void Form1_ResizeEnd(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeEndEvent();
         }
 
-        private void Form1_CursorChanged(object sender, EventArgs e)
+        private void Form1_CursorChanged(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleCursorChangedEvent();
         }
@@ -854,7 +849,7 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_Activated(object sender, EventArgs e)
+        private void Form1_Activated(object Sender, EventArgs E)
         {
             if (HandleDialogActivatedEvent()) return;
 
@@ -878,7 +873,7 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_Deactivate(object sender, EventArgs e)
+        private void Form1_Deactivate(object Sender, EventArgs E)
         {
             if (HandleDialogDeactivatedEvent()) return;
 
@@ -906,13 +901,13 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void Form1_KeyDown(object Sender, KeyEventArgs E)
         {
-            if (e.KeyCode == Keys.F1) Camera.Reset();
+            if (E.KeyCode == Keys.F1) Camera.Reset();
 
-            if (HandleDialogKeyDownEvent(e)) return;
+            if (HandleDialogKeyDownEvent(E)) return;
 
-            UtilitiesFunctions.HandleKeyDownEvent(e);
+            UtilitiesFunctions.HandleKeyDownEvent(E);
         }
 
         bool HandleDialogMouseDownAndDoubleClickEvent(MouseEventArgs E)
@@ -936,14 +931,14 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        private void Form1_MouseDown(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseDownAndDoubleClickEvent(e)) return;
+            if (HandleDialogMouseDownAndDoubleClickEvent(E)) return;
         }
 
-        private void Form1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void Form1_MouseDoubleClick(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseDownAndDoubleClickEvent(e)) return;
+            if (HandleDialogMouseDownAndDoubleClickEvent(E)) return;
         }
 
         bool HandleDialogMouseUpEvent(MouseEventArgs E)
@@ -967,9 +962,9 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        private void Form1_MouseUp(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseUpEvent(e)) return;
+            if (HandleDialogMouseUpEvent(E)) return;
         }
 
         bool HandleDialogMouseWheelEvent(MouseEventArgs E)
@@ -993,9 +988,9 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_MouseWheel(object sender, MouseEventArgs e)
+        private void Form1_MouseWheel(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseWheelEvent(e)) return;
+            if (HandleDialogMouseWheelEvent(E)) return;
         }
 
         bool HandleDialogMouseMoveEvent(MouseEventArgs E)
@@ -1019,9 +1014,9 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        private void Form1_MouseMove(object Sender, MouseEventArgs E)
         {
-            if (HandleDialogMouseMoveEvent(e)) return;
+            if (HandleDialogMouseMoveEvent(E)) return;
         }
 
         bool HandleDialogMoveEvent(EventArgs E)
@@ -1041,9 +1036,9 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_Move(object sender, EventArgs e)
+        private void Form1_Move(object Sender, EventArgs E)
         {
-            if (HandleDialogMoveEvent(e)) return;
+            if (HandleDialogMoveEvent(E)) return;
         }
 
         bool HandleDialogMouseCaptureChangedEvent(EventArgs E)
@@ -1063,9 +1058,9 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_MouseCaptureChanged(object sender, EventArgs e)
+        private void Form1_MouseCaptureChanged(object Sender, EventArgs E)
         {
-            if (HandleDialogMouseCaptureChangedEvent(e)) return;
+            if (HandleDialogMouseCaptureChangedEvent(E)) return;
         }
 
         bool HandleDialogKeyUpEvent(KeyEventArgs E)
@@ -1089,12 +1084,12 @@ namespace SoftParticles
             return false;
         }
 
-        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        private void Form1_KeyUp(object Sender, KeyEventArgs E)
         {
-            if (HandleDialogKeyUpEvent(e)) return;
+            if (HandleDialogKeyUpEvent(E)) return;
         }
 
-        Random Random = new Random();
+        readonly Random Random = new Random();
         float RPercent()
         {
             var Ret = (float)(Random.Next(20000) - 10000);
@@ -1133,12 +1128,12 @@ namespace SoftParticles
                     MiscellaneousFlags = 0,
                     Usage = Usage.Default
                 };
-            var Result = Device.CreateBuffer(ref VertexBufferDescription, out ParticleVB);
+            var Result = Device.CreateBuffer(ref VertexBufferDescription, out ParticleVertexBuffer);
             if (Result < 0) return Result;
 
             VertexBufferDescription.BindFlags = BindFlag.IndexBuffer;
             VertexBufferDescription.ByteWidth = MaximumParticles * 4;
-            Result = Device.CreateBuffer(ref VertexBufferDescription, out ParticleIB);
+            Result = Device.CreateBuffer(ref VertexBufferDescription, out ParticleIndexBuffer);
             if (Result < 0) return Result;
 
             CpuParticles = new UnmanagedMemory<ParticleVertex>(ByteWidth);
@@ -1157,7 +1152,9 @@ namespace SoftParticles
 
         struct Byte4
         {
+// ReSharper disable NotAccessedField.Local
             public byte X, Y, Z, W;
+// ReSharper restore NotAccessedField.Local
         };
 
         //--------------------------------------------------------------------------------------
@@ -1223,28 +1220,30 @@ namespace SoftParticles
             }
 
             // Generate normals from the density gradient
-            var HeightAdjust = 0.5f;
-            Vector3 Normal;
-            Vector3 DensityGradient;
+            const float HeightAdjust = 0.5f;
             for (var Z = 0; Z < VolumeSize; Z++)
             {
                 for (var Y = 0; Y < VolumeSize; Y++)
                 {
                     for (var X = 0; X < VolumeSize; X++)
                     {
+                        Vector3 DensityGradient;
                         DensityGradient.X = GetDensity(X + 1, Y, Z, Data, VolumeSize) - GetDensity(X - 1, Y, Z, Data, VolumeSize) / HeightAdjust;
                         DensityGradient.Y = GetDensity(X, Y + 1, Z, Data, VolumeSize) - GetDensity(X, Y - 1, Z, Data, VolumeSize) / HeightAdjust;
                         DensityGradient.Z = GetDensity(X, Y, Z + 1, Data, VolumeSize) - GetDensity(X, Y, Z - 1, Data, VolumeSize) / HeightAdjust;
 
+                        Vector3 Normal;
                         D3DX10Functions.Vector3Normalize(out Normal, ref DensityGradient);
                         SetNormal(Normal, X, Y, Z, Data, VolumeSize);
                     }
                 }
             }
 
-            var Description = new Texture3D_Description();
-            Description.BindFlags = BindFlag.ShaderResource;
-            Description.CpuAccessFlags = 0;
+            var Description = new Texture3D_Description
+            {
+                BindFlags = BindFlag.ShaderResource,
+                CpuAccessFlags = 0
+            };
             Description.Depth = Description.Height = Description.Width = VolumeSize;
             Description.Format = Format.R8G8B8A8_SNorm;
             Description.MipLevels = 1;
@@ -1253,12 +1252,17 @@ namespace SoftParticles
             var Result = Device.CreateTexture3D(ref Description, new[] { InitData }, out NoiseVolume);
             if (Result < 0) return Result;
 
-            var ShaderResourceViewDescription = new ShaderResourceViewDescription();
-            ShaderResourceViewDescription.Format = Description.Format;
-            ShaderResourceViewDescription.ViewDimension = ShaderResourceViewDimension.Texture3D;
-            ShaderResourceViewDescription.Texture3D.MipLevels = Description.MipLevels;
-            ShaderResourceViewDescription.Texture3D.MostDetailedMip = 0;
-            Result = Device.CreateShaderResourceView(NoiseVolume, ref ShaderResourceViewDescription, out NoiseVolumeRV);
+            var ShaderResourceViewDescription = new ShaderResourceViewDescription
+            {
+                Format = Description.Format,
+                ViewDimension = ShaderResourceViewDimension.Texture3D,
+                Texture3D =
+                {
+                    MipLevels = Description.MipLevels,
+                    MostDetailedMip = 0
+                }
+            };
+            Result = Device.CreateShaderResourceView(NoiseVolume, ref ShaderResourceViewDescription, out NoiseVolumeResourceView);
             if (Result < 0) return Result;
 
             InitData.SystemMemory.Dispose();
@@ -1273,8 +1277,6 @@ namespace SoftParticles
             //  lo is the lower index, hi is the upper index
             //  of the region of array a that is to be sorted
             int I = Lo, J = Hi;
-            float H;
-            uint Index;
             float X;
             Depths.Get((uint)((Lo + Hi) / 2), out X);
 
@@ -1296,13 +1298,15 @@ namespace SoftParticles
                 }
                 if (I <= J)
                 {
+                    float H;
                     Depths.Get((uint)I, out H);
                     Depths.Get((uint)J, out D); Depths.Set((uint)I, ref D);
                     Depths.Set((uint)J, ref H);
 
-                    uint II;
+                    uint D2;
+                    uint Index;
                     Indices.Get((uint)I, out Index);
-                    Indices.Get((uint)J, out II); Indices.Set((uint)I, ref II);
+                    Indices.Get((uint)J, out D2); Indices.Set((uint)I, ref D2);
                     Indices.Set((uint)J, ref Index);
                     I++; J--;
                 }
@@ -1321,14 +1325,13 @@ namespace SoftParticles
             if (ParticleDepthArray == null || CpuParticleIndices == null) return;
 
             // assume vDir is normalized
-            Vector3 ToParticle;
             //init indices and depths
             for (uint I = 0; I < MaximumParticles; I++)
             {
                 CpuParticleIndices.Set(I, ref I);
                 ParticleVertex Out;
                 CpuParticles.Get(I, out Out);
-                ToParticle = Out.Position - Eye;
+                var ToParticle = Out.Position - Eye;
                 var Dot = D3DX10Functions.Vector3Dot(ref Dir, ref ToParticle);
                 ParticleDepthArray.Set(I, ref Dot);
             }
@@ -1342,19 +1345,13 @@ namespace SoftParticles
         //--------------------------------------------------------------------------------------
         double LastEmitTime;
         uint LastParticleEmitted;
-        void AdvanceParticles(Device Device, double Time, float TimeDelta)
+        void AdvanceParticles(/*Device Device,*/ double Time, float TimeDelta)
         {
             //emit new particles
 
-            if (!AnimateParticles)
-            {
-                LastEmitTime = Time;
-                return;
-            }
-
-            var EmitRate = this.EmitRate;
-            var ParticleMaxSize = this.ParticleMaxSize;
-            var ParticleMinSize = this.ParticleMinSize;
+            var EmitRate = Form1.EmitRate;
+            var ParticleMaxSize = Form1.ParticleMaxSize;
+            var ParticleMinSize = Form1.ParticleMinSize;
 
             if (ParticleTechnique.VolumeHard == ParticleTechnique || ParticleTechnique.VolumeSoft == ParticleTechnique)
             {
@@ -1376,8 +1373,6 @@ namespace SoftParticles
                 LastEmitTime = Time;
             }
 
-            Vector3 Vel;
-            float LifeSq;
             for (uint I = 0; I < MaximumParticles; I++)
             {
                 ParticleVertex P;
@@ -1385,10 +1380,10 @@ namespace SoftParticles
                 if (P.Life > -1)
                 {
                     // squared velocity falloff
-                    LifeSq = P.Life * P.Life;
+                    var LifeSq = P.Life * P.Life;
 
                     // Slow down by 50% as we age
-                    Vel = P.Velocity * (1 - 0.5f * LifeSq);
+                    var Vel = P.Velocity * (1 - 0.5f * LifeSq);
                     Vel.Y += 0.5f;	//(add some to the up direction, becuase of buoyancy)
 
                     P.Position += Vel * TimeDelta;
@@ -1407,8 +1402,9 @@ namespace SoftParticles
         //--------------------------------------------------------------------------------------
         void UpdateParticleBuffers(Device Device)
         {
-            Device.UpdateSubresource(ParticleVB, 0, CpuParticles, 0, 0);
-            Device.UpdateSubresource(ParticleIB, 0, CpuParticleIndices, 0, 0);
+            Device.UpdateSubresource(ParticleVertexBuffer, 0, CpuParticles, 0, 0);
+            Device.UpdateSubresource(ParticleIndexBuffer, 0, CpuParticleIndices, 0, 0);
         }
     }
 }
+// ReSharper restore CSharpWarnings::CS0197

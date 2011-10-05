@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using Xtro.MDX.Direct3DX10;
 using Color = Xtro.MDX.Direct3DX10.Color;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 

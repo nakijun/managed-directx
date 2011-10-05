@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Xtro.MDX.Utilities
 {
-    internal class Windows
+    internal static class Windows
     {
         internal enum GetWindowLongConst
         {
@@ -15,6 +15,7 @@ namespace Xtro.MDX.Utilities
             UserData = -21,
             ID = -12
         }
+
         [Flags]
         internal enum WindowPlacementFlag
         {
@@ -43,39 +44,30 @@ namespace Xtro.MDX.Utilities
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         internal struct Point32
         {
-            public int X;
-            public int Y;
+            int X;
+            int Y;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         internal struct Rect32
         {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
+            internal int Left;
+            internal int Top;
+            internal int Right;
+            internal int Bottom;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         internal struct WindowPlacement
         {
-            public int Length;
-            public WindowPlacementFlag Flags;
-            public ShowWindowCommand ShowCommand;
-            public Point32 MinPosition;
-            public Point32 MaxPosition;
-            public Rect32 NormalPosition;
+            internal int Length;
+            internal WindowPlacementFlag Flags;
+            internal ShowWindowCommand ShowCommand;
+            internal Point32 MinPosition;
+            internal Point32 MaxPosition;
+            internal Rect32 NormalPosition;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct PointL
-        {
-            [MarshalAs(UnmanagedType.I4)]
-            public int x;
-            [MarshalAs(UnmanagedType.I4)]
-            public int y;
-        }
-        
         [Flags]
         internal enum ExecutionState : uint
         {
@@ -100,17 +92,17 @@ namespace Xtro.MDX.Utilities
 
         [DllImport("user32.dll")]
         internal static extern bool SetWindowPlacement(IntPtr WindowHandle, ref WindowPlacement WindowPlacement);
-    
+
         [DllImport("user32.dll")]
         internal static extern bool ShowWindow(IntPtr WindowHandle, ShowWindowCommand ShowCommand);
-    
+
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool AdjustWindowRect(ref Rect32 Rect, uint Style, bool Menu);
 
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern uint GetWindowLong(IntPtr WindowHandle, GetWindowLongConst Index);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto,SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern ExecutionState SetThreadExecutionState(ExecutionState Flags);
     }
 }

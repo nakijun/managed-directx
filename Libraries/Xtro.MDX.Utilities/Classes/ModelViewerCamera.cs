@@ -6,7 +6,7 @@ using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 
 namespace Xtro.MDX.Utilities
 {
-    public class ModelViewerCamera : BaseCamera
+    public sealed class ModelViewerCamera : BaseCamera
     {
         readonly ArcBall WorldArcBall = new ArcBall();
         readonly ArcBall ViewArcBall = new ArcBall();

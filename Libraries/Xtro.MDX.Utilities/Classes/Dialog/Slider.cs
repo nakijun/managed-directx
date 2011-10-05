@@ -4,21 +4,21 @@ using System.Windows.Forms;
 
 namespace Xtro.MDX.Utilities
 {
-    public class Slider : Control
+    public sealed class Slider : Control
     {
-        protected int Value;
+        int Value;
 
-        protected int Minimum;
-        protected int Maximum;
+        int Minimum;
+        int Maximum;
 
-        protected int DragX;      // Mouse position at start of drag
-        protected int DragOffset; // Drag offset from the center of the button
-        protected int ButtonX;
+        int DragX;      // Mouse position at start of drag
+        int DragOffset; // Drag offset from the center of the button
+        int ButtonX;
 
-        protected bool Pressed;
-        protected Rectangle ButtonRectangle;
+        bool Pressed;
+        Rectangle ButtonRectangle;
 
-        protected void SetValueInternal(int Value, bool FromInput)
+        void SetValueInternal(int Value, bool FromInput)
         {
             // Clamp to range
             Value = Math.Max(Minimum, Value);
@@ -32,7 +32,7 @@ namespace Xtro.MDX.Utilities
             Dialog.SendEvent(Event.SliderValueChanged, FromInput, this);
         }
 
-        protected int ValueFromPosition(int X)
+        int ValueFromPosition(int X)
         {
             var ValuePerPixel = (float)(Maximum - Minimum) / BoundingBox.Width;
             return (int)(0.5f + Minimum + ValuePerPixel * (X - BoundingBox.Left));

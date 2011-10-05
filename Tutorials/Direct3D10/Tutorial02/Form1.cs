@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+﻿// ReSharper disable CSharpWarnings::CS0197
+using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-
 using Xtro.MDX;
 using Xtro.MDX.Generic;
 using Xtro.MDX.DXGI;
@@ -21,37 +13,35 @@ using Buffer = Xtro.MDX.Direct3D10.Buffer;
 using Error = Xtro.MDX.Direct3D10.Error;
 using Xtro.MDX.Direct3DX10;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
-using Font = System.Drawing.Font;
 
 namespace Tutorial02
 {
-    public partial class Form1 : Form
+    sealed partial class Form1 : Form
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        static extern IntPtr PostMessage(IntPtr Wnd, int Msg, int ParamW, int ParamL);
 
-        DriverType DriverType = DriverType.Null;
-        Device Device = null;
-        SwapChain SwapChain = null;
-        RenderTargetView RenderTargetView = null;
-        Effect Effect = null;
-        EffectTechnique Technique = null;
+        Device Device;
+        SwapChain SwapChain;
+        RenderTargetView RenderTargetView;
+        Effect Effect;
+        EffectTechnique Technique;
         TechniqueDescription TechniqueDescription;
-        InputLayout VertexLayout = null;
-        Buffer VertexBuffer = null;
+        InputLayout VertexLayout;
+        Buffer VertexBuffer;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Form1_Shown(object sender, EventArgs e)
+        private void Form1_Shown(object Sender, EventArgs E)
         {
             if (InitDevice()) Application.Idle += Application_Idle;
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form1_FormClosing(object Sender, FormClosingEventArgs E)
         {
             Application.Idle -= Application_Idle;
 
@@ -71,7 +61,9 @@ namespace Tutorial02
             catch (Exception Ex) { Application_Exception(Sender, new ThreadExceptionEventArgs(Ex)); }
         }
 
-        void Application_Exception(object Sender, ThreadExceptionEventArgs E)
+        // ReSharper disable UnusedParameter.Local
+        static void Application_Exception(object Sender, ThreadExceptionEventArgs E)
+        // ReSharper restore UnusedParameter.Local
         {
             MessageBox.Show(E.Exception.ToString());
             Application.Exit();
@@ -79,8 +71,6 @@ namespace Tutorial02
 
         bool InitDevice()
         {
-            var ClientSize = this.ClientSize;
-
             CreateDeviceFlag CreateDeviceFlags = 0;
 #if DEBUG
             CreateDeviceFlags |= CreateDeviceFlag.Debug;
@@ -88,24 +78,35 @@ namespace Tutorial02
 
             DriverType[] DriverTypes = { DriverType.Hardware, DriverType.Reference };
 
-            SwapChainDescription SwapChainDescription = new SwapChainDescription();
-            SwapChainDescription.BufferCount = 1;
-            SwapChainDescription.BufferDescription.Width = (uint)ClientSize.Width;
-            SwapChainDescription.BufferDescription.Height = (uint)ClientSize.Height;
-            SwapChainDescription.BufferDescription.Format = Format.R8G8B8A8_UNorm;
-            SwapChainDescription.BufferDescription.RefreshRate.Numerator = 60;
-            SwapChainDescription.BufferDescription.RefreshRate.Denominator = 1;
-            SwapChainDescription.BufferUsage = UsageFlag.RenderTargetOutput;
-            SwapChainDescription.OutputWindow = Handle;
-            SwapChainDescription.SampleDescription.Count = 1;
-            SwapChainDescription.SampleDescription.Quality = 0;
-            SwapChainDescription.Windowed = true;
-
-            int Result = 0;
-
-            for (int DriverTypeIndex = 0; DriverTypeIndex < DriverTypes.Length; DriverTypeIndex++)
+            var SwapChainDescription = new SwapChainDescription
             {
-                Result = Functions.CreateDeviceAndSwapChain(null, DriverTypes[DriverTypeIndex], null, CreateDeviceFlags, ref SwapChainDescription, out SwapChain, out Device);
+                BufferCount = 1,
+                BufferDescription =
+                {
+                    Width = (uint)ClientSize.Width,
+                    Height = (uint)ClientSize.Height,
+                    Format = Format.R8G8B8A8_UNorm,
+                    RefreshRate =
+                    {
+                        Numerator = 60,
+                        Denominator = 1
+                    }
+                },
+                BufferUsage = UsageFlag.RenderTargetOutput,
+                OutputWindow = Handle,
+                SampleDescription =
+                {
+                    Count = 1,
+                    Quality = 0
+                },
+                Windowed = true
+            };
+
+            var Result = 0;
+
+            foreach (var Type in DriverTypes)
+            {
+                Result = Functions.CreateDeviceAndSwapChain(null, Type, null, CreateDeviceFlags, ref SwapChainDescription, out SwapChain, out Device);
                 if (Result >= 0) break;
             }
 
@@ -117,31 +118,30 @@ namespace Tutorial02
             Result = SwapChain.GetBuffer(0, typeof(Texture2D), out Surface);
             if (Result < 0) throw new Exception("SwapChain.GetBuffer has failed : " + Result);
 
-            Texture2D BackBuffer;
-            BackBuffer = (Texture2D)Surface;
+            var BackBuffer = (Texture2D)Surface;
 
             Result = Device.CreateRenderTargetView(BackBuffer, out RenderTargetView);
             if (Result < 0) throw new Exception("Device.CreateRenderTargetView has failed : " + Result);
 
             if (BackBuffer != null) BackBuffer.Release();
 
-            Device.OM_SetRenderTargets(1,new [] { RenderTargetView }, null);
+            Device.OM_SetRenderTargets(1, new[] { RenderTargetView }, null);
 
             // Setup the viewport
-            Viewport Viewport = new Viewport()
-            {
-                TopLeftX = 0,
-                TopLeftY = 0,
-                Width = (uint)ClientSize.Width,
-                Height = (uint)ClientSize.Height,
-                MinDepth = 0.0f,
-                MaxDepth = 1.0f
-            };
+            var Viewport = new Viewport
+                {
+                    TopLeftX = 0,
+                    TopLeftY = 0,
+                    Width = (uint)ClientSize.Width,
+                    Height = (uint)ClientSize.Height,
+                    MinDepth = 0.0f,
+                    MaxDepth = 1.0f
+                };
             Device.RS_SetViewports(1, new[] { Viewport });
 
             // Create the effect
 
-            ShaderFlag ShaderFlags = ShaderFlag.EnableStrictness;
+            var ShaderFlags = ShaderFlag.EnableStrictness;
 #if DEBUG
             // Set the ShaderFlag.Debug flag to embed debug information in the shaders.
             // Setting this flag improves the shader debugging experience, but still allows 
@@ -153,10 +153,10 @@ namespace Tutorial02
             Result = D3DX10Functions.CreateEffectFromFile("Tutorial02.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
             if (Result == (int)Error.FileNotFound)
             {
-                MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
+                MessageBox.Show(@"The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", @"Error", MessageBoxButtons.OK);
                 return false;
             }
-            else if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
+            if (Result < 0) throw new Exception("D3DX10Functions.CreateEffectFromFile has failed : " + Result);
 
             // Obtain the technique
             Technique = Effect.GetTechniqueByName("Render");
@@ -182,7 +182,7 @@ namespace Tutorial02
             PassDescription PassDescription;
             Result = Technique.GetPassByIndex(0).GetDescription(out PassDescription);
             if (Result < 0) throw new Exception("GetDescription has failed : " + Result);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Size, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, PassDescription.IA_InputSignature.Size, out VertexLayout);
             if (Result < 0) throw new Exception("Device.CreateInputLayout has failed : " + Result);
 
             // Set the input layout
@@ -190,24 +190,24 @@ namespace Tutorial02
 
             // Create vertex buffer
 
-            var VertexCount = (uint)3;
-            int VertexSize = Marshal.SizeOf(typeof(Vector3));
+            const uint VertexCount = 3;
+            var VertexSize = Marshal.SizeOf(typeof(Vector3));
             var Vertices = new UnmanagedMemory<Vector3>((uint)(VertexSize * VertexCount));
-            Vertices.Write(new Vector3[]
+            Vertices.Write(new[]
             {
                 new Vector3(0.0f, 0.5f, 0.5f),
                 new Vector3(0.5f, -0.5f, 0.5f),
                 new Vector3(-0.5f, -0.5f, 0.5f)
             });
-            SubResourceData InitData = new SubResourceData
+            var InitData = new SubResourceData
             {
                 SystemMemory = Vertices,
                 SystemMemoryPitch = 0,
                 SystemMemorySlicePitch = 0
             };
-            BufferDescription BufferDescription = new BufferDescription
+            var BufferDescription = new BufferDescription
             {
-                ByteWidth = (uint)Vertices.Size,
+                ByteWidth = Vertices.Size,
                 Usage = Usage.Default,
                 BindFlags = BindFlag.VertexBuffer,
                 CpuAccessFlags = 0,
@@ -218,7 +218,7 @@ namespace Tutorial02
             if (Result < 0) throw new Exception("Device.CreateBuffer has failed : " + Result);
 
             // Set vertex buffer
-            Device.IA_SetVertexBuffers(0,1, new [] { VertexBuffer }, new [] { (uint)VertexSize }, new uint[] { 0 });
+            Device.IA_SetVertexBuffers(0, 1, new[] { VertexBuffer }, new[] { (uint)VertexSize }, new uint[] { 0 });
 
             // Set primitive topology
             Device.IA_SetPrimitiveTopology(PrimitiveTopology.TriangleList);
@@ -229,7 +229,7 @@ namespace Tutorial02
         void Render()
         {
             // Clear the backbuffer
-            Float4 ClearColor = new Float4(new[]{0.0f, 0.125f, 0.3f, 1.0f}); //red,green,blue,alpha
+            var ClearColor = new Float4(new[] { 0.0f, 0.125f, 0.3f, 1.0f }); //red,green,blue,alpha
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 
             // Render a triangle
@@ -256,3 +256,4 @@ namespace Tutorial02
         }
     }
 }
+// ReSharper restore CSharpWarnings::CS0197

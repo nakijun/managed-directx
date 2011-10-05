@@ -1,6 +1,6 @@
 ﻿namespace Tutorial14
 {
-    partial class Form1
+    sealed partial class Form1
     {
         /// <summary>
         /// Required designer variable.

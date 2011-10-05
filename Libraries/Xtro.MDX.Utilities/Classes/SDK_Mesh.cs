@@ -232,19 +232,19 @@ namespace Xtro.MDX.Utilities
                 }
             }
 
-            public bool DiffuseResourceViewError {get; private set;}
+            public bool DiffuseResourceViewError { get; private set; }
             public void SetDiffuseResourceViewError()
             {
                 FDiffuseResourceView = null;
                 DiffuseResourceViewError = true;
             }
-            public bool NormalResourceViewError {get; private set;}
+            public bool NormalResourceViewError { get; private set; }
             public void SetNormalResourceViewError()
             {
                 FNormalResourceView = null;
                 NormalResourceViewError = true;
             }
-            public bool SpecularResourceViewError {get; private set;}
+            public bool SpecularResourceViewError { get; private set; }
             public void SetSpecularResourceViewError()
             {
                 FSpecularResourceView = null;
@@ -476,8 +476,6 @@ namespace Xtro.MDX.Utilities
         int CreateFromMemory(Device Device, UnmanagedMemory Data, bool CreateAdjacencyIndices, bool CopyStatic, CallbacksStruct[] LoaderCallbacks)
         {
             var Result = (int)Error.Fail;
-            Vector3 Lower;
-            Vector3 Upper;
             this.Device = Device;
 
             if (CopyStatic)
@@ -582,6 +580,8 @@ namespace Xtro.MDX.Utilities
             // update bounding volume 
             for (uint I = 0; I < MeshHeaderData.NumberOfMeshes; I++)
             {
+                Vector3 Lower;
+                Vector3 Upper;
                 Lower.X = float.MaxValue; Lower.Y = float.MaxValue; Lower.Z = float.MaxValue;
                 Upper.X = -float.MaxValue; Upper.Y = -float.MaxValue; Upper.Z = -float.MaxValue;
 
@@ -700,9 +700,9 @@ namespace Xtro.MDX.Utilities
                 Quaternion.X = Data.Orientation.X;
                 Quaternion.Y = Data.Orientation.Y;
                 Quaternion.Z = Data.Orientation.Z;
-// ReSharper disable CompareOfFloatsByEqualityOperator
+                // ReSharper disable CompareOfFloatsByEqualityOperator
                 if (Quaternion.W == 0 && Quaternion.X == 0 && Quaternion.Y == 0 && Quaternion.Z == 0) D3DX10Functions.QuaternionIdentity(out Quaternion);
-// ReSharper restore CompareOfFloatsByEqualityOperator
+                // ReSharper restore CompareOfFloatsByEqualityOperator
                 D3DX10Functions.QuaternionNormalize(out Quaternion, ref Quaternion);
                 D3DX10Functions.MatrixRotationQuaternion(out QuaternionMatrix, ref Quaternion);
                 LocalTransform = (QuaternionMatrix * Translate);
@@ -724,15 +724,6 @@ namespace Xtro.MDX.Utilities
         // transform frame assuming that it is an absolute transformation
         void TransformFrameAbsolute(uint Frame, double Time)
         {
-            Matrix Transform1;
-            Matrix Transform2;
-            Matrix Rotation1;
-            Matrix Rotation2;
-            Quaternion Quaternion1;
-            Quaternion Quaternion2;
-            Matrix MatrixInvTo;
-            Matrix MatrixFrom;
-
             var Tick = GetAnimationKeyFromTime(Time);
 
             // UnmanagedMemory.Get is not working for MarshalAs structs
@@ -750,6 +741,13 @@ namespace Xtro.MDX.Utilities
                 AnimationData DataOriginal;
                 AnimationDataMemory.Get((uint)AnimationFrame.DataOffset, out DataOriginal);
 
+                Matrix Transform1;
+                Matrix Transform2;
+                Matrix Rotation1;
+                Matrix Rotation2;
+                Quaternion Quaternion1;
+                Quaternion Quaternion2;
+
                 D3DX10Functions.MatrixTranslation(out Transform1, -DataOriginal.Translation.X, -DataOriginal.Translation.Y, -DataOriginal.Translation.Z);
                 D3DX10Functions.MatrixTranslation(out Transform2, Data.Translation.X, Data.Translation.Y, Data.Translation.Z);
 
@@ -759,14 +757,14 @@ namespace Xtro.MDX.Utilities
                 Quaternion1.W = DataOriginal.Orientation.W;
                 D3DX10Functions.QuaternionInverse(out Quaternion1, ref Quaternion1);
                 D3DX10Functions.MatrixRotationQuaternion(out Rotation1, ref Quaternion1);
-                MatrixInvTo = Transform1 * Rotation1;
+                var MatrixInvTo = Transform1 * Rotation1;
 
                 Quaternion2.X = Data.Orientation.X;
                 Quaternion2.Y = Data.Orientation.Y;
                 Quaternion2.Z = Data.Orientation.Z;
                 Quaternion2.W = Data.Orientation.W;
                 D3DX10Functions.MatrixRotationQuaternion(out Rotation2, ref Quaternion2);
-                MatrixFrom = Rotation2 * Transform2;
+                var MatrixFrom = Rotation2 * Transform2;
 
                 var Output = MatrixInvTo * MatrixFrom;
                 TransformedFrameMatrices[Frame] = Output;
@@ -1009,8 +1007,8 @@ namespace Xtro.MDX.Utilities
             if (Result < 0) return Result;
 
             // Open the file
-            FileStream File;
-            try { File = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read); }
+            FileStream FileStream;
+            try { FileStream = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read); }
             catch { return (int)Error.MediaNotFound; }
 
             try
@@ -1020,7 +1018,7 @@ namespace Xtro.MDX.Utilities
 
                 var AnimationFileHeaderSize = Marshal.SizeOf(typeof(AnimationFileHeader));
                 var Buffer = new byte[AnimationFileHeaderSize];
-                File.Read(Buffer, 0, AnimationFileHeaderSize);
+                FileStream.Read(Buffer, 0, AnimationFileHeaderSize);
 
                 var FileHeader = new AnimationFileHeader();
                 var FileHeaderHandle = GCHandle.Alloc(FileHeader, GCHandleType.Pinned);
@@ -1033,8 +1031,8 @@ namespace Xtro.MDX.Utilities
 
                 // read it all in
                 Buffer = new byte[AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize];
-                File.Seek(0, SeekOrigin.Begin);
-                File.Read(Buffer, 0, AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize);
+                FileStream.Seek(0, SeekOrigin.Begin);
+                FileStream.Read(Buffer, 0, AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize);
                 AnimationDataMemory.GetStream().Write(Buffer, 0, AnimationFileHeaderSize + (int)FileHeader.AnimationDataSize);
 
                 // pointer fixup
@@ -1063,7 +1061,7 @@ namespace Xtro.MDX.Utilities
             }
             finally
             {
-                File.Close();
+                FileStream.Close();
             }
 
             return Result;
@@ -1241,7 +1239,6 @@ namespace Xtro.MDX.Utilities
             }
             catch { return (int)Error.OutOfMemory; }
 
-            IndexBufferHeader IndexBufferHeader;
             for (uint I = 0; I < MeshHeaderData.NumberOfMeshes; I++)
             {
                 // UnmanagedMemory.Get is not working for MarshalAs structs
@@ -1257,6 +1254,7 @@ namespace Xtro.MDX.Utilities
                 Size = Marshal.SizeOf(typeof(VertexBufferHeader));
                 var VertexBufferHeader = (VertexBufferHeader)Marshal.PtrToStructure(new IntPtr(VertexBufferArray.Pointer.ToInt64() + VB_Index * Size), typeof(VertexBufferHeader));
 
+                IndexBufferHeader IndexBufferHeader;
                 IndexBufferArray.Get(IB_Index, out IndexBufferHeader);
                 var VertexData = new UnmanagedMemory(new IntPtr(BufferData.Pointer.ToInt64() + (long)VertexBufferHeader.DataOffset), (uint)VertexBufferHeader.SizeBytes);
                 var IndexData = new UnmanagedMemory(new IntPtr(BufferData.Pointer.ToInt64() + (long)IndexBufferHeader.DataOffset), (uint)IndexBufferHeader.SizeBytes);

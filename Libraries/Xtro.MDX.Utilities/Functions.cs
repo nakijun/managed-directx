@@ -536,8 +536,11 @@ namespace Xtro.MDX.Utilities
 
             // Store device description
             string DeviceStats = null;
-            if (DeviceType == DriverType.Reference) DeviceStats = "REFERENCE";
-            else if (DeviceType == DriverType.Hardware) DeviceStats = "HARDWARE";
+            switch (DeviceType)
+            {
+            case DriverType.Reference: DeviceStats = "REFERENCE"; break;
+            case DriverType.Hardware: DeviceStats = "HARDWARE"; break;
+            }
 
             if (DeviceType == DriverType.Hardware)
             {
@@ -2581,7 +2584,7 @@ namespace Xtro.MDX.Utilities
                 GetState().LastStatsUpdateTime = AbsoluteTime;
                 GetState().LastStatsUpdateFrames = 0;
 
-                GetState().FPS_Stats = string.Format("{0:0.00} fps ", FPS);
+                GetState().FpsStats = string.Format("{0:0.00} fps ", FPS);
             }
         }
 
@@ -2598,20 +2601,20 @@ namespace Xtro.MDX.Utilities
             // Walk through the list of timer callbacks
             for (var I = 0; I < Timers.Count; I++)
             {
-                var Timer = Timers[I];
-                if (Timer.Enabled)
+                var TimerI = Timers[I];
+                if (TimerI.Enabled)
                 {
-                    Timer.Countdown -= ElapsedTime;
+                    TimerI.Countdown -= ElapsedTime;
 
                     // Call the callback if count down expired
-                    if (Timer.Countdown < 0)
+                    if (TimerI.Countdown < 0)
                     {
-                        Timer.CallbackTimer(Timer.ID, Timer.CallbackUserContext);
+                        TimerI.CallbackTimer(TimerI.ID, TimerI.CallbackUserContext);
                         // The callback my have changed the timer.
-                        Timer = Timers[I];
-                        Timer.Countdown = Timer.TimeoutInSecs;
+                        TimerI = Timers[I];
+                        TimerI.Countdown = TimerI.TimeoutInSecs;
                     }
-                    Timers[I] = Timer;
+                    Timers[I] = TimerI;
                 }
             }
         }
@@ -3100,7 +3103,6 @@ namespace Xtro.MDX.Utilities
             // Handle paint messages when the app is paused
             if (IsRenderingPaused() && GetState().DeviceObjectsCreated && GetState().DeviceObjectsReset)
             {
-                int Result;
                 var Time = GetTime();
                 var ElapsedTime = GetElapsedTime();
 
@@ -3116,7 +3118,7 @@ namespace Xtro.MDX.Utilities
                     //var Flags = GetState().RenderingOccluded ? PresentFlag.Test : GetState().CurrentDeviceSettings.PresentFlags;
 
                     var SwapChain = GetSwapChain();
-                    Result = SwapChain.Present(0, GetState().CurrentDeviceSettings.PresentFlags);
+                    var Result = SwapChain.Present(0, GetState().CurrentDeviceSettings.PresentFlags);
                     if (Result == (int)Status.Occluded)
                     {
                         // There is a window covering our entire rendering area.
@@ -3155,45 +3157,45 @@ namespace Xtro.MDX.Utilities
                     // the window has actually become minimized due to rapid change
                     // so just ignore this message
                 }
-                else if (GetForm().WindowState == FormWindowState.Maximized)
-                {
-                    if (GetState().Minimized) Pause(false, false); // Unpause since we're no longer minimized
-                    GetState().Minimized = false;
-                    GetState().Maximized = true;
-                    CheckForWindowSizeChange();
-                    CheckForWindowChangingMonitors();
-                }
-                else if (GetForm().WindowState == FormWindowState.Normal)
-                {
-                    //DXUTCheckForDXGIFullScreenSwitch();
-                    if (GetState().Maximized)
+                else switch (GetForm().WindowState)
                     {
-                        GetState().Maximized = false;
-                        CheckForWindowSizeChange();
-                        CheckForWindowChangingMonitors();
-                    }
-                    else if (GetState().Minimized)
-                    {
-                        Pause(false, false); // Unpause since we're no longer minimized
+                    case FormWindowState.Maximized:
+                        if (GetState().Minimized) Pause(false, false); // Unpause since we're no longer minimized
                         GetState().Minimized = false;
+                        GetState().Maximized = true;
                         CheckForWindowSizeChange();
                         CheckForWindowChangingMonitors();
+                        break;
+                    case FormWindowState.Normal:
+                        if (GetState().Maximized)
+                        {
+                            GetState().Maximized = false;
+                            CheckForWindowSizeChange();
+                            CheckForWindowChangingMonitors();
+                        }
+                        else if (GetState().Minimized)
+                        {
+                            Pause(false, false); // Unpause since we're no longer minimized
+                            GetState().Minimized = false;
+                            CheckForWindowSizeChange();
+                            CheckForWindowChangingMonitors();
+                        }
+                        else if (GetState().InSizeMove)
+                        {
+                            // If we're neither maximized nor minimized, the window size 
+                            // is changing by the user dragging the window edges.  In this 
+                            // case, we don't reset the device yet -- we wait until the 
+                            // user stops dragging, and a WM_EXITSIZEMOVE message comes.
+                        }
+                        else
+                        {
+                            // This WM_SIZE come from resizing the window via an API like SetWindowPos() so 
+                            // resize and reset the device now.
+                            CheckForWindowSizeChange();
+                            CheckForWindowChangingMonitors();
+                        }
+                        break;
                     }
-                    else if (GetState().InSizeMove)
-                    {
-                        // If we're neither maximized nor minimized, the window size 
-                        // is changing by the user dragging the window edges.  In this 
-                        // case, we don't reset the device yet -- we wait until the 
-                        // user stops dragging, and a WM_EXITSIZEMOVE message comes.
-                    }
-                    else
-                    {
-                        // This WM_SIZE come from resizing the window via an API like SetWindowPos() so 
-                        // resize and reset the device now.
-                        CheckForWindowSizeChange();
-                        CheckForWindowChangingMonitors();
-                    }
-                }
             }
         }
 
@@ -3285,7 +3287,6 @@ namespace Xtro.MDX.Utilities
             // Skip this check for various reasons
             if (!GetState().AutoChangeAdapter || GetState().IgnoreSizeChange || !GetState().DeviceCreated || !IsWindowed()) return;
 
-            int Result;
             var WindowMonitor = Screen.FromControl(GetForm());
             var AdapterMonitor = GetState().AdapterMonitor;
             if (WindowMonitor != AdapterMonitor)
@@ -3318,7 +3319,7 @@ namespace Xtro.MDX.Utilities
                         PresentInterval = MatchType.ClosestToInput
                     };
 
-                    Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
+                    var Result = FindValidDeviceSettings(DeviceSettings, DeviceSettings, MatchOptions);
                     if (Result >= 0)
                     {
                         // Create a Direct3D device using the new device settings.  
@@ -3484,8 +3485,10 @@ namespace Xtro.MDX.Utilities
         // Don't pause the game or deactive the window without first stopping rumble otherwise 
         // the controller will continue to rumble
         //--------------------------------------------------------------------------------------
+        // ReSharper disable UnusedParameter.Local
         static void EnableXInput(bool B)
         {
+            // ReSharper restore UnusedParameter.Local
         }
 
         public static void HandleKeyDownEvent(KeyEventArgs E)
@@ -3541,7 +3544,7 @@ namespace Xtro.MDX.Utilities
             case Format.BC3_UNorm_SRGB:
             case Format.BC3_UNorm:
                 return Format.BC3_Typeless;
-            };
+            }
 
             return Format;
         }
@@ -3852,7 +3855,7 @@ namespace Xtro.MDX.Utilities
 
         public static string GetFrameStats(bool ShowFPS)
         {
-            var FPS = (ShowFPS) ? GetState().FPS_Stats : "";
+            var FPS = (ShowFPS) ? GetState().FpsStats : "";
             var FrameStats = string.Format(GetState().StaticFrameStats, FPS);
             GetState().FrameStats = FrameStats;
             return FrameStats;
@@ -3884,13 +3887,17 @@ namespace Xtro.MDX.Utilities
             var SwitchToRef = (SwitchToRef)Object;
             if (Result >= 0)
             {
-                SwitchToRef.SetUseRef(SwitchToRef.GetUseRef() ? false : true);
+                SwitchToRef.SetUseRef(!SwitchToRef.GetUseRef());
                 SwitchToRef.Release();
                 return 0;
             }
 
-            if (DeviceSettings.DriverType == DriverType.Hardware || DeviceSettings.DriverType == DriverType.Software) DeviceSettings.DriverType = DriverType.Reference;
-            else if (DeviceSettings.DriverType == DriverType.Reference) DeviceSettings.DriverType = DriverType.Hardware;
+            switch (DeviceSettings.DriverType)
+            {
+            case DriverType.Software:
+            case DriverType.Hardware: DeviceSettings.DriverType = DriverType.Reference; break;
+            case DriverType.Reference: DeviceSettings.DriverType = DriverType.Hardware; break;
+            }
 
             var MatchOptions = new MatchOptions
             {

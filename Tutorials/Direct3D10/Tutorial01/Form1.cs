@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+﻿// ReSharper disable CSharpWarnings::CS0197
+using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
@@ -16,28 +12,27 @@ using Functions = Xtro.MDX.Direct3D10.Functions;
 
 namespace Tutorial01
 {
-    public partial class Form1 : Form
+    sealed partial class Form1 : Form
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        static extern IntPtr PostMessage(IntPtr Wnd, int Msg, int ParamW, int ParamL);
 
-        DriverType DriverType = DriverType.Null;
-        Device Device = null;
-        SwapChain SwapChain = null;
-        RenderTargetView RenderTargetView = null;
+        Device Device;
+        SwapChain SwapChain;
+        RenderTargetView RenderTargetView;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Form1_Shown(object sender, EventArgs e)
+        private void Form1_Shown(object Sender, EventArgs E)
         {
             if (InitDevice()) Application.Idle += Application_Idle;
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form1_FormClosing(object Sender, FormClosingEventArgs E)
         {
             Application.Idle -= Application_Idle;
 
@@ -57,7 +52,9 @@ namespace Tutorial01
             catch (Exception Ex) { Application_Exception(Sender, new ThreadExceptionEventArgs(Ex)); }
         }
 
-        void Application_Exception(object Sender, ThreadExceptionEventArgs E)
+        // ReSharper disable UnusedParameter.Local
+        static void Application_Exception(object Sender, ThreadExceptionEventArgs E)
+        // ReSharper restore UnusedParameter.Local
         {
             MessageBox.Show(E.Exception.ToString());
             Application.Exit();
@@ -65,32 +62,41 @@ namespace Tutorial01
 
         bool InitDevice()
         {
-            var ClientSize = this.ClientSize;
-
             CreateDeviceFlag CreateDeviceFlags = 0;
 #if DEBUG
             CreateDeviceFlags |= CreateDeviceFlag.Debug;
 #endif
             DriverType[] DriverTypes = { DriverType.Hardware, DriverType.Reference };
 
-            SwapChainDescription SwapChainDescription = new SwapChainDescription();
-            SwapChainDescription.BufferCount = 1;
-            SwapChainDescription.BufferDescription.Width = (uint)ClientSize.Width;
-            SwapChainDescription.BufferDescription.Height = (uint)ClientSize.Height;
-            SwapChainDescription.BufferDescription.Format = Format.R8G8B8A8_UNorm;
-            SwapChainDescription.BufferDescription.RefreshRate.Numerator = 60;
-            SwapChainDescription.BufferDescription.RefreshRate.Denominator = 1;
-            SwapChainDescription.BufferUsage = UsageFlag.RenderTargetOutput;
-            SwapChainDescription.OutputWindow = Handle;
-            SwapChainDescription.SampleDescription.Count = 1;
-            SwapChainDescription.SampleDescription.Quality = 0;
-            SwapChainDescription.Windowed = true;
-
-            int Result = 0;
-
-            for (int DriverTypeIndex = 0; DriverTypeIndex < DriverTypes.Length; DriverTypeIndex++)
+            var SwapChainDescription = new SwapChainDescription
             {
-                Result = Functions.CreateDeviceAndSwapChain(null, DriverTypes[DriverTypeIndex], null, CreateDeviceFlags, ref SwapChainDescription, out SwapChain, out Device);
+                BufferCount = 1,
+                BufferDescription =
+                {
+                    Width = (uint)ClientSize.Width,
+                    Height = (uint)ClientSize.Height,
+                    Format = Format.R8G8B8A8_UNorm,
+                    RefreshRate =
+                    {
+                        Numerator = 60,
+                        Denominator = 1
+                    }
+                },
+                BufferUsage = UsageFlag.RenderTargetOutput,
+                OutputWindow = Handle,
+                SampleDescription =
+                {
+                    Count = 1,
+                    Quality = 0
+                },
+                Windowed = true
+            };
+
+            var Result = 0;
+
+            foreach (var Type in DriverTypes)
+            {
+                Result = Functions.CreateDeviceAndSwapChain(null, Type, null, CreateDeviceFlags, ref SwapChainDescription, out SwapChain, out Device);
                 if (Result >= 0) break;
             }
 
@@ -100,28 +106,27 @@ namespace Tutorial01
 
             Unknown Surface;
             Result = SwapChain.GetBuffer(0, typeof(Texture2D), out Surface);
-            if (Result < 0) throw new Exception("SwapChain.GetBuffer has failed"); 
-            
-            Texture2D BackBuffer;
-            BackBuffer = (Texture2D)Surface;
+            if (Result < 0) throw new Exception("SwapChain.GetBuffer has failed");
+
+            var BackBuffer = (Texture2D)Surface;
 
             Result = Device.CreateRenderTargetView(BackBuffer, out RenderTargetView);
             if (Result < 0) throw new Exception("Device.CreateRenderTargetView has failed");
 
             if (BackBuffer != null) BackBuffer.Release();
 
-            Device.OM_SetRenderTargets(1,new [] { RenderTargetView }, null);
+            Device.OM_SetRenderTargets(1, new[] { RenderTargetView }, null);
 
             // Setup the viewport
-            Viewport Viewport = new Viewport()
-            {
-                TopLeftX = 0,
-                TopLeftY = 0,
-                Width = (uint)ClientSize.Width,
-                Height = (uint)ClientSize.Height,
-                MinDepth = 0.0f,
-                MaxDepth = 1.0f
-            };
+            var Viewport = new Viewport
+                {
+                    TopLeftX = 0,
+                    TopLeftY = 0,
+                    Width = (uint)ClientSize.Width,
+                    Height = (uint)ClientSize.Height,
+                    MinDepth = 0.0f,
+                    MaxDepth = 1.0f
+                };
             Device.RS_SetViewports(1, new[] { Viewport });
 
             return true;
@@ -130,7 +135,7 @@ namespace Tutorial01
         void Render()
         {
             // Just clear the backbuffer
-            Float4 ClearColor = new Float4(new[]{0.0f, 0.125f, 0.3f, 1.0f}); //red,green,blue,alpha
+            var ClearColor = new Float4(new[] { 0.0f, 0.125f, 0.3f, 1.0f }); //red,green,blue,alpha
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
             SwapChain.Present(0, 0);
         }
@@ -145,3 +150,4 @@ namespace Tutorial01
         }
     }
 }
+// ReSharper restore CSharpWarnings::CS0197

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// ReSharper disable CSharpWarnings::CS0197
+using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
@@ -7,9 +8,7 @@ using Xtro.MDX.Generic;
 using Xtro.MDX.DXGI;
 using Xtro.MDX.Direct3D10;
 using Device = Xtro.MDX.Direct3D10.Device;
-using Functions = Xtro.MDX.Direct3D10.Functions;
 using Buffer = Xtro.MDX.Direct3D10.Buffer;
-using Error = Xtro.MDX.Direct3D10.Error;
 using Xtro.MDX.Direct3DX10;
 using D3DX10Constants = Xtro.MDX.Direct3DX10.Constants;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
@@ -18,15 +17,11 @@ using UtilitiesFunctions = Xtro.MDX.Utilities.Functions;
 
 namespace Tutorial08
 {
-    public partial class Form1 : Form
+    sealed partial class Form1 : Form
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
-        [DllImport("kernel32.dll")]
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        static extern uint GetTickCount();
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        static extern IntPtr PostMessage(IntPtr Wnd, int Msg, int ParamW, int ParamL);
 
         static double DegreeToRadian(double Degree)
         {
@@ -35,21 +30,23 @@ namespace Tutorial08
 
         struct SimpleVertex
         {
+            // ReSharper disable NotAccessedField.Local
             public Vector3 Position;
             public Vector2 Texture;
+            // ReSharper restore NotAccessedField.Local
         };
 
-        Effect Effect = null;
-        InputLayout VertexLayout = null;
-        EffectTechnique Technique = null;
-        Buffer VertexBuffer = null;
-        Buffer IndexBuffer = null;
-        ShaderResourceView TextureResourceView = null;
-        EffectMatrixVariable WorldVariable = null;
-        EffectMatrixVariable ViewVariable = null;
-        EffectMatrixVariable ProjectionVariable = null;
-        EffectVectorVariable MeshColorVariable = null;
-        EffectShaderResourceVariable DiffuseVariable = null;
+        Effect Effect;
+        InputLayout VertexLayout;
+        EffectTechnique Technique;
+        Buffer VertexBuffer;
+        Buffer IndexBuffer;
+        ShaderResourceView TextureResourceView;
+        EffectMatrixVariable WorldVariable;
+        EffectMatrixVariable ViewVariable;
+        EffectMatrixVariable ProjectionVariable;
+        EffectVectorVariable MeshColorVariable;
+        EffectShaderResourceVariable DiffuseVariable;
         Matrix World;
         Matrix View;
         Matrix Projection;
@@ -75,7 +72,7 @@ namespace Tutorial08
                 UtilitiesFunctions.SetCallbackFrameMove(OnFrameMove, null);
                 UtilitiesFunctions.SetCallbackDeviceChanging(OnModifyDeviceSettings, null);
 
-                UtilitiesFunctions.Initialize(true);
+                UtilitiesFunctions.Initialize();
                 UtilitiesFunctions.SetCursorSettings(true, true);
                 UtilitiesFunctions.SetWindow(this);
                 UtilitiesFunctions.CreateDevice(true, 640, 480);
@@ -121,7 +118,7 @@ namespace Tutorial08
             Application.Exit();
         }
 
-        bool IsDeviceAcceptable(uint Adapter, uint Output, DriverType DeviceType, Format BackBufferFormat, bool Windowed, object UserContext)
+        static bool IsDeviceAcceptable(uint Adapter, uint Output, DriverType DeviceType, Format BackBufferFormat, bool Windowed, object UserContext)
         {
             return true;
         }
@@ -141,7 +138,7 @@ namespace Tutorial08
             var Result = D3DX10Functions.CreateEffectFromFile("Tutorial08.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
             if (Result < 0)
             {
-                MessageBox.Show("The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", "Error", MessageBoxButtons.OK);
+                MessageBox.Show(@"The FX file cannot be located.  Please run this executable from the directory that contains the FX file.", @"Error", MessageBoxButtons.OK);
                 return Result;
             }
 
@@ -180,17 +177,17 @@ namespace Tutorial08
             // Create the input layout
             PassDescription PassDescription;
             Technique.GetPassByIndex(0).GetDescription(out PassDescription);
-            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, (uint)PassDescription.IA_InputSignature.Size, out VertexLayout);
+            Result = Device.CreateInputLayout(Layout, (uint)Layout.Length, PassDescription.IA_InputSignature, PassDescription.IA_InputSignature.Size, out VertexLayout);
             if (Result < 0) return Result;
 
             // Set the input layout
             Device.IA_SetInputLayout(VertexLayout);
 
             // Create vertex buffer
-            var VertexCount = (uint)24;
-            int VertexSize = Marshal.SizeOf(typeof(SimpleVertex));
+            const uint VertexCount = 24;
+            var VertexSize = Marshal.SizeOf(typeof(SimpleVertex));
             var Vertices = new UnmanagedMemory<SimpleVertex>((uint)(VertexSize * VertexCount));
-            Vertices.Write(new SimpleVertex[]
+            Vertices.Write(new[]
             {
                 new SimpleVertex{Position= new Vector3(-1.0f, 1.0f, -1.0f),Texture= new Vector2(0.0f, 0.0f)},
                 new SimpleVertex{Position= new Vector3(1.0f, 1.0f, -1.0f),Texture= new Vector2(1.0f, 0.0f)},
@@ -220,7 +217,7 @@ namespace Tutorial08
 
             var BufferDescription = new BufferDescription
             {
-                ByteWidth = (uint)Vertices.Size,
+                ByteWidth = Vertices.Size,
                 Usage = Usage.Default,
                 BindFlags = BindFlag.VertexBuffer,
                 CpuAccessFlags = 0,
@@ -236,12 +233,12 @@ namespace Tutorial08
             if (Result < 0) return Result;
 
             // Set vertex buffer
-            Device.IA_SetVertexBuffers(0, 1, new[] { VertexBuffer }, new uint[] { (uint)(BufferDescription.ByteWidth / 24) }, new uint[] { 0 });
+            Device.IA_SetVertexBuffers(0, 1, new[] { VertexBuffer }, new[] { BufferDescription.ByteWidth / 24 }, new uint[] { 0 });
 
             // Create index buffer
-            var IndexCount = (uint)36;
+            const uint IndexCount = 36;
             var Indices = new UnmanagedMemory<int>(sizeof(int) * IndexCount);
-            Indices.Write(new int[] 
+            Indices.Write(new[] 
             {
                 3, 1, 0,
                 2, 1, 3,
@@ -259,7 +256,7 @@ namespace Tutorial08
 
             BufferDescription = new BufferDescription
             {
-                ByteWidth = (uint)Indices.Size,
+                ByteWidth = Indices.Size,
                 Usage = Usage.Default,
                 BindFlags = BindFlag.IndexBuffer,
                 CpuAccessFlags = 0,
@@ -287,9 +284,9 @@ namespace Tutorial08
             D3DX10Functions.MatrixIdentity(out World);
 
             // Initialize the view matrix
-            Vector3 Eye = new Vector3(0.0f, 3.0f, -6.0f);
-            Vector3 At = new Vector3(0.0f, 1.0f, 0.0f);
-            Vector3 Up = new Vector3(0.0f, 1.0f, 0.0f);
+            var Eye = new Vector3(0.0f, 3.0f, -6.0f);
+            var At = new Vector3(0.0f, 1.0f, 0.0f);
+            var Up = new Vector3(0.0f, 1.0f, 0.0f);
             D3DX10Functions.MatrixLookAtLH(out View, ref Eye, ref At, ref Up);
 
             // Update Variables that never change
@@ -319,12 +316,12 @@ namespace Tutorial08
             // Setup the projection parameters again
             var Aspect = (float)BackBufferSurfaceDescription.Width / BackBufferSurfaceDescription.Height;
             D3DX10Functions.MatrixPerspectiveFovLH(out Projection, (float)D3DX10Constants.PI * 0.25f, Aspect, 0.1f, 100.0f);
-            ProjectionVariable.SetMatrix((float[])Projection); 
+            ProjectionVariable.SetMatrix((float[])Projection);
 
             return 0;
         }
 
-        void OnReleasingSwapChain(object UserContext)
+        static void OnReleasingSwapChain(object UserContext)
         {
         }
 
@@ -333,7 +330,7 @@ namespace Tutorial08
             //
             // Clear the back buffer
             //
-            Float4 ClearColor = new Float4(new[]{0.0f, 0.125f, 0.3f, 1.0f}); //red,green,blue,alpha
+            var ClearColor = new Float4(new[] { 0.0f, 0.125f, 0.3f, 1.0f }); //red,green,blue,alpha
             var RenderTargetView = UtilitiesFunctions.GetRenderTargetView();
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 
@@ -372,49 +369,50 @@ namespace Tutorial08
             MeshColor.Z = (float)Math.Sin(Time * 5.0f) + 1.0f * 0.5f;
         }
 
-        bool OnModifyDeviceSettings(DeviceSettings DeviceSettings, object UserContext)
+        static bool OnModifyDeviceSettings(DeviceSettings DeviceSettings, object UserContext)
         {
             return true;
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void Form1_Paint(object Sender, PaintEventArgs E)
         {
             UtilitiesFunctions.HandlePaintEvent();
         }
 
-        private void Form1_Resize(object sender, EventArgs e)
+        private void Form1_Resize(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeEvent();
         }
 
-        private void Form1_ResizeBegin(object sender, EventArgs e)
+        private void Form1_ResizeBegin(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeBeginEvent();
         }
 
-        private void Form1_ResizeEnd(object sender, EventArgs e)
+        private void Form1_ResizeEnd(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleResizeEndEvent();
         }
 
-        private void Form1_CursorChanged(object sender, EventArgs e)
-        {                                            
+        private void Form1_CursorChanged(object Sender, EventArgs E)
+        {
             UtilitiesFunctions.HandleCursorChangedEvent();
         }
 
-        private void Form1_Activated(object sender, EventArgs e)
+        private void Form1_Activated(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleActivatedEvent();
         }
 
-        private void Form1_Deactivate(object sender, EventArgs e)
+        private void Form1_Deactivate(object Sender, EventArgs E)
         {
             UtilitiesFunctions.HandleDeactivateEvent();
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void Form1_KeyDown(object Sender, KeyEventArgs E)
         {
-            UtilitiesFunctions.HandleKeyDownEvent(e);
+            UtilitiesFunctions.HandleKeyDownEvent(E);
         }
     }
 }
+// ReSharper restore CSharpWarnings::CS0197
