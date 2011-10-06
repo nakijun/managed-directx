@@ -22,90 +22,14 @@ public:
 	{
 		float get(unsigned int Index1, unsigned int Index2)
 		{
-			switch (Index1)
-			{
-			case 0 : 
-				switch (Index2)
-				{
-				case 0 : return Value11;
-				case 1 : return Value12;
-				case 2 : return Value13;
-				case 3 : return Value14;
-				default : return 0;
-				}
-			case 1 : 
-				switch (Index2)
-				{
-				case 0 : return Value21;
-				case 1 : return Value22;
-				case 2 : return Value23;
-				case 3 : return Value24;
-				default : return 0;
-				}
-			case 2 : 
-				switch (Index2)
-				{
-				case 0 : return Value31;
-				case 1 : return Value32;
-				case 2 : return Value33;
-				case 3 : return Value34;
-				default : return 0;
-				}
-			case 3 : 
-				switch (Index2)
-				{
-				case 0 : return Value41;
-				case 1 : return Value42;
-				case 2 : return Value43;
-				case 3 : return Value44;
-				default : return 0;
-				}
-			default : return 0;
-			}
+			pin_ptr<float> PinnedThis = &Value11;
+			return ((float**)PinnedThis)[Index1][Index2];
 		}
 
 		void set(unsigned int Index1, unsigned int Index2, float Value)
 		{
-			switch (Index1)
-			{
-			case 0 : 
-				switch (Index2)
-				{
-				case 0 : Value11 = Value; break;
-				case 1 : Value12 = Value; break;
-				case 2 : Value13 = Value; break;
-				case 3 : Value14 = Value; break;
-				default : return;
-				}
-			case 1 : 
-				switch (Index2)
-				{
-				case 0 : Value21 = Value; break;
-				case 1 : Value22 = Value; break;
-				case 2 : Value23 = Value; break;
-				case 3 : Value24 = Value; break;
-				default : return;
-				}
-			case 2 : 
-				switch (Index2)
-				{
-				case 0 : Value31 = Value; break;
-				case 1 : Value32 = Value; break;
-				case 2 : Value33 = Value; break;
-				case 3 : Value34 = Value; break;
-				default : return;
-				}
-			case 3 : 
-				switch (Index2)
-				{
-				case 0 : Value41 = Value; break;
-				case 1 : Value42 = Value; break;
-				case 2 : Value43 = Value; break;
-				case 3 : Value44 = Value; break;
-				default : return;
-				}
-			default : return;
-			}
+			pin_ptr<float> PinnedThis = &Value11;
+			((float**)PinnedThis)[Index1][Index2] = Value;
 		}
 	}
 

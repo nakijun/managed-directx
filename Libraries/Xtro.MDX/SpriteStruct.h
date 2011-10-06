@@ -59,23 +59,17 @@ public:
 
 	virtual bool Equals(SpriteStruct Value)
 	{
-		return
-			MatrixWorld == Value.MatrixWorld &&
-			TextureCoordinates == Value.TextureCoordinates &&
-			TextureSize == Value.TextureSize &&
-			ColorModulate == Value.ColorModulate &&
-			Texture == Value.Texture &&
-			TextureIndex == Value.TextureIndex;
+		pin_ptr<Matrix> PinnedThis = &MatrixWorld;
+		pin_ptr<SpriteStruct> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SpriteStruct::typeid)) == 0;
 	}
 
 	static bool Equals(SpriteStruct% Value1, SpriteStruct% Value2)
 	{
-		return
-			Value1.MatrixWorld == Value2.MatrixWorld &&
-			Value1.TextureCoordinates == Value2.TextureCoordinates &&
-			Value1.TextureSize == Value2.TextureSize &&
-			Value1.ColorModulate == Value2.ColorModulate &&
-			Value1.Texture == Value2.Texture &&
-			Value1.TextureIndex == Value2.TextureIndex;
+		pin_ptr<SpriteStruct> PinnedValue1 = &Value1;
+		pin_ptr<SpriteStruct> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(SpriteStruct::typeid)) == 0;
 	}
 };

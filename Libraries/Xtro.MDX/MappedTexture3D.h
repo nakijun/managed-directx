@@ -49,17 +49,17 @@ public:
 
 	virtual bool Equals(MappedTexture3D Value)
 	{
-		return
-			Data == Value.Data &&
-			RowPitch == Value.RowPitch &&
-			DepthPitch == Value.DepthPitch;
+		pin_ptr<UnmanagedMemory^> PinnedThis = &Data;
+		pin_ptr<MappedTexture3D> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(MappedTexture3D::typeid)) == 0;
 	}
 
 	static bool Equals(MappedTexture3D% Value1, MappedTexture3D% Value2)
 	{
-		return
-			Value1.Data == Value2.Data &&
-			Value1.RowPitch == Value2.RowPitch &&
-			Value1.DepthPitch == Value2.DepthPitch;
+		pin_ptr<MappedTexture3D> PinnedValue1 = &Value1;
+		pin_ptr<MappedTexture3D> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(MappedTexture3D::typeid)) == 0;
 	}
 };

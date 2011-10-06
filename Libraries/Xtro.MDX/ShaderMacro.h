@@ -1,9 +1,10 @@
 public value class ShaderMacro : IEquatable<ShaderMacro>
 {
-internal: 
+private:
 	IntPtr pName;
 	IntPtr pDefinition;
 
+internal: 
 	inline void Marshal(D3D10_SHADER_MACRO* Native)
 	{
 		pName = Marshal::StringToHGlobalAnsi(Name);
@@ -15,8 +16,17 @@ internal:
 
 	inline void Unmarshal()
 	{
-		Marshal::FreeHGlobal(pName); 
-		Marshal::FreeHGlobal(pDefinition); 
+		if (pName != IntPtr::Zero)
+		{
+			Marshal::FreeHGlobal(pName); 
+			pName = IntPtr::Zero;
+		}
+
+		if (pDefinition != IntPtr::Zero)
+		{
+			Marshal::FreeHGlobal(pDefinition); 
+			pDefinition = IntPtr::Zero;
+		}
 	}
 
 public:

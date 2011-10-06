@@ -32,15 +32,17 @@ public:
 
 	virtual bool Equals(MappedRectangle Value)
 	{
-		return
-			Pitch == Value.Pitch &&
-			Bits == Value.Bits;
+		pin_ptr<unsigned int> PinnedThis = &Pitch;
+		pin_ptr<MappedRectangle> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(MappedRectangle::typeid)) == 0;
 	}
 
 	static bool Equals(MappedRectangle% Value1, MappedRectangle% Value2)
 	{
-		return
-			Value1.Pitch == Value2.Pitch &&
-			Value1.Bits == Value2.Bits;
+		pin_ptr<MappedRectangle> PinnedValue1 = &Value1;
+		pin_ptr<MappedRectangle> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(MappedRectangle::typeid)) == 0;
 	}
 };

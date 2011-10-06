@@ -51,17 +51,17 @@ public:
 
 	virtual bool Equals(SubResourceData Value)
 	{
-		return
-			SystemMemory == Value.SystemMemory &&
-			SystemMemoryPitch == Value.SystemMemoryPitch &&
-			SystemMemorySlicePitch == Value.SystemMemorySlicePitch;
+		pin_ptr<UnmanagedMemory^> PinnedThis = &SystemMemory;
+		pin_ptr<SubResourceData> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SubResourceData::typeid)) == 0;
 	}
 
 	static bool Equals(SubResourceData% Value1, SubResourceData% Value2)
 	{
-		return
-			Value1.SystemMemory == Value2.SystemMemory &&
-			Value1.SystemMemoryPitch == Value2.SystemMemoryPitch &&
-			Value1.SystemMemorySlicePitch == Value2.SystemMemorySlicePitch;
+		pin_ptr<SubResourceData> PinnedValue1 = &Value1;
+		pin_ptr<SubResourceData> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(SubResourceData::typeid)) == 0;
 	}
 };

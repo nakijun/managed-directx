@@ -22,7 +22,7 @@
 
 * public olmayan fonksiyonlarý inline yap. constructor, destructor hariç.
 
-* PassDescription gibi içinde array olan struclarýn eþitlik kontrolünde array i basit tip ise memcmp ile deðilse tek tek içini tarayarak kontrol et.
+* PassDescription gibi içinde String^ olan struclarýn eþitlik kontrolünde tek tek kontrol et.
 
 * doðal çift yönlü(method yok) : (default sequential olduðundan bu açýklama gereksiz kaldý) doðrudan native fonksiyonlara geçebilecek (içinde String^ gibi þeyler olmayan, basit tipler ve sequential struct'lar içeren) struclar [StructLayout(LayoutKind::Sequential)] olmalý. Ör : Viewport
   çift yönlü(ToNative+FromNative) : (default sequential olduðundan bu açýklama gereksiz kaldý) Sequential olmayan struct içeren struct'larýn ToNative ve FromNative metodu (internal olarak lazýmsa).

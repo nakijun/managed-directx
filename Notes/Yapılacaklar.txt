@@ -2,10 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* D3D10_MESSAGE_CATEGORY *pCategoryList; array<> olacak
-
-* Matrix'in indexer get ve set'i Byte2 deki gibi yap.
-
 * structure'larý yap
   interface'leri yap
 
