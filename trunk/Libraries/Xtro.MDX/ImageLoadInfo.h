@@ -1,8 +1,9 @@
 public value class ImageLoadInfo : IEquatable<ImageLoadInfo>
 {
-internal:
+private:
 	D3DX10_IMAGE_INFO* pSourceInfo;
 
+internal:
 	inline void Marshal(D3DX10_IMAGE_LOAD_INFO* Native)
 	{
 		Native->Width = Width;
@@ -31,7 +32,11 @@ internal:
 
 	inline void Unmarshal()
 	{
-		if (pSourceInfo) delete pSourceInfo; 
+		if (pSourceInfo)
+		{
+			delete pSourceInfo; 
+			pSourceInfo = 0;
+		}
 	}
 
 public:
@@ -110,41 +115,17 @@ public:
 
 	virtual bool Equals(ImageLoadInfo Value)
 	{
-		if (SourceInfo.HasValue != Value.SourceInfo.HasValue) return false;
-		bool SourceInfoEquals = SourceInfo.HasValue ? SourceInfo.Value == Value.SourceInfo.Value : true;
-																										 
-		return
-			Width == Value.Width &&
-			Height == Value.Height &&
-			Depth == Value.Depth &&
-			FirstMipLevel == Value.FirstMipLevel &&
-			MipLevels == Value.MipLevels &&
-			Usage == Value.Usage &&
-			BindFlags == Value.BindFlags &&
-			CpuAccessFlags == Value.CpuAccessFlags &&
-			MiscellaneousFlags == Value.MiscellaneousFlags &&
-			Format == Value.Format &&
-			Filter == Value.Filter &&
-			MipFilter == Value.MipFilter;
+		pin_ptr<D3DX10_IMAGE_INFO*> PinnedThis = &pSourceInfo;
+		pin_ptr<ImageLoadInfo> PinnedValue = &Value;
+
+		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(ImageLoadInfo::typeid)) == 0;
 	}
 
 	static bool Equals(ImageLoadInfo% Value1, ImageLoadInfo% Value2)
 	{
-		if (Value1.SourceInfo.HasValue != Value2.SourceInfo.HasValue) return false;
-		bool SourceInfoEquals = Value1.SourceInfo.HasValue ? Value1.SourceInfo.Value == Value2.SourceInfo.Value : true;
-																										 
-		return
-			Value1.Width == Value2.Width &&
-			Value1.Height == Value2.Height &&
-			Value1.Depth == Value2.Depth &&
-			Value1.FirstMipLevel == Value2.FirstMipLevel &&
-			Value1.MipLevels == Value2.MipLevels &&
-			Value1.Usage == Value2.Usage &&
-			Value1.BindFlags == Value2.BindFlags &&
-			Value1.CpuAccessFlags == Value2.CpuAccessFlags &&
-			Value1.MiscellaneousFlags == Value2.MiscellaneousFlags &&
-			Value1.Format == Value2.Format &&
-			Value1.Filter == Value2.Filter &&
-			Value1.MipFilter == Value2.MipFilter;
+		pin_ptr<ImageLoadInfo> PinnedValue1 = &Value1;
+		pin_ptr<ImageLoadInfo> PinnedValue2 = &Value2;
+
+		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(ImageLoadInfo::typeid)) == 0;
 	}
 };

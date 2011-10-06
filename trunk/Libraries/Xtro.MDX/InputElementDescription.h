@@ -1,8 +1,9 @@
 public value class InputElementDescription : IEquatable<InputElementDescription>
 {
-internal: 		
+private:
 	IntPtr pSemanticName;
 
+internal: 		
 	inline void Marshal(D3D10_INPUT_ELEMENT_DESC* Native)
 	{
 		pSemanticName = Marshal::StringToHGlobalAnsi(SemanticName);
@@ -18,7 +19,11 @@ internal:
 
 	inline void Unmarshal()
 	{
-		Marshal::FreeHGlobal(pSemanticName); 
+		if (pSemanticName != IntPtr::Zero)
+		{
+			Marshal::FreeHGlobal(pSemanticName); 
+			pSemanticName = IntPtr::Zero;
+		}
 	}
 
 public:

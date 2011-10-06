@@ -23,6 +23,11 @@ namespace TestMDX
 
         private void Form1_Shown(object Sender, EventArgs E)
         {
+            var at = new TextureLoadInfo { Filter = FilterFlag.Box, DestinationBox = new Box { Back=1} };
+            var bt = new TextureLoadInfo { Filter = FilterFlag.Box, DestinationBox = new Box() };
+            bt.DestinationBox = new Box { Back = 1 };
+            var tt = at == bt;
+
             var b1 = new byte[] { 1, 2, 3 };
             var b2 = new byte[] { 1, 2, 3 };
             var c = b1.SequenceEqual(b2);
