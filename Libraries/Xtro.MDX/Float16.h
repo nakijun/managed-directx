@@ -1,12 +1,12 @@
 public value class Float16 : IEquatable<Float16>
 {
 internal:
-	WORD Value;
+	unsigned short Value;
 
 public:
 	Float16(float Float)
 	{
-		Value = (WORD)Float;
+		Value = (unsigned short)Float;
 	}
 
 	static explicit operator float(Float16 Value)

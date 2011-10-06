@@ -4,8 +4,8 @@ public:
 	unsigned int PresentCount;
 	unsigned int PresentRefreshCount;
 	unsigned int SyncRefreshCount;
-	__int64 SyncQpcTime;
-    __int64 SyncGpuTime;
+	long long SyncQpcTime;
+    long long SyncGpuTime;
 
 	static bool operator == (FrameStatistics Left, FrameStatistics Right)
 	{
