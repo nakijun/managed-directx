@@ -47,9 +47,9 @@ namespace SoftParticles
             public Vector3 Position;
             public Vector3 Velocity;
             public float Life;
-// ReSharper disable NotAccessedField.Local
+            // ReSharper disable NotAccessedField.Local
             public float Size;
-// ReSharper restore NotAccessedField.Local
+            // ReSharper restore NotAccessedField.Local
         };
 
         readonly ModelViewerCamera Camera;
@@ -90,7 +90,7 @@ namespace SoftParticles
         EffectTechnique RenderVolumeParticlesHard;
         EffectTechnique RenderVolumeParticlesSoft;
         EffectTechnique RenderBillboardParticlesODepthSoft;
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         EffectTechnique RenderVolumeParticlesSoftMSAA;
         EffectTechnique RenderVolumeParticlesHardMSAA;
         EffectTechnique RenderBillboardParticlesSoftMSAA;
@@ -117,9 +117,9 @@ namespace SoftParticles
         EffectShaderResourceVariable VolumeDiffTexture;
         EffectShaderResourceVariable VolumeNormTexture;
         EffectShaderResourceVariable DepthTexture;
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         EffectShaderResourceVariable DepthMSAATexture;
-// ReSharper restore InconsistentNaming
+        // ReSharper restore InconsistentNaming
 
         int BackBufferWidth = 640;
         int BackBufferHeight = 480;
@@ -337,7 +337,7 @@ namespace SoftParticles
 
             Result = D3DX10Functions.CreateSprite(Device, 512, out Sprite);
             if (Result < 0) return Result;
-            TextHelper = new TextHelper(Font2,Sprite);
+            TextHelper = new TextHelper(Font2, Sprite);
 
             // Read the D3DX effect file
             string DestinationPath;
@@ -473,30 +473,30 @@ namespace SoftParticles
             if (ParticleVertexLayout != null) ParticleVertexLayout.Release();
             if (ParticleVertexBuffer != null) ParticleVertexBuffer.Release();
             if (ParticleIndexBuffer != null) ParticleIndexBuffer.Release();
-            if(ParticleTextureResourceView!=null)ParticleTextureResourceView.Release();
-            if(NoiseVolume!=null)NoiseVolume.Release();
-            if(NoiseVolumeResourceView!=null)NoiseVolumeResourceView.Release();
-            if(ColorGradTextureResourceView!=null)ColorGradTextureResourceView.Release();
+            if (ParticleTextureResourceView != null) ParticleTextureResourceView.Release();
+            if (NoiseVolume != null) NoiseVolume.Release();
+            if (NoiseVolumeResourceView != null) NoiseVolumeResourceView.Release();
+            if (ColorGradTextureResourceView != null) ColorGradTextureResourceView.Release();
 
             ObjectMesh.Delete();
             SkyMesh.Delete();
 
-            CpuParticles=null;
-            CpuParticleIndices=null;
-            ParticleDepthArray=null;
+            CpuParticles = null;
+            CpuParticleIndices = null;
+            ParticleDepthArray = null;
 
             Font2 = null;
             Sprite = null;
             TextHelper = null;
             Effect = null;
             SceneVertexLayout = null;
-            ParticleVertexLayout =null;
+            ParticleVertexLayout = null;
             ParticleVertexBuffer = null;
             ParticleIndexBuffer = null;
-            ParticleTextureResourceView=null;
-            NoiseVolume=null;
-            NoiseVolumeResourceView=null;
-            ColorGradTextureResourceView=null;
+            ParticleTextureResourceView = null;
+            NoiseVolume = null;
+            NoiseVolumeResourceView = null;
+            ColorGradTextureResourceView = null;
         }
 
         int OnSwapChainResized(Device Device, SwapChain SwapChain, ref SurfaceDescription BackBufferSurfaceDescription, object UserContext)
@@ -622,7 +622,7 @@ namespace SoftParticles
             var WorldView = World * View;
             D3DX10Functions.MatrixInverse(out InvView, ref View);
             D3DX10Functions.MatrixInverse(out InvProj, ref Proj);
-            var ViewLightDir1=new Vector4();
+            var ViewLightDir1 = new Vector4();
             var WorldLightDir1 = new Vector4();
             var ViewLightDir2 = new Vector4();
             var WorldLightDir2 = new Vector4();
@@ -674,7 +674,7 @@ namespace SoftParticles
             SkyMesh.Render(Device, RenderSky, DiffuseTexture);
             ObjectMesh.Render(Device, RenderScene, DiffuseTexture, NormalTexture);
 
-            EffectTechnique ParticleTech=null;
+            EffectTechnique ParticleTech = null;
 
             if (1 == SampleCount)
             {
@@ -1144,17 +1144,17 @@ namespace SoftParticles
                 CpuParticles.Set(I, ref Temp);
             }
 
-            CpuParticleIndices = new UnmanagedMemory<uint>(MaximumParticles*4);
-            ParticleDepthArray = new UnmanagedMemory<float>(MaximumParticles*4);
+            CpuParticleIndices = new UnmanagedMemory<uint>(MaximumParticles * 4);
+            ParticleDepthArray = new UnmanagedMemory<float>(MaximumParticles * 4);
 
             return Result;
         }
 
         struct Byte4
         {
-// ReSharper disable NotAccessedField.Local
+            // ReSharper disable NotAccessedField.Local
             public byte X, Y, Z, W;
-// ReSharper restore NotAccessedField.Local
+            // ReSharper restore NotAccessedField.Local
         };
 
         //--------------------------------------------------------------------------------------

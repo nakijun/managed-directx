@@ -11,26 +11,14 @@ public:
 	{
 		float get(int Index)
 		{
-			switch (Index)
-			{
-			case 0 : return Value0;
-			case 1 : return Value1;
-			case 2 : return Value2;
-			case 3 : return Value3;
-			default : return 0;
-			}
+			pin_ptr<float> PinnedThis = &Value0;
+			return ((float*)PinnedThis)[Index];
 		}
 
 		void set(int Index, float Value)
 		{
-			switch (Index)
-			{
-			case 0 : Value0 = Value; break;
-			case 1 : Value1 = Value; break;
-			case 2 : Value2 = Value; break;
-			case 3 : Value3 = Value; break;
-			default : return;
-			}
+			pin_ptr<float> PinnedThis = &Value0;
+			((float*)PinnedThis)[Index] = Value;
 		}
 	}
 
@@ -39,8 +27,8 @@ public:
 		if (Floats == nullptr || Floats->Length < 4) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedValue0 = &Value0;
-		memcpy(PinnedValue0, PinnedFloats, Marshal::SizeOf(Float4::typeid));
+		pin_ptr<float> PinnedThis = &Value0;
+		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Float4::typeid));
 	}
 
 	static explicit operator array<float>^(Float4 Value)

@@ -15,34 +15,14 @@ public:
 	{
 		bool get(int Index)
 		{
-			switch (Index)
-			{
-			case 0 : return Value0 != 0;
-			case 1 : return Value1 != 0;
-			case 2 : return Value2 != 0;
-			case 3 : return Value3 != 0;
-			case 4 : return Value4 != 0;
-			case 5 : return Value5 != 0;
-			case 6 : return Value6 != 0;
-			case 7 : return Value7 != 0;
-			default : return 0;
-			}
+			pin_ptr<int> PinnedThis = &Value0;
+			return ((int*)PinnedThis)[Index] != 0;
 		}
 
 		void set(int Index, bool Value)
 		{
-			switch (Index)
-			{
-			case 0 : Value0 = Value; break;
-			case 1 : Value1 = Value; break;
-			case 2 : Value2 = Value; break;
-			case 3 : Value3 = Value; break;
-			case 4 : Value4 = Value; break;
-			case 5 : Value5 = Value; break;
-			case 6 : Value6 = Value; break;
-			case 7 : Value7 = Value; break;
-			default : return;
-			}
+			pin_ptr<int> PinnedThis = &Value0;
+			((int*)PinnedThis)[Index] = Value;
 		}
 	}
 
@@ -51,8 +31,8 @@ public:
 		if (Booleans == nullptr || Booleans->Length < 8) return;
 
 		pin_ptr<bool> PinnedBooleans = &Booleans[0];
-		pin_ptr<int> PinnedValue0 = &Value0;
-		memcpy(PinnedValue0, PinnedBooleans, Marshal::SizeOf(Boolean8::typeid));
+		pin_ptr<int> PinnedThis = &Value0;
+		memcpy(PinnedThis, PinnedBooleans, Marshal::SizeOf(Boolean8::typeid));
 	}
 
 	static explicit operator array<bool>^(Boolean8 Value)

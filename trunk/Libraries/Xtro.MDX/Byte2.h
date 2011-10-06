@@ -9,22 +9,14 @@ public:
 	{
 		unsigned char get(int Index)
 		{
-			switch (Index)
-			{
-			case 0 : return Value0;
-			case 1 : return Value1;
-			default : return 0;
-			}
+			pin_ptr<unsigned char> PinnedThis = &Value0;
+			return ((unsigned char*)PinnedThis)[Index];
 		}
 
 		void set(int Index, unsigned char Value)
 		{
-			switch (Index)
-			{
-			case 0 : Value0 = Value; break;
-			case 1 : Value1 = Value; break;
-			default : return;
-			}
+			pin_ptr<unsigned char> PinnedThis = &Value0;
+			((unsigned char*)PinnedThis)[Index] = Value;
 		}
 	}
 
@@ -33,8 +25,8 @@ public:
 		if (Bytes == nullptr || Bytes->Length < 2) return;
 
 		pin_ptr<unsigned char> PinnedBytes = &Bytes[0];
-		pin_ptr<unsigned char> PinnedValue0 = &Value0;
-		memcpy(PinnedValue0, PinnedBytes, Marshal::SizeOf(Byte2::typeid));
+		pin_ptr<unsigned char> PinnedThis = &Value0;
+		memcpy(PinnedThis, PinnedBytes, Marshal::SizeOf(Byte2::typeid));
 	}
 
 	static explicit operator array<unsigned char>^(Byte2 Value)
