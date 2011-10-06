@@ -712,6 +712,9 @@
     <ClInclude Include="MappedRectangle.h">
       <Filter>DXGI\Structures</Filter>
     </ClInclude>
+    <ClInclude Include="CounterInfo.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">

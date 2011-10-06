@@ -133,6 +133,7 @@ namespace Direct3D10
 	#include "DepthStencilState.h"
 	#include "Box.h"
 	#include "CounterDescription.h"
+	#include "CounterInfo.h"
 	#include "DeviceD3D10.h"
 	#include "DeviceChild_ForwardedMethods.h"
 	#include "StateBlockMask.h"
