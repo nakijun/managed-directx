@@ -685,6 +685,33 @@
     <ClInclude Include="DepthStencilOperationDescription.h">
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
+    <ClInclude Include="CounterDescription.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameStatistics.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="GammaControl.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Rgb.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Rgb1025.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="GammaControlCapabilities.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Float1025.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedResource.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="MappedRectangle.h">
+      <Filter>DXGI\Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">

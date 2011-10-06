@@ -161,6 +161,7 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantsD3D10.h" />
+    <ClInclude Include="CounterDescription.h" />
     <ClInclude Include="DepthStencilDescription.h" />
     <ClInclude Include="DepthStencilOperationDescription.h" />
     <ClInclude Include="DepthStencilState.h" />
@@ -168,8 +169,13 @@
     <ClInclude Include="DeviceDXGI.h" />
     <ClInclude Include="EffectScalarVariable.h" />
     <ClInclude Include="Enums.h" />
+    <ClInclude Include="Float1025.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FontDescription.h" />
+    <ClInclude Include="FrameStatistics.h" />
+    <ClInclude Include="GammaControl.h" />
+    <ClInclude Include="GammaControlCapabilities.h" />
+    <ClInclude Include="MappedRectangle.h" />
     <ClInclude Include="MappedTexture2D.h" />
     <ClInclude Include="MappedTexture3D.h" />
     <ClInclude Include="Mesh.h" />
@@ -262,8 +268,11 @@
     <ClInclude Include="RasterizerDescription.h" />
     <ClInclude Include="RasterizerState.h" />
     <ClInclude Include="Rational.h" />
+    <ClInclude Include="Rgb.h" />
+    <ClInclude Include="Rgb1025.h" />
     <ClInclude Include="SampleDescription.h" />
     <ClInclude Include="ShaderResourceViewDescription.h" />
+    <ClInclude Include="SharedResource.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteStruct.h" />
     <ClInclude Include="StateBlock.h" />
