@@ -7,12 +7,6 @@ internal:
 		RowPitch = Native->RowPitch;
 	}	
 		
-	inline void ToNative(D3D10_MAPPED_TEXTURE2D* Native)
-	{
-		Native->pData = (Data != nullptr && Data->Size > 0) ? Data->pMemory : 0;
-		Native->RowPitch = RowPitch;
-	}
-
 public:
 	UnmanagedMemory^ Data;
 	unsigned int RowPitch;

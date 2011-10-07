@@ -168,7 +168,12 @@
     <ClInclude Include="DepthStencilState.h" />
     <ClInclude Include="DeviceChild_ForwardedMethods.h" />
     <ClInclude Include="DeviceDXGI.h" />
+    <ClInclude Include="EffectDescription.h" />
     <ClInclude Include="EffectScalarVariable.h" />
+    <ClInclude Include="EffectShaderDescription.h" />
+    <ClInclude Include="EffectShaderVariable.h" />
+    <ClInclude Include="EffectTypeDescription.h" />
+    <ClInclude Include="EffectVariableDescription.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Float1025.h" />
     <ClInclude Include="Font.h" />
@@ -267,6 +272,7 @@
     <ClInclude Include="AdapterDescription.h" />
     <ClInclude Include="ModeDescription.h" />
     <ClInclude Include="OutputDescription.h" />
+    <ClInclude Include="PassShaderDescription.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Quaternion_ForwardedMethods.h" />
     <ClInclude Include="QueryDataPipelineStatistics.h" />

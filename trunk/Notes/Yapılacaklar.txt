@@ -2,8 +2,10 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* structure'larý yap
-  interface'leri yap
+* shader structs
+  d3dx10 structs
+
+* interface'leri yap
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 

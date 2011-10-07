@@ -5,10 +5,7 @@ internal:
 	{
 		Name = gcnew String(Native->Name);
 		Annotations = Native->Annotations;
-			
-		IA_InputSignature = gcnew UnmanagedMemory((unsigned int)Native->IAInputSignatureSize);
-		memcpy(IA_InputSignature->pMemory, Native->pIAInputSignature, IA_InputSignature->Size);
-			
+		IA_InputSignature = gcnew UnmanagedMemory(IntPtr(Native->pIAInputSignature), Native->IAInputSignatureSize);
 		StencilRef = Native->StencilRef;
 		SampleMask = Native->SampleMask;
 			
@@ -16,32 +13,6 @@ internal:
 		memcpy(PinnedBlendFactor, Native->BlendFactor, Marshal::SizeOf(Float4::typeid));
 	}
 
-	/* When needed this method will be converted to Marshal/Unmarshal pair	
-	inline D3D10_PASS_DESC ToNative()
-	{
-		D3D10_PASS_DESC Result;
-			
-		Result.Name = (LPCSTR)Marshal::StringToHGlobalAnsi(Name).ToPointer();
-		Result.Annotations = Annotations;
-
-		pin_ptr<Byte> PinnedIA_InputSignature = nullptr;
-		if (IA_InputSignature != nullptr && IA_InputSignature->Length > 0)
-		{
-			PinnedIA_InputSignature = &IA_InputSignature[0];
-			Result.IAInputSignatureSize = IA_InputSignature->Length;
-		}
-		else Result.IAInputSignatureSize = 0;
-		Result.pIAInputSignature = PinnedIA_InputSignature;
-
-		Result.StencilRef = StencilRef;
-		Result.SampleMask = SampleMask;
-
-		pin_ptr<Float4> PinnedBlendFactor = &BlendFactor;
-		memcpy(Result.BlendFactor, PinnedBlendFactor, Marshal::SizeOf(Float4::typeid));
-			
-		return Result;
-	}
-	*/
 public:
 	String^ Name;
 	unsigned int Annotations;
