@@ -8,13 +8,6 @@ internal:
 		DepthPitch = Native->DepthPitch;
 	}	
 		
-	inline void ToNative(D3D10_MAPPED_TEXTURE3D* Native)
-	{
-		Native->pData = (Data != nullptr && Data->Size > 0) ? Data->pMemory : 0;
-		Native->RowPitch = RowPitch;
-		Native->DepthPitch = DepthPitch;
-	}
-
 public:
 	UnmanagedMemory^ Data;
 	unsigned int RowPitch;

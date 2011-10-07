@@ -1,5 +1,12 @@
 public value class MappedRectangle : IEquatable<MappedRectangle>
 {
+internal:
+	inline void FromNative(DXGI_MAPPED_RECT* Native)
+	{
+		Bits = gcnew UnmanagedMemory(IntPtr(Native->pBits), 0);
+		Pitch = Native->Pitch;
+	}	
+		
 public:
 	unsigned int Pitch;
 	UnmanagedMemory^ Bits;
