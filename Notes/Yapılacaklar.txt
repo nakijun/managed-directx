@@ -2,8 +2,7 @@
 * Burda bitirdiklerini sık sık yapçaksan Hatırlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* shader structs
-  d3dx10 structs
+* d3dx10 structs
 
 * interface'leri yap
 
