@@ -195,9 +195,9 @@
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2D1Helper.h" />
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2DBaseTypes.h" />
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2Derr.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10_1.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10_1shader.h" />
+    <ClInclude Include="Microsoft DirectX SDK %28August 2009%29\Include\D3D10.h" />
+    <ClInclude Include="Microsoft DirectX SDK %28August 2009%29\Include\D3D10_1.h" />
+    <ClInclude Include="Microsoft DirectX SDK %28August 2009%29\Include\D3D10_1shader.h" />
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10effect.h" />
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d10misc.h" />
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d10sdklayers.h" />
@@ -286,8 +286,14 @@
     <ClInclude Include="Rgb1025.h" />
     <ClInclude Include="SampleDescription.h" />
     <ClInclude Include="SamplerDescription.h" />
+    <ClInclude Include="ShaderBufferDescription.h" />
+    <ClInclude Include="ShaderDescription.h" />
+    <ClInclude Include="ShaderInputBindDescription.h" />
     <ClInclude Include="ShaderResourceViewDescription.h" />
+    <ClInclude Include="ShaderTypeDescription.h" />
+    <ClInclude Include="ShaderVariableDescription.h" />
     <ClInclude Include="SharedResource.h" />
+    <ClInclude Include="SignatureParameterDescription.h" />
     <ClInclude Include="SO_DeclarationEntry.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteStruct.h" />

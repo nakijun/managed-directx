@@ -84,15 +84,6 @@
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2Derr.h">
       <Filter>%28DirectX SDK Includes And Libs%29</Filter>
     </ClInclude>
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10.h">
-      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
-    </ClInclude>
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10_1.h">
-      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
-    </ClInclude>
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10_1shader.h">
-      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
-    </ClInclude>
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10effect.h">
       <Filter>%28DirectX SDK Includes And Libs%29</Filter>
     </ClInclude>
@@ -759,6 +750,33 @@
     </ClInclude>
     <ClInclude Include="EffectShaderVariable.h">
       <Filter>_NotImplementedYet</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderBufferDescription.h">
+      <Filter>Direct3D10\Shader\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderDescription.h">
+      <Filter>Direct3D10\Shader\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK %28August 2009%29\Include\D3D10.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK %28August 2009%29\Include\D3D10_1.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Microsoft DirectX SDK %28August 2009%29\Include\D3D10_1shader.h">
+      <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderInputBindDescription.h">
+      <Filter>Direct3D10\Shader\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderTypeDescription.h">
+      <Filter>Direct3D10\Shader\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderVariableDescription.h">
+      <Filter>Direct3D10\Shader\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="SignatureParameterDescription.h">
+      <Filter>Direct3D10\Shader\Structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
