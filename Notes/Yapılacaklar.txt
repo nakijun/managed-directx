@@ -2,8 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* d3dx10 structs
-
 * interface'leri yap
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
@@ -12,8 +10,7 @@
     struct larý hep ref '%' (gereken durumlarda da out)olarak geçirdiðimiz için null alabilen durumlarda metodun o parametresi olmayan versiyonu yapýlacak.
     class [out] ise ve null alabiliyosa o parametre olmayan metod versiyonu yap. ör : Device.CreateTexture2D
 
-* Büyük karakterler arasý _ karakterini kontrol et. ör : JPG_Loader
-  Küçük olarak kabul edilen kýsaltmalar : Cpu, 
+* çoðu kýsaltmayý küçük kabul et. Ör : Cpu, Whql, Rgb, Bmp...
 
 * Dialog
     Ertelendi :
@@ -21,5 +18,3 @@
           ResetCaretBlink  
       AddEditBox
       AddListBox
-
-* XInput : DXUT_GAMEPAD, EnableXInput

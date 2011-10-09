@@ -7,6 +7,7 @@ using Xtro.MDX.Generic;
 using Xtro.MDX.Direct3D10;
 using Xtro.MDX.Direct3DX10;
 using Buffer = Xtro.MDX.Direct3D10.Buffer;
+using Constants = Xtro.MDX.Direct3D10.Constants;
 using D3D10X_Mesh = Xtro.MDX.Direct3DX10.Mesh;
 using Device = Xtro.MDX.Direct3D10.Device;
 using Usage = Xtro.MDX.Direct3D10.Usage;
@@ -779,11 +780,11 @@ namespace Xtro.MDX.Utilities
 
             var MeshDataPair = MeshPairArray[Mesh];
 
-            var Strides = new uint[(int)IA.VertexInputResourceSlotCount];
-            var Offsets = new uint[(int)IA.VertexInputResourceSlotCount];
-            var VertexBuffers = new Buffer[(int)IA.VertexInputResourceSlotCount];
+            var Strides = new uint[Constants.InputAssemblerVertexInputResourceSlotCount];
+            var Offsets = new uint[Constants.InputAssemblerVertexInputResourceSlotCount];
+            var VertexBuffers = new Buffer[Constants.InputAssemblerVertexInputResourceSlotCount];
 
-            if (MeshData.NumberOfVertexBuffers > (int)IA.VertexInputResourceSlotCount) return;
+            if (MeshData.NumberOfVertexBuffers > Constants.InputAssemblerVertexInputResourceSlotCount) return;
 
             for (var I = 0; I < MeshData.NumberOfVertexBuffers; I++)
             {
@@ -877,11 +878,11 @@ namespace Xtro.MDX.Utilities
 
             var MeshDataPair = MeshPairArray[Mesh];
 
-            var Strides = new uint[(int)IA.VertexInputResourceSlotCount];
-            var Offsets = new uint[(int)IA.VertexInputResourceSlotCount];
-            var VertexBuffers = new Buffer[(int)IA.VertexInputResourceSlotCount];
+            var Strides = new uint[Constants.InputAssemblerVertexInputResourceSlotCount];
+            var Offsets = new uint[Constants.InputAssemblerVertexInputResourceSlotCount];
+            var VertexBuffers = new Buffer[Constants.InputAssemblerVertexInputResourceSlotCount];
 
-            if (MeshData.NumberOfVertexBuffers > (int)IA.VertexInputResourceSlotCount) return;
+            if (MeshData.NumberOfVertexBuffers > Constants.InputAssemblerVertexInputResourceSlotCount) return;
 
             for (var I = 0; I < MeshData.NumberOfVertexBuffers; I++)
             {

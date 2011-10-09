@@ -41,11 +41,6 @@ namespace Tutorial14
             ScreenRasterizerMode = 7
         }
 
-        static double DegreeToRadian(double Degree)
-        {
-            return Degree * D3DX10Constants.PI / 180.0f;
-        }
-
         static readonly string[] QuadTechniques =
         {
             "RenderQuadSolid",
@@ -649,11 +644,11 @@ namespace Tutorial14
             // Update the camera's position based on user input 
             Camera.FrameMove(ElapsedTime);
 
-            if (Spinning) D3DX10Functions.MatrixRotationY(out World, (float)(60.0f * DegreeToRadian(Time)));
-            else D3DX10Functions.MatrixRotationY(out World, (float)DegreeToRadian(180.0f));
+            if (Spinning) D3DX10Functions.MatrixRotationY(out World, (float)(60.0f * D3DX10Functions.ToRadian(Time)));
+            else D3DX10Functions.MatrixRotationY(out World, (float)D3DX10Functions.ToRadian(180.0f));
 
             Matrix Rotation;
-            D3DX10Functions.MatrixRotationX(out Rotation, (float)DegreeToRadian(-90.0f));
+            D3DX10Functions.MatrixRotationX(out Rotation, (float)D3DX10Functions.ToRadian(-90.0f));
             World = Rotation * World;
         }
 

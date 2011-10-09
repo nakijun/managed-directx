@@ -11,11 +11,11 @@ public:
 		if (Floats == nullptr || Floats->Length < 4) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedX = &X;
-		memcpy(PinnedX, PinnedFloats, Marshal::SizeOf(Vector4::typeid));
+		pin_ptr<float> PinnedThis = &X;
+		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Vector4::typeid));
 	}
 
-	Vector4(array<Float16>^ Floats)
+	Vector4(array<Float16bit>^ Floats)
 	{
 		if (Floats == nullptr || Floats->Length < 4) return;
 

@@ -36,11 +36,6 @@ namespace Tutorial10
             PuffStatic = 6
         }
 
-        static double DegreeToRadian(double Degree)
-        {
-            return Degree * D3DX10Constants.PI / 180.0f;
-        }
-
         readonly ModelViewerCamera Camera;
         readonly DialogResourceManager DialogResourceManager = new DialogResourceManager();// manager for shared resources of dialogs
         readonly SettingsDialog SettingsDialog = new SettingsDialog();       // Device settings dialog
@@ -420,11 +415,11 @@ namespace Tutorial10
             // Update the camera's position based on user input 
             Camera.FrameMove(ElapsedTime);
 
-            if (Spinning) D3DX10Functions.MatrixRotationY(out World, (float)(60.0f * DegreeToRadian(Time)));
-            else D3DX10Functions.MatrixRotationY(out World, (float)DegreeToRadian(180.0f));
+            if (Spinning) D3DX10Functions.MatrixRotationY(out World, (float)(60.0f * D3DX10Functions.ToRadian(Time)));
+            else D3DX10Functions.MatrixRotationY(out World, (float)D3DX10Functions.ToRadian(180.0f));
 
             Matrix Rotation;
-            D3DX10Functions.MatrixRotationX(out Rotation, (float)DegreeToRadian(-90.0f));
+            D3DX10Functions.MatrixRotationX(out Rotation, (float)D3DX10Functions.ToRadian(-90.0f));
             World = Rotation * World;
         }
 

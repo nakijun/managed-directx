@@ -23,11 +23,6 @@ namespace Tutorial08
         [System.Security.SuppressUnmanagedCodeSecurity]
         static extern IntPtr PostMessage(IntPtr Wnd, int Msg, int ParamW, int ParamL);
 
-        static double DegreeToRadian(double Degree)
-        {
-            return Degree * D3DX10Constants.PI / 180.0f;
-        }
-
         struct SimpleVertex
         {
             // ReSharper disable NotAccessedField.Local
@@ -361,7 +356,7 @@ namespace Tutorial08
         void OnFrameMove(double Time, float ElapsedTime, object UserContext)
         {
             // Rotate cube around the origin
-            D3DX10Functions.MatrixRotationY(out World, (float)(60 * DegreeToRadian(Time)));
+            D3DX10Functions.MatrixRotationY(out World, (float)(60 * D3DX10Functions.ToRadian(Time)));
 
             // Modify the color
             MeshColor.X = (float)Math.Sin(Time * 1.0f) + 1.0f * 0.5f;

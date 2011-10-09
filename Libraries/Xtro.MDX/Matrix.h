@@ -38,11 +38,11 @@ public:
 		if (Floats == nullptr || Floats->Length < 16) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedValue11 = &Value11;
-		memcpy(PinnedValue11, PinnedFloats, Marshal::SizeOf(Matrix::typeid));
+		pin_ptr<float> PinnedThis = &Value11;
+		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Matrix::typeid));
 	}
 		
-	Matrix(array<Float16>^ Floats)
+	Matrix(array<Float16bit>^ Floats)
 	{
 		if (Floats == nullptr || Floats->Length < 16) return;
 

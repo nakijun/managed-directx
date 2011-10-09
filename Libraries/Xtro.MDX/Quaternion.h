@@ -11,11 +11,11 @@ public:
 		if (Floats == nullptr || Floats->Length < 4) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedX = &X;
-		memcpy(PinnedX, PinnedFloats, Marshal::SizeOf(Quaternion::typeid));
+		pin_ptr<float> PinnedThis = &X;
+		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Quaternion::typeid));
 	}
 
-	Quaternion(array<Float16>^ Floats)
+	Quaternion(array<Float16bit>^ Floats)
 	{
 		if (Floats == nullptr || Floats->Length < 4) return;
 

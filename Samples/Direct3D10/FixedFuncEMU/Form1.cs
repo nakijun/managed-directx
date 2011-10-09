@@ -38,11 +38,6 @@ namespace FixedFuncEMU
             // ReSharper restore UnusedMember.Local
         };
 
-        static double DegreeToRadian(double Degree)
-        {
-            return Degree * D3DX10Constants.PI / 180.0f;
-        }
-
         const byte MaximumBalls = 10;
 
         struct SceneVertex
@@ -218,7 +213,7 @@ namespace FixedFuncEMU
             // Update the camera's position based on user input 
             Camera.FrameMove(ElapsedTime);
 
-            var BlackHoleRads = (float)(Time * DegreeToRadian(RotateSpeed));
+            var BlackHoleRads = (float)(Time * D3DX10Functions.ToRadian(RotateSpeed));
             D3DX10Functions.MatrixRotationY(out BlackHole, BlackHoleRads);
 
             // Rotate the clip planes to align with the black holes
@@ -271,7 +266,7 @@ namespace FixedFuncEMU
                         // Found a free ball
                         Balls[I].StartTime = Time;
                         Matrix LaunchMatrix;
-                        D3DX10Functions.MatrixRotationY(out LaunchMatrix, (I % 2) * (float)DegreeToRadian(180.0f) + BlackHoleRads + (float)DegreeToRadian(BallLife * RotateSpeed));
+                        D3DX10Functions.MatrixRotationY(out LaunchMatrix, (I % 2) * (float)D3DX10Functions.ToRadian(180.0f) + BlackHoleRads + (float)D3DX10Functions.ToRadian(BallLife * RotateSpeed));
                         D3DX10Functions.Vector3TransformNormal(out Balls[I].VelStart, ref BallLaunch, ref LaunchMatrix);
                         D3DX10Functions.MatrixTranslation(out Balls[I].World, BallStart.X, BallStart.Y, BallStart.Z);
                         Found = true;
@@ -282,7 +277,7 @@ namespace FixedFuncEMU
 
             // Rotate the cookie matrix
             Matrix LightRot;
-            D3DX10Functions.MatrixRotationY(out LightRot, (float)DegreeToRadian(50.0f) * (float)Time);
+            D3DX10Functions.MatrixRotationY(out LightRot, (float)D3DX10Functions.ToRadian(50.0f) * (float)Time);
             var LightEye = new Vector3(0, 5.65f, 0);
             var LightAt = new Vector3(0, 0, 0);
             var Up = new Vector3(0, 0, 1);
@@ -466,7 +461,7 @@ namespace FixedFuncEMU
             }
             SceneLights.SetRawValue(Lights, 0, 8 * (uint)Marshal.SizeOf(typeof(SceneLight)));
 
-            D3DX10Functions.MatrixPerspectiveFovLH(out LightProj, (float)DegreeToRadian(90.0f), 1.0f, 0.1f, 100.0f);
+            D3DX10Functions.MatrixPerspectiveFovLH(out LightProj, (float)D3DX10Functions.ToRadian(90.0f), 1.0f, 0.1f, 100.0f);
 
             // Create the screenspace quad VB
             // This gets initialized in OnD3D10SwapChainResized

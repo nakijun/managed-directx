@@ -21,11 +21,6 @@ namespace Tutorial09
         [System.Security.SuppressUnmanagedCodeSecurity]
         static extern IntPtr PostMessage(IntPtr Wnd, int Msg, int ParamW, int ParamL);
 
-        static double DegreeToRadian(double Degree)
-        {
-            return Degree * D3DX10Constants.PI / 180.0f;
-        }
-
         Effect Effect;
         InputLayout VertexLayout;
         EffectTechnique Technique;
@@ -288,7 +283,7 @@ namespace Tutorial09
         void OnFrameMove(double Time, float ElapsedTime, object UserContext)
         {
             // Rotate cube around the origin
-            D3DX10Functions.MatrixRotationY(out World, (float)(60 * DegreeToRadian(Time)));
+            D3DX10Functions.MatrixRotationY(out World, (float)(60 * D3DX10Functions.ToRadian(Time)));
         }
 
         static bool OnModifyDeviceSettings(DeviceSettings DeviceSettings, object UserContext)

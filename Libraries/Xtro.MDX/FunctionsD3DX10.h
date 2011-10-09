@@ -28,6 +28,16 @@ private:
 	}
 
 public:	
+	static double ToRadian(double Degree)
+	{
+		return Degree * (D3DX_PI / 180.0);
+	}
+
+	static double ToDegree(double Radian)
+	{
+		return Radian * (180.0 / D3DX_PI);
+	}
+
 	static int SaveTextureToFile(Xtro::MDX::Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
 	{
 		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
