@@ -492,9 +492,6 @@
     <ClInclude Include="View.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="Float16.h">
-      <Filter>Direct3DX10\Structures</Filter>
-    </ClInclude>
     <ClInclude Include="ImageInfo.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
@@ -542,9 +539,6 @@
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="Texture3D.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantsD3D10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="RasterizerState.h">
@@ -606,9 +600,6 @@
     </ClInclude>
     <ClInclude Include="EnumsDXGI.h">
       <Filter>DXGI</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantsD3DX10.h">
-      <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="StateBlock.h">
       <Filter>_NotImplementedYet</Filter>
@@ -777,6 +768,36 @@
     </ClInclude>
     <ClInclude Include="SignatureParameterDescription.h">
       <Filter>Direct3D10\Shader\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributeRange.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributeWeights.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Float8.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Float16bit.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="IntersectionInfo.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldEpsilons.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinningChannel.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Direct3DX10\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantsD3DX10.h">
+      <Filter>Direct3DX10</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantsD3D10.h">
+      <Filter>Direct3D10</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

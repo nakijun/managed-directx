@@ -9,9 +9,9 @@ public:
 	{
 		if (Floats == nullptr || Floats->Length < 3) return;
 
-		X = Floats[0];
-		Y = Floats[1];
-		Z = Floats[2];
+		pin_ptr<float> PinnedFloats = &Floats[0];
+		pin_ptr<float> PinnedThis = &X;
+		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Vector3::typeid));
 	}
 
 	Vector3(Vector Vector)
@@ -21,7 +21,7 @@ public:
 		this->Z = Vector.Z;
 	}
 
-	Vector3(array<Float16>^ Floats)
+	Vector3(array<Float16bit>^ Floats)
 	{
 		if (Floats == nullptr || Floats->Length < 3) return;
 

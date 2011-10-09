@@ -278,21 +278,6 @@ public enum class FormatSupport
 	ShaderGather = D3D10_FORMAT_SUPPORT_SHADER_GATHER
 };
 
-public enum class IA
-{
-	DefaultIndexBufferOffsetInBytes = D3D10_IA_DEFAULT_INDEX_BUFFER_OFFSET_IN_BYTES,
-	DefaultPrimitiveTopology = D3D10_IA_DEFAULT_PRIMITIVE_TOPOLOGY,
-	DefaultVertexBufferOffsetInBytes = D3D10_IA_DEFAULT_VERTEX_BUFFER_OFFSET_IN_BYTES,
-	IndexInputResourceSlotCount = D3D10_IA_INDEX_INPUT_RESOURCE_SLOT_COUNT,
-	InstanceIdBitCount = D3D10_IA_INSTANCE_ID_BIT_COUNT,
-	IntegerArithmeticBitCount = D3D10_IA_INTEGER_ARITHMETIC_BIT_COUNT,
-	PrimitiveIdBitCount = D3D10_IA_PRIMITIVE_ID_BIT_COUNT,
-	VertexIdBitCount = D3D10_IA_VERTEX_ID_BIT_COUNT,
-	VertexInputResourceSlotCount = D3D10_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT,
-	VertexInputStructureElementsComponents = D3D10_IA_VERTEX_INPUT_STRUCTURE_ELEMENTS_COMPONENTS,
-	VertexInputStructureElementCount = D3D10_IA_VERTEX_INPUT_STRUCTURE_ELEMENT_COUNT
-};
-
 public enum class IncludeType
 {
 	Local = D3D10_INCLUDE_LOCAL,
@@ -953,33 +938,6 @@ public enum class ResourceReturnType
 	UInt = D3D10_RETURN_TYPE_UINT,
 	Float = D3D10_RETURN_TYPE_FLOAT,
 	Mixed = D3D10_RETURN_TYPE_MIXED
-};
-
-public enum class Requirement
-{
-	BlendObjectCountPerCentext = D3D10_REQ_BLEND_OBJECT_COUNT_PER_CONTEXT,
-	BufferResourceTexelCount2ToExp = D3D10_REQ_BUFFER_RESOURCE_TEXEL_COUNT_2_TO_EXP,	
-	ConstantBufferElementCount = D3D10_REQ_CONSTANT_BUFFER_ELEMENT_COUNT,
-	DepthStencilObjectCountPerContext = D3D10_REQ_DEPTH_STENCIL_OBJECT_COUNT_PER_CONTEXT,	
-	DrawIndexedIndexCount2ToExp = D3D10_REQ_DRAWINDEXED_INDEX_COUNT_2_TO_EXP,
-	DrawVertexCount2ToExp = D3D10_REQ_DRAW_VERTEX_COUNT_2_TO_EXP,
-	FilteringHW_AddressableResourceDimension = D3D10_REQ_FILTERING_HW_ADDRESSABLE_RESOURCE_DIMENSION,	
-	GeometyShaderInvocation32BitOutputComponentLimit = D3D10_REQ_GS_INVOCATION_32BIT_OUTPUT_COMPONENT_LIMIT,	
-	ImmediateConstantBufferElementCount = D3D10_REQ_IMMEDIATE_CONSTANT_BUFFER_ELEMENT_COUNT,
-	MaxAnisotropy = D3D10_REQ_MAXANISOTROPY,
-	MipLevels = D3D10_REQ_MIP_LEVELS,
-	MultiElementStructureSizeInBytes = D3D10_REQ_MULTI_ELEMENT_STRUCTURE_SIZE_IN_BYTES,	
-	RasterizerObjectCountPerContext = D3D10_REQ_RASTERIZER_OBJECT_COUNT_PER_CONTEXT,	
-	RenderToBufferWindowWidth = D3D10_REQ_RENDER_TO_BUFFER_WINDOW_WIDTH,	
-	ResourceSizeInMegabytes = D3D10_REQ_RESOURCE_SIZE_IN_MEGABYTES,
-	ResourceViewCountPerContext2ToExp = D3D10_REQ_RESOURCE_VIEW_COUNT_PER_CONTEXT_2_TO_EXP,	
-	SamplerObjectCountPerContext = D3D10_REQ_SAMPLER_OBJECT_COUNT_PER_CONTEXT,	
-	Texture1D_ArrayAxisDimension = D3D10_REQ_TEXTURE1D_ARRAY_AXIS_DIMENSION,
-	Texture1D_U_Dimension = D3D10_REQ_TEXTURE1D_U_DIMENSION,
-	Texture2D_ArrayAxisDimension = D3D10_REQ_TEXTURE2D_ARRAY_AXIS_DIMENSION,
-	Texture2D_U_OrV_Dimension = D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION,	
-	Texture3D_U_V_OrW_Dimension = D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION,	
-	TextureCubeDimension = D3D10_REQ_TEXTURECUBE_DIMENSION,
 };
 
 public enum class StencilOperation

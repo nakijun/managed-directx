@@ -20,11 +20,11 @@ public:
 		if (Floats == nullptr || Floats->Length < 4) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedR = &R;
-		memcpy(PinnedR, PinnedFloats, Marshal::SizeOf(Color::typeid));
+		pin_ptr<float> PinnedThis = &R;
+		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Color::typeid));
 	}
 
-	Color(array<Float16>^ Floats)
+	Color(array<Float16bit>^ Floats)
 	{
 		if (Floats == nullptr || Floats->Length < 4) return;
 

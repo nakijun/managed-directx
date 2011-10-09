@@ -18,7 +18,7 @@ public:
 		this->Y = Vector.Y;
 	}
 
-	Vector2(array<Float16>^ Floats)
+	Vector2(array<Float16bit>^ Floats)
 	{
 		if (Floats == nullptr || Floats->Length < 2) return;
 

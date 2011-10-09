@@ -3371,9 +3371,6 @@ namespace Xtro.MDX.Utilities
             {
                 GetState().Active = true;
 
-                // Enable controller rumble & input when activating app
-                EnableXInput(true);
-
                 // The GetMinimizedWhileFullscreen() varible is used instead of !DXUTIsWindowed()
                 // to handle the rare case toggling to windowed mode while the fullscreen application 
                 // is minimized and thus making the pause count wrong
@@ -3469,9 +3466,6 @@ namespace Xtro.MDX.Utilities
             {
                 GetState().Active = false;
 
-                // Disable any controller rumble & input when de-activating app
-                EnableXInput(false);
-
                 if (!IsWindowed())
                 {
                     // Going from full screen to a minimized state 
@@ -3479,16 +3473,6 @@ namespace Xtro.MDX.Utilities
                     GetState().MinimizedWhileFullscreen = true;
                 }
             }
-        }
-
-        //--------------------------------------------------------------------------------------
-        // Don't pause the game or deactive the window without first stopping rumble otherwise 
-        // the controller will continue to rumble
-        //--------------------------------------------------------------------------------------
-        // ReSharper disable UnusedParameter.Local
-        static void EnableXInput(bool B)
-        {
-            // ReSharper restore UnusedParameter.Local
         }
 
         public static void HandleKeyDownEvent(KeyEventArgs E)
