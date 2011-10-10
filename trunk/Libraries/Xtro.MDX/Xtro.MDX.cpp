@@ -20,17 +20,20 @@ namespace Xtro
 namespace MDX
 {
 	#include "Enums.h"
-	#include "Interface.h"
-	#include "IID_Converter.h"
-	#include "Unknown.h"
-	#include "Float4.h"
-	#include "Float8.h"
-	#include "Float1025.h"
+
 	#include "Boolean8.h"
 	#include "Byte2.h"
 	#include "Byte8.h"
 	#include "Byte16.h"
+	#include "Float4.h"
+	#include "Float8.h"
+	#include "Float1025.h"
+
+	#include "IID_Converter.h"
+	#include "Interface.h"
+	#include "Unknown.h"
 	#include "UnmanagedMemory.h"
+
 namespace Generic
 {
 	#include "UnmanagedMemoryGeneric.h"
@@ -40,29 +43,31 @@ namespace DXGI
 {
 	ref class Device;
 
-	#include "Object.h"
 	#include "EnumsDXGI.h"
+
+	#include "AdapterDescription.h"
 	#include "FrameStatistics.h"
-	#include "Rgb.h"
-	#include "Rgb1025.h"
-	#include "GammaControl.h"
 	#include "GammaControlCapabilities.h"
 	#include "MappedRectangle.h"
 	#include "OutputDescription.h"
 	#include "Rational.h"
 	#include "ModeDescription.h"
-	#include "Output.h"
-	#include "AdapterDescription.h"
-	#include "Adapter.h"
+	#include "Rgb.h"
+	#include "Rgb1025.h"
+	#include "GammaControl.h"
 	#include "SampleDescription.h"
 	#include "SharedResource.h"
 	#include "SurfaceDescription.h"
 	#include "SwapChainDescription.h"
-	#include "SwapChain.h"
-	#include "Factory.h"
+
+	#include "Object.h"
 	#include "DeviceSubObject.h"
 	#include "ResourceDXGI.h"
 	#include "Surface.h"
+	#include "Output.h"
+	#include "SwapChain.h"
+	#include "Adapter.h"
+	#include "Factory.h"
 	#include "DeviceDXGI.h"
 	#include "FunctionsDXGI.h"
 }

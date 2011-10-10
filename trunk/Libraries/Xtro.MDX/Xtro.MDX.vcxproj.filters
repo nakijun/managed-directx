@@ -453,25 +453,13 @@
     <ClInclude Include="InputLayout.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="Output.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="RenderTargetView.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="ResourceD3D10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceDXGI.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderResourceView.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="Surface.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="SwapChain.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="Texture2D.h">
@@ -806,6 +794,18 @@
       <Filter>Base\Classes</Filter>
     </ClInclude>
     <ClInclude Include="DeviceSubObject.h">
+      <Filter>DXGI\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Output.h">
+      <Filter>DXGI\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceDXGI.h">
+      <Filter>DXGI\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>DXGI\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="SwapChain.h">
       <Filter>DXGI\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>

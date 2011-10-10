@@ -133,6 +133,14 @@ public enum class MakeWindowAssociationFlag
 	NoPrintScreen = DXGI_MWA_NO_PRINT_SCREEN
 };
 
+[Flags]
+public enum class MapFlag
+{
+	Read = DXGI_MAP_READ,	
+	Write = DXGI_MAP_WRITE,	
+	Discard = DXGI_MAP_DISCARD
+};
+
 public enum class ModeRotation
 {
 	Unspecified = DXGI_MODE_ROTATION_UNSPECIFIED,
@@ -172,6 +180,15 @@ public enum class ResidencyFlag
     ResidentInsharedMemory = DXGI_RESIDENCY_RESIDENT_IN_SHARED_MEMORY,
     EvictedToDisk = DXGI_RESIDENCY_EVICTED_TO_DISK,
 };				  
+
+public enum class ResourcePriority
+{
+	Minimum = DXGI_RESOURCE_PRIORITY_MINIMUM,
+	Low = DXGI_RESOURCE_PRIORITY_LOW,
+	Normal = DXGI_RESOURCE_PRIORITY_NORMAL,
+	High = DXGI_RESOURCE_PRIORITY_HIGH,
+	Maximum = DXGI_RESOURCE_PRIORITY_MAXIMUM
+};
 
 [Flags]
 public enum class SwapChainFlag

@@ -12,6 +12,15 @@ internal:
 	}
 
 public:
+	int FindClosestMatchingMode(ModeDescription% ModeToMatch, [Out] ModeDescription% ClosestMatch, Unknown^ ConcernedDevice)
+	{
+		pin_ptr<ModeDescription> PinnedModeToMatch = &ModeToMatch;
+		pin_ptr<ModeDescription> PinnedClosestMatch = &ClosestMatch;
+		IUnknown* pConcernedDevice = ConcernedDevice == nullptr ? 0 : ConcernedDevice->pUnknown;
+
+		return pOutput->FindClosestMatchingMode((DXGI_MODE_DESC*)PinnedModeToMatch, (DXGI_MODE_DESC*)PinnedClosestMatch, pConcernedDevice);
+	}
+
 	int GetDescription([Out] OutputDescription% Description)
 	{
 		DXGI_OUTPUT_DESC NativeDescription;
@@ -30,5 +39,64 @@ public:
 		int Result = pOutput->GetDisplayModeList((DXGI_FORMAT)EnumerationFormat, (unsigned int)Flags, (unsigned int*)PinnedNumberOfModes, (DXGI_MODE_DESC*)PinnedDescriptions);
 
 		return Result;
+	}
+
+	int GetDisplaySurfaceData(Surface^ Destination)
+	{
+		IDXGISurface* pDestination = Destination == nullptr ? 0 : Destination->pSurface;
+
+		return pOutput->GetDisplaySurfaceData(pDestination);
+	}
+
+	int GetFrameStatistics([Out] FrameStatistics% Stats)
+	{
+		pin_ptr<FrameStatistics> PinnedStats = &Stats;
+
+		return pOutput->GetFrameStatistics((DXGI_FRAME_STATISTICS*)PinnedStats);
+	}
+
+	int GetGammaControl(array<GammaControl>^ Array)
+	{
+		pin_ptr<GammaControl> PinnedArray = Array != nullptr && Array->Length > 0 ? &Array[0] : nullptr;
+
+		return pOutput->GetGammaControl((DXGI_GAMMA_CONTROL*)PinnedArray);
+	}
+
+	int GetGammaControlCapabilities([Out] GammaControlCapabilities% GammaCapabilities)
+	{
+		pin_ptr<GammaControlCapabilities> PinnedGammaCapabilities = &GammaCapabilities;
+
+		return pOutput->GetGammaControlCapabilities((DXGI_GAMMA_CONTROL_CAPABILITIES*)PinnedGammaCapabilities);
+	}
+
+	void ReleaseOwnership()
+	{
+		pOutput->ReleaseOwnership();
+	}
+
+	int SetDisplaySurface(Surface^ ScanoutSurface)
+	{
+		IDXGISurface* pScanoutSurface = ScanoutSurface == nullptr ? 0 : ScanoutSurface->pSurface;
+
+		return pOutput->SetDisplaySurface(pScanoutSurface);
+	}
+
+	int SetGammaControl(array<GammaControl>^ Array)
+	{
+		pin_ptr<GammaControl> PinnedArray = Array != nullptr && Array->Length > 0 ? &Array[0] : nullptr;
+
+		return pOutput->SetGammaControl((DXGI_GAMMA_CONTROL*)PinnedArray);
+	}
+
+	int TakeOwnership(Unknown^ Device, bool Exclusive)
+	{
+		IUnknown *pDevice = Device == nullptr ? 0 : Device->pUnknown;
+
+		return pOutput->TakeOwnership(pDevice, Exclusive);
+	}
+
+	int WaitForVerticalBlank()
+	{
+		return pOutput->WaitForVBlank();
 	}
 };
