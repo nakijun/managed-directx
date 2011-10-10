@@ -12,11 +12,15 @@ internal:
 	}
 
 public:
-	int CheckInterfaceSupport(Guid InterfaceName, [Out] long long% UserModeDriverVersion)
+	int CheckInterfaceSupport(Type^ InterfaceName, [Out] long long% UserModeDriverVersion)
 	{
+		Guid RIID;
+		try { RIID = (Guid)InterfaceName->GetField("IID", BindingFlags::DeclaredOnly | BindingFlags::NonPublic | BindingFlags::Static)->GetValue(nullptr); }
+		catch (...) { RIID = Guid::Empty; }
+
 		pin_ptr<long long> PinnedUserModeDriverVersion = &UserModeDriverVersion;
 
-		return pAdapter->CheckInterfaceSupport(IID_Converter::ToNative(InterfaceName), (LARGE_INTEGER*)PinnedUserModeDriverVersion);
+		return pAdapter->CheckInterfaceSupport(IID_Converter::ToNative(RIID), (LARGE_INTEGER*)PinnedUserModeDriverVersion);
 	}
 
 	int EnumerateOutputs(unsigned int OutputNo, [Out] Output^% Output)

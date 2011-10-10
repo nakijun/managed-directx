@@ -176,7 +176,7 @@ namespace Tutorial11
             if (Result < 0) return Result;
             Result = SettingsDialog.OnCreateDevice(Device);
             if (Result < 0) return Result;
-            Result = D3DX10Functions.CreateFont(Device, 15, 0, (uint)FontWeight.Bold, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.Default | FontPitchAndFamily.DontCare, "Arial", out Font2);
+            Result = D3DX10Functions.CreateFont(Device, 15, 0, (uint)FontWeight.Bold, 1, false, FontCharacterSet.Default, FontPrecision.Default, FontQuality.Default, FontPitchAndFamilyFlag.Default | FontPitchAndFamilyFlag.DontCare, "Arial", out Font2);
             if (Result < 0) return Result;
             Result = D3DX10Functions.CreateSprite(Device, 512, out Sprite);
             if (Result < 0) return Result;

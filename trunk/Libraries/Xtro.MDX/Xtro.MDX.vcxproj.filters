@@ -64,6 +64,15 @@
     <Filter Include="%28DirectX SDK Includes And Libs%29\x86">
       <UniqueIdentifier>{7c2752e2-20be-4182-a736-89173b86d406}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Base\Structures">
+      <UniqueIdentifier>{c689e998-b0a3-4617-97c0-9471e37202af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Interfaces">
+      <UniqueIdentifier>{bc12fa24-8a4c-4434-a35a-cf99d1448cc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Classes">
+      <UniqueIdentifier>{6c9ef9ba-6fd0-4c0a-8215-4982cbe7719e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h">
@@ -390,21 +399,6 @@
     <ClInclude Include="TechniqueDescription.h">
       <Filter>Direct3D10\Effect\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Float4.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="IID_Converter.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Interface.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Unknown.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="UnmanagedMemory.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="Blob.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -418,9 +412,6 @@
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="DeviceD3D10.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceSubObject.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
@@ -529,9 +520,6 @@
     <ClInclude Include="Box.h">
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceDXGI.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="Texture1D.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -580,9 +568,6 @@
     <ClInclude Include="TextureCubeSRV.h">
       <Filter>Direct3D10\Resource\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="UnmanagedMemoryGeneric.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -615,18 +600,6 @@
     </ClInclude>
     <ClInclude Include="BlendDescription.h">
       <Filter>Direct3D10\Core\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="Boolean8.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Byte8.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Byte2.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Byte16.h">
-      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="EffectScalarVariable.h">
       <Filter>_NotImplementedYet</Filter>
@@ -681,9 +654,6 @@
     </ClInclude>
     <ClInclude Include="GammaControlCapabilities.h">
       <Filter>DXGI\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="Float1025.h">
-      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="SharedResource.h">
       <Filter>DXGI\Structures</Filter>
@@ -772,9 +742,6 @@
     <ClInclude Include="AttributeWeights.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Float8.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="Float16bit.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
@@ -797,6 +764,48 @@
       <Filter>Direct3D10</Filter>
     </ClInclude>
     <ClInclude Include="Adapter.h">
+      <Filter>DXGI\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceDXGI.h">
+      <Filter>DXGI\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Boolean8.h">
+      <Filter>Base\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Byte16.h">
+      <Filter>Base\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Byte2.h">
+      <Filter>Base\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Byte8.h">
+      <Filter>Base\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Float1025.h">
+      <Filter>Base\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Float4.h">
+      <Filter>Base\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Float8.h">
+      <Filter>Base\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface.h">
+      <Filter>Base\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Unknown.h">
+      <Filter>Base\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="UnmanagedMemoryGeneric.h">
+      <Filter>Base\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="UnmanagedMemory.h">
+      <Filter>Base\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="IID_Converter.h">
+      <Filter>Base\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceSubObject.h">
       <Filter>DXGI\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
