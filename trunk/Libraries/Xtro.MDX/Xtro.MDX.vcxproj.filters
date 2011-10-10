@@ -405,9 +405,6 @@
     <ClInclude Include="UnmanagedMemory.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="Adapter.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="Blob.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -798,6 +795,9 @@
     </ClInclude>
     <ClInclude Include="ConstantsD3D10.h">
       <Filter>Direct3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="Adapter.h">
+      <Filter>DXGI\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
