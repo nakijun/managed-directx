@@ -12,6 +12,24 @@ internal:
 	}
 
 public:
+	int CreateSurface(SurfaceDescription% Description, unsigned int NumberOfSurfaces, UsageFlag Usage, SharedResource% SharedResource, [Out] Surface^% Surface)
+	{
+		pin_ptr<SurfaceDescription> PinnedDescription = &Description;
+		pin_ptr<Xtro::MDX::DXGI::SharedResource> PinnedSharedResource = &SharedResource;
+
+		IDXGISurface* pSurface = 0;
+		int Result = pDevice->CreateSurface((DXGI_SURFACE_DESC*)PinnedDescription, NumberOfSurfaces, (DXGI_USAGE)Usage, (DXGI_SHARED_RESOURCE*)PinnedSharedResource, &pSurface);
+
+		if (pSurface) 
+		{
+			try { Surface = (Xtro::MDX::DXGI::Surface^)Interfaces[IntPtr(pSurface)]; }
+			catch (KeyNotFoundException^) { Surface = gcnew Xtro::MDX::DXGI::Surface(IntPtr(pSurface)); }
+		}
+		else Surface = nullptr;
+
+		return Result;
+	}
+
 	int GetAdapter([Out] Adapter^% Adapter)
 	{
 		IDXGIAdapter* pAdapter = 0;
@@ -25,5 +43,42 @@ public:
 		else Adapter = nullptr;
 
 		return Result;
+	}
+
+	int GetGpuThreadPriority([Out] int% Priority)
+	{
+		pin_ptr<int> PinnedPriority = &Priority;
+
+		return pDevice->GetGPUThreadPriority((int*)PinnedPriority);
+	}
+
+	int QueryResourceResidency(array<Unknown^>^ Resources, [Out] ResidencyFlag% ResidencyStatus, unsigned int NumberOfResources)
+	{
+		pin_ptr<ResidencyFlag> PinnedResidencyStatus = &ResidencyStatus;
+
+		IUnknown** pResources = 0;
+		try
+		{
+			if (Resources != nullptr && Resources->Length > 0)
+			{
+				unsigned int ResourcesCount = Resources->Length;
+				pResources = new IUnknown*[ResourcesCount];
+				for (unsigned int ResourcesNo = 0; ResourcesNo < ResourcesCount; ResourcesNo++)
+				{
+					pResources[ResourcesNo] = Resources[ResourcesNo] == nullptr ? 0 : Resources[ResourcesNo]->pUnknown;
+				}
+			}
+
+			return pDevice->QueryResourceResidency(pResources, (DXGI_RESIDENCY*)PinnedResidencyStatus, NumberOfResources);
+		}
+		finally
+		{
+			if (pResources) delete[] pResources;
+		}
+	}
+
+	int SetGpuThreadPriority(int Priority)
+	{
+		return pDevice->SetGPUThreadPriority(Priority);
 	}
 };

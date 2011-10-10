@@ -38,10 +38,9 @@ namespace Generic
 
 namespace DXGI
 {
+	ref class Device;
+
 	#include "Object.h"
-	#include "DeviceSubObject.h"
-	#include "Surface.h"
-	#include "ResourceDXGI.h"
 	#include "EnumsDXGI.h"
 	#include "FrameStatistics.h"
 	#include "Rgb.h"
@@ -61,6 +60,9 @@ namespace DXGI
 	#include "SwapChainDescription.h"
 	#include "SwapChain.h"
 	#include "Factory.h"
+	#include "DeviceSubObject.h"
+	#include "ResourceDXGI.h"
+	#include "Surface.h"
 	#include "DeviceDXGI.h"
 	#include "FunctionsDXGI.h"
 }

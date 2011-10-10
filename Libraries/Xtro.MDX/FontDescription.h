@@ -30,7 +30,7 @@ public:
     FontCharacterSet CharacterSet;
     FontPrecision OutputPrecision;
     FontQuality Quality;
-    FontPitchAndFamily PitchAndFamily;
+    FontPitchAndFamilyFlag PitchAndFamily;
     String^ FaceName;
 
 	static bool operator == (FontDescription Left, FontDescription Right)

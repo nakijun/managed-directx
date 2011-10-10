@@ -1,6 +1,8 @@
 ----------------------------------------------------------------------
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
+           
+* DXGI Output
 
 * interface'leri yap
 * function'larý yap

@@ -39,7 +39,7 @@ public enum class FontDrawFlag
 };
 
 [Flags]
-public enum class FontPitchAndFamily
+public enum class FontPitchAndFamilyFlag
 {
 	Default = DEFAULT_PITCH,
 	Fixed = FIXED_PITCH,

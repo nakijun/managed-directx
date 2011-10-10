@@ -166,7 +166,7 @@ public enum class PresentFlag
 };
 
 [Flags]
-public enum class Residency
+public enum class ResidencyFlag
 {
     Resident = DXGI_RESIDENCY_FULLY_RESIDENT,
     ResidentInsharedMemory = DXGI_RESIDENCY_RESIDENT_IN_SHARED_MEMORY,
