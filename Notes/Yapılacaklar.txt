@@ -3,6 +3,7 @@
 ----------------------------------------------------------------------
 
 * interface'leri yap
+* function'larý yap
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 

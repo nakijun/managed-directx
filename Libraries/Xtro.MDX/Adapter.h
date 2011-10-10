@@ -12,6 +12,13 @@ internal:
 	}
 
 public:
+	int CheckInterfaceSupport(Guid InterfaceName, [Out] long long% UserModeDriverVersion)
+	{
+		pin_ptr<long long> PinnedUserModeDriverVersion = &UserModeDriverVersion;
+
+		return pAdapter->CheckInterfaceSupport(IID_Converter::ToNative(InterfaceName), (LARGE_INTEGER*)PinnedUserModeDriverVersion);
+	}
+
 	int EnumerateOutputs(unsigned int OutputNo, [Out] Output^% Output)
 	{
 		IDXGIOutput* pOutput = 0;
