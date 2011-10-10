@@ -31,16 +31,30 @@ public:
 		return Result;
 	}
 
-	int Present(unsigned int SyncInterval, PresentFlag Flags)
+	int GetContainingOutput([Out] Output^% Output)
 	{
-		return pSwapChain->Present(SyncInterval, (unsigned int)Flags);
+		IDXGIOutput* pOutput = 0;
+		return pSwapChain->GetContainingOutput(&pOutput);
+
+		if (pOutput)
+		{	
+			try { Output = (Xtro::MDX::DXGI::Output^)Interfaces[IntPtr(pOutput)]; }
+			catch (KeyNotFoundException^) { Output = gcnew Xtro::MDX::DXGI::Output(IntPtr(pOutput)); }
+		}
+		else Output = nullptr;
 	}
 
-	int SetFullscreenState(bool Fullscreen, Output^ Target)
+	int GetDescription([Out] SwapChainDescription% Description)
 	{
-		IDXGIOutput* pTarget = Target == nullptr ? 0 : Target->pOutput;
+		pin_ptr<SwapChainDescription> PinnedDescription = &Description;
+		return pSwapChain->GetDesc((DXGI_SWAP_CHAIN_DESC*)PinnedDescription);
+	}
 
-		return pSwapChain->SetFullscreenState(Fullscreen, pTarget);
+	int GetFrameStatistics([Out] FrameStatistics% Stats)
+	{
+		pin_ptr<FrameStatistics> PinnedStats = &Stats;
+
+		return pSwapChain->GetFrameStatistics((DXGI_FRAME_STATISTICS*)PinnedStats);
 	}
 
 	int GetFullscreenState([Out] bool% Fullscreen, [Out] Output^% Target)
@@ -58,19 +72,6 @@ public:
 		else Target = nullptr;
 	}
 
-	int GetContainingOutput([Out] Output^% Output)
-	{
-		IDXGIOutput* pOutput = 0;
-		return pSwapChain->GetContainingOutput(&pOutput);
-
-		if (pOutput)
-		{	
-			try { Output = (Xtro::MDX::DXGI::Output^)Interfaces[IntPtr(pOutput)]; }
-			catch (KeyNotFoundException^) { Output = gcnew Xtro::MDX::DXGI::Output(IntPtr(pOutput)); }
-		}
-		else Output = nullptr;
-	}
-
 	int GetFullscreenState([Out] bool% Fullscreen)
 	{
 		pin_ptr<bool> PinnedFullscreen = &Fullscreen;
@@ -78,10 +79,21 @@ public:
 		return pSwapChain->GetFullscreenState((BOOL*)PinnedFullscreen, 0);
 	}
 
-	int GetDescription([Out] SwapChainDescription% Description)
+	int GetLastPresentCount([Out] unsigned int% LastPresentCount)
 	{
-		pin_ptr<SwapChainDescription> PinnedDescription = &Description;
-		return pSwapChain->GetDesc((DXGI_SWAP_CHAIN_DESC*)PinnedDescription);
+		pin_ptr<unsigned int> PinnedLastPresentCount = &LastPresentCount;
+
+		return pSwapChain->GetLastPresentCount(PinnedLastPresentCount);
+	}
+
+	int Present(unsigned int SyncInterval, PresentFlag Flags)
+	{
+		return pSwapChain->Present(SyncInterval, (unsigned int)Flags);
+	}
+
+	int ResizeBuffers(unsigned int BufferCount, unsigned int Width, unsigned int Height, Format NewFormat, SwapChainFlag SwapChainFlags)
+	{
+		return pSwapChain->ResizeBuffers(BufferCount, Width, Height, (DXGI_FORMAT)NewFormat, (unsigned int)SwapChainFlags);
 	}
 
 	int ResizeTarget(ModeDescription% NewTargetParameters)
@@ -90,9 +102,10 @@ public:
 		return pSwapChain->ResizeTarget((DXGI_MODE_DESC*)PinnedNewTargetParameters);
 	}
 
-	int ResizeBuffers(unsigned int BufferCount, unsigned int Width, unsigned int Height, Format NewFormat, SwapChainFlag SwapChainFlags)
+	int SetFullscreenState(bool Fullscreen, Output^ Target)
 	{
-		return pSwapChain->ResizeBuffers(BufferCount, Width, Height, (DXGI_FORMAT)NewFormat, (unsigned int)SwapChainFlags);
-	}
+		IDXGIOutput* pTarget = Target == nullptr ? 0 : Target->pOutput;
 
+		return pSwapChain->SetFullscreenState(Fullscreen, pTarget);
+	}
 };
