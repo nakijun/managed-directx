@@ -26,7 +26,7 @@ public:
 		DXGI_OUTPUT_DESC NativeDescription;
 		int Result = pOutput->GetDesc(&NativeDescription);
 
-		if (Result >= 0) Description.FromNative(&NativeDescription);
+		Description.FromNative(&NativeDescription);
 
 		return Result;
 	}

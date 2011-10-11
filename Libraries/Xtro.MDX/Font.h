@@ -12,11 +12,6 @@ internal:
 	}
 
 public:
-	int PreloadCharacters(unsigned int First, unsigned int Last)
-	{
-		return pFont->PreloadCharacters(First, Last);
-	}
-
 	int DrawText(Sprite^ Sprite, String^ String, int Count, System::Drawing::Rectangle% Rectangle, FontDrawFlag Format, Color% Color)
 	{
 		ID3DX10Sprite* pSprite = Sprite == nullptr ? 0 : Sprite->pSprite;
@@ -35,6 +30,17 @@ public:
 		return IntPtr(pFont->GetDC());
 	}
 
+	int GetDescription([Out] FontDescription% Description)
+	{
+		D3DX10_FONT_DESC NativeDescription;
+
+		int Result = pFont->GetDesc(&NativeDescription);
+
+		Description.FromNative(&NativeDescription);
+
+		return Result;
+	}
+
 	int GetDevice([Out] Xtro::MDX::Direct3D10::Device^% Device_)
 	{
 		ID3D10Device* pDevice = 0;
@@ -48,5 +54,70 @@ public:
 		else Device_ = nullptr;
 
 		return Result;
+	}
+
+	int GetGlyphData(unsigned int Glyph, [Out] ShaderResourceView^ Texture, System::Drawing::Rectangle% BlackBox, Point% CellInc)
+	{
+		RECT NativeBlackBox = { BlackBox.Left, BlackBox.Top, BlackBox.Right, BlackBox.Bottom };
+		POINT NativeCellInc = { CellInc.X, CellInc.Y };
+
+		ID3D10ShaderResourceView* pTexture = 0;
+		int Result = pFont->GetGlyphData(Glyph, &pTexture, &NativeBlackBox, &NativeCellInc);
+
+		if (pTexture)
+		{	
+			try { Texture = (ShaderResourceView^)Interfaces[IntPtr(pTexture)]; }
+			catch (KeyNotFoundException^) { Texture = gcnew ShaderResourceView(IntPtr(pTexture)); }
+		}
+		else Texture = nullptr;
+
+		return Result;
+	}
+
+	bool GetTextMetrics([Out] TextMetrics% TextMetrics)
+	{
+		TEXTMETRIC NativeTextMetrics;
+
+		bool Result = pFont->GetTextMetricsW(&NativeTextMetrics) != 0;
+														 
+		TextMetrics.Ascent = NativeTextMetrics.tmAscent;
+		TextMetrics.AverageCharWidth = NativeTextMetrics.tmAveCharWidth;
+		TextMetrics.BreakChar = NativeTextMetrics.tmBreakChar;
+		TextMetrics.CharSet = (TextMetricsCharacterSet)NativeTextMetrics.tmCharSet;
+		TextMetrics.DefaultChar = NativeTextMetrics.tmDefaultChar;
+		TextMetrics.Descent = NativeTextMetrics.tmDescent;
+		TextMetrics.DigitizedAspectX = NativeTextMetrics.tmDigitizedAspectX;
+		TextMetrics.DigitizedAspectY = NativeTextMetrics.tmDigitizedAspectY;
+		TextMetrics.ExternalLeading = NativeTextMetrics.tmExternalLeading;
+		TextMetrics.FirstChar = NativeTextMetrics.tmFirstChar;
+		TextMetrics.Height = NativeTextMetrics.tmHeight;
+		TextMetrics.InternalLeading = NativeTextMetrics.tmInternalLeading;
+		TextMetrics.Italic = NativeTextMetrics.tmItalic != 0;
+		TextMetrics.LastChar = NativeTextMetrics.tmLastChar;
+		TextMetrics.MaxCharWidth = NativeTextMetrics.tmMaxCharWidth;
+		TextMetrics.Overhang = NativeTextMetrics.tmOverhang;
+		TextMetrics.PitchAndFamily = (TextMetricsPitchAndFamilyValues)NativeTextMetrics.tmPitchAndFamily;
+		TextMetrics.StruckOut = NativeTextMetrics.tmStruckOut != 0;
+		TextMetrics.Underlined = NativeTextMetrics.tmUnderlined != 0;
+		TextMetrics.Weight = NativeTextMetrics.tmWeight;
+
+		return Result;
+	}
+
+	int PreloadCharacters(unsigned int First, unsigned int Last)
+	{
+		return pFont->PreloadCharacters(First, Last);
+	}
+
+	int PreloadGlyphs(unsigned int First, unsigned int Last)
+	{
+		return pFont->PreloadGlyphs(First, Last);
+	}
+
+	int PreloadText(String^ String, int Count)
+	{				 
+		IntPtr pString = Marshal::StringToHGlobalUni(String);
+		try { return pFont->PreloadText((LPCWSTR)pString.ToPointer(), Count); }
+		finally { Marshal::FreeHGlobal(pString); }
 	}
 };

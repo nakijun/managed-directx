@@ -17,7 +17,7 @@ public:
 		D3D10_PASS_DESC NativeDescription;
 		int Result = pEffectPass->GetDesc(&NativeDescription);
 
-		if (Result >= 0) Description.FromNative(&NativeDescription);
+		Description.FromNative(&NativeDescription);
 
 		return Result;
 	}

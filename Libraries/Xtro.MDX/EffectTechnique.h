@@ -31,7 +31,7 @@ public:
 		D3D10_TECHNIQUE_DESC NativeDescription;
 		int Result = pEffectTechnique->GetDesc(&NativeDescription);
 
-		if (Result >= 0) Description.FromNative(&NativeDescription);
+		Description.FromNative(&NativeDescription);
 
 		return Result;
 	}
