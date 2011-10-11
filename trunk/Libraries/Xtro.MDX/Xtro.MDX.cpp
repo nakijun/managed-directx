@@ -9,6 +9,8 @@
 
 using namespace System;
 using namespace System::IO;
+using namespace System::Drawing;
+using namespace System::Windows::Forms::VisualStyles;
 using namespace System::Collections::Generic;
 using namespace System::Globalization;
 using namespace System::Reflection;
@@ -69,6 +71,7 @@ namespace DXGI
 	#include "Adapter.h"
 	#include "Factory.h"
 	#include "DeviceDXGI.h"
+
 	#include "FunctionsDXGI.h"
 }
 
@@ -78,8 +81,9 @@ namespace Direct3D10
 
 	ref class Device;
 
-	#include "ConstantsD3D10.h"
 	#include "EnumsD3D10.h"
+	#include "ConstantsD3D10.h"
+
 	#include "BlendDescription.h"
 	#include "StateBlock.h"
 	#include "Include.h"
@@ -164,7 +168,6 @@ namespace Direct3D10
 	#include "DeviceD3D10.h"
 	#include "DeviceChild_ForwardedMethods.h"
 	#include "StateBlockMask.h"
-	#include "FunctionsD3D10.h"
 	#include "EffectPass.h"
 	#include "EffectTechnique.h"
 	#include "EffectVariable.h"
@@ -180,6 +183,8 @@ namespace Direct3D10
 	#include "Blob.h"
 	#include "Asynchronous.h"
 	#include "Counter.h"
+
+	#include "FunctionsD3D10.h"
 }
 
 namespace Direct3DX10
@@ -188,29 +193,32 @@ namespace Direct3DX10
 
 	#include "EnumsD3DX10.h"
 	#include "ConstantsD3DX10.h"
+
 	#include "AttributeRange.h"
 	#include "AttributeWeights.h"
 	#include "Float16bit.h"
-	#include "Vector.h"
-	#include "Vector2.h"
-	#include "Vector3.h"
-	#include "Vector4.h"
-	#include "Plane.h"
-	#include "Quaternion.h"
 	#include "Color.h"
-	#include "Matrix.h"
-	#include "SpriteStruct.h"
-	#include "Sprite.h"
-	#include "Font.h"
-	#include "MeshBuffer.h"
-	#include "Mesh.h"
 	#include "FontDescription.h"
 	#include "ImageInfo.h"
-	#include "IntersectionInfo.h"
-	#include "WeldEpsilons.h"
-	#include "SkinningChannel.h"
 	#include "ImageLoadInfo.h"
+	#include "IntersectionInfo.h"
+	#include "Matrix.h"
+	#include "Plane.h"
+	#include "Quaternion.h"
+	#include "SkinningChannel.h"
 	#include "TextureLoadInfo.h"
+	#include "Vector.h"
+	#include "Vector2.h"
+	#include "SpriteStruct.h"
+	#include "Vector3.h"
+	#include "Vector4.h"
+	#include "WeldEpsilons.h"
+
+	#include "MeshBuffer.h"
+	#include "Mesh.h"
+	#include "Sprite.h"
+	#include "Font.h"
+
 	#include "FunctionsD3DX10.h"
 	#include "Quaternion_ForwardedMethods.h"
 }

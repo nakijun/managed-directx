@@ -43,7 +43,7 @@ public:
 		DXGI_ADAPTER_DESC NativeDescription;
 		int Result = pAdapter->GetDesc(&NativeDescription);
 
-		if (Result >= 0) Description.FromNative(&NativeDescription);
+		Description.FromNative(&NativeDescription);
 
 		return Result;
 	}

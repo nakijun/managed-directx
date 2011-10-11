@@ -73,6 +73,9 @@
     <Filter Include="Base\Classes">
       <UniqueIdentifier>{6c9ef9ba-6fd0-4c0a-8215-4982cbe7719e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Direct3DX10\Interfaces">
+      <UniqueIdentifier>{6ab7d7d9-1bf8-495d-a356-f997e555ca26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h">
@@ -496,9 +499,6 @@
     <ClInclude Include="FontDescription.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -807,6 +807,9 @@
     </ClInclude>
     <ClInclude Include="SwapChain.h">
       <Filter>DXGI\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Direct3DX10\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

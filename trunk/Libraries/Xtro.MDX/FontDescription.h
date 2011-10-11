@@ -1,6 +1,21 @@
 public value class FontDescription : IEquatable<FontDescription>
 {
 internal:
+	inline void FromNative(D3DX10_FONT_DESC* Native)
+	{
+		Height = Native->Height;
+		Width = Native->Width;
+		Weight = (FontWeight)Native->Weight;
+		MipLevels = Native->MipLevels;
+		Italic = Native->Italic != 0;
+		CharacterSet = (FontCharacterSet)Native->CharSet;
+		OutputPrecision = (FontPrecision)Native->OutputPrecision;
+		Quality = (FontQuality)Native->Quality;
+		PitchAndFamily = (FontPitchAndFamilyFlag)Native->PitchAndFamily;
+
+		FaceName = gcnew String(Native->FaceName);
+	}
+
 	// No need to marshal/unmarshal pair since FaceName has fixed size
 	inline void ToNative(D3DX10_FONT_DESC* Native)
 	{
