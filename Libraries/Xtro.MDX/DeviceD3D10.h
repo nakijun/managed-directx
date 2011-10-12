@@ -294,15 +294,13 @@ public:
 		int Result = 0;
 		ID3D10InputLayout* pInputLayout = 0;
 
-		int ElementCount = 0;
 		D3D10_INPUT_ELEMENT_DESC* pInputElementDescriptions = 0;
 		try
 		{
 			if (InputElementDescriptions != nullptr && InputElementDescriptions->Length > 0)
 			{
-				ElementCount = InputElementDescriptions->Length;
-				pInputElementDescriptions = new D3D10_INPUT_ELEMENT_DESC[ElementCount];
-				for (int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+				pInputElementDescriptions = new D3D10_INPUT_ELEMENT_DESC[InputElementDescriptions->Length];
+				for (int ElementNo = 0; ElementNo < InputElementDescriptions->Length; ElementNo++)
 				{
 					InputElementDescriptions[ElementNo].Marshal(&pInputElementDescriptions[ElementNo]);
 				}
@@ -314,7 +312,7 @@ public:
 		{
 			if (InputElementDescriptions != nullptr)
 			{
-				for (int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+				for (int ElementNo = 0; ElementNo < InputElementDescriptions->Length; ElementNo++)
 				{
 					InputElementDescriptions[ElementNo].Unmarshal();
 				}

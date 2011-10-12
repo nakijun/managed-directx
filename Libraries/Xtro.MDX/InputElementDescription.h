@@ -4,6 +4,18 @@ private:
 	IntPtr pSemanticName;
 
 internal: 		
+	inline void FromNative(D3D10_INPUT_ELEMENT_DESC* Native)
+	{
+		SemanticName = gcnew String(Native->SemanticName);
+			
+		SemanticIndex = Native->SemanticIndex;
+		Format = (Xtro::MDX::DXGI::Format)Native->Format;
+		InputSlot = Native->InputSlot;
+		AlignedByteOffset = Native->AlignedByteOffset;
+		InputSlotClass = (InputClassification)Native->InputSlotClass;
+		InstanceDataStepRate = Native->InstanceDataStepRate;
+	}
+
 	inline void Marshal(D3D10_INPUT_ELEMENT_DESC* Native)
 	{
 		pSemanticName = Marshal::StringToHGlobalAnsi(SemanticName);

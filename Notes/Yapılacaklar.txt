@@ -1,7 +1,12 @@
 ----------------------------------------------------------------------
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
-           
+
+* ID3DX10Mesh::Optimize
+
+* UnmanagedMemory'ye çevrilebilecek array parametreler varsa ara çevir.
+* Xtro::MDX::Generic::UnmanagedMemory yapýlabilcek yerleri tara ve yap.
+
 * interface'leri yap
 * function'larý yap
 
