@@ -15,7 +15,7 @@ public enum class CpuOptimization
     SSE2 = D3DX_SSE2_OPTIMIZED,
     SSE = D3DX_SSE_OPTIMIZED 
 };
-
+		 
 public enum class Error
 {
     CannotModifyIndexBuffer = D3DX10_ERR_CANNOT_MODIFY_INDEX_BUFFER,
@@ -96,6 +96,13 @@ public enum class NormalMapFlag
     Mirror = D3DX10_NORMALMAP_MIRROR,
     InvertSign = D3DX10_NORMALMAP_INVERTSIGN,
     ComputeOcclusion = D3DX10_NORMALMAP_COMPUTE_OCCLUSION
+};
+
+public enum class SkinInfoScale
+{
+	None = D3DX10_SKININFO_NO_SCALING,
+	To1 = D3DX10_SKININFO_SCALE_TO_1,
+	ToTotal = D3DX10_SKININFO_SCALE_TO_TOTAL
 };
 
 [Flags]

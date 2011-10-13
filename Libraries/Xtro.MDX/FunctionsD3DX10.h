@@ -332,7 +332,7 @@ public:
 
 	static int CreateEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect, [Out] Blob^% Errors)
 	{
-		LPCVOID pData = Data == nullptr ? 0 : Data->pMemory;
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 		ID3D10EffectPool* pEffectPool = EffectPool == nullptr ? 0 : EffectPool->pEffectPool;
@@ -391,7 +391,7 @@ public:
 	
 	static int CreateEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect)
 	{
-		LPCVOID pData = Data == nullptr ? 0 : Data->pMemory;
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 		ID3D10EffectPool* pEffectPool = EffectPool == nullptr ? 0 : EffectPool->pEffectPool;
