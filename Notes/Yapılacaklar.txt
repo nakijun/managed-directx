@@ -2,9 +2,11 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* ID3DX10Mesh::Optimize
+* ID3DX10SkinInfo 
 
 * UnmanagedMemory'ye çevrilebilecek array parametreler varsa ara çevir.
+  içinde String^ yada Object^ gibi referanslar olmayan her array çevrilmeli mi ?
+
 * Xtro::MDX::Generic::UnmanagedMemory yapýlabilcek yerleri tara ve yap.
 
 * interface'leri yap

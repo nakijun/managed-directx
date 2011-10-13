@@ -556,9 +556,6 @@
     <ClInclude Include="TextureCubeSRV.h">
       <Filter>Direct3D10\Resource\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="MeshBuffer.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="Quaternion.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
@@ -809,6 +806,9 @@
       <Filter>Direct3DX10\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
+      <Filter>Direct3DX10\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshBuffer.h">
       <Filter>Direct3DX10\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>

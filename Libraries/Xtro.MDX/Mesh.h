@@ -289,6 +289,45 @@ public:
 		return Result;
 	}
 
+	int Optimize(unsigned int Flags, Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ FaceRemap, [Out] Blob^% VertexRemap)
+	{
+		unsigned int* pFaceRemap = FaceRemap == nullptr ? 0 : (unsigned int*)FaceRemap->pMemory;
+
+		ID3D10Blob* pVertexRemap = 0;
+
+		int Result = pMesh->Optimize(Flags,	pFaceRemap, &pVertexRemap);
+
+		if (pVertexRemap)
+		{
+			try { VertexRemap = (Blob^)Interfaces[IntPtr(pVertexRemap)]; }
+			catch (KeyNotFoundException^) { VertexRemap = gcnew Blob(IntPtr(pVertexRemap)); }					
+		}
+		else VertexRemap = nullptr;
+
+		return Result;
+	}
+
+	int SetAdjacencyData(Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ Adjacency)
+	{
+		unsigned int* pAdjacency = Adjacency == nullptr ? 0 : (unsigned int*)Adjacency->pMemory;
+
+		return pMesh->SetAdjacencyData(pAdjacency);
+	}
+
+	int SetAttributeData(Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ Data)
+	{
+		unsigned int* pData = Data == nullptr ? 0 : (unsigned int*)Data->pMemory;
+
+		return pMesh->SetAttributeData(pData);
+	}
+
+	int SetAttributeTable(Xtro::MDX::Generic::UnmanagedMemory<AttributeRange>^ AttribTable, unsigned int AttributeTableSize)
+	{
+		D3DX10_ATTRIBUTE_RANGE* pAttribTable = AttribTable == nullptr ? 0 : (D3DX10_ATTRIBUTE_RANGE*)AttribTable->pMemory;
+
+		return pMesh->SetAttributeTable(pAttribTable, AttributeTableSize);
+	}
+
 	int SetIndexData(UnmanagedMemory^ Data, unsigned int Indices)
 	{
 		void* pData = Data == nullptr ? 0 : Data->pMemory;
@@ -296,6 +335,13 @@ public:
 		return pMesh->SetIndexData(pData, Indices);
 	}
 
+	int SetPointRepData(Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ PointReps)
+	{
+		unsigned int* pPointReps = PointReps == nullptr ? 0 : (unsigned int*)PointReps->pMemory;
+
+		return pMesh->SetPointRepData(pPointReps);
+	}
+	
 	int SetVertexData(unsigned int Buffer, UnmanagedMemory^ Data)
 	{
 		void* pData = Data == nullptr ? 0 : Data->pMemory;

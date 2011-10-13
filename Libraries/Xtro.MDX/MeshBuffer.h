@@ -12,6 +12,11 @@ internal:
 	}
 
 public:
+	SIZE_T GetSize()
+	{
+		return pMeshBuffer->GetSize();
+	}
+
 	int Map([Out] UnmanagedMemory^% Data)
 	{
 		SIZE_T Size;
