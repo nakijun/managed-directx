@@ -499,9 +499,6 @@
     <ClInclude Include="FontDescription.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="TextureLoadInfo.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
@@ -809,6 +806,15 @@
       <Filter>Direct3DX10\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="MeshBuffer.h">
+      <Filter>Direct3DX10\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinInfo.h">
+      <Filter>Direct3DX10\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Direct3DX10\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixStack.h">
       <Filter>Direct3DX10\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>

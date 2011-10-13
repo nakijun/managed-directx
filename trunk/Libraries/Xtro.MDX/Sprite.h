@@ -17,17 +17,6 @@ public:
 		return pSprite->Begin((D3DX10_SPRITE_FLAG)Flags);
 	}
 
-	int End()
-	{
-		return pSprite->End();
-	}
-
-	int SetProjectionTransform(Matrix% ProjectionTransform)
-	{
-		pin_ptr<Matrix> PinnedProjectionTransform = &ProjectionTransform;
-		return pSprite->SetProjectionTransform((D3DXMATRIX*)PinnedProjectionTransform);
-	}
-
 	int DrawSpritesBuffered(array<SpriteStruct>^ Sprites, unsigned int SpriteCount)
 	{
 		D3DX10_SPRITE* pSprites = 0;
@@ -52,6 +41,35 @@ public:
 		}
 	}
 
+	int DrawSpritesImmediate(array<SpriteStruct>^ Sprites, unsigned int SpriteCount, unsigned int SpriteSize, unsigned int Flags)
+	{
+		D3DX10_SPRITE* pSprites = 0;
+
+		try
+		{
+			if (Sprites != nullptr && Sprites->Length > 0)
+			{
+				unsigned int ElementCount = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
+				pSprites = new D3DX10_SPRITE[ElementCount];
+				for (unsigned int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+				{
+					Sprites[ElementNo].ToNative(&pSprites[ElementNo]);
+				}
+			}
+
+			return pSprite->DrawSpritesImmediate(pSprites, SpriteCount, SpriteSize, Flags);
+		}
+		finally
+		{
+			if (pSprites) delete[] pSprites;
+		}
+	}
+
+	int End()
+	{
+		return pSprite->End();
+	}
+
 	int Flush()
 	{
 		return pSprite->Flush();
@@ -70,5 +88,29 @@ public:
 		else Device_ = nullptr;
 
 		return Result;
+	}
+
+	int GetProjectionTransform([Out] Matrix% ProjectionTransform)
+	{
+		pin_ptr<Matrix> PinnedProjectionTransform = &ProjectionTransform;
+		return pSprite->GetProjectionTransform((D3DXMATRIX*)PinnedProjectionTransform);
+	}
+
+	int GetViewTransform([Out] Matrix% ViewTransform)
+	{
+		pin_ptr<Matrix> PinnedViewTransform = &ViewTransform;
+		return pSprite->GetViewTransform((D3DXMATRIX*)PinnedViewTransform);
+	}
+
+	int SetProjectionTransform(Matrix% ProjectionTransform)
+	{
+		pin_ptr<Matrix> PinnedProjectionTransform = &ProjectionTransform;
+		return pSprite->SetProjectionTransform((D3DXMATRIX*)PinnedProjectionTransform);
+	}
+
+	int SetViewTransform(Matrix% ViewTransform)
+	{
+		pin_ptr<Matrix> PinnedViewTransform = &ViewTransform;
+		return pSprite->SetViewTransform((D3DXMATRIX*)PinnedViewTransform);
 	}
 };

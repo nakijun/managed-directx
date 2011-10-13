@@ -3,7 +3,7 @@ public value class SubResourceData : IEquatable<SubResourceData>
 internal:
 	inline void ToNative(D3D10_SUBRESOURCE_DATA* Native)
 	{
-		Native->pSysMem = (SystemMemory != nullptr && SystemMemory->Size > 0) ? SystemMemory->pMemory : 0;
+		Native->pSysMem = SystemMemory == nullptr ? 0 : SystemMemory->pMemory;
 		Native->SysMemPitch = SystemMemoryPitch;
 		Native->SysMemSlicePitch = SystemMemorySlicePitch;
 	}

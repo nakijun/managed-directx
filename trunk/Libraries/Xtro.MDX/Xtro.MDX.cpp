@@ -216,7 +216,9 @@ namespace Direct3DX10
 
 	#include "MeshBuffer.h"
 	#include "Mesh.h"
+	#include "SkinInfo.h"
 	#include "Sprite.h"
+	#include "MatrixStack.h"
 	#include "Font.h"
 
 	#include "FunctionsD3DX10.h"
