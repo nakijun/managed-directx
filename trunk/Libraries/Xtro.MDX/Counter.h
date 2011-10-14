@@ -12,4 +12,9 @@ internal:
 	}
 
 public:
+	void GetDescription([Out] CounterDescription% Description)
+	{
+		pin_ptr<CounterDescription> PinnedDescription = &Description;
+		pCounter->GetDesc((D3D10_COUNTER_DESC*)PinnedDescription);
+	}
 };

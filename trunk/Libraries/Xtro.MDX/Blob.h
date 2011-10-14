@@ -13,4 +13,20 @@ internal:
 	}
 
 public:
+	UnmanagedMemory^ GetBufferPointer()
+	{
+		void* pResult = pBlob->GetBufferPointer();
+
+		UnmanagedMemory^ Result;
+
+		if (pResult) Result = gcnew UnmanagedMemory(IntPtr(pResult), 0);
+		else Result = nullptr;
+
+		return Result;
+	}
+
+	SIZE_T GetBufferSize()
+	{
+		return pBlob->GetBufferSize();
+	}
 };
