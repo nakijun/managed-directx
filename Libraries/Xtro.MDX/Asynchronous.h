@@ -28,4 +28,9 @@ public:
 
 		return pAsynchronous->GetData(pData, DataSize, (unsigned int)GetDataFlags);
 	}
+
+	unsigned int GetDataSize()
+	{
+		return pAsynchronous->GetDataSize();
+	}
 };

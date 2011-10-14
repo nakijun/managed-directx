@@ -402,9 +402,6 @@
     <ClInclude Include="TechniqueDescription.h">
       <Filter>Direct3D10\Effect\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Blob.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="Buffer.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -517,12 +514,6 @@
     <ClInclude Include="RasterizerDescription.h">
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Asynchronous.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="Counter.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderResourceViewDescription.h">
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
@@ -570,9 +561,6 @@
     </ClInclude>
     <ClInclude Include="StateBlockMask.h">
       <Filter>Direct3D10\Core\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="BlendState.h">
-      <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="DeviceChild_ForwardedMethods.h">
       <Filter>_NotImplementedYet</Filter>
@@ -816,6 +804,18 @@
     </ClInclude>
     <ClInclude Include="MatrixStack.h">
       <Filter>Direct3DX10\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Asynchronous.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendState.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Blob.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Counter.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

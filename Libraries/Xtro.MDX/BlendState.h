@@ -12,4 +12,9 @@ internal:
 	}
 
 public:
+	void GetDescription([Out] BlendDescription% Description)
+	{
+		pin_ptr<BlendDescription> PinnedDescription = &Description;
+		pBlendState->GetDesc((D3D10_BLEND_DESC*)PinnedDescription);
+	}
 };
