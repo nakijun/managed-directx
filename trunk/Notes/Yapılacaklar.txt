@@ -2,6 +2,14 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
+* Object in GetPrivateData'ý düzelt.
+
+* DeviceChild
+
+* Device interface atlandý.
+
+* SO geçen bazý isimleri StreamOutput yap
+
 * UnmanagedMemory'ye çevrilebilecek array parametreler varsa ara çevir.
   içinde String^ yada Object^ gibi referanslar olmayan her array çevrilmeli mi ?
 

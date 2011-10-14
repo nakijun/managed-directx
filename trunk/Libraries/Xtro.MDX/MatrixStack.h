@@ -12,13 +12,11 @@ internal:
 	}
 
 public:
-	void GetTop([Out] Matrix% Out)
+	Xtro::MDX::Generic::UnmanagedMemory<Matrix>^ GetTop()
 	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		
-		D3DXMATRIX* pOut = pMatrixStack->GetTop();
+		D3DXMATRIX* pResult = pMatrixStack->GetTop();
 
-		memcpy(PinnedOut, pOut, sizeof(D3DXMATRIX));
+		return gcnew Xtro::MDX::Generic::UnmanagedMemory<Matrix>(IntPtr(pResult), sizeof(D3DXMATRIX));
 	}
 
 	int LoadIdentity()
