@@ -408,9 +408,6 @@
     <ClInclude Include="DepthStencilView.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceChild.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="DeviceD3D10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -561,9 +558,6 @@
     </ClInclude>
     <ClInclude Include="StateBlockMask.h">
       <Filter>Direct3D10\Core\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceChild_ForwardedMethods.h">
-      <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="BlendDescription.h">
       <Filter>Direct3D10\Core\Structures</Filter>
@@ -815,6 +809,15 @@
       <Filter>Direct3D10\Core\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="Counter.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceChild.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceChild_ForwardedMethods.h">
       <Filter>Direct3D10\Core\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>

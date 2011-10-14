@@ -171,6 +171,14 @@ public enum class DeviceStateType
 	Predication = D3D10_DST_PREDICATION
 };
 	   
+[Flags]
+public enum class DebugFeatureFlag
+{
+	FlushPerRenderOperation = D3D10_DEBUG_FEATURE_FLUSH_PER_RENDER_OP,
+	FinishPerRenderOperation = D3D10_DEBUG_FEATURE_FINISH_PER_RENDER_OP,
+	PresentPerRenderOperation = D3D10_DEBUG_FEATURE_PRESENT_PER_RENDER_OP
+};																		 
+
 public enum class DepthStencilViewDimension
 {
 	Unknown = D3D10_DSV_DIMENSION_UNKNOWN,

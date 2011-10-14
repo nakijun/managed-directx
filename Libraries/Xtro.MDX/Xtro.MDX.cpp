@@ -183,6 +183,7 @@ namespace Direct3D10
 	#include "Blob.h"
 	#include "Asynchronous.h"
 	#include "Counter.h"
+	#include "Debug.h"
 
 	#include "FunctionsD3D10.h"
 }

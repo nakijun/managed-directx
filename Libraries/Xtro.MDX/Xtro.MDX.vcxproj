@@ -165,6 +165,7 @@
     <ClInclude Include="ConstantsD3D10.h" />
     <ClInclude Include="CounterDescription.h" />
     <ClInclude Include="CounterInfo.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="DepthStencilDescription.h" />
     <ClInclude Include="DepthStencilOperationDescription.h" />
     <ClInclude Include="DepthStencilState.h" />
