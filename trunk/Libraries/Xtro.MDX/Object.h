@@ -38,32 +38,25 @@ public:
 		return pObject->GetPrivateData(IID_Converter::ToNative(Name), PinnedDataSize, 0);
 	}
 
-	int GetPrivateData(Guid Name, unsigned int DataSize, [Out] UnmanagedMemory^% Data, [Out] Unknown^% Unknown)
+	int GetPrivateData(Guid Name, unsigned int DataSize, UnmanagedMemory^ Data)
 	{
 		pin_ptr<unsigned int> PinnedDataSize = &DataSize;
-
-		Data = nullptr;
-		Unknown = nullptr;
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
 		
-		int Result = pObject->GetPrivateData(IID_Converter::ToNative(Name), PinnedDataSize, 0);
+		return pObject->GetPrivateData(IID_Converter::ToNative(Name), PinnedDataSize, pData);
+	}
 
-		if (DataSize > 0)
+	int GetPrivateData(Guid Name, [Out] Unknown^% Unknown)
+	{
+		void* pData = 0;
+		
+		unsigned int DataSize = Marshal::SizeOf(IntPtr::typeid);
+		int Result = pObject->GetPrivateData(IID_Converter::ToNative(Name), &DataSize, &pData);
+
+		if (pData)
 		{
-			Data = gcnew UnmanagedMemory(DataSize);
-			Result = pObject->GetPrivateData(IID_Converter::ToNative(Name), PinnedDataSize, Data->pMemory);
-
-			if (DataSize == sizeof(IntPtr))
-			{
-				void* pData = 0;
-				memcpy(&pData, Data->pMemory, sizeof(IntPtr));
-
-				try
-				{
-					Unknown = (Xtro::MDX::Unknown^)Interfaces[IntPtr(pData)];
-					Data = nullptr;
-				}
-				catch (KeyNotFoundException^) { }
-			}
+			try	{ Unknown = (Xtro::MDX::Unknown^)Interfaces[IntPtr(pData)];	}
+			catch (KeyNotFoundException^) { Unknown = nullptr; }
 		}
 
 		return Result;

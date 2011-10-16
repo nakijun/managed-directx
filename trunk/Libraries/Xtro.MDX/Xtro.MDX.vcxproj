@@ -185,6 +185,7 @@
     <ClInclude Include="FrameStatistics.h" />
     <ClInclude Include="GammaControl.h" />
     <ClInclude Include="GammaControlCapabilities.h" />
+    <ClInclude Include="InfoQueue.h" />
     <ClInclude Include="InfoQueueFilter.h" />
     <ClInclude Include="InfoQueueFilterDescription.h" />
     <ClInclude Include="IntersectionInfo.h" />
@@ -274,16 +275,19 @@
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xnamath.h" />
     <ClInclude Include="FunctionsDXGI.h" />
     <ClInclude Include="Factory.h" />
+    <ClInclude Include="Multithread.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="AdapterDescription.h" />
     <ClInclude Include="ModeDescription.h" />
     <ClInclude Include="OutputDescription.h" />
     <ClInclude Include="PassShaderDescription.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Predicate.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Quaternion_ForwardedMethods.h" />
+    <ClInclude Include="Query.h" />
     <ClInclude Include="QueryDataPipelineStatistics.h" />
-    <ClInclude Include="QueryDataSO_Statistics.h" />
+    <ClInclude Include="QueryDataStreamOutputStatistics.h" />
     <ClInclude Include="QueryDataTimestampDisjoint.h" />
     <ClInclude Include="QueryDescription.h" />
     <ClInclude Include="RasterizerDescription.h" />
@@ -293,6 +297,7 @@
     <ClInclude Include="Rgb1025.h" />
     <ClInclude Include="SampleDescription.h" />
     <ClInclude Include="SamplerDescription.h" />
+    <ClInclude Include="SamplerState.h" />
     <ClInclude Include="ShaderBufferDescription.h" />
     <ClInclude Include="ShaderDescription.h" />
     <ClInclude Include="ShaderInputBindDescription.h" />
@@ -303,7 +308,7 @@
     <ClInclude Include="SignatureParameterDescription.h" />
     <ClInclude Include="SkinInfo.h" />
     <ClInclude Include="SkinningChannel.h" />
-    <ClInclude Include="SO_DeclarationEntry.h" />
+    <ClInclude Include="StreamOutputDeclarationEntry.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteStruct.h" />
     <ClInclude Include="StateBlock.h" />

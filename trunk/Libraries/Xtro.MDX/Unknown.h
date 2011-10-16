@@ -22,7 +22,7 @@ public:
 	{
 		unsigned int Result = pUnknown->Release();
 
-		if(Result == 0) Interfaces.Remove(InterfacePointer);
+		if (Result == 0) Interfaces.Remove(InterfacePointer);
 
 		return Result;
 	}

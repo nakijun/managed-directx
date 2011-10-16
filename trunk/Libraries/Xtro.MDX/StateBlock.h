@@ -12,13 +12,34 @@ internal:
 	}
 
 public:
+	int Apply()
+	{
+		return pStateBlock->Apply();
+	}
+
 	int Capture()
 	{
 		return pStateBlock->Capture();
 	}
 
-	int Apply()
+	int GetDevice([Out] Device^% Device)
 	{
-		return pStateBlock->Apply();
+		ID3D10Device* pDevice = 0;
+
+		int Result = pStateBlock->GetDevice(&pDevice);
+
+		if (pDevice) 
+		{
+			try { Device = (Xtro::MDX::Direct3D10::Device^)Interfaces[IntPtr(pDevice)]; }
+			catch (KeyNotFoundException^) { Device = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }
+		}
+		else Device = nullptr;
+
+		return Result;
+	}
+
+	int ReleaseAllDeviceObjects()
+	{
+		return pStateBlock->ReleaseAllDeviceObjects();
 	}
 };

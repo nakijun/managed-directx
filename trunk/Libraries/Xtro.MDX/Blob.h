@@ -19,8 +19,7 @@ public:
 
 		UnmanagedMemory^ Result;
 
-		if (pResult) Result = gcnew UnmanagedMemory(IntPtr(pResult), 0);
-		else Result = nullptr;
+		Result = pResult ? gcnew UnmanagedMemory(IntPtr(pResult), 0) : nullptr;
 
 		return Result;
 	}

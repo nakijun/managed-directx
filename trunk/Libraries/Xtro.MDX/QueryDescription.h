@@ -1,7 +1,7 @@
 public value class QueryDescription : IEquatable<QueryDescription>
 {
 public:
-    Query Query;
+    QueryEnum Query;
     QueryMiscellaneousFlag MiscellaneousFlags;
 
 	static bool operator == (QueryDescription Left, QueryDescription Right)
@@ -32,7 +32,7 @@ public:
 
 	virtual bool Equals(QueryDescription Value)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::Query> PinnedThis = &Query;
+		pin_ptr<QueryEnum> PinnedThis = &Query;
 		pin_ptr<QueryDescription> PinnedValue = &Value;
 
 		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(QueryDescription::typeid)) == 0;

@@ -874,7 +874,7 @@ public enum class PrimitiveTopology
 	TriangleStripAdjacency = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP_ADJ
 };
 
-public enum class Query
+public enum class QueryEnum
 {
 	Event = D3D10_QUERY_EVENT,
 	Occlusion = D3D10_QUERY_OCCLUSION,

@@ -23,8 +23,7 @@ public:
 		void* pData = 0;
 		int Result = pTexture1D->Map(Subresource, (D3D10_MAP)MapType, (unsigned int)MapFlags, &pData);
 
-		if (pData) Data = gcnew UnmanagedMemory(IntPtr(pData), 0);
-		else Data = nullptr;
+		Data = pData ? gcnew UnmanagedMemory(IntPtr(pData), 0) : nullptr;
 
 		return Result;
 	}

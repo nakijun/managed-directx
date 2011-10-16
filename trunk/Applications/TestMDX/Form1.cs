@@ -96,14 +96,23 @@ namespace TestMDX
             UnmanagedMemory MemoryData;
 
             uint Size = 0;
-            Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
+            Factory.GetPrivateData(Name, out Size);
+            Factory.GetPrivateData(Name, out InterfaceData);
+            MemoryData = new UnmanagedMemory(1000);
+            Factory.GetPrivateData(Name, Size, MemoryData);
+
             Factory.SetPrivateDataInterface(Name, Factory);
-            Size = 0;
-            Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
+            Factory.GetPrivateData(Name, out InterfaceData);
             a = InterfaceData.Release();
-        //    Factory.SetPrivateData(Name, 4, new byte[4] { 1, 2, 3, 4 });
+
+            MemoryData = new UnmanagedMemory(64);
+            MemoryData.Write(0, new[] { 1, 2, 3, 4 });
+            Factory.SetPrivateData(Name, MemoryData.Size, MemoryData);
             Size = 0;
-            Factory.GetPrivateData(Name, out MemoryData, ref Size, out InterfaceData);
+            Factory.GetPrivateData(Name, out Size);
+            MemoryData = new UnmanagedMemory(Size);
+            Factory.GetPrivateData(Name, Size, MemoryData);
+            MemoryData.Get<uint>(0, out a);
 
             Adapter Adapter;
             Factory.EnumerateAdapters(0, out Adapter);

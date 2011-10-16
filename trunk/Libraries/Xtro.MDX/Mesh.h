@@ -235,8 +235,7 @@ public:
 
 		int Result = pMesh->GetVertexDescription(&pDescription, PinnedDeclarationCount);
 
-		if (pDescription) Description = gcnew Xtro::MDX::Generic::UnmanagedMemory<InputElementDescription>(IntPtr((void*)pDescription), sizeof(D3D10_INPUT_ELEMENT_DESC) * DeclarationCount);
-		else Description = nullptr;
+		Description = pDescription ? gcnew Xtro::MDX::Generic::UnmanagedMemory<InputElementDescription>(IntPtr((void*)pDescription), sizeof(D3D10_INPUT_ELEMENT_DESC) * DeclarationCount) : nullptr;
 
 		return Result;
 	}

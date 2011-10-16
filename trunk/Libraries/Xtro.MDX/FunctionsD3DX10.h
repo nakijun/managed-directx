@@ -3,28 +3,25 @@ public ref class Functions abstract sealed
 private:
 	inline static Xtro::MDX::Direct3D10::Resource^ CreateTextureByType(ID3D10Resource*	pResource)
 	{
-		Xtro::MDX::Direct3D10::Resource^ Result;
-
 		D3D10_RESOURCE_DIMENSION Type;
 		pResource->GetType(&Type);
 
 		switch (Type)
 		{
 			case D3D10_RESOURCE_DIMENSION_TEXTURE1D : 
-				try { Result = (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
-				catch (KeyNotFoundException^) { Result = gcnew Texture1D(IntPtr(pResource)); }
+				try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
+				catch (KeyNotFoundException^) { return gcnew Texture1D(IntPtr(pResource)); }
 				break;
 			case D3D10_RESOURCE_DIMENSION_TEXTURE2D : 
-				try { Result = (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
-				catch (KeyNotFoundException^) { Result = gcnew Texture2D(IntPtr(pResource)); }
+				try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
+				catch (KeyNotFoundException^) { return gcnew Texture2D(IntPtr(pResource)); }
 				break;
 			case D3D10_RESOURCE_DIMENSION_TEXTURE3D : 
-				try { Result = (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
-				catch (KeyNotFoundException^) { Result = gcnew Texture3D(IntPtr(pResource)); }
+				try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
+				catch (KeyNotFoundException^) { return gcnew Texture3D(IntPtr(pResource)); }
 				break;
+			default: return nullptr;
 		}
-
-		return Result;
 	}
 
 public:	
@@ -164,14 +161,10 @@ public:
 		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
 		ID3D10Resource* pDestinationTexture = DestinationTexture == nullptr ? 0 : DestinationTexture->pResource;
 
-		int Result;
-
 		D3DX10_TEXTURE_LOAD_INFO NativeLoadInfo;
 		LoadInfo.Marshal(&NativeLoadInfo);
-		try { Result = D3DX10LoadTextureFromTexture(pSourceTexture, &NativeLoadInfo, pDestinationTexture); }
+		try { return D3DX10LoadTextureFromTexture(pSourceTexture, &NativeLoadInfo, pDestinationTexture); }
 		finally { LoadInfo.Unmarshal(); }
-
-		return Result;
 	}
 
 	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] ShaderResourceView^% ShaderResourceView)
