@@ -37,8 +37,7 @@ public:
 			Size = Description.ByteWidth;
 		}
 
-		if (pData) Data = gcnew UnmanagedMemory(IntPtr(pData), Size);
-		else Data = nullptr;
+		Data = pData ? gcnew UnmanagedMemory(IntPtr(pData), Size) : nullptr;
 
 		return Result;
 	}

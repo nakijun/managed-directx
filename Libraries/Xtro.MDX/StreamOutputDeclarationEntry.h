@@ -1,4 +1,4 @@
-public value class SO_DeclarationEntry : IEquatable<SO_DeclarationEntry>
+public value class StreamOutputDeclarationEntry : IEquatable<StreamOutputDeclarationEntry>
 {
 private:
 	IntPtr pSemanticName;
@@ -26,12 +26,12 @@ public:
     unsigned char ComponentCount;
     unsigned char OutputSlot;
 
-	static bool operator == (SO_DeclarationEntry Left, SO_DeclarationEntry Right)
+	static bool operator == (StreamOutputDeclarationEntry Left, StreamOutputDeclarationEntry Right)
 	{
 		return Equals(Left, Right);
 	}
 
-	static bool operator != (SO_DeclarationEntry Left, SO_DeclarationEntry Right)
+	static bool operator != (StreamOutputDeclarationEntry Left, StreamOutputDeclarationEntry Right)
 	{
 		return !Equals(Left, Right);
 	}
@@ -55,7 +55,7 @@ public:
 		return Equals(Value);
 	}
 
-	virtual bool Equals(SO_DeclarationEntry Value)
+	virtual bool Equals(StreamOutputDeclarationEntry Value)
 	{
 		return
 			SemanticName == Value.SemanticName &&
@@ -65,7 +65,7 @@ public:
 			OutputSlot == Value.OutputSlot;
 	}
 
-	static bool Equals(SO_DeclarationEntry% Value1, SO_DeclarationEntry% Value2)
+	static bool Equals(StreamOutputDeclarationEntry% Value1, StreamOutputDeclarationEntry% Value2)
 	{
 		return
 			Value1.SemanticName == Value2.SemanticName &&

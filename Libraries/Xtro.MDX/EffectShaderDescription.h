@@ -6,7 +6,7 @@ internal:
 		InputSignature = gcnew UnmanagedMemory(IntPtr((void*)Native->pInputSignature), 0);
 		IsInline = Native->IsInline != 0;
 		Bytecode = gcnew UnmanagedMemory(IntPtr((void*)Native->pBytecode), Native->BytecodeLength);
-		SO_Declaration = gcnew String(Native->SODecl);
+		StreamOutputDeclaration = gcnew String(Native->SODecl);
 		NumberOfInputSignatureEntries = Native->NumInputSignatureEntries;
 		NumberOfOutputSignatureEntries = Native->NumOutputSignatureEntries;
 	}
@@ -15,7 +15,7 @@ public:
     UnmanagedMemory^ InputSignature;
     bool IsInline;
     UnmanagedMemory^ Bytecode;
-    String^ SO_Declaration;
+    String^ StreamOutputDeclaration;
     unsigned int NumberOfInputSignatureEntries;
     unsigned int NumberOfOutputSignatureEntries;
 		
@@ -33,7 +33,7 @@ public:
 	{
 		return
 			(int)IsInline ^
-			(SO_Declaration == nullptr ? 1 : SO_Declaration->GetHashCode()) ^
+			(StreamOutputDeclaration == nullptr ? 1 : StreamOutputDeclaration->GetHashCode()) ^
 			NumberOfInputSignatureEntries ^
 			NumberOfOutputSignatureEntries;
 	}
@@ -53,7 +53,7 @@ public:
 			InputSignature == Value.InputSignature &&
 			IsInline == Value.IsInline &&
 			Bytecode == Value.Bytecode &&
-			SO_Declaration == Value.SO_Declaration &&
+			StreamOutputDeclaration == Value.StreamOutputDeclaration &&
 			NumberOfInputSignatureEntries == Value.NumberOfInputSignatureEntries &&
 			NumberOfOutputSignatureEntries == Value.NumberOfOutputSignatureEntries;
 	}
@@ -64,7 +64,7 @@ public:
 			Value1.InputSignature == Value2.InputSignature &&
 			Value1.IsInline == Value2.IsInline &&
 			Value1.Bytecode == Value2.Bytecode &&
-			Value1.SO_Declaration == Value2.SO_Declaration &&
+			Value1.StreamOutputDeclaration == Value2.StreamOutputDeclaration &&
 			Value1.NumberOfInputSignatureEntries == Value2.NumberOfInputSignatureEntries &&
 			Value1.NumberOfOutputSignatureEntries == Value2.NumberOfOutputSignatureEntries;
 	}

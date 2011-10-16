@@ -2,14 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* Object in GetPrivateData'ý düzelt.
-
-* DeviceChild
-
-* Device interface atlandý.
-
-* SO geçen bazý isimleri StreamOutput yap
-
 * UnmanagedMemory'ye çevrilebilecek array parametreler varsa ara çevir.
   içinde String^ yada Object^ gibi referanslar olmayan her array çevrilmeli mi ?
 
@@ -17,6 +9,11 @@
 
 * Sprite'daki ElementCount = Math::Min ile az for iþlemi yapma olayýný gerekli yerlere yay.
 * RS_GetScissorRectangles deki tek satýrda "?" kontrolü ile new RECT iþlemi çok yerde var mý ? mümkünse hiç olmasýn.
+
+* InfoQueue
+
+* interface atlandý :
+    Device
 
 * interface'leri yap
 * function'larý yap

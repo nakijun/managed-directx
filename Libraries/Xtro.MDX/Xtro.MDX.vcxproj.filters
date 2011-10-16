@@ -444,12 +444,6 @@
     <ClInclude Include="FunctionsD3DX10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="Include.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="InputLayout.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="RenderTargetView.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -550,9 +544,6 @@
     <ClInclude Include="EnumsDXGI.h">
       <Filter>DXGI</Filter>
     </ClInclude>
-    <ClInclude Include="StateBlock.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="SpriteStruct.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
@@ -563,9 +554,6 @@
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
     <ClInclude Include="EffectScalarVariable.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="SwitchToRef.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="Texture1D_Description.h">
@@ -637,9 +625,6 @@
     <ClInclude Include="QueryDataPipelineStatistics.h">
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="QueryDataSO_Statistics.h">
-      <Filter>Direct3D10\Core\Structures</Filter>
-    </ClInclude>
     <ClInclude Include="QueryDataTimestampDisjoint.h">
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
@@ -647,9 +632,6 @@
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
     <ClInclude Include="SamplerDescription.h">
-      <Filter>Direct3D10\Core\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="SO_DeclarationEntry.h">
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
     <ClInclude Include="EffectDescription.h">
@@ -819,6 +801,39 @@
     </ClInclude>
     <ClInclude Include="DeviceChild_ForwardedMethods.h">
       <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Include.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="InputLayout.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Multithread.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Predicate.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Query.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplerState.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="StateBlock.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="SwitchToRef.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoQueue.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryDataStreamOutputStatistics.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamOutputDeclarationEntry.h">
+      <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

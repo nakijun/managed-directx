@@ -29,8 +29,8 @@ internal:
 		ArrayInstructionCount = Native->ArrayInstructionCount;
 		CutInstructionCount = Native->CutInstructionCount;
 		EmitInstructionCount = Native->EmitInstructionCount;
-		GS_OutputTopology = (PrimitiveTopology)Native->GSOutputTopology;
-		GS_MaxOutputVertexCount = Native->GSMaxOutputVertexCount;
+		GeometryShaderOutputTopology = (PrimitiveTopology)Native->GSOutputTopology;
+		GeometryShaderMaximumOutputVertexCount = Native->GSMaxOutputVertexCount;
 	}
 
 public:
@@ -60,8 +60,8 @@ public:
     unsigned int ArrayInstructionCount;
     unsigned int CutInstructionCount;
     unsigned int EmitInstructionCount;
-    PrimitiveTopology GS_OutputTopology;
-    unsigned int GS_MaxOutputVertexCount;
+    PrimitiveTopology GeometryShaderOutputTopology;
+    unsigned int GeometryShaderMaximumOutputVertexCount;
 
 	static bool operator == (ShaderDescription Left, ShaderDescription Right)
 	{
@@ -102,8 +102,8 @@ public:
 			ArrayInstructionCount ^
 			CutInstructionCount ^
 			EmitInstructionCount ^
-			(int)GS_OutputTopology ^
-			GS_MaxOutputVertexCount;
+			(int)GeometryShaderOutputTopology ^
+			GeometryShaderMaximumOutputVertexCount;
 	}
 
 	virtual bool Equals(System::Object^ Value) override
@@ -144,8 +144,8 @@ public:
 			ArrayInstructionCount == Value.ArrayInstructionCount &&
 			CutInstructionCount == Value.CutInstructionCount &&
 			EmitInstructionCount == Value.EmitInstructionCount &&
-			GS_OutputTopology == Value.GS_OutputTopology &&
-			GS_MaxOutputVertexCount == Value.GS_MaxOutputVertexCount;
+			GeometryShaderOutputTopology == Value.GeometryShaderOutputTopology &&
+			GeometryShaderMaximumOutputVertexCount == Value.GeometryShaderMaximumOutputVertexCount;
 	}
 
 	static bool Equals(ShaderDescription% Value1, ShaderDescription% Value2)
@@ -177,7 +177,7 @@ public:
 			Value1.ArrayInstructionCount == Value2.ArrayInstructionCount &&
 			Value1.CutInstructionCount == Value2.CutInstructionCount &&
 			Value1.EmitInstructionCount == Value2.EmitInstructionCount &&
-			Value1.GS_OutputTopology == Value2.GS_OutputTopology &&
-			Value1.GS_MaxOutputVertexCount == Value2.GS_MaxOutputVertexCount;
+			Value1.GeometryShaderOutputTopology == Value2.GeometryShaderOutputTopology &&
+			Value1.GeometryShaderMaximumOutputVertexCount == Value2.GeometryShaderMaximumOutputVertexCount;
 	}
 };

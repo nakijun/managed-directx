@@ -5,6 +5,7 @@ using Xtro.MDX.Direct3D10;
 using Xtro.MDX.DXGI;
 using Device = Xtro.MDX.Direct3D10.Device;
 using D3D10Functions = Xtro.MDX.Direct3D10.Functions;
+using Debug = System.Diagnostics.Debug;
 using SystemColor = System.Drawing.Color;
 
 namespace Xtro.MDX.Utilities
