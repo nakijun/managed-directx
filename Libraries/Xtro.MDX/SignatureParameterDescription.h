@@ -3,7 +3,7 @@ public value class SignatureParameterDescription : IEquatable<SignatureParameter
 internal:				 
 	inline void FromNative(D3D10_SIGNATURE_PARAMETER_DESC* Native)
 	{
-		SemanticName = gcnew String(Native->SemanticName);
+		SemanticName = Native->SemanticName ? gcnew String(Native->SemanticName) : nullptr;
 		SemanticIndex = Native->SemanticIndex;
 		Register = Native->Register;
 		SystemValueType = (Name)Native->SystemValueType;

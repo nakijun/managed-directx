@@ -13,7 +13,7 @@ internal:
 		Quality = (FontQuality)Native->Quality;
 		PitchAndFamily = (FontPitchAndFamilyFlag)Native->PitchAndFamily;
 
-		FaceName = gcnew String(Native->FaceName);
+		FaceName = Native->FaceName ? gcnew String(Native->FaceName) : nullptr;
 	}
 
 	// No need to marshal/unmarshal pair since FaceName has fixed size

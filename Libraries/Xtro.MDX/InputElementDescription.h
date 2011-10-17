@@ -6,7 +6,7 @@ private:
 internal: 		
 	inline void FromNative(D3D10_INPUT_ELEMENT_DESC* Native)
 	{
-		SemanticName = gcnew String(Native->SemanticName);
+		SemanticName = Native->SemanticName ? gcnew String(Native->SemanticName) : nullptr;
 			
 		SemanticIndex = Native->SemanticIndex;
 		Format = (Xtro::MDX::DXGI::Format)Native->Format;

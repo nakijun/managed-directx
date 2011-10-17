@@ -3,8 +3,8 @@ public value class EffectVariableDescription : IEquatable<EffectVariableDescript
 internal:				 
 	inline void FromNative(D3D10_EFFECT_VARIABLE_DESC* Native)
 	{
-		Name = gcnew String(Native->Name);
-		Semantic = gcnew String(Native->Semantic);
+		Name = Native->Name ? gcnew String(Native->Name) : nullptr;
+		Semantic = Native->Semantic ? gcnew String(Native->Semantic) : nullptr;
 		Flags = (EffectVariableFlag)Native->Flags;
 		Annotations = Native->Annotations;
 		BufferOffset = Native->BufferOffset;

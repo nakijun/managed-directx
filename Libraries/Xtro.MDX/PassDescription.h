@@ -3,9 +3,9 @@ public value class PassDescription : IEquatable<PassDescription>
 internal:				 
 	inline void FromNative(D3D10_PASS_DESC* Native)
 	{
-		Name = gcnew String(Native->Name);
+		Name = Native->Name ? gcnew String(Native->Name) : nullptr;
 		Annotations = Native->Annotations;
-		IA_InputSignature = gcnew UnmanagedMemory(IntPtr(Native->pIAInputSignature), (unsigned int)Native->IAInputSignatureSize);
+		IA_InputSignature = Native->pIAInputSignature ? gcnew UnmanagedMemory(IntPtr(Native->pIAInputSignature), (unsigned int)Native->IAInputSignatureSize) : nullptr;
 		StencilRef = Native->StencilRef;
 		SampleMask = Native->SampleMask;
 			

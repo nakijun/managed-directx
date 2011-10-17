@@ -3,7 +3,7 @@ public value class ShaderInputBindDescription : IEquatable<ShaderInputBindDescri
 internal:				 
 	inline void FromNative(D3D10_SHADER_INPUT_BIND_DESC* Native)
 	{
-		Name = gcnew String(Native->Name);
+		Name = Native->Name ? gcnew String(Native->Name) : nullptr;
 		Type = (ShaderInputType)Native->Type;
 		BindPoint = Native->BindPoint;
 		BindCount = Native->BindCount;

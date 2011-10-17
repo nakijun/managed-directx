@@ -12,17 +12,29 @@ internal:
 		NumberOfSeverities = Native->NumSeverities;		
 		NumberOfIDs = Native->NumIDs;		
 
-		CategoryList = gcnew array<MessageCategory>(NumberOfCategories);
-		pin_ptr<MessageCategory> PinnedCategoryList = NumberOfCategories > 0 ? &CategoryList[0] : nullptr;
-		memcpy(PinnedCategoryList, Native->pCategoryList, NumberOfCategories * 4);
+		if (Native->pCategoryList)
+		{
+			CategoryList = gcnew array<MessageCategory>(NumberOfCategories);
+			pin_ptr<MessageCategory> PinnedCategoryList = NumberOfCategories > 0 ? &CategoryList[0] : nullptr;
+			memcpy(PinnedCategoryList, Native->pCategoryList, NumberOfCategories * 4);
+		}
+		else CategoryList = nullptr;
 
-		SeverityList = gcnew array<MessageSeverity>(NumberOfSeverities);
-		pin_ptr<MessageSeverity> PinnedSeverityList = NumberOfSeverities > 0 ? &SeverityList[0] : nullptr;
-		memcpy(PinnedSeverityList, Native->pSeverityList, NumberOfSeverities * 4);
+		if (Native->pSeverityList)
+		{
+			SeverityList = gcnew array<MessageSeverity>(NumberOfSeverities);
+			pin_ptr<MessageSeverity> PinnedSeverityList = NumberOfSeverities > 0 ? &SeverityList[0] : nullptr;
+			memcpy(PinnedSeverityList, Native->pSeverityList, NumberOfSeverities * 4);
+		}
+		else SeverityList = nullptr;
 
-		ID_List = gcnew array<MessageID>(NumberOfIDs);
-		pin_ptr<MessageID> PinnedID_List = NumberOfIDs > 0 ? &ID_List[0] : nullptr;
-		memcpy(PinnedID_List, Native->pIDList, NumberOfIDs * 4);
+		if (Native->pIDList)
+		{
+			ID_List = gcnew array<MessageID>(NumberOfIDs);
+			pin_ptr<MessageID> PinnedID_List = NumberOfIDs > 0 ? &ID_List[0] : nullptr;
+			memcpy(PinnedID_List, Native->pIDList, NumberOfIDs * 4);
+		}
+		else ID_List = nullptr;
 	}
 							   
 	inline void Marshal(D3D10_INFO_QUEUE_FILTER_DESC* Native)

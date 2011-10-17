@@ -3,10 +3,10 @@ public value class EffectShaderDescription : IEquatable<EffectShaderDescription>
 internal:				 
 	inline void FromNative(D3D10_EFFECT_SHADER_DESC* Native)
 	{
-		InputSignature = gcnew UnmanagedMemory(IntPtr((void*)Native->pInputSignature), 0);
+		InputSignature = Native->pInputSignature ? gcnew UnmanagedMemory(IntPtr((void*)Native->pInputSignature), 0) : nullptr;
 		IsInline = Native->IsInline != 0;
-		Bytecode = gcnew UnmanagedMemory(IntPtr((void*)Native->pBytecode), Native->BytecodeLength);
-		StreamOutputDeclaration = gcnew String(Native->SODecl);
+		Bytecode = Native->pBytecode ? gcnew UnmanagedMemory(IntPtr((void*)Native->pBytecode), Native->BytecodeLength) : nullptr;
+		StreamOutputDeclaration = Native->SODecl ? gcnew String(Native->SODecl) : nullptr;
 		NumberOfInputSignatureEntries = Native->NumInputSignatureEntries;
 		NumberOfOutputSignatureEntries = Native->NumOutputSignatureEntries;
 	}

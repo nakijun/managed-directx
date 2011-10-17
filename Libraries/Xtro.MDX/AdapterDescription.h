@@ -3,7 +3,7 @@ public value class AdapterDescription : IEquatable<AdapterDescription>
 internal:
 	inline void FromNative(DXGI_ADAPTER_DESC* Native)
 	{
-		Description = gcnew String(Native->Description);
+		Description = Native->Description ? gcnew String(Native->Description) : nullptr;
 			
 		VendorId = Native->VendorId;
 		DeviceId = Native->DeviceId;

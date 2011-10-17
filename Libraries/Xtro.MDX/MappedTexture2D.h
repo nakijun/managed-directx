@@ -3,7 +3,7 @@ public value class MappedTexture2D : IEquatable<MappedTexture2D>
 internal:
 	inline void FromNative(D3D10_MAPPED_TEXTURE2D* Native)
 	{
-		Data = gcnew UnmanagedMemory(IntPtr(Native->pData), 0);
+		Data = Native->pData ? gcnew UnmanagedMemory(IntPtr(Native->pData), 0) : nullptr;
 		RowPitch = Native->RowPitch;
 	}	
 		
