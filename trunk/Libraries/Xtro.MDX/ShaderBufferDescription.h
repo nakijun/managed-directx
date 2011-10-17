@@ -3,7 +3,7 @@ public value class ShaderBufferDescription : IEquatable<ShaderBufferDescription>
 internal:				 
 	inline void FromNative(D3D10_SHADER_BUFFER_DESC* Native)
 	{
-		Name = gcnew String(Native->Name);
+		Name = Native->Name ? gcnew String(Native->Name) : nullptr;
 		Type = (ConstantBufferType)Native->Type;
 		Variables = Native->Variables;
 		Size = Native->Size;

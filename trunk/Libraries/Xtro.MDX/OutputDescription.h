@@ -3,7 +3,7 @@ public value class OutputDescription : IEquatable<OutputDescription>
 internal:
 	inline void FromNative(DXGI_OUTPUT_DESC* Native)
 	{
-		DeviceName = gcnew String(Native->DeviceName);
+		DeviceName = Native->DeviceName ? gcnew String(Native->DeviceName) : nullptr;
 
 		DesktopCoordinates.X = Native->DesktopCoordinates.left;
 		DesktopCoordinates.Width = Native->DesktopCoordinates.right - Native->DesktopCoordinates.left;

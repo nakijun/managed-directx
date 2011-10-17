@@ -3,7 +3,7 @@ public value class EffectTypeDescription : IEquatable<EffectTypeDescription>
 internal:				 
 	inline void FromNative(D3D10_EFFECT_TYPE_DESC* Native)
 	{
-		TypeName = gcnew String(Native->TypeName);
+		TypeName = Native->TypeName ? gcnew String(Native->TypeName) : nullptr;
 		Class = (ShaderVariableClass)Native->Class;
 		Type = (ShaderVariableType)Native->Type;
 		Elements = Native->Elements;

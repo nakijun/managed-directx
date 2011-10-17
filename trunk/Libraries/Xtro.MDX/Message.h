@@ -6,7 +6,7 @@ internal:
 		Category = (MessageCategory)Native->Category;
 		Severity = (MessageSeverity)Native->Severity;
 		ID = (MessageID)Native->ID;
-		Description = gcnew String(Native->pDescription);
+		Description = Native->pDescription ? gcnew String(Native->pDescription) : nullptr;
 		DescriptionByteLength = Native->DescriptionByteLength;
 	}
 

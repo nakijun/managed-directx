@@ -3,11 +3,11 @@ public value class ShaderVariableDescription : IEquatable<ShaderVariableDescript
 internal:				 
 	inline void FromNative(D3D10_SHADER_VARIABLE_DESC* Native)
 	{
-		Name = gcnew String(Native->Name);
+		Name = Native->Name ? gcnew String(Native->Name) : nullptr;
 		StartOffset = Native->StartOffset;
 		Size = Native->Size;
 		Flags = (ShaderVariableFlag)Native->uFlags;
-		DefaultValue = gcnew UnmanagedMemory(IntPtr(Native->DefaultValue), Size);
+		DefaultValue = Native->DefaultValue ? gcnew UnmanagedMemory(IntPtr(Native->DefaultValue), Size) : nullptr;
 	}
 
 public:

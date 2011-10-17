@@ -4,7 +4,7 @@ internal:
 	inline void FromNative(D3D10_SHADER_DESC* Native)
 	{
 		Version = Native->Version;
-		Creator = gcnew String(Native->Creator);
+		Creator = Native->Creator ? gcnew String(Native->Creator) : nullptr;
 		Flags = Native->Flags;
 		ConstantBuffers = Native->ConstantBuffers;
 		BoundResources = Native->BoundResources;

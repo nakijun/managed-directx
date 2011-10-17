@@ -3,7 +3,7 @@ public value class TechniqueDescription : IEquatable<TechniqueDescription>
 internal:	 
 	inline void FromNative(D3D10_TECHNIQUE_DESC* Native)
 	{
-		Name = gcnew String(Native->Name);
+		Name = Native->Name ? gcnew String(Native->Name) : nullptr;
 		Passes = Native->Passes;
 		Annotations = Native->Annotations;
 	}
