@@ -24,10 +24,10 @@ internal:
 			pSourceInfo = new D3DX10_IMAGE_INFO();
 			pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo.Value;
 			memcpy(pSourceInfo, PinnedSourceInfo, sizeof(D3DX10_IMAGE_INFO));
-
-			Native->pSrcInfo = pSourceInfo;
 		}
-		else Native->pSrcInfo = 0;
+		else pSourceInfo = 0;
+		
+		Native->pSrcInfo = pSourceInfo;
 	}
 
 	inline void Unmarshal()

@@ -227,7 +227,7 @@ public:
 		return pMesh->GetVertexCount();
 	}
 
-	int GetVertexDescription([Out] Xtro::MDX::Generic::UnmanagedMemory<InputElementDescription>^% Description, unsigned int% DeclarationCount)
+	int GetVertexDescription([Out] array<InputElementDescription>^% Description, unsigned int% DeclarationCount)
 	{
 		pin_ptr<unsigned int> PinnedDeclarationCount = &DeclarationCount;
 
@@ -235,7 +235,15 @@ public:
 
 		int Result = pMesh->GetVertexDescription(&pDescription, PinnedDeclarationCount);
 
-		Description = pDescription ? gcnew Xtro::MDX::Generic::UnmanagedMemory<InputElementDescription>(IntPtr((void*)pDescription), sizeof(D3D10_INPUT_ELEMENT_DESC) * DeclarationCount) : nullptr;
+		if (pDescription)
+		{
+			Description = gcnew array<InputElementDescription>(DeclarationCount);
+			for (unsigned int ElementNo = 0; ElementNo < DeclarationCount; ElementNo++)
+			{
+				Description[ElementNo].FromNative((D3D10_INPUT_ELEMENT_DESC*)&pDescription[ElementNo]);
+			}
+		}
+		else Description = nullptr;
 
 		return Result;
 	}

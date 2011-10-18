@@ -26,18 +26,62 @@ public:
 		finally { Marshal::FreeHGlobal(pDescription); }
 	}
 
-	int AddRetrievalFilterEntries(Xtro::MDX::Generic::UnmanagedMemory<InfoQueueFilter>^ Filter)
+	int AddRetrievalFilterEntries(array<InfoQueueFilter>^ Filter)
 	{
-		D3D10_INFO_QUEUE_FILTER* pFilter = Filter == nullptr ? 0 : (D3D10_INFO_QUEUE_FILTER*)Filter->pMemory;
+		D3D10_INFO_QUEUE_FILTER* pFilter = 0;
+		try
+		{
+			if (Filter != nullptr && Filter->Length > 0)
+			{
+				pFilter = new D3D10_INFO_QUEUE_FILTER[Filter->Length];
+				for (int FilterNo = 0; FilterNo < Filter->Length; FilterNo++)
+				{
+					Filter[FilterNo].Marshal(&pFilter[FilterNo]);
+				}
+			}
 
-		return pInfoQueue->AddRetrievalFilterEntries(pFilter);
+			return pInfoQueue->AddRetrievalFilterEntries(pFilter);
+		}
+		finally
+		{
+			if (Filter != nullptr)
+			{
+				for (int FilterNo = 0; FilterNo < Filter->Length; FilterNo++)
+				{
+					Filter[FilterNo].Unmarshal();
+				}
+			}
+			if (pFilter) delete[] pFilter;
+		}
 	}
 
-	int AddStorageFilterEntries(Xtro::MDX::Generic::UnmanagedMemory<InfoQueueFilter>^ Filter)
+	int AddStorageFilterEntries(array<InfoQueueFilter>^ Filter)
 	{
-		D3D10_INFO_QUEUE_FILTER* pFilter = Filter == nullptr ? 0 : (D3D10_INFO_QUEUE_FILTER*)Filter->pMemory;
+		D3D10_INFO_QUEUE_FILTER* pFilter = 0;
+		try
+		{
+			if (Filter != nullptr && Filter->Length > 0)
+			{
+				pFilter = new D3D10_INFO_QUEUE_FILTER[Filter->Length];
+				for (int FilterNo = 0; FilterNo < Filter->Length; FilterNo++)
+				{
+					Filter[FilterNo].Marshal(&pFilter[FilterNo]);
+				}
+			}
 
-		return pInfoQueue->AddStorageFilterEntries(pFilter);
+			return pInfoQueue->AddStorageFilterEntries(pFilter);
+		}
+		finally
+		{
+			if (Filter != nullptr)
+			{
+				for (int FilterNo = 0; FilterNo < Filter->Length; FilterNo++)
+				{
+					Filter[FilterNo].Unmarshal();
+				}
+			}
+			if (pFilter) delete[] pFilter;
+		}
 	}
 
 	void ClearRetrievalFilter()
