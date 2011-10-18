@@ -43,21 +43,33 @@ internal:
 		Native->NumSeverities = NumberOfSeverities;
 		Native->NumIDs = NumberOfIDs;
 
-		pCategoryList = new D3D10_MESSAGE_CATEGORY[NumberOfCategories];
-		pin_ptr<MessageCategory> PinnedCategoryList = NumberOfCategories > 0 ? &CategoryList[0] : nullptr;
-		memcpy(PinnedCategoryList, Native->pCategoryList, NumberOfCategories * 4);
+		if (CategoryList != nullptr)
+		{
+			pCategoryList = new D3D10_MESSAGE_CATEGORY[NumberOfCategories];
+			pin_ptr<MessageCategory> PinnedCategoryList = NumberOfCategories > 0 ? &CategoryList[0] : nullptr;
+			memcpy(PinnedCategoryList, Native->pCategoryList, NumberOfCategories * 4);
+		}
+		else pCategoryList = 0;
 
 		Native->pCategoryList = pCategoryList;
 
-		pSeverityList = new D3D10_MESSAGE_SEVERITY[NumberOfSeverities];
-		pin_ptr<MessageSeverity> PinnedSeverityList = NumberOfSeverities > 0 ? &SeverityList[0] : nullptr;
-		memcpy(PinnedSeverityList, Native->pSeverityList, NumberOfSeverities * 4);
+		if (SeverityList != nullptr)
+		{
+			pSeverityList = new D3D10_MESSAGE_SEVERITY[NumberOfSeverities];
+			pin_ptr<MessageSeverity> PinnedSeverityList = NumberOfSeverities > 0 ? &SeverityList[0] : nullptr;
+			memcpy(PinnedSeverityList, Native->pSeverityList, NumberOfSeverities * 4);
+		}
+		else pSeverityList = 0;
 
 		Native->pSeverityList = pSeverityList;
 
-		pIDList = new D3D10_MESSAGE_ID[NumberOfIDs];
-		pin_ptr<MessageID> PinnedIDList = NumberOfIDs > 0 ? &ID_List[0] : nullptr;
-		memcpy(PinnedIDList, Native->pIDList, NumberOfIDs * 4);
+		if (ID_List != nullptr)
+		{
+			pIDList = new D3D10_MESSAGE_ID[NumberOfIDs];
+			pin_ptr<MessageID> PinnedIDList = NumberOfIDs > 0 ? &ID_List[0] : nullptr;
+			memcpy(PinnedIDList, Native->pIDList, NumberOfIDs * 4);
+		}
+		else pIDList = 0;
 
 		Native->pIDList = pIDList;
 	}

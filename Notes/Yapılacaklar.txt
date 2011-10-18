@@ -2,11 +2,8 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* MappedTexture2D.FromNative deki gibi Native->pData null kontrolü olmayan yerlere "? nullptr" ekle
-  FromNative bitti, ToNative, Marshal olanlarý yap.
-
 * UnmanagedMemory'ye çevrilebilecek array parametreler varsa ara çevir.
-  içinde String^ yada Object^ gibi referanslar olmayan her array çevrilmeli mi ?
+  - içinde String^ yada Object^ gibi referanslar olanlar array olacak
 
 * Xtro::MDX::Generic::UnmanagedMemory yapýlabilcek yerleri tara ve yap.
 

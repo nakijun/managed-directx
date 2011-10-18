@@ -21,20 +21,20 @@ internal:
 			pSourceBox = new D3D10_BOX();
 			pin_ptr<Box> PinnedSourceBox = &SourceBox.Value;
 			memcpy(pSourceBox, PinnedSourceBox, sizeof(D3D10_BOX));
-
-			Native->pSrcBox = pSourceBox;
 		}
-		else Native->pSrcBox = 0;
+		else pSourceBox = 0;
+
+		Native->pSrcBox = pSourceBox;
 
 		if (DestinationBox.HasValue) 
 		{
 			pDestinationBox = new D3D10_BOX();
 			pin_ptr<Box> PinnedDestinationBox = &DestinationBox.Value;
 			memcpy(pDestinationBox, PinnedDestinationBox, sizeof(D3D10_BOX));
-
-			Native->pDstBox = pDestinationBox;
 		}
-		else Native->pDstBox = 0;
+		else pDestinationBox = 0;
+
+		Native->pDstBox = pDestinationBox;
 	}
 
 	inline void Unmarshal()
