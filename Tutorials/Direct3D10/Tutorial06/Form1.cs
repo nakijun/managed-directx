@@ -394,25 +394,25 @@ namespace Tutorial06
 
             // Setup our lighting parameters
 
-            var LightDirections = new UnmanagedMemory<Vector4>((uint)Marshal.SizeOf(typeof(Vector4)) * 2);
+            var LightDirections = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Vector4)) * 2);
             var Vector4 = new Vector4(-0.577f, 0.577f, -0.577f, 1.0f);
-            LightDirections.Set(0, ref Vector4);
+            LightDirections.Set(0, 0, ref Vector4);
             Vector4 = new Vector4(0.0f, 0.0f, -1.0f, 1.0f);
-            LightDirections.Set(1, ref Vector4);
+            LightDirections.Set(0, 1, ref Vector4);
 
-            var LightColors = new UnmanagedMemory<Vector4>((uint)Marshal.SizeOf(typeof(Vector4)) * 2);
+            var LightColors = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Vector4)) * 2);
             Vector4 = new Vector4(0.5f, 0.5f, 0.5f, 1.0f);
-            LightColors.Set(0, ref Vector4);
+            LightColors.Set(0, 0, ref Vector4);
             Vector4 = new Vector4(0.5f, 0.0f, 0.0f, 1.0f);
-            LightColors.Set(1, ref Vector4);
+            LightColors.Set(0, 1, ref Vector4);
 
             // Rotate the second light around the origin
             Matrix Rotate;
             D3DX10Functions.MatrixRotationY(out Rotate, -2.0f * Time);
-            LightDirections.Get(1, out Vector4);
+            LightDirections.Get(0, 1, out Vector4);
             var Vector3 = new Vector3((float[])Vector4);
             D3DX10Functions.Vector3Transform(out Vector4, ref Vector3, ref Rotate);
-            LightDirections.Set(1, ref Vector4);
+            LightDirections.Set(0, 1, ref Vector4);
 
             // Clear the backbuffer
             var ClearColor = new Float4(new[] { 0.0f, 0.125f, 0.3f, 1.0f }); //red,green,blue,alpha
@@ -456,7 +456,9 @@ namespace Tutorial06
                 // Update the world variable to reflect the current light
                 WorldVariable.SetMatrix((float[])Light);
                 LightColors.Get(M, out Vector4);
-                OutputColorVariable.SetFloatVector((float[])Vector4);
+                var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(Vector4));
+                Data.Set(0, ref Vector4);
+                OutputColorVariable.SetFloatVector(Data);
 
                 for (uint PassNo = 0; PassNo < TechniqueDescriptionRenderLight.Passes; PassNo++)
                 {

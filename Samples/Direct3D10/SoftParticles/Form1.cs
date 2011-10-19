@@ -260,11 +260,11 @@ namespace SoftParticles
             UpdateParticleBuffers(Device);
 
             // Update the movement of the noise octaves
-            var OctaveOffsets = new UnmanagedMemory<Vector4>(4 * (uint)Marshal.SizeOf(typeof(Vector4)));
+            var OctaveOffsets = new UnmanagedMemory<float>(4 * (uint)Marshal.SizeOf(typeof(Vector4)));
             for (uint I = 0; I < 4; I++)
             {
                 var V = new Vector4(-(float)(Time * 0.05), 0, 0, 0);
-                OctaveOffsets.Set(I, ref V);
+                OctaveOffsets.Set(0, I, ref V);
             }
             OctaveOffsetsVariable.SetFloatVectorArray(OctaveOffsets, 0, 4);
         }
@@ -654,19 +654,28 @@ namespace SoftParticles
                     Y = Vec3.Y,
                     Z = Vec3.Z
                 };
-            var ScreenSize = new[] { BackBufferWidth, (float)BackBufferHeight };
+            var ScreenSize = new UnmanagedMemory<float>(2 * sizeof(float));
+            ScreenSize.Set(0, 0, ref BackBufferWidth);
+            ScreenSize.Set(0, 1, ref BackBufferHeight);
 
             WorldViewProjVariable.SetMatrix((float[])WorldViewProj);
             WorldViewVariable.SetMatrix((float[])WorldView);
             WorldVariable.SetMatrix((float[])World);
             InvViewVariable.SetMatrix((float[])InvView);
             InvProjVariable.SetMatrix((float[])InvProj);
-            ViewLightDir1Variable.SetFloatVector((float[])ViewLightDir1);
-            WorldLightDir1Variable.SetFloatVector((float[])WorldLightDir1);
-            ViewLightDir2Variable.SetFloatVector((float[])ViewLightDir2);
-            WorldLightDir2Variable.SetFloatVector((float[])WorldLightDir2);
-            ViewDirVariable.SetFloatVector((float[])ViewDir);
-            EyePtVariable.SetFloatVector((float[])EyePt);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Vector4)));
+            Data.Set(0, ref ViewLightDir1);
+            ViewLightDir1Variable.SetFloatVector(Data);
+            Data.Set(0, ref WorldLightDir1);
+            WorldLightDir1Variable.SetFloatVector(Data);
+            Data.Set(0, ref ViewLightDir2);
+            ViewLightDir2Variable.SetFloatVector(Data);
+            Data.Set(0, ref WorldLightDir2);
+            WorldLightDir2Variable.SetFloatVector(Data);
+            Data.Set(0, ref ViewDir);
+            ViewDirVariable.SetFloatVector(Data);
+            Data.Set(0, ref EyePt);
+            EyePtVariable.SetFloatVector(Data);
             ScreenSizeVariable.SetFloatVector(ScreenSize);
 
             // Render the scene

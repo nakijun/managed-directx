@@ -77,7 +77,7 @@ namespace FixedFuncEMU
         Matrix LightView;
         Matrix LightProj;
         readonly UnmanagedMemory<SceneLight> Lights = new UnmanagedMemory<SceneLight>(8 * (uint)Marshal.SizeOf(typeof(SceneLight)));
-        readonly UnmanagedMemory<Vector4> ClipPlanes = new UnmanagedMemory<Vector4>(3 * (uint)Marshal.SizeOf(typeof(Vector4)));
+        readonly UnmanagedMemory<float> ClipPlanes = new UnmanagedMemory<float>(3 * (uint)Marshal.SizeOf(typeof(Vector4)));
         readonly Ball[] Balls = new Ball[MaximumBalls];
         const double LaunchInterval = 0.3f;
         const float RotateSpeed = 70.0f;
@@ -218,16 +218,16 @@ namespace FixedFuncEMU
 
             // Rotate the clip planes to align with the black holes
             var Vector4 = new Vector4(0, 1.0f, 0, -0.8f);
-            ClipPlanes.Set(0, ref Vector4);
+            ClipPlanes.Set(0, 0, ref Vector4);
             var VectorPlane1 = new Vector3(0.707f, 0.707f, 0);
             var VectorPlane2 = new Vector3(-0.707f, 0.707f, 0);
             Vector3 Out;
             D3DX10Functions.Vector3TransformNormal(out Out, ref VectorPlane1, ref BlackHole);
             Vector4 = new Vector4(Out.X, Out.Y, Out.Z, 0.70f);
-            ClipPlanes.Set(1, ref Vector4);
+            ClipPlanes.Set(0, 1, ref Vector4);
             D3DX10Functions.Vector3TransformNormal(out Out, ref VectorPlane2, ref BlackHole);
             Vector4 = new Vector4(Out.X, Out.Y, Out.Z, 0.70f);
-            ClipPlanes.Set(2, ref Vector4);
+            ClipPlanes.Set(0, 2, ref Vector4);
             ClipPlanesVariable.SetFloatVectorArray(ClipPlanes, 0, 3);
 
             var BallLaunch = new Vector3(2.1f, 8.1f, 0);
@@ -400,7 +400,9 @@ namespace FixedFuncEMU
             FogEnd.SetFloat(22.0f);
             FogDensity.SetFloat(0.05f);
             var VectorFogColor = new Vector4(0.7f, 1.0f, 1.0f, 1);
-            FogColor.SetFloatVector((float[])VectorFogColor);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(VectorFogColor));
+            Data.Set(0, ref VectorFogColor);
+            FogColor.SetFloatVector(Data);
 
             // Create our vertex input layout
             var Layout = new[]

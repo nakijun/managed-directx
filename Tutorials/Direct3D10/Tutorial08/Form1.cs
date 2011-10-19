@@ -339,7 +339,9 @@ namespace Tutorial08
             // Update variables that change once per frame
             //
             WorldVariable.SetMatrix((float[])World);//StructToFloatArray(World));
-            MeshColorVariable.SetFloatVector((float[])MeshColor);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(MeshColor));
+            Data.Set(0, ref MeshColor);
+            MeshColorVariable.SetFloatVector(Data);
 
             //
             // Render the cube

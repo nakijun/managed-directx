@@ -12,14 +12,14 @@ internal:
 	}
 
 public:
-	int SetFloatVector(array<float>^ Data)
+	int SetFloatVector(Xtro::MDX::Generic::UnmanagedMemory<float>^ Data)
 	{
-		pin_ptr<float> PinnedData = Data != nullptr && Data->Length > 0 ? &Data[0] : nullptr;
+		float* pData = Data == nullptr ? 0 : (float*)Data->pMemory;
 
-		return pEffectVectorVariable->SetFloatVector(PinnedData);
+		return pEffectVectorVariable->SetFloatVector(pData);
 	}
 
-	int SetFloatVectorArray(UnmanagedMemory^ Data, unsigned int Offset, unsigned int Count)
+	int SetFloatVectorArray(Xtro::MDX::Generic::UnmanagedMemory<float>^ Data, unsigned int Offset, unsigned int Count)
 	{
 		float* pData = Data == nullptr ? 0 : (float*)Data->pMemory;
 
