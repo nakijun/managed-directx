@@ -376,7 +376,9 @@ namespace Tutorial07
             // Update variables that change once per frame
             var Result = WorldVariable.SetMatrix((float[])World);
             if (Result < 0) throw new Exception("WorldVariable.SetMatrix has failed : " + Result);
-            Result = MeshColorVariable.SetFloatVector((float[])MeshColor);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(MeshColor));
+            Data.Set(0, ref MeshColor);
+            Result = MeshColorVariable.SetFloatVector(Data);
             if (Result < 0) throw new Exception("MeshColorVariable.SetFloatVector has failed : " + Result);
 
             // Render the cube

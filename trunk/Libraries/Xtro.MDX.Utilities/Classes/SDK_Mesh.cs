@@ -852,8 +852,17 @@ namespace Xtro.MDX.Utilities
                     if (Diffuse != null && !MaterialPair.DiffuseResourceViewError) Diffuse.SetResource(MaterialPair.DiffuseResourceView);
                     if (Normal != null && !MaterialPair.NormalResourceViewError) Normal.SetResource(MaterialPair.NormalResourceView);
                     if (Specular != null && !MaterialPair.SpecularResourceViewError) Specular.SetResource(MaterialPair.SpecularResourceView);
-                    if (DiffuseVector != null) DiffuseVector.SetFloatVector((float[])Material.Diffuse);
-                    if (SpecularVector != null) SpecularVector.SetFloatVector((float[])Material.Specular);
+                    var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Vector4)));
+                    if (DiffuseVector != null)
+                    {
+                        Data.Set(0, ref Material.Diffuse);
+                        DiffuseVector.SetFloatVector(Data);
+                    }
+                    if (SpecularVector != null)
+                    {
+                        Data.Set(0, ref Material.Diffuse);
+                        SpecularVector.SetFloatVector(Data);
+                    }
 
                     Technique.GetPassByIndex(P).Apply(0);
 
