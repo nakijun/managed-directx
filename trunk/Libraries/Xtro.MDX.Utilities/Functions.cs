@@ -580,14 +580,18 @@ namespace Xtro.MDX.Utilities
             BackBuffer.GetDescription(out BackBufferSurfaceDescription);
 
             // Setup the viewport to match the backbuffer
-            Viewport Viewport;
-            Viewport.Width = BackBufferSurfaceDescription.Width;
-            Viewport.Height = BackBufferSurfaceDescription.Height;
-            Viewport.MinDepth = 0;
-            Viewport.MaxDepth = 1;
-            Viewport.TopLeftX = 0;
-            Viewport.TopLeftY = 0;
-            Device.RS_SetViewports(1, new[] { Viewport });
+            var Viewport = new Viewport
+            {
+                Width = BackBufferSurfaceDescription.Width,
+                Height = BackBufferSurfaceDescription.Height,
+                MinDepth = 0,
+                MaxDepth = 1,
+                TopLeftX = 0,
+                TopLeftY = 0
+            };
+            var Viewports = new UnmanagedMemory<Viewport>((uint)Marshal.SizeOf(Viewport));
+            Viewports.Set(ref Viewport);
+            Device.RS_SetViewports(1, Viewports);
 
             // Create the render target view
             Result = Device.CreateRenderTargetView(BackBuffer, out RenderTargetView);

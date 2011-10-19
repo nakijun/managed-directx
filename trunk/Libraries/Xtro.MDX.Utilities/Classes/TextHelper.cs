@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using System.Runtime.InteropServices;
+using Xtro.MDX.Generic;
 using Point = System.Drawing.Point;
 using Xtro.MDX.Direct3D10;
 using Xtro.MDX.Direct3DX10;
@@ -81,7 +83,7 @@ namespace Xtro.MDX.Utilities
         {
             if (Sprite != null)
             {
-                var Viewports = new Viewport[Constants.ViewportAndScissorRectangleObjectCountPerPipeline];
+                var Viewports = new UnmanagedMemory<Viewport>((uint)(Constants.ViewportAndScissorRectangleObjectCountPerPipeline * Marshal.SizeOf(typeof(Viewport))));
                 uint ViewportCount = 1;
                 Device Device;
                 Sprite.GetDevice(out Device);
@@ -89,8 +91,10 @@ namespace Xtro.MDX.Utilities
                 {
                     // Set projection
                     Device.RS_GetViewports(ref ViewportCount, Viewports);
+                    Viewport Viewport;
+                    Viewports.Get(out Viewport);
                     Matrix ProjectionMatrix;
-                    D3DX10Functions.MatrixOrthoOffCenterLH(out ProjectionMatrix, Viewports[0].TopLeftX, Viewports[0].TopLeftX + Viewports[0].Width, Viewports[0].TopLeftY, Viewports[0].TopLeftY + Viewports[0].Height, 0.1f, 10);
+                    D3DX10Functions.MatrixOrthoOffCenterLH(out ProjectionMatrix, Viewport.TopLeftX, Viewport.TopLeftX + Viewport.Width, Viewport.TopLeftY, Viewport.TopLeftY + Viewport.Height, 0.1f, 10);
                     Sprite.SetProjectionTransform(ref ProjectionMatrix);
 
                     Sprite.Begin(SpriteFlag.SortTexture);

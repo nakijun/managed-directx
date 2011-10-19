@@ -129,15 +129,17 @@ namespace Tutorial02
 
             // Setup the viewport
             var Viewport = new Viewport
-                {
-                    TopLeftX = 0,
-                    TopLeftY = 0,
-                    Width = (uint)ClientSize.Width,
-                    Height = (uint)ClientSize.Height,
-                    MinDepth = 0.0f,
-                    MaxDepth = 1.0f
-                };
-            Device.RS_SetViewports(1, new[] { Viewport });
+            {
+                TopLeftX = 0,
+                TopLeftY = 0,
+                Width = (uint)ClientSize.Width,
+                Height = (uint)ClientSize.Height,
+                MinDepth = 0.0f,
+                MaxDepth = 1.0f
+            };
+            var Viewports = new UnmanagedMemory<Viewport>((uint)Marshal.SizeOf(Viewport));
+            Viewports.Set(ref Viewport);
+            Device.RS_SetViewports(1, Viewports);
 
             // Create the effect
 
