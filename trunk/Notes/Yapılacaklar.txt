@@ -2,14 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* "operator array" tara. mempcy ile yap.
-
-* sizeof ve Marshal.SizeOf lari tara. mümkünse tip yerine zaten mevcut olan deðiþkenin adýný yazarak sizeof'unu al.
-
-* Sprite'daki ElementCount = Math::Min ile az for iþlemi yapma olayýný gerekli yerlere yay.
-
-* RS_GetScissorRectangles deki tek satýrda "?" kontrolü ile new RECT iþlemi çok yerde var mý ? mümkünse hiç olmasýn.
-
 * InfoQueue
 
 * interface atlandý :

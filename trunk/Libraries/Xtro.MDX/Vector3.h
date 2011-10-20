@@ -39,7 +39,13 @@ public:
 
 	static explicit operator array<float>^(Vector3 Value)
 	{
-		return gcnew array<float>(3) { Value.X, Value.Y, Value.Z };
+		array<float>^ Floats = gcnew array<float>(3);
+		
+		pin_ptr<float> PinnedFloats = &Floats[0];
+		pin_ptr<Vector3> PinnedValue = &Value;
+		memcpy(PinnedFloats, PinnedValue, Marshal::SizeOf(Vector3::typeid));
+
+		return Floats;
 	}
 
 	void Add(Vector3 Value)

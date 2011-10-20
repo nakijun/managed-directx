@@ -25,11 +25,11 @@ public:
 		{
 			if (Sprites != nullptr && Sprites->Length > 0)
 			{
-				unsigned int ElementCount = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
-				pSprites = new D3DX10_SPRITE[ElementCount];
-				for (unsigned int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+				unsigned int Count = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
+				pSprites = new D3DX10_SPRITE[Count];
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					Sprites[ElementNo].ToNative(&pSprites[ElementNo]);
+					Sprites[No].ToNative(&pSprites[No]);
 				}
 			}
 
@@ -44,16 +44,15 @@ public:
 	int DrawSpritesImmediate(array<SpriteStruct>^ Sprites, unsigned int SpriteCount, unsigned int SpriteSize, unsigned int Flags)
 	{
 		D3DX10_SPRITE* pSprites = 0;
-
 		try
 		{
 			if (Sprites != nullptr && Sprites->Length > 0)
 			{
-				unsigned int ElementCount = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
-				pSprites = new D3DX10_SPRITE[ElementCount];
-				for (unsigned int ElementNo = 0; ElementNo < ElementCount; ElementNo++)
+				unsigned int Count = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
+				pSprites = new D3DX10_SPRITE[Count];
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					Sprites[ElementNo].ToNative(&pSprites[ElementNo]);
+					Sprites[No].ToNative(&pSprites[No]);
 				}
 			}
 

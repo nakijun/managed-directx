@@ -141,10 +141,11 @@ public:
 		{
 			if (RenderTargetViews != nullptr && RenderTargetViews->Length > 0)
 			{
-				ppRenderTargetViews = new ID3D10RenderTargetView*[RenderTargetViews->Length];
-				for (int RenderTargetViewNo = 0; RenderTargetViewNo < RenderTargetViews->Length; RenderTargetViewNo++)
+				unsigned int Count = Math::Min(NumberOfViews, (unsigned int)RenderTargetViews->Length);
+				ppRenderTargetViews = new ID3D10RenderTargetView*[Count];
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					ppRenderTargetViews[RenderTargetViewNo] = RenderTargetViews[RenderTargetViewNo] == nullptr ? 0 : RenderTargetViews[RenderTargetViewNo]->pRenderTargetView;
+					ppRenderTargetViews[No] = RenderTargetViews[No] == nullptr ? 0 : RenderTargetViews[No]->pRenderTargetView;
 				}
 			}
 
@@ -174,7 +175,7 @@ public:
 	void RS_GetScissorRectangles(unsigned int% NumberOfRectangles, array<System::Drawing::Rectangle>^ Rectangles)
 	{
 		pin_ptr<unsigned int> PinnedNumberOfRectangles = &NumberOfRectangles;
-		RECT* NativeRectangles = Rectangles != nullptr && Rectangles->Length > 0 ? new RECT[Rectangles->Length] : 0;
+		RECT* NativeRectangles = 0;
 
 		try
 		{
@@ -182,13 +183,15 @@ public:
 
 			if (Rectangles != nullptr && Rectangles->Length > 0)
 			{
-				for (int RectangleNo = 0; RectangleNo < Rectangles->Length; RectangleNo++)
+				unsigned int Count = Math::Min(NumberOfRectangles, (unsigned int)Rectangles->Length);
+				NativeRectangles = new RECT[Count];
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					RECT* pNativeRectangle = &NativeRectangles[RectangleNo];
-					Rectangles[RectangleNo].X = pNativeRectangle->left;
-					Rectangles[RectangleNo].Y = pNativeRectangle->top;
-					Rectangles[RectangleNo].Width = pNativeRectangle->right - pNativeRectangle->left;
-					Rectangles[RectangleNo].Height = pNativeRectangle->bottom - pNativeRectangle->top;
+					RECT* pNativeRectangle = &NativeRectangles[No];
+					Rectangles[No].X = pNativeRectangle->left;
+					Rectangles[No].Y = pNativeRectangle->top;
+					Rectangles[No].Width = pNativeRectangle->right - pNativeRectangle->left;
+					Rectangles[No].Height = pNativeRectangle->bottom - pNativeRectangle->top;
 				}
 			}
 		}
@@ -205,15 +208,15 @@ public:
 		{
 			if (Rectangles != nullptr && Rectangles->Length > 0)
 			{
-				NativeRectangles = new RECT[Rectangles->Length];
-
-				for (int RectangleNo = 0; RectangleNo < Rectangles->Length; RectangleNo++)
+				unsigned int Count = Math::Min(NumberOfRectangles, (unsigned int)Rectangles->Length);
+				NativeRectangles = new RECT[Count];
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					RECT* pNativeRectangle = &NativeRectangles[RectangleNo];
-					pNativeRectangle->left = Rectangles[RectangleNo].X;
-					pNativeRectangle->top = Rectangles[RectangleNo].Y;
-					pNativeRectangle->right = Rectangles[RectangleNo].Right;
-					pNativeRectangle->bottom = Rectangles[RectangleNo].Bottom;
+					RECT* pNativeRectangle = &NativeRectangles[No];
+					pNativeRectangle->left = Rectangles[No].X;
+					pNativeRectangle->top = Rectangles[No].Y;
+					pNativeRectangle->right = Rectangles[No].Right;
+					pNativeRectangle->bottom = Rectangles[No].Bottom;
 				}
 			}
 
@@ -272,10 +275,11 @@ public:
 		{
 			if (ShaderResourceViews != nullptr && ShaderResourceViews->Length > 0)
 			{
-				ppShaderResourceViews = new ID3D10ShaderResourceView*[ShaderResourceViews->Length];
-				for (int ShaderResourceViewNo = 0; ShaderResourceViewNo < ShaderResourceViews->Length; ShaderResourceViewNo++)
+				unsigned int Count = Math::Min(NumberOfViews, (unsigned int)ShaderResourceViews->Length);
+				ppShaderResourceViews = new ID3D10ShaderResourceView*[Count];
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					ppShaderResourceViews[ShaderResourceViewNo] = ShaderResourceViews[ShaderResourceViewNo] == nullptr ? 0 : ShaderResourceViews[ShaderResourceViewNo]->pShaderResourceView;
+					ppShaderResourceViews[No] = ShaderResourceViews[No] == nullptr ? 0 : ShaderResourceViews[No]->pShaderResourceView;
 				}
 			}
 
@@ -294,15 +298,17 @@ public:
 		int Result = 0;
 		ID3D10InputLayout* pInputLayout = 0;
 
+		unsigned int Count;
 		D3D10_INPUT_ELEMENT_DESC* pInputElementDescriptions = 0;
 		try
 		{
 			if (InputElementDescriptions != nullptr && InputElementDescriptions->Length > 0)
 			{
-				pInputElementDescriptions = new D3D10_INPUT_ELEMENT_DESC[InputElementDescriptions->Length];
-				for (int ElementNo = 0; ElementNo < InputElementDescriptions->Length; ElementNo++)
+				Count = Math::Min(NumberOfElements, (unsigned int)InputElementDescriptions->Length);
+				pInputElementDescriptions = new D3D10_INPUT_ELEMENT_DESC[Count];
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					InputElementDescriptions[ElementNo].Marshal(&pInputElementDescriptions[ElementNo]);
+					InputElementDescriptions[No].Marshal(&pInputElementDescriptions[No]);
 				}
 			}
 
@@ -310,11 +316,11 @@ public:
 		}
 		finally
 		{
-			if (InputElementDescriptions != nullptr)
+			if (InputElementDescriptions != nullptr && InputElementDescriptions->Length > 0)
 			{
-				for (int ElementNo = 0; ElementNo < InputElementDescriptions->Length; ElementNo++)
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					InputElementDescriptions[ElementNo].Unmarshal();
+					InputElementDescriptions[No].Unmarshal();
 				}
 			}
 			if (pInputElementDescriptions) delete[] pInputElementDescriptions;
@@ -399,9 +405,9 @@ public:
 			{
 				pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
 
-				for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+				for (int No = 0; No < InitialData->Length; No++)
 				{
-					InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+					InitialData[No].ToNative(&pInitialData[No]);
 				}
 			}
 
@@ -433,9 +439,9 @@ public:
 			{
 				pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
 
-				for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+				for (int No = 0; No < InitialData->Length; No++)
 				{
-					InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+					InitialData[No].ToNative(&pInitialData[No]);
 				}
 			}
 
@@ -461,9 +467,9 @@ public:
 			{
 				pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
 
-				for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+				for (int No = 0; No < InitialData->Length; No++)
 				{
-					InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+					InitialData[No].ToNative(&pInitialData[No]);
 				}
 			}
 
@@ -495,9 +501,9 @@ public:
 			{
 				pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
 
-				for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+				for (int No = 0; No < InitialData->Length; No++)
 				{
-					InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+					InitialData[No].ToNative(&pInitialData[No]);
 				}
 			}
 
@@ -523,9 +529,9 @@ public:
 			{
 				pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
 
-				for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+				for (int No = 0; No < InitialData->Length; No++)
 				{
-					InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+					InitialData[No].ToNative(&pInitialData[No]);
 				}
 			}
 
@@ -557,9 +563,9 @@ public:
 			{
 				pInitialData = new D3D10_SUBRESOURCE_DATA[InitialData->Length];
 
-				for (int InitialDataNo = 0; InitialDataNo < InitialData->Length; InitialDataNo++)
+				for (int No = 0; No < InitialData->Length; No++)
 				{
-					InitialData[InitialDataNo].ToNative(&pInitialData[InitialDataNo]);
+					InitialData[No].ToNative(&pInitialData[No]);
 				}
 			}
 
@@ -581,11 +587,11 @@ public:
 		{
 			if (VertexBuffers != nullptr && VertexBuffers->Length > 0)
 			{
-				unsigned int VertexBufferCount = VertexBuffers->Length;
-				pVertexBuffers = new ID3D10Buffer*[VertexBufferCount];
-				for (unsigned int VertexBufferNo = 0; VertexBufferNo < VertexBufferCount; VertexBufferNo++)
+				unsigned int Count = Math::Min(NumberOfBuffers, (unsigned int)VertexBuffers->Length);
+				pVertexBuffers = new ID3D10Buffer*[Count];
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					pVertexBuffers[VertexBufferNo] = VertexBuffers[VertexBufferNo] == nullptr ? 0 : VertexBuffers[VertexBufferNo]->pBuffer;
+					pVertexBuffers[No] = VertexBuffers[No] == nullptr ? 0 : VertexBuffers[No]->pBuffer;
 				}
 			}
 
