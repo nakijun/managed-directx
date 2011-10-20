@@ -35,7 +35,13 @@ public:
 
 	static explicit operator array<float>^(Plane Value)
 	{
-		return gcnew array<float>(4) { Value.A, Value.B, Value.C, Value.D };
+		array<float>^ Floats = gcnew array<float>(4);
+		
+		pin_ptr<float> PinnedFloats = &Floats[0];
+		pin_ptr<Plane> PinnedValue = &Value;
+		memcpy(PinnedFloats, PinnedValue, Marshal::SizeOf(Plane::typeid));
+
+		return Floats;
 	}
 
 	void Add(Plane Value)

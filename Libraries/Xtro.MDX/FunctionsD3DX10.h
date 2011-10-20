@@ -233,9 +233,9 @@ public:
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				for (int No = 0; No < Defines->Length; No++)
 				{
-					Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+					Defines[No].Marshal(&pDefines[No]);
 				}
 			}
 
@@ -246,11 +246,11 @@ public:
 			Marshal::FreeHGlobal(pFileName); 
 			Marshal::FreeHGlobal(pProfile); 
 
-			if (Defines != nullptr)
+			if (Defines != nullptr && Defines->Length > 0)
 			{
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				for (int No = 0; No < Defines->Length; No++)
 				{
-					Defines[DefineNo].Unmarshal();
+					Defines[No].Unmarshal();
 				}
 			}
 			if (pDefines) delete[] pDefines;
@@ -290,9 +290,9 @@ public:
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				for (int No = 0; No < Defines->Length; No++)
 				{
-					Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+					Defines[No].Marshal(&pDefines[No]);
 				}
 			}
 
@@ -303,11 +303,11 @@ public:
 			Marshal::FreeHGlobal(pFileName); 
 			Marshal::FreeHGlobal(pProfile); 
 
-			if (Defines != nullptr)
+			if (Defines != nullptr && Defines->Length > 0)
 			{
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				for (int No = 0; No < Defines->Length; No++)
 				{
-					Defines[DefineNo].Unmarshal();
+					Defines[No].Unmarshal();
 				}
 			}
 			if (pDefines) delete[] pDefines;
@@ -342,9 +342,9 @@ public:
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				for (int No = 0; No < Defines->Length; No++)
 				{
-					Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+					Defines[No].Marshal(&pDefines[No]);
 				}
 			}
 
@@ -355,11 +355,11 @@ public:
 			Marshal::FreeHGlobal(pFileName); 
 			Marshal::FreeHGlobal(pProfile); 
 
-			if (Defines != nullptr)
+			if (Defines != nullptr && Defines->Length > 0)
 			{
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				for (int No = 0; No < Defines->Length; No++)
 				{
-					Defines[DefineNo].Unmarshal();
+					Defines[No].Unmarshal();
 				}
 			}
 			if (pDefines) delete[] pDefines;
@@ -400,9 +400,9 @@ public:
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				for (int No = 0; No < Defines->Length; No++)
 				{
-					Defines[DefineNo].Marshal(&pDefines[DefineNo]);
+					Defines[No].Marshal(&pDefines[No]);
 				}
 			}
 
@@ -413,11 +413,11 @@ public:
 			Marshal::FreeHGlobal(pFileName); 
 			Marshal::FreeHGlobal(pProfile); 
 
-			if (Defines != nullptr)
+			if (Defines != nullptr && Defines->Length > 0)
 			{
-				for (int DefineNo = 0; DefineNo < Defines->Length; DefineNo++)
+				for (int No = 0; No < Defines->Length; No++)
 				{
-					Defines[DefineNo].Unmarshal();
+					Defines[No].Unmarshal();
 				}
 			}
 			if (pDefines) delete[] pDefines;
@@ -499,15 +499,17 @@ public:
 		ID3DX10Mesh* pMesh = 0;
 
 		IntPtr pPositionSemantic = Marshal::StringToHGlobalAnsi(PositionSemantic);
+		unsigned int Count;
 		D3D10_INPUT_ELEMENT_DESC* pDeclaration = 0;
 		try 
 		{
 			if (Declaration != nullptr && Declaration->Length > 0)
 			{
-				pDeclaration = new D3D10_INPUT_ELEMENT_DESC[Declaration->Length];
-				for (int DeclarationNo = 0; DeclarationNo < Declaration->Length; DeclarationNo++)
+				Count = Math::Min(DeclarationCount, (unsigned int)Declaration->Length);
+				pDeclaration = new D3D10_INPUT_ELEMENT_DESC[Count];
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					Declaration[DeclarationNo].Marshal(&pDeclaration[DeclarationNo]);
+					Declaration[No].Marshal(&pDeclaration[No]);
 				}
 			}
 
@@ -517,11 +519,11 @@ public:
 		{
 			Marshal::FreeHGlobal(pPositionSemantic); 
 
-			if (Declaration != nullptr)
+			if (Declaration != nullptr && Declaration->Length > 0)
 			{
-				for (int DeclarationNo = 0; DeclarationNo < Declaration->Length; DeclarationNo++)
+				for (unsigned int No = 0; No < Count; No++)
 				{
-					Declaration[DeclarationNo].Unmarshal();
+					Declaration[No].Unmarshal();
 				}
 			}
 			if (pDeclaration) delete[] pDeclaration;

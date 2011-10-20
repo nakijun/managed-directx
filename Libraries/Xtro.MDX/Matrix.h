@@ -89,10 +89,13 @@ public:
 
 	static explicit operator array<float>^(Matrix Value)
 	{
-		return gcnew array<float>(16) { Value.Value11, Value.Value12, Value.Value13, Value.Value14,
-										Value.Value21, Value.Value22, Value.Value23, Value.Value24,
-										Value.Value31, Value.Value32, Value.Value33, Value.Value34,
-										Value.Value41, Value.Value42, Value.Value43, Value.Value44 };
+		array<float>^ Floats = gcnew array<float>(16);
+		
+		pin_ptr<float> PinnedFloats = &Floats[0];
+		pin_ptr<Matrix> PinnedValue = &Value;
+		memcpy(PinnedFloats, PinnedValue, Marshal::SizeOf(Matrix::typeid));
+
+		return Floats;
 	}
 
 	void Multiply(Matrix Value)

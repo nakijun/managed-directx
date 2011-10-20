@@ -44,7 +44,13 @@ public:
 
 	static explicit operator array<float>^(Color Value)
 	{
-		return gcnew array<float>(4) { Value.R, Value.G, Value.B, Value.A };
+		array<float>^ Floats = gcnew array<float>(4);
+		
+		pin_ptr<float> PinnedFloats = &Floats[0];
+		pin_ptr<Color> PinnedValue = &Value;
+		memcpy(PinnedFloats, PinnedValue, Marshal::SizeOf(Color::typeid));
+
+		return Floats;
 	}
 
 	void Add(Color Value)

@@ -34,9 +34,9 @@ public:
 			if (Filter != nullptr && Filter->Length > 0)
 			{
 				pFilter = new D3D10_INFO_QUEUE_FILTER[Filter->Length];
-				for (int FilterNo = 0; FilterNo < Filter->Length; FilterNo++)
+				for (int No = 0; No < Filter->Length; No++)
 				{
-					Filter[FilterNo].Marshal(&pFilter[FilterNo]);
+					Filter[No].Marshal(&pFilter[No]);
 				}
 			}
 
@@ -44,11 +44,11 @@ public:
 		}
 		finally
 		{
-			if (Filter != nullptr)
+			if (Filter != nullptr && Filter->Length > 0)
 			{
-				for (int FilterNo = 0; FilterNo < Filter->Length; FilterNo++)
+				for (int No = 0; No < Filter->Length; No++)
 				{
-					Filter[FilterNo].Unmarshal();
+					Filter[No].Unmarshal();
 				}
 			}
 			if (pFilter) delete[] pFilter;
@@ -63,9 +63,9 @@ public:
 			if (Filter != nullptr && Filter->Length > 0)
 			{
 				pFilter = new D3D10_INFO_QUEUE_FILTER[Filter->Length];
-				for (int FilterNo = 0; FilterNo < Filter->Length; FilterNo++)
+				for (int No = 0; No < Filter->Length; No++)
 				{
-					Filter[FilterNo].Marshal(&pFilter[FilterNo]);
+					Filter[No].Marshal(&pFilter[No]);
 				}
 			}
 
@@ -73,11 +73,11 @@ public:
 		}
 		finally
 		{
-			if (Filter != nullptr)
+			if (Filter != nullptr && Filter->Length > 0)
 			{
-				for (int FilterNo = 0; FilterNo < Filter->Length; FilterNo++)
+				for (int No = 0; No < Filter->Length; No++)
 				{
-					Filter[FilterNo].Unmarshal();
+					Filter[No].Unmarshal();
 				}
 			}
 			if (pFilter) delete[] pFilter;
