@@ -589,9 +589,7 @@ namespace Xtro.MDX.Utilities
                 TopLeftX = 0,
                 TopLeftY = 0
             };
-            var Viewports = new UnmanagedMemory<Viewport>((uint)Marshal.SizeOf(Viewport));
-            Viewports.Set(ref Viewport);
-            Device.RS_SetViewports(1, Viewports);
+            Device.RS_SetViewports(1, new[] { Viewport });
 
             // Create the render target view
             Result = Device.CreateRenderTargetView(BackBuffer, out RenderTargetView);

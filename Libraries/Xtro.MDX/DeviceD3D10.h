@@ -156,20 +156,20 @@ public:
 		}
 	}
 
-	void RS_GetViewports(unsigned int% NumberOfViewports, Xtro::MDX::Generic::UnmanagedMemory<Viewport>^ Viewports)
-	{
-		pin_ptr<unsigned int> PinnedNumberOfViewports = &NumberOfViewports;
-		D3D10_VIEWPORT* pViewports = Viewports == nullptr ? 0 : (D3D10_VIEWPORT*)Viewports->pMemory;
+    void RS_GetViewports(unsigned int% NumberOfViewports, array<Viewport>^ Viewports)
+    {
+        pin_ptr<unsigned int> PinnedNumberOfViewports = &NumberOfViewports;
+        pin_ptr<Viewport> PinnedViewports = Viewports != nullptr && Viewports->Length > 0 ? &Viewports[0] : nullptr;
 
-		pDevice->RSGetViewports(PinnedNumberOfViewports, pViewports);
-	}
+        pDevice->RSGetViewports(PinnedNumberOfViewports, (D3D10_VIEWPORT*)PinnedViewports);
+    }
 
-	void RS_SetViewports(unsigned int NumberOfViewports, Xtro::MDX::Generic::UnmanagedMemory<Viewport>^ Viewports)
-	{
-		D3D10_VIEWPORT* pViewports = Viewports == nullptr ? 0 : (D3D10_VIEWPORT*)Viewports->pMemory;
+    void RS_SetViewports(unsigned int NumberOfViewports, array<Viewport>^ Viewports)
+    {
+        pin_ptr<Viewport> PinnedViewports = Viewports != nullptr && Viewports->Length > 0 ? &Viewports[0] : nullptr;
 
-		pDevice->RSSetViewports(NumberOfViewports, pViewports);
-	}
+        pDevice->RSSetViewports(NumberOfViewports, (D3D10_VIEWPORT*)PinnedViewports);
+    }
 
 	void RS_GetScissorRectangles(unsigned int% NumberOfRectangles, array<System::Drawing::Rectangle>^ Rectangles)
 	{

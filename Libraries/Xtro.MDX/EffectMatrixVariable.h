@@ -12,10 +12,10 @@ internal:
 	}
 
 public:
-	int SetMatrix(array<float>^ Data)
+	int SetMatrix(Xtro::MDX::Generic::UnmanagedMemory<float>^ Data)
 	{											   
-		pin_ptr<float> PinnedData = Data != nullptr && Data->Length > 0 ? &Data[0] : nullptr;
+		float* pData = Data == nullptr ? 0 : (float*)Data->pMemory;
 
-		return pEffectMatrixVariable->SetMatrix(PinnedData);
+		return pEffectMatrixVariable->SetMatrix(pData);
 	}
 };

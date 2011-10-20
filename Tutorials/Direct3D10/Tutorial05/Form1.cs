@@ -29,8 +29,10 @@ namespace Tutorial05
 
         struct SimpleVertex
         {
+            // ReSharper disable NotAccessedField.Local
             public Vector3 Position;
             public Vector4 Color;
+            // ReSharper restore NotAccessedField.Local
         };
 
         Device Device;
@@ -187,9 +189,7 @@ namespace Tutorial05
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             };
-            var Viewports = new UnmanagedMemory<Viewport>((uint)Marshal.SizeOf(Viewport));
-            Viewports.Set(ref Viewport);
-            Device.RS_SetViewports(1, Viewports);
+            Device.RS_SetViewports(1, new[] { Viewport });
 
             // Create the effect
 
@@ -387,11 +387,15 @@ namespace Tutorial05
             Device.ClearDepthStencilView(DepthStencilView, ClearFlag.Depth, 1.0f, 0);
 
             // Update variables for the first cube
-            var Result = WorldVariable.SetMatrix((float[])World1);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref World1);
+            var Result = WorldVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("WorldVariable.SetMatrix has failed : " + Result);
-            Result = ViewVariable.SetMatrix((float[])View);
+            Data.Set(0, ref View);
+            Result = ViewVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("ViewVariable.SetMatrix has failed : " + Result);
-            Result = ProjectionVariable.SetMatrix((float[])Projection);
+            Data.Set(0, ref Projection);
+            Result = ProjectionVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("ProjectionVariable.SetMatrix has failed : " + Result);
 
             // Render the first cube
@@ -402,11 +406,14 @@ namespace Tutorial05
             }
 
             // Update variables for the second cube
-            Result = WorldVariable.SetMatrix((float[])World2);
+            Data.Set(0, ref World2);
+            Result = WorldVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("WorldVariable.SetMatrix has failed : " + Result);
-            Result = ViewVariable.SetMatrix((float[])View);
+            Data.Set(0, ref View);
+            Result = ViewVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("ViewVariable.SetMatrix has failed : " + Result);
-            Result = ProjectionVariable.SetMatrix((float[])Projection);
+            Data.Set(0, ref Projection);
+            Result = ProjectionVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("ProjectionVariable.SetMatrix has failed : " + Result);
 
             // Render the second cube

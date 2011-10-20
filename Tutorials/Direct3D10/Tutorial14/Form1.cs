@@ -503,9 +503,15 @@ namespace Tutorial14
             //
             // Update variables that change once per frame
             //
-            ProjectionVariable.SetMatrix((float[])Camera.GetProjectionMatrix());
-            ViewVariable.SetMatrix((float[])Camera.GetViewMatrix());
-            WorldVariable.SetMatrix((float[])World);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            var Matrix = Camera.GetProjectionMatrix();
+            Data.Set(0, ref Matrix);
+            ProjectionVariable.SetMatrix(Data);
+            Matrix = Camera.GetViewMatrix();
+            Data.Set(0, ref Matrix);
+            ViewVariable.SetMatrix(Data);
+            Data.Set(0, ref World);
+            WorldVariable.SetMatrix((Data));
 
             // Update the Cull Mode (non-FX method)
             //
@@ -559,7 +565,8 @@ namespace Tutorial14
             //
             Matrix WorldMatrix;
             D3DX10Functions.MatrixScaling(out WorldMatrix, 150.0f, 150.0f, 1.0f);
-            WorldVariable.SetMatrix(((float[])WorldMatrix));
+            Data.Set(0, ref WorldMatrix);
+            WorldVariable.SetMatrix(Data);
 
             //
             // Render the screen space quad

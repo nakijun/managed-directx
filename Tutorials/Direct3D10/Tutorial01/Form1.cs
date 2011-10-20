@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using Xtro.MDX;
 using Xtro.MDX.DXGI;
 using Xtro.MDX.Direct3D10;
-using Xtro.MDX.Generic;
 using Device = Xtro.MDX.Direct3D10.Device;
 using Functions = Xtro.MDX.Direct3D10.Functions;
 
@@ -128,9 +127,7 @@ namespace Tutorial01
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             };
-            var Viewports = new UnmanagedMemory<Viewport>((uint)Marshal.SizeOf(Viewport));
-            Viewports.Set(ref Viewport);
-            Device.RS_SetViewports(1, Viewports);
+            Device.RS_SetViewports(1, new[] { Viewport });
 
             return true;
         }

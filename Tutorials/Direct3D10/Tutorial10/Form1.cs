@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using Xtro.MDX;
 using Xtro.MDX.DXGI;
 using Xtro.MDX.Direct3D10;
+using Xtro.MDX.Generic;
 using Device = Xtro.MDX.Direct3D10.Device;
 using Xtro.MDX.Direct3DX10;
 using D3DX10Constants = Xtro.MDX.Direct3DX10.Constants;
@@ -337,9 +338,15 @@ namespace Tutorial10
             //
             // Update variables that change once per frame
             //
-            ProjectionVariable.SetMatrix((float[])Camera.GetProjectionMatrix());
-            ViewVariable.SetMatrix((float[])Camera.GetViewMatrix());
-            WorldVariable.SetMatrix((float[])World);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            var Matrix = Camera.GetProjectionMatrix();
+            Data.Set(0, ref Matrix);
+            ProjectionVariable.SetMatrix(Data);
+            Matrix = Camera.GetViewMatrix();
+            Data.Set(0, ref Matrix);
+            ViewVariable.SetMatrix(Data);
+            Data.Set(0, ref World);
+            WorldVariable.SetMatrix((Data));
 
             //
             // Set the Vertex Layout

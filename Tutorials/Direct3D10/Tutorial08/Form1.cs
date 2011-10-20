@@ -285,7 +285,9 @@ namespace Tutorial08
             D3DX10Functions.MatrixLookAtLH(out View, ref Eye, ref At, ref Up);
 
             // Update Variables that never change
-            ViewVariable.SetMatrix((float[])View);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref View);
+            ViewVariable.SetMatrix(Data);
             DiffuseVariable.SetResource(TextureResourceView);
 
             return 0;
@@ -311,7 +313,9 @@ namespace Tutorial08
             // Setup the projection parameters again
             var Aspect = (float)BackBufferSurfaceDescription.Width / BackBufferSurfaceDescription.Height;
             D3DX10Functions.MatrixPerspectiveFovLH(out Projection, (float)D3DX10Constants.PI * 0.25f, Aspect, 0.1f, 100.0f);
-            ProjectionVariable.SetMatrix((float[])Projection);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref Projection);
+            ProjectionVariable.SetMatrix(Data);
 
             return 0;
         }
@@ -338,8 +342,9 @@ namespace Tutorial08
             //
             // Update variables that change once per frame
             //
-            WorldVariable.SetMatrix((float[])World);//StructToFloatArray(World));
-            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(MeshColor));
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref World);
+            WorldVariable.SetMatrix(Data);//StructToFloatArray(World));
             Data.Set(0, ref MeshColor);
             MeshColorVariable.SetFloatVector(Data);
 

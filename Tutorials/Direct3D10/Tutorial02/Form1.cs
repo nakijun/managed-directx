@@ -137,9 +137,7 @@ namespace Tutorial02
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             };
-            var Viewports = new UnmanagedMemory<Viewport>((uint)Marshal.SizeOf(Viewport));
-            Viewports.Set(ref Viewport);
-            Device.RS_SetViewports(1, Viewports);
+            Device.RS_SetViewports(1, new[] { Viewport });
 
             // Create the effect
 
