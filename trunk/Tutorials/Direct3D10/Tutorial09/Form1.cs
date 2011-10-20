@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using Xtro.MDX;
 using Xtro.MDX.DXGI;
 using Xtro.MDX.Direct3D10;
+using Xtro.MDX.Generic;
 using Device = Xtro.MDX.Direct3D10.Device;
 using Xtro.MDX.Direct3DX10;
 using D3DX10Constants = Xtro.MDX.Direct3DX10.Constants;
@@ -188,7 +189,9 @@ namespace Tutorial09
             D3DX10Functions.MatrixLookAtLH(out View, ref Eye, ref At, ref Up);
 
             // Update Variables that never change
-            ViewVariable.SetMatrix((float[])View);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref View);
+            ViewVariable.SetMatrix(Data);
 
             return 0;
         }
@@ -209,7 +212,9 @@ namespace Tutorial09
             // Setup the projection parameters again
             var Aspect = (float)BackBufferSurfaceDescription.Width / BackBufferSurfaceDescription.Height;
             D3DX10Functions.MatrixPerspectiveFovLH(out Projection, (float)D3DX10Constants.PI * 0.25f, Aspect, 0.5f, 1000.0f);
-            ProjectionVariable.SetMatrix((float[])Projection);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref Projection);
+            ProjectionVariable.SetMatrix(Data);
 
             return 0;
         }
@@ -236,7 +241,9 @@ namespace Tutorial09
             //
             // Update variables that change once per frame
             //
-            WorldVariable.SetMatrix((float[])World);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref World);
+            WorldVariable.SetMatrix(Data);
 
             //
             // Set the Vertex Layout

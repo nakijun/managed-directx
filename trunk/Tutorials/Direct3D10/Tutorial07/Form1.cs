@@ -161,9 +161,7 @@ namespace Tutorial07
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             };
-            var Viewports = new UnmanagedMemory<Viewport>((uint)Marshal.SizeOf(Viewport));
-            Viewports.Set(ref Viewport);
-            Device.RS_SetViewports(1, Viewports);
+            Device.RS_SetViewports(1, new[] { Viewport });
 
             // Create the effect
 
@@ -346,8 +344,11 @@ namespace Tutorial07
             D3DX10Functions.MatrixPerspectiveFovLH(out Projection, FovY, ClientSize.Width / (float)ClientSize.Height, 0.1f, 100.0f);
 
             // Update Variables that never change
-            ViewVariable.SetMatrix((float[])View);
-            ProjectionVariable.SetMatrix((float[])Projection);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(View));
+            Data.Set(0, ref View);
+            ViewVariable.SetMatrix(Data);
+            Data.Set(0, ref Projection);
+            ProjectionVariable.SetMatrix(Data);
             DiffuseVariable.SetResource(TextureResourceView);
 
             return true;
@@ -376,9 +377,10 @@ namespace Tutorial07
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 
             // Update variables that change once per frame
-            var Result = WorldVariable.SetMatrix((float[])World);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(World));
+            Data.Set(0, ref World);
+            var Result = WorldVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("WorldVariable.SetMatrix has failed : " + Result);
-            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(MeshColor));
             Data.Set(0, ref MeshColor);
             Result = MeshColorVariable.SetFloatVector(Data);
             if (Result < 0) throw new Exception("MeshColorVariable.SetFloatVector has failed : " + Result);

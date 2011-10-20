@@ -157,9 +157,7 @@ namespace Tutorial04
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             };
-            var Viewports = new UnmanagedMemory<Viewport>((uint)Marshal.SizeOf(Viewport));
-            Viewports.Set(ref Viewport);
-            Device.RS_SetViewports(1, Viewports);
+            Device.RS_SetViewports(1, new[] { Viewport }); 
 
             // Create the effect
 
@@ -339,11 +337,15 @@ namespace Tutorial04
             Device.ClearRenderTargetView(RenderTargetView, ref ClearColor);
 
             // Update variables
-            var Result = WorldVariable.SetMatrix((float[])World);
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref World);
+            var Result = WorldVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("WorldVariable.SetMatrix has failed : " + Result);
-            Result = ViewVariable.SetMatrix((float[])View);
+            Data.Set(0, ref View);
+            Result = ViewVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("ViewVariable.SetMatrix has failed : " + Result);
-            Result = ProjectionVariable.SetMatrix((float[])Projection);
+            Data.Set(0, ref Projection);
+            Result = ProjectionVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("ProjectionVariable.SetMatrix has failed : " + Result);
 
             // Render a cube

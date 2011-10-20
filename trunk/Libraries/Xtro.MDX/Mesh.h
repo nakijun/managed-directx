@@ -121,12 +121,12 @@ public:
 		return Result;
 	}
 
-	int GetAttributeTable(array<AttributeRange>^ AttribTable, unsigned int% AttribTableSize)
+	int GetAttributeTable(Xtro::MDX::Generic::UnmanagedMemory<AttributeRange>^ AttribTable, unsigned int% AttribTableSize)
 	{
 		pin_ptr<unsigned int> PinnedAttribTableSize = &AttribTableSize;
-		pin_ptr<AttributeRange> PinnedAttribTable = AttribTable != nullptr && AttribTable->Length > 0 ? &AttribTable[0] : nullptr;
+		D3DX10_ATTRIBUTE_RANGE* pAttribTable = AttribTable == nullptr ? 0 : (D3DX10_ATTRIBUTE_RANGE*)AttribTable->pMemory;
 
-		return pMesh->GetAttributeTable((D3DX10_ATTRIBUTE_RANGE*)PinnedAttribTable, PinnedAttribTableSize);
+		return pMesh->GetAttributeTable(pAttribTable, PinnedAttribTableSize);
 	}
 
 	int GetDeviceIndexBuffer([Out] Buffer^% IndexBuffer)

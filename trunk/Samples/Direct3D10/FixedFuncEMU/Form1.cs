@@ -618,19 +618,26 @@ namespace FixedFuncEMU
             var ProjMatrix = Camera.GetProjectionMatrix();
             var ViewMatrix = Camera.GetViewMatrix();
 
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
             var LightViewProjMatrix = LightView * LightProj;
-            LightViewProj.SetMatrix((float[])LightViewProjMatrix);
-            World.SetMatrix((float[])WorldMatrix);
-            View.SetMatrix((float[])ViewMatrix);
-            Proj.SetMatrix((float[])ProjMatrix);
+            Data.Set(0, ref LightViewProjMatrix);
+            LightViewProj.SetMatrix(Data);
+            Data.Set(0, ref WorldMatrix);
+            World.SetMatrix(Data);
+            Data.Set(0, ref ViewMatrix);
+            View.SetMatrix(Data);
+            Data.Set(0, ref ProjMatrix);
+            Proj.SetMatrix(Data);
             D3DX10Functions.MatrixInverse(out InvProjMatrix, ref ProjMatrix);
-            InvProj.SetMatrix((float[])InvProjMatrix);
+            Data.Set(0, ref InvProjMatrix);
+            InvProj.SetMatrix(Data);
 
             // Render the room and the blackholes
             EnableClipping.SetBool(false);
             EnableLighting.SetBool(false);
             RoomMesh.Render(Device, RenderSceneGouraudTech, DiffuseTex);
-            World.SetMatrix((float[])BlackHole);
+            Data.Set(0, ref BlackHole);
+            World.SetMatrix(Data);
             HoleMesh.Render(Device, RenderSceneGouraudTech, DiffuseTex);
 
             // Render the balls
@@ -640,7 +647,8 @@ namespace FixedFuncEMU
             {
                 if (Balls[I].StartTime > -1.0)
                 {
-                    World.SetMatrix((float[])Balls[I].World);
+                    Data.Set(0, ref Balls[I].World);
+                    World.SetMatrix(Data);
 
                     switch (I % 3)
                     {

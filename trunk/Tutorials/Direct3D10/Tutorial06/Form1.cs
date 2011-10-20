@@ -193,9 +193,7 @@ namespace Tutorial06
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             };
-            var Viewports = new UnmanagedMemory<Viewport>((uint)Marshal.SizeOf(Viewport));
-            Viewports.Set(ref Viewport);
-            Device.RS_SetViewports(1, Viewports);
+            Device.RS_SetViewports(1, new[] { Viewport }); 
 
             // Create the effect
 
@@ -424,11 +422,15 @@ namespace Tutorial06
             Device.ClearDepthStencilView(DepthStencilView, ClearFlag.Depth, 1.0f, 0);
 
             // Update matrix variables
-            var Result = WorldVariable.SetMatrix((float[])World);//StructToFloatArray(World));
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref World);
+            var Result = WorldVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("WorldVariable.SetMatrix has failed : " + Result);
-            Result = ViewVariable.SetMatrix((float[])View);
+            Data.Set(0, ref View);
+            Result = ViewVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("ViewVariable.SetMatrix has failed : " + Result);
-            Result = ProjectionVariable.SetMatrix((float[])Projection);
+            Data.Set(0, ref Projection);
+            Result = ProjectionVariable.SetMatrix(Data);
             if (Result < 0) throw new Exception("ProjectionVariable.SetMatrix has failed : " + Result);
 
             // Update lighting variables
@@ -456,10 +458,9 @@ namespace Tutorial06
                 Light = LightScale * Light;
 
                 // Update the world variable to reflect the current light
-                WorldVariable.SetMatrix((float[])Light);
-                LightColors.Get(M, out Vector4);
-                var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(Vector4));
-                Data.Set(0, ref Vector4);
+                Data.Set(0, ref Light);
+                WorldVariable.SetMatrix(Data);
+                LightColors.CopyTo(M, Data, 0, 1);
                 OutputColorVariable.SetFloatVector(Data);
 
                 for (uint PassNo = 0; PassNo < TechniqueDescriptionRenderLight.Passes; PassNo++)

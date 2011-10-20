@@ -658,12 +658,17 @@ namespace SoftParticles
             ScreenSize.Set(0, 0, ref BackBufferWidth);
             ScreenSize.Set(0, 1, ref BackBufferHeight);
 
-            WorldViewProjVariable.SetMatrix((float[])WorldViewProj);
-            WorldViewVariable.SetMatrix((float[])WorldView);
-            WorldVariable.SetMatrix((float[])World);
-            InvViewVariable.SetMatrix((float[])InvView);
-            InvProjVariable.SetMatrix((float[])InvProj);
-            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Vector4)));
+            var Data = new UnmanagedMemory<float>((uint)Marshal.SizeOf(typeof(Matrix)));
+            Data.Set(0, ref WorldViewProj);
+            WorldViewProjVariable.SetMatrix(Data);
+            Data.Set(0, ref WorldView);
+            WorldViewVariable.SetMatrix(Data);
+            Data.Set(0, ref World);
+            WorldVariable.SetMatrix(Data);
+            Data.Set(0, ref InvView);
+            InvViewVariable.SetMatrix(Data);
+            Data.Set(0, ref InvProj);
+            InvProjVariable.SetMatrix(Data);
             Data.Set(0, ref ViewLightDir1);
             ViewLightDir1Variable.SetFloatVector(Data);
             Data.Set(0, ref WorldLightDir1);
