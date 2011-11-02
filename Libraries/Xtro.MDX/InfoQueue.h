@@ -113,4 +113,29 @@ public:
 	{
 		return pInfoQueue->GetBreakOnSeverity((D3D10_MESSAGE_SEVERITY)Severity) != 0;
 	}
+
+	int GetMessage(long long MessageIndex, [Out] SIZE_T% MessageByteLength)
+	{
+		pin_ptr<SIZE_T> PinnedMessageByteLength = &MessageByteLength;
+
+		return pInfoQueue->GetMessage(MessageIndex, 0, PinnedMessageByteLength);
+	}
+
+	int GetMessage(long long MessageIndex, [Out] Message% Message, SIZE_T MessageByteLength)
+	{
+		pin_ptr<SIZE_T> PinnedMessageByteLength = &MessageByteLength;
+
+		D3D10_MESSAGE* pMessage = (D3D10_MESSAGE*)malloc(MessageByteLength);
+		try
+		{
+			int Result = pInfoQueue->GetMessage(MessageIndex, pMessage, PinnedMessageByteLength);
+			Message.FromNative(pMessage);
+		}
+		finally
+		{
+			free(pMessage);
+		}
+
+		return Result;
+	}
 };
