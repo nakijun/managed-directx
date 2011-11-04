@@ -12,4 +12,20 @@ internal:
 	}
 
 public:
+	ResourcePriority GetEvictionPriority()
+	{
+		return (ResourcePriority)pResource->GetEvictionPriority();
+	}
+
+	void GetType([Out] ResourceDimension% Type)
+	{
+		pin_ptr<ResourceDimension> PinnedType = &Type;
+
+		pResource->GetType((D3D10_RESOURCE_DIMENSION*)PinnedType);
+	}  
+
+	void SetEvictionPriority(ResourcePriority EvictionPriority)
+	{
+		pResource->SetEvictionPriority((unsigned int)EvictionPriority);
+	}
 };

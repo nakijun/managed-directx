@@ -12,4 +12,9 @@ internal:
 	}
 
 public:
+	void GetDescription([Out] RenderTargetViewDescription% Description)
+	{
+		pin_ptr<RenderTargetViewDescription> PinnedDescription = &Description;
+		pRenderTargetView->GetDesc((D3D10_RENDER_TARGET_VIEW_DESC*)PinnedDescription);
+	}
 };

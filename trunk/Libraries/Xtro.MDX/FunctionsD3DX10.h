@@ -457,7 +457,7 @@ public:
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
-		int Result;
+		int Result = 0;
 		ID3DX10Font* pFont = 0;
 
 		IntPtr pFaceName = Marshal::StringToHGlobalUni(FaceName);
@@ -495,7 +495,7 @@ public:
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
-		int Result;
+		int Result = 0;
 		ID3DX10Mesh* pMesh = 0;
 
 		IntPtr pPositionSemantic = Marshal::StringToHGlobalAnsi(PositionSemantic);
