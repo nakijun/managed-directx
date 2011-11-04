@@ -76,6 +76,12 @@
     <Filter Include="Direct3DX10\Interfaces">
       <UniqueIdentifier>{6ab7d7d9-1bf8-495d-a356-f997e555ca26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Direct3D10\Shader\Interfaces">
+      <UniqueIdentifier>{e87ca0f4-d9b2-4fb6-a775-31eb71e5a962}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D10\Effect\Interfaces">
+      <UniqueIdentifier>{78035625-fede-430b-b5cf-2f39718767ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h">
@@ -402,12 +408,6 @@
     <ClInclude Include="TechniqueDescription.h">
       <Filter>Direct3D10\Effect\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Buffer.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="DepthStencilView.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="DeviceD3D10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -444,21 +444,6 @@
     <ClInclude Include="FunctionsD3DX10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="RenderTargetView.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceD3D10.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderResourceView.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="View.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="ImageInfo.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
@@ -492,12 +477,6 @@
     </ClInclude>
     <ClInclude Include="Box.h">
       <Filter>Direct3D10\Core\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture1D.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture3D.h">
-      <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="RasterizerState.h">
       <Filter>Direct3D10\Core\Interfaces</Filter>
@@ -834,6 +813,33 @@
     </ClInclude>
     <ClInclude Include="StreamOutputDeclarationEntry.h">
       <Filter>Direct3D10\Core\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>Direct3D10\Resource\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilView.h">
+      <Filter>Direct3D10\Resource\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTargetView.h">
+      <Filter>Direct3D10\Resource\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceD3D10.h">
+      <Filter>Direct3D10\Resource\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderResourceView.h">
+      <Filter>Direct3D10\Resource\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture1D.h">
+      <Filter>Direct3D10\Resource\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>Direct3D10\Resource\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture3D.h">
+      <Filter>Direct3D10\Resource\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="View.h">
+      <Filter>Direct3D10\Resource\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

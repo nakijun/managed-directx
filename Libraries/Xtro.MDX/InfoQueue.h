@@ -125,10 +125,12 @@ public:
 	{
 		pin_ptr<SIZE_T> PinnedMessageByteLength = &MessageByteLength;
 
+		int Result = 0;
+
 		D3D10_MESSAGE* pMessage = (D3D10_MESSAGE*)malloc(MessageByteLength);
 		try
 		{
-			int Result = pInfoQueue->GetMessage(MessageIndex, pMessage, PinnedMessageByteLength);
+			Result = pInfoQueue->GetMessage(MessageIndex, pMessage, PinnedMessageByteLength);
 			Message.FromNative(pMessage);
 		}
 		finally
@@ -137,5 +139,165 @@ public:
 		}
 
 		return Result;
+	}
+
+	long long GetMessageCountLimit()
+	{
+		return pInfoQueue->GetMessageCountLimit();
+	}
+
+	bool GetMuteDebugOutput()
+	{
+		return pInfoQueue->GetMuteDebugOutput() != 0;
+	}
+
+	long long GetNumberOfMessagesAllowedByStorageFilter()
+	{
+		return pInfoQueue->GetNumMessagesAllowedByStorageFilter();
+	}
+
+	long long GetNumberOfMessagesDeniedByStorageFilter()
+	{
+		return pInfoQueue->GetNumMessagesDeniedByStorageFilter();
+	}
+
+	long long GetNumberOfMessagesDiscardedByMessageCountLimit()
+	{
+		return pInfoQueue->GetNumMessagesDiscardedByMessageCountLimit();
+	}
+
+	long long GetNumberOfStoredMessages()
+	{
+		return pInfoQueue->GetNumStoredMessages();
+	}
+
+	long long GetNumberOfStoredMessagesAllowedByRetrievalFilter()
+	{
+		return pInfoQueue->GetNumStoredMessagesAllowedByRetrievalFilter();
+	}
+
+	int GetRetrievalFilter([Out] SIZE_T% FilterByteLength)
+	{
+		pin_ptr<SIZE_T> PinnedFilterByteLength = &FilterByteLength;
+
+		return pInfoQueue->GetRetrievalFilter(0, PinnedFilterByteLength);
+	}
+
+	int GetRetrievalFilter([Out] InfoQueueFilter% Filter, SIZE_T FilterByteLength)
+	{
+		D3D10_INFO_QUEUE_FILTER NativeFilter;
+
+		int Result = pInfoQueue->GetRetrievalFilter(&NativeFilter, &FilterByteLength);
+
+		Filter.FromNative(&NativeFilter);
+
+		return Result;
+	}
+
+	unsigned int GetRetrievalFilterStackSize()
+	{
+		return pInfoQueue->GetRetrievalFilterStackSize();
+	}
+
+	int GetStorageFilter([Out] SIZE_T% FilterByteLength)
+	{
+		pin_ptr<SIZE_T> PinnedFilterByteLength = &FilterByteLength;
+
+		return pInfoQueue->GetStorageFilter(0, PinnedFilterByteLength);
+	}
+
+	int GetStorageFilter([Out] InfoQueueFilter% Filter, SIZE_T FilterByteLength)
+	{
+		D3D10_INFO_QUEUE_FILTER NativeFilter;
+
+		int Result = pInfoQueue->GetStorageFilter(&NativeFilter, &FilterByteLength);
+
+		Filter.FromNative(&NativeFilter);
+
+		return Result;
+	}
+
+	unsigned int GetStorageFilterStackSize()
+	{
+		return pInfoQueue->GetStorageFilterStackSize();
+	}
+
+	void PopRetrievalFilter()
+	{
+		pInfoQueue->PopRetrievalFilter();
+	}
+
+	void PopStorageFilter()
+	{
+		pInfoQueue->PopStorageFilter();
+	}
+
+	int PushCopyOfRetrievalFilter()
+	{
+		return pInfoQueue->PushCopyOfRetrievalFilter();
+	}
+
+	int PushCopyOfStorageFilter()
+	{
+		return pInfoQueue->PushCopyOfStorageFilter();
+	}
+
+	int PushEmptyRetrievalFilter()
+	{
+		return pInfoQueue->PushEmptyRetrievalFilter();
+	}
+
+	int PushEmptyStorageFilter()
+	{
+		return pInfoQueue->PushEmptyStorageFilter();
+	}
+
+	int PushRetrievalFilter(InfoQueueFilter% Filter)
+	{
+		int Result = 0;
+
+		D3D10_INFO_QUEUE_FILTER NativeFilter;
+		Filter.Marshal(&NativeFilter);
+		try	{ Result = pInfoQueue->PushRetrievalFilter(&NativeFilter); }
+		finally	{ Filter.Unmarshal(); }
+
+		return Result;
+	}
+
+	int PushStorageFilter(InfoQueueFilter% Filter)
+	{
+		int Result = 0;
+
+		D3D10_INFO_QUEUE_FILTER NativeFilter;
+		Filter.Marshal(&NativeFilter);
+		try	{ Result = pInfoQueue->PushStorageFilter(&NativeFilter); }
+		finally	{ Filter.Unmarshal(); }
+
+		return Result;
+	}
+
+	int SetBreakOnCategory(MessageCategory Category, bool Enable)
+	{
+		return pInfoQueue->SetBreakOnCategory((D3D10_MESSAGE_CATEGORY)Category, Enable);
+	}
+
+	int SetBreakOnID(MessageID ID, bool Enable)
+	{
+		return pInfoQueue->SetBreakOnID((D3D10_MESSAGE_ID)ID, Enable);
+	}
+
+	int SetBreakOnSeverity(MessageSeverity Severity, bool Enable)
+	{
+		return pInfoQueue->SetBreakOnSeverity((D3D10_MESSAGE_SEVERITY)Severity, Enable);
+	}
+
+	int SetMessageCountLimit(long long MessageCountLimit)
+	{
+		return pInfoQueue->SetMessageCountLimit(MessageCountLimit);
+	}
+
+	void SetMuteDebugOutput(bool Mute)
+	{
+		pInfoQueue->SetMuteDebugOutput(Mute);
 	}
 };

@@ -12,4 +12,9 @@ internal:
 	}
 
 public:
+	void GetDescription([Out] DepthStencilViewDescription% Description)
+	{
+		pin_ptr<DepthStencilViewDescription> PinnedDescription = &Description;
+		pDepthStencilView->GetDesc((D3D10_DEPTH_STENCIL_VIEW_DESC*)PinnedDescription);
+	}
 };

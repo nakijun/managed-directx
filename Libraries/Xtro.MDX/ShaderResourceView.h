@@ -12,4 +12,9 @@ internal:
 	}
 
 public:
+	void GetDescription([Out] ShaderResourceViewDescription% Description)
+	{
+		pin_ptr<ShaderResourceViewDescription> PinnedDescription = &Description;
+		pShaderResourceView->GetDesc((D3D10_SHADER_RESOURCE_VIEW_DESC*)PinnedDescription);
+	}
 };
