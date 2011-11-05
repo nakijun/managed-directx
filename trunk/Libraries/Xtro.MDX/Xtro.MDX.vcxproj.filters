@@ -411,9 +411,6 @@
     <ClInclude Include="DeviceD3D10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="EffectMatrixVariable.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="EffectPass.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -866,6 +863,15 @@
       <Filter>Direct3D10\Effect\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="EffectBlendVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectDepthStencilVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectDepthStencilViewVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectMatrixVariable.h">
       <Filter>Direct3D10\Effect\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>

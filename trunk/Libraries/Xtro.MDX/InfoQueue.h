@@ -125,20 +125,15 @@ public:
 	{
 		pin_ptr<SIZE_T> PinnedMessageByteLength = &MessageByteLength;
 
-		int Result = 0;
-
 		D3D10_MESSAGE* pMessage = (D3D10_MESSAGE*)malloc(MessageByteLength);
 		try
 		{
-			Result = pInfoQueue->GetMessage(MessageIndex, pMessage, PinnedMessageByteLength);
+			int Result = pInfoQueue->GetMessage(MessageIndex, pMessage, PinnedMessageByteLength);
 			Message.FromNative(pMessage);
-		}
-		finally
-		{
-			free(pMessage);
-		}
 
-		return Result;
+			return Result;
+		}
+		finally	{ free(pMessage); }
 	}
 
 	long long GetMessageCountLimit()
@@ -254,26 +249,20 @@ public:
 
 	int PushRetrievalFilter(InfoQueueFilter% Filter)
 	{
-		int Result = 0;
-
 		D3D10_INFO_QUEUE_FILTER NativeFilter;
 		Filter.Marshal(&NativeFilter);
-		try	{ Result = pInfoQueue->PushRetrievalFilter(&NativeFilter); }
-		finally	{ Filter.Unmarshal(); }
 
-		return Result;
+		try	{ return pInfoQueue->PushRetrievalFilter(&NativeFilter); }
+		finally	{ Filter.Unmarshal(); }
 	}
 
 	int PushStorageFilter(InfoQueueFilter% Filter)
 	{
-		int Result = 0;
-
 		D3D10_INFO_QUEUE_FILTER NativeFilter;
 		Filter.Marshal(&NativeFilter);
-		try	{ Result = pInfoQueue->PushStorageFilter(&NativeFilter); }
-		finally	{ Filter.Unmarshal(); }
 
-		return Result;
+		try	{ return pInfoQueue->PushStorageFilter(&NativeFilter); }
+		finally	{ Filter.Unmarshal(); }
 	}
 
 	int SetBreakOnCategory(MessageCategory Category, bool Enable)

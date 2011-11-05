@@ -171,6 +171,8 @@ namespace Direct3D10
 	#include "DeviceChild_ForwardedMethods.h"
 	#include "StateBlockMask.h"
 	#include "EffectPass.h"
+	#include "EffectDepthStencilVariable.h"
+	#include "EffectDepthStencilViewVariable.h"
 	#include "EffectTechnique.h"
 	#include "EffectVectorVariable.h"
 	#include "EffectMatrixVariable.h"
