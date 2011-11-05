@@ -136,24 +136,24 @@ public:
 	{
 		ID3D10DepthStencilView* pDepthStencilView = DepthStencilView == nullptr ? 0 : DepthStencilView->pDepthStencilView;
 
-		ID3D10RenderTargetView** ppRenderTargetViews = 0;
+		ID3D10RenderTargetView** pRenderTargetViews = 0;
 		try
 		{
 			if (RenderTargetViews != nullptr && RenderTargetViews->Length > 0)
 			{
 				unsigned int Count = Math::Min(NumberOfViews, (unsigned int)RenderTargetViews->Length);
-				ppRenderTargetViews = new ID3D10RenderTargetView*[Count];
+				pRenderTargetViews = new ID3D10RenderTargetView*[Count];
 				for (unsigned int No = 0; No < Count; No++)
 				{
-					ppRenderTargetViews[No] = RenderTargetViews[No] == nullptr ? 0 : RenderTargetViews[No]->pRenderTargetView;
+					pRenderTargetViews[No] = RenderTargetViews[No] == nullptr ? 0 : RenderTargetViews[No]->pRenderTargetView;
 				}
 			}
 
-			pDevice->OMSetRenderTargets(NumberOfViews, ppRenderTargetViews, pDepthStencilView);
+			pDevice->OMSetRenderTargets(NumberOfViews, pRenderTargetViews, pDepthStencilView);
 		}
 		finally
 		{
-			if (ppRenderTargetViews) delete[] ppRenderTargetViews;
+			if (pRenderTargetViews) delete[] pRenderTargetViews;
 		}
 	}
 

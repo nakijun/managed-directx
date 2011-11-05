@@ -30,7 +30,7 @@ internal:
 		Native->PitchAndFamily = (unsigned char)PitchAndFamily;
 
 		int Length = FaceName == nullptr ? 0 : FaceName->Length;
-		for(int No = 0; No < LF_FACESIZE; No++)
+		for (int No = 0; No < LF_FACESIZE; No++)
 		{
 			Native->FaceName[No] = No < Length ? FaceName[No] : 0;
 		}

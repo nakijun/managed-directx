@@ -173,6 +173,8 @@
     <ClInclude Include="DeviceDXGI.h" />
     <ClInclude Include="EffectBlendVariable.h" />
     <ClInclude Include="EffectConstantBuffer.h" />
+    <ClInclude Include="EffectDepthStencilVariable.h" />
+    <ClInclude Include="EffectDepthStencilViewVariable.h" />
     <ClInclude Include="EffectDescription.h" />
     <ClInclude Include="EffectScalarVariable.h" />
     <ClInclude Include="EffectShaderDescription.h" />
