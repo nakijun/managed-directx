@@ -21,7 +21,8 @@ public:
 			try { return (ShaderReflectionConstantBuffer^)Interfaces[IntPtr(pResult)]; }
 			catch (KeyNotFoundException^) { return gcnew ShaderReflectionConstantBuffer(IntPtr(pResult)); }
 		}
-		else return nullptr;
+		
+		return nullptr;
 	}
 
 	ShaderReflectionConstantBuffer^ GetConstantBufferByName(String^ Name)
@@ -37,7 +38,8 @@ public:
 			try { return (ShaderReflectionConstantBuffer^)Interfaces[IntPtr(pResult)]; }
 			catch (KeyNotFoundException^) { return gcnew ShaderReflectionConstantBuffer(IntPtr(pResult)); }
 		}
-		else return nullptr;
+		
+		return nullptr;
 	}
 
 	int GetDescription([Out] ShaderDescription% Description)

@@ -1,4 +1,4 @@
-public ref class SwapChain sealed : Object
+public ref class SwapChain sealed : DeviceSubObject
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_IDXGISwapChain);
@@ -6,7 +6,7 @@ private:
 internal:
 	IDXGISwapChain* pSwapChain;
 
-	SwapChain(IntPtr SwapChain) : Object(SwapChain)
+	SwapChain(IntPtr SwapChain) : DeviceSubObject(SwapChain)
 	{
 		pSwapChain = (IDXGISwapChain*)SwapChain.ToPointer();
 	}

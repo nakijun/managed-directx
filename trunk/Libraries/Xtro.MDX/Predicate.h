@@ -1,4 +1,4 @@
-public ref class Predicate sealed : DeviceChild
+public ref class Predicate sealed : Query
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Predicate);
@@ -6,7 +6,7 @@ private:
 internal:
 	ID3D10Predicate* pPredicate;
 
-	Predicate(IntPtr Predicate) : DeviceChild(Predicate)
+	Predicate(IntPtr Predicate) : Query(Predicate)
 	{	
 		pPredicate = (ID3D10Predicate*)Predicate.ToPointer();
 	}

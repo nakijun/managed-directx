@@ -1,4 +1,4 @@
-public ref class InfoQueue sealed : DeviceChild
+public ref class InfoQueue sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10InfoQueue);
@@ -6,7 +6,7 @@ private:
 internal:
 	ID3D10InfoQueue* pInfoQueue;
 
-	InfoQueue(IntPtr InfoQueue) : DeviceChild(InfoQueue)
+	InfoQueue(IntPtr InfoQueue) : Unknown(InfoQueue)
 	{	
 		pInfoQueue = (ID3D10InfoQueue*)InfoQueue.ToPointer();
 	}

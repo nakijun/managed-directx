@@ -16,14 +16,13 @@ public:
 	{
 		ID3D10EffectPass* pEffectPass = pEffectTechnique->GetPassByIndex(Index);
 
-		EffectPass^ Result = nullptr;
 		if (pEffectPass)
 		{
-			try { Result = (EffectPass^)Interfaces[IntPtr(pEffectPass)]; }
-			catch (KeyNotFoundException^) { Result = gcnew EffectPass(IntPtr(pEffectPass)); }
+			try { return (EffectPass^)Interfaces[IntPtr(pEffectPass)]; }
+			catch (KeyNotFoundException^) { return gcnew EffectPass(IntPtr(pEffectPass)); }
 		}
-
-		return Result;
+		
+		return nullptr;
 	}
 
 	int GetDescription([Out] TechniqueDescription% Description)

@@ -1,4 +1,4 @@
-public ref class Query sealed : DeviceChild
+public ref class Query : Asynchronous
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Query);
@@ -6,7 +6,7 @@ private:
 internal:
 	ID3D10Query* pQuery;
 
-	Query(IntPtr Query) : DeviceChild(Query)
+	Query(IntPtr Query) : Asynchronous(Query)
 	{	
 		pQuery = (ID3D10Query*)Query.ToPointer();
 	}

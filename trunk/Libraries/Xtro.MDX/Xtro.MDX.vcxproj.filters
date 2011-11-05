@@ -411,9 +411,6 @@
     <ClInclude Include="DeviceD3D10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="EffectMatrixVariable.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -852,6 +849,24 @@
     </ClInclude>
     <ClInclude Include="ShaderReflectionConstantBuffer.h">
       <Filter>Direct3D10\Shader\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderReflectionVariable.h">
+      <Filter>Direct3D10\Shader\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderReflectionType.h">
+      <Filter>Direct3D10\Shader\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexShader.h">
+      <Filter>Direct3D10\Shader\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectConstantBuffer.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectBlendVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

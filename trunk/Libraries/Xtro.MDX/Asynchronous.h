@@ -1,4 +1,4 @@
-public ref class Asynchronous : Unknown
+public ref class Asynchronous : DeviceChild
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Asynchronous);
@@ -6,7 +6,7 @@ private:
 internal:
 	ID3D10Asynchronous* pAsynchronous;
 
-	Asynchronous(IntPtr Asynchronous) : Unknown(Asynchronous)
+	Asynchronous(IntPtr Asynchronous) : DeviceChild(Asynchronous)
 	{	
 		pAsynchronous = (ID3D10Asynchronous*)Asynchronous.ToPointer();
 	}

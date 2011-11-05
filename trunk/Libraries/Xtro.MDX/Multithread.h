@@ -1,4 +1,4 @@
-public ref class Multithread sealed : DeviceChild
+public ref class Multithread sealed : Unknown
 {
 private:
 	static Guid IID = IID_Converter::ToManaged(IID_ID3D10Multithread);
@@ -6,7 +6,7 @@ private:
 internal:
 	ID3D10Multithread* pMultithread;
 
-	Multithread(IntPtr Multithread) : DeviceChild(Multithread)
+	Multithread(IntPtr Multithread) : Unknown(Multithread)
 	{	
 		pMultithread = (ID3D10Multithread*)Multithread.ToPointer();
 	}
