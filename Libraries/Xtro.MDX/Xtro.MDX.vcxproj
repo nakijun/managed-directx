@@ -171,6 +171,8 @@
     <ClInclude Include="DepthStencilState.h" />
     <ClInclude Include="DeviceChild_ForwardedMethods.h" />
     <ClInclude Include="DeviceDXGI.h" />
+    <ClInclude Include="EffectBlendVariable.h" />
+    <ClInclude Include="EffectConstantBuffer.h" />
     <ClInclude Include="EffectDescription.h" />
     <ClInclude Include="EffectScalarVariable.h" />
     <ClInclude Include="EffectShaderDescription.h" />
@@ -305,6 +307,8 @@
     <ClInclude Include="ShaderInputBindDescription.h" />
     <ClInclude Include="ShaderReflection.h" />
     <ClInclude Include="ShaderReflectionConstantBuffer.h" />
+    <ClInclude Include="ShaderReflectionType.h" />
+    <ClInclude Include="ShaderReflectionVariable.h" />
     <ClInclude Include="ShaderResourceViewDescription.h" />
     <ClInclude Include="ShaderTypeDescription.h" />
     <ClInclude Include="ShaderVariableDescription.h" />
@@ -335,6 +339,7 @@
     <ClInclude Include="TextureCubeSRV.h" />
     <ClInclude Include="TextureLoadInfo.h" />
     <ClInclude Include="UnmanagedMemoryGeneric.h" />
+    <ClInclude Include="VertexShader.h" />
     <ClInclude Include="Viewport.h" />
     <ClInclude Include="BufferDescription.h" />
     <ClInclude Include="BufferRTV.h" />

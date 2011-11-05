@@ -2,7 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* ShaderReflectionConstantBuffer
+* ID3D10EffectDepthStencilVariable 
 
 * interface atlandý :
     Device

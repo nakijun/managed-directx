@@ -2,86 +2,82 @@ EffectMatrixVariable^ EffectVariable::AsMatrix()
 {
 	ID3D10EffectMatrixVariable* pResult = pEffectVariable->AsMatrix();
 
-	EffectMatrixVariable^ Result = nullptr;
 	if (pResult) 
 	{
 		try
 		{
-			try	{ Result = (EffectMatrixVariable^)Interfaces[IntPtr(pResult)]; }
+			try	{ return (EffectMatrixVariable^)Interfaces[IntPtr(pResult)]; }
 			catch (InvalidCastException^)
 			{
 				Interfaces.Remove(IntPtr(pResult));
 				throw gcnew	KeyNotFoundException();
 			}
 		}
-		catch (KeyNotFoundException^) { Result = gcnew EffectMatrixVariable(IntPtr(pResult)); }
+		catch (KeyNotFoundException^) { return gcnew EffectMatrixVariable(IntPtr(pResult)); }
 	}
 
-	return Result;
+	return nullptr;
 }
 
 EffectScalarVariable^ EffectVariable::AsScalar()
 {
 	ID3D10EffectScalarVariable* pResult = pEffectVariable->AsScalar();
 
-	EffectScalarVariable^ Result = nullptr;
 	if (pResult) 
 	{
 		try
 		{
-			try	{ Result = (EffectScalarVariable^)Interfaces[IntPtr(pResult)]; }
+			try	{ return (EffectScalarVariable^)Interfaces[IntPtr(pResult)]; }
 			catch (InvalidCastException^)
 			{
 				Interfaces.Remove(IntPtr(pResult));
 				throw gcnew	KeyNotFoundException();
 			}
 		}
-		catch (KeyNotFoundException^) { Result = gcnew EffectScalarVariable(IntPtr(pResult)); }
+		catch (KeyNotFoundException^) { return gcnew EffectScalarVariable(IntPtr(pResult)); }
 	}
 
-	return Result;
+	return nullptr;
 }
 
 EffectVectorVariable^ EffectVariable::AsVector()
 {
 	ID3D10EffectVectorVariable* pResult = pEffectVariable->AsVector();
 
-	EffectVectorVariable^ Result = nullptr;
 	if (pResult) 
 	{
 		try
 		{
-			try	{ Result = (EffectVectorVariable^)Interfaces[IntPtr(pResult)]; }
+			try	{ return (EffectVectorVariable^)Interfaces[IntPtr(pResult)]; }
 			catch (InvalidCastException^)
 			{
 				Interfaces.Remove(IntPtr(pResult));
 				throw gcnew	KeyNotFoundException();
 			}
 		}
-		catch (KeyNotFoundException^) { Result = gcnew EffectVectorVariable(IntPtr(pResult)); }
+		catch (KeyNotFoundException^) { return gcnew EffectVectorVariable(IntPtr(pResult)); }
 	}
 
-	return Result;
+	return nullptr;
 }
 
 EffectShaderResourceVariable^ EffectVariable::AsShaderResource()
 {
 	ID3D10EffectShaderResourceVariable* pResult = pEffectVariable->AsShaderResource();
 
-	EffectShaderResourceVariable^ Result = nullptr;
 	if (pResult) 
 	{
 		try
 		{
-			try	{ Result = (EffectShaderResourceVariable^)Interfaces[IntPtr(pResult)]; }
+			try	{ return (EffectShaderResourceVariable^)Interfaces[IntPtr(pResult)]; }
 			catch (InvalidCastException^)
 			{
 				Interfaces.Remove(IntPtr(pResult));
 				throw gcnew	KeyNotFoundException();
 			}
 		}
-		catch (KeyNotFoundException^) { Result = gcnew EffectShaderResourceVariable(IntPtr(pResult)); }
+		catch (KeyNotFoundException^) { return gcnew EffectShaderResourceVariable(IntPtr(pResult)); }
 	}
 
-	return Result;
+	return nullptr;
 }
