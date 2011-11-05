@@ -12,10 +12,10 @@ internal:
 	}
 
 public:
-	void GetDescription([Out] SurfaceDescription% Description)
+	int GetDescription([Out] SurfaceDescription% Description)
 	{
 		pin_ptr<SurfaceDescription> PinnedDescription = &Description;
-		pSurface->GetDesc((DXGI_SURFACE_DESC*)PinnedDescription);
+		return pSurface->GetDesc((DXGI_SURFACE_DESC*)PinnedDescription);
 	}
 
 	int Map([Out] MappedRectangle% LockedRectangle, MapFlag MapFlags)

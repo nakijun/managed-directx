@@ -185,6 +185,7 @@
     <ClInclude Include="FrameStatistics.h" />
     <ClInclude Include="GammaControl.h" />
     <ClInclude Include="GammaControlCapabilities.h" />
+    <ClInclude Include="GeometryShader.h" />
     <ClInclude Include="InfoQueue.h" />
     <ClInclude Include="InfoQueueFilter.h" />
     <ClInclude Include="InfoQueueFilterDescription.h" />
@@ -281,6 +282,7 @@
     <ClInclude Include="ModeDescription.h" />
     <ClInclude Include="OutputDescription.h" />
     <ClInclude Include="PassShaderDescription.h" />
+    <ClInclude Include="PixelShader.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Predicate.h" />
     <ClInclude Include="Quaternion.h" />
@@ -301,6 +303,8 @@
     <ClInclude Include="ShaderBufferDescription.h" />
     <ClInclude Include="ShaderDescription.h" />
     <ClInclude Include="ShaderInputBindDescription.h" />
+    <ClInclude Include="ShaderReflection.h" />
+    <ClInclude Include="ShaderReflectionConstantBuffer.h" />
     <ClInclude Include="ShaderResourceViewDescription.h" />
     <ClInclude Include="ShaderTypeDescription.h" />
     <ClInclude Include="ShaderVariableDescription.h" />

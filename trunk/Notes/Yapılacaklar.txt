@@ -2,7 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* Shader interfaces
+* ShaderReflectionConstantBuffer
 
 * interface atlandý :
     Device
