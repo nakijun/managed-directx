@@ -14,7 +14,7 @@ internal:
 public:
 	EffectTechnique^ GetTechniqueByName(String^ Name)
 	{
-		ID3D10EffectTechnique* pResult;
+		ID3D10EffectTechnique* pResult = 0;
 
 		IntPtr pName = Marshal::StringToHGlobalAnsi(Name);
 		try { pResult = pEffect->GetTechniqueByName((LPCSTR)pName.ToPointer()); }
@@ -32,7 +32,7 @@ public:
 	
 	EffectTechnique^ GetTechniqueByIndex(unsigned int Index)
 	{
-		ID3D10EffectTechnique* pResult;
+		ID3D10EffectTechnique* pResult = 0;
 
 		pResult = pEffect->GetTechniqueByIndex(Index);
 
@@ -48,7 +48,7 @@ public:
 	
 	EffectVariable^ GetVariableByName(String^ Name)
 	{
-		ID3D10EffectVariable* pResult;
+		ID3D10EffectVariable* pResult = 0;
 
 		IntPtr pName = Marshal::StringToHGlobalAnsi(Name);
 		try { pResult = pEffect->GetVariableByName((LPCSTR)pName.ToPointer()); }

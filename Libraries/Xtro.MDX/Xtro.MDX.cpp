@@ -189,6 +189,10 @@ namespace Direct3D10
 	#include "Query.h"
 	#include "SamplerState.h"
 	#include "InfoQueue.h"
+	#include "GeometryShader.h"
+	#include "PixelShader.h"
+	#include "ShaderReflectionConstantBuffer.h"
+	#include "ShaderReflection.h"
 
 	#include "FunctionsD3D10.h"
 }
