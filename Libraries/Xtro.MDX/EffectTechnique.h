@@ -12,14 +12,37 @@ internal:
 	}
 
 public:
-	EffectPass^ GetPassByIndex(unsigned int Index)
+	int ComputeStateBlockMask([Out] StateBlockMask% StateBlockMask)
 	{
-		ID3D10EffectPass* pEffectPass = pEffectTechnique->GetPassByIndex(Index);
+		pin_ptr<Xtro::MDX::Direct3D10::StateBlockMask> PinnedStateBlockMask = &StateBlockMask;
+		return pEffectTechnique->ComputeStateBlockMask((D3D10_STATE_BLOCK_MASK*)PinnedStateBlockMask);
+	}
 
-		if (pEffectPass)
-		{
-			try { return (EffectPass^)Interfaces[IntPtr(pEffectPass)]; }
-			catch (KeyNotFoundException^) { return gcnew EffectPass(IntPtr(pEffectPass)); }
+	EffectVariable^ GetAnnotationByIndex(unsigned int Index)
+	{
+		ID3D10EffectVariable* pResult = pEffectTechnique->GetAnnotationByIndex(Index);
+
+		if (pResult)
+		{	
+			try { return (EffectVariable^)Interfaces[IntPtr(pResult)]; }
+			catch (KeyNotFoundException^) { return gcnew EffectVariable(IntPtr(pResult)); }
+		}
+		
+		return nullptr;
+	}
+
+	EffectVariable^ GetAnnotationByName(String^ Name)
+	{
+		ID3D10EffectVariable* pResult = 0;
+
+		IntPtr pName = Marshal::StringToHGlobalAnsi(Name);
+		try { pResult = pEffectTechnique->GetAnnotationByName((LPCSTR)pName.ToPointer()); }
+		finally { Marshal::FreeHGlobal(pName); }
+
+		if (pResult)
+		{	
+			try { return (EffectVariable^)Interfaces[IntPtr(pResult)]; }
+			catch (KeyNotFoundException^) { return gcnew EffectVariable(IntPtr(pResult)); }
 		}
 		
 		return nullptr;
@@ -33,5 +56,40 @@ public:
 		Description.FromNative(&NativeDescription);
 
 		return Result;
+	}
+
+	EffectPass^ GetPassByIndex(unsigned int Index)
+	{
+		ID3D10EffectPass* pResult = pEffectTechnique->GetPassByIndex(Index);
+
+		if (pResult)
+		{	
+			try { return (EffectPass^)Interfaces[IntPtr(pResult)]; }
+			catch (KeyNotFoundException^) { return gcnew EffectPass(IntPtr(pResult)); }
+		}
+		
+		return nullptr;
+	}
+
+	EffectPass^ GetPassByName(String^ Name)
+	{
+		ID3D10EffectPass* pResult = 0;
+
+		IntPtr pName = Marshal::StringToHGlobalAnsi(Name);
+		try { pResult = pEffectTechnique->GetPassByName((LPCSTR)pName.ToPointer()); }
+		finally { Marshal::FreeHGlobal(pName); }
+
+		if (pResult)
+		{	
+			try { return (EffectPass^)Interfaces[IntPtr(pResult)]; }
+			catch (KeyNotFoundException^) { return gcnew EffectPass(IntPtr(pResult)); }
+		}
+		
+		return nullptr;
+	}
+
+	bool IsValid()
+	{
+		return pEffectTechnique->IsValid();
 	}
 };

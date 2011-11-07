@@ -78,7 +78,7 @@ public:
 	{
 		TEXTMETRIC NativeTextMetrics;
 
-		bool Result = pFont->GetTextMetricsW(&NativeTextMetrics) != 0;
+		bool Result = pFont->GetTextMetricsW(&NativeTextMetrics);
 														 
 		TextMetrics.Ascent = NativeTextMetrics.tmAscent;
 		TextMetrics.AverageCharWidth = NativeTextMetrics.tmAveCharWidth;
@@ -92,13 +92,13 @@ public:
 		TextMetrics.FirstChar = NativeTextMetrics.tmFirstChar;
 		TextMetrics.Height = NativeTextMetrics.tmHeight;
 		TextMetrics.InternalLeading = NativeTextMetrics.tmInternalLeading;
-		TextMetrics.Italic = NativeTextMetrics.tmItalic != 0;
+		TextMetrics.Italic = NativeTextMetrics.tmItalic;
 		TextMetrics.LastChar = NativeTextMetrics.tmLastChar;
 		TextMetrics.MaxCharWidth = NativeTextMetrics.tmMaxCharWidth;
 		TextMetrics.Overhang = NativeTextMetrics.tmOverhang;
 		TextMetrics.PitchAndFamily = (TextMetricsPitchAndFamilyValues)NativeTextMetrics.tmPitchAndFamily;
-		TextMetrics.StruckOut = NativeTextMetrics.tmStruckOut != 0;
-		TextMetrics.Underlined = NativeTextMetrics.tmUnderlined != 0;
+		TextMetrics.StruckOut = NativeTextMetrics.tmStruckOut;
+		TextMetrics.Underlined = NativeTextMetrics.tmUnderlined;
 		TextMetrics.Weight = NativeTextMetrics.tmWeight;
 
 		return Result;

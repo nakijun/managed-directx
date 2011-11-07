@@ -65,9 +65,7 @@ public:
 
 	EffectTechnique^ GetTechniqueByIndex(unsigned int Index)
 	{
-		ID3D10EffectTechnique* pResult = 0;
-
-		pResult = pEffect->GetTechniqueByIndex(Index);
+		ID3D10EffectTechnique* pResult = pEffect->GetTechniqueByIndex(Index);
 
 		if (pResult) 
 		{
@@ -97,9 +95,7 @@ public:
 	
 	EffectVariable^ GetVariableByIndex(unsigned int Index)
 	{
-		ID3D10EffectVariable* pResult = 0;
-
-		pResult = pEffect->GetVariableByIndex(Index);
+		ID3D10EffectVariable* pResult = pEffect->GetVariableByIndex(Index);
 
 		if (pResult) 
 		{
@@ -146,17 +142,17 @@ public:
 
 	bool IsOptimized()
 	{
-		return pEffect->IsOptimized() != 0;
+		return pEffect->IsOptimized();
 	}
 
 	bool IsPool()
 	{
-		return pEffect->IsPool() != 0;
+		return pEffect->IsPool();
 	}
 
 	bool IsValid()
 	{
-		return pEffect->IsValid() != 0;
+		return pEffect->IsValid();
 	}
 
 	int Optimize()

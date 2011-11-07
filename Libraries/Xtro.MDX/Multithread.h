@@ -19,7 +19,7 @@ public:
 
 	bool GetMultithreadProtected()
 	{
-		return pMultithread->GetMultithreadProtected() != 0;
+		return pMultithread->GetMultithreadProtected();
 	}
 
 	void Leave()
@@ -29,6 +29,6 @@ public:
 
 	bool SetMultithreadProtected(bool MTProtect)
 	{
-		return pMultithread->SetMultithreadProtected(MTProtect) != 0;
+		return pMultithread->SetMultithreadProtected(MTProtect);
 	}
 };

@@ -2,6 +2,8 @@
 #include "Windows.h"
 #include "Microsoft DirectX SDK (August 2009)/Include/D3DX10.h"
 
+#pragma warning (disable : 4800)
+
 #undef DrawText
 #undef GetTextMetrics
 #undef CreateFont
@@ -80,6 +82,20 @@ namespace Direct3D10
 	using namespace Xtro::MDX::DXGI;
 
 	ref class Device;
+	ref class EffectBlendVariable;
+	ref class EffectConstantBuffer;
+	ref class EffectDepthStencilVariable;
+	ref class EffectDepthStencilViewVariable;
+	ref class EffectMatrixVariable;
+	ref class EffectRasterizerVariable;
+	ref class EffectRenderTargetViewVariable;
+	ref class EffectSamplerVariable;
+	ref class EffectScalarVariable;
+	ref class EffectShaderVariable;
+	ref class EffectShaderResourceVariable;
+	ref class EffectShaderResourceVariable;
+	ref class EffectStringVariable;
+	ref class EffectVectorVariable;
 
 	#include "EnumsD3D10.h"
 	#include "ConstantsD3D10.h"
@@ -163,24 +179,32 @@ namespace Direct3D10
 	#include "CounterDescription.h"
 	#include "CounterInfo.h"
 	#include "BlendDescription.h"
-	#include "EffectVariable.h"
 	#include "BlendState.h"
-	#include "EffectBlendVariable.h"
+	#include "EffectType.h"
+	#include "EffectVariable.h"
+	#include "EffectRasterizerVariable.h"
+	#include "SamplerState.h"
+	#include "EffectSamplerVariable.h"
 	#include "DeviceD3D10.h"
 	#include "StateBlock.h"
 	#include "DeviceChild_ForwardedMethods.h"
 	#include "StateBlockMask.h"
-	#include "EffectPass.h"
 	#include "EffectDepthStencilVariable.h"
 	#include "EffectDepthStencilViewVariable.h"
-	#include "EffectTechnique.h"
+	#include "EffectRenderTargetViewVariable.h"
 	#include "EffectVectorVariable.h"
 	#include "EffectMatrixVariable.h"
 	#include "EffectScalarVariable.h"
+	#include "EffectBlendVariable.h"
 	#include "EffectShaderResourceVariable.h"
-	#include "EffectVariable_ForwardedMethods.h"
+	#include "GeometryShader.h"
+	#include "PixelShader.h"
+	#include "VertexShader.h"
 	#include "EffectShaderVariable.h"
+	#include "EffectStringVariable.h"
 	#include "PassShaderDescription.h"
+	#include "EffectPass.h"
+	#include "EffectTechnique.h"
 	#include "EffectConstantBuffer.h"
 	#include "Effect.h"
 	#include "EffectPool.h"
@@ -191,15 +215,12 @@ namespace Direct3D10
 	#include "Multithread.h"
 	#include "Query.h"
 	#include "Predicate.h"
-	#include "SamplerState.h"
 	#include "InfoQueue.h"
-	#include "GeometryShader.h"
-	#include "PixelShader.h"
 	#include "ShaderReflectionType.h"
 	#include "ShaderReflectionVariable.h"
 	#include "ShaderReflectionConstantBuffer.h"
 	#include "ShaderReflection.h"
-	#include "VertexShader.h"
+	#include "EffectVariable_ForwardedMethods.h"
 
 	#include "FunctionsD3D10.h"
 }

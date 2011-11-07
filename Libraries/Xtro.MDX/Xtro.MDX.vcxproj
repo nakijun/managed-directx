@@ -176,9 +176,14 @@
     <ClInclude Include="EffectDepthStencilVariable.h" />
     <ClInclude Include="EffectDepthStencilViewVariable.h" />
     <ClInclude Include="EffectDescription.h" />
+    <ClInclude Include="EffectRasterizerVariable.h" />
+    <ClInclude Include="EffectRenderTargetViewVariable.h" />
+    <ClInclude Include="EffectSamplerVariable.h" />
     <ClInclude Include="EffectScalarVariable.h" />
     <ClInclude Include="EffectShaderDescription.h" />
     <ClInclude Include="EffectShaderVariable.h" />
+    <ClInclude Include="EffectStringVariable.h" />
+    <ClInclude Include="EffectType.h" />
     <ClInclude Include="EffectTypeDescription.h" />
     <ClInclude Include="EffectVariableDescription.h" />
     <ClInclude Include="Enums.h" />

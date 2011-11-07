@@ -4,7 +4,7 @@ internal:
 	inline void FromNative(D3D10_EFFECT_SHADER_DESC* Native)
 	{
 		InputSignature = Native->pInputSignature ? gcnew UnmanagedMemory(IntPtr((void*)Native->pInputSignature), 0) : nullptr;
-		IsInline = Native->IsInline != 0;
+		IsInline = Native->IsInline;
 		Bytecode = Native->pBytecode ? gcnew UnmanagedMemory(IntPtr((void*)Native->pBytecode), Native->BytecodeLength) : nullptr;
 		StreamOutputDeclaration = Native->SODecl ? gcnew String(Native->SODecl) : nullptr;
 		NumberOfInputSignatureEntries = Native->NumInputSignatureEntries;

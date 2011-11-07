@@ -18,7 +18,7 @@ public:
 	{
 		bool get()
 		{
-			return BDepthClipEnable != 0;
+			return BDepthClipEnable;
 		}
 
 		void set(bool Value)
@@ -31,7 +31,7 @@ public:
 	{
 		bool get()
 		{
-			return BScissorEnable != 0;
+			return BScissorEnable;
 		}
 
 		void set(bool Value)
@@ -44,7 +44,7 @@ public:
 	{
 		bool get()
 		{
-			return BMultisampleEnable != 0;
+			return BMultisampleEnable;
 		}
 
 		void set(bool Value)
@@ -57,7 +57,7 @@ public:
 	{
 		bool get()
 		{
-			return BAntialiasedLineEnable != 0;
+			return BAntialiasedLineEnable;
 		}
 
 		void set(bool Value)
