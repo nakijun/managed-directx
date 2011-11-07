@@ -411,27 +411,6 @@
     <ClInclude Include="DeviceD3D10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
-    <ClInclude Include="EffectPass.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectPool.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectShaderResourceVariable.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectTechnique.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectVariable.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectVariable_ForwardedMethods.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectVectorVariable.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="FunctionsD3D10.h">
       <Filter>_NotImplementedYet</Filter>
     </ClInclude>
@@ -526,9 +505,6 @@
     <ClInclude Include="BlendDescription.h">
       <Filter>Direct3D10\Core\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="EffectScalarVariable.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
     <ClInclude Include="Texture1D_Description.h">
       <Filter>Direct3D10\Resource\Structures</Filter>
     </ClInclude>
@@ -621,9 +597,6 @@
     </ClInclude>
     <ClInclude Include="PassShaderDescription.h">
       <Filter>Direct3D10\Effect\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectShaderVariable.h">
-      <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="ShaderBufferDescription.h">
       <Filter>Direct3D10\Shader\Structures</Filter>
@@ -872,6 +845,48 @@
       <Filter>Direct3D10\Effect\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="EffectMatrixVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectPass.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectPool.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectRasterizerVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectRenderTargetViewVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectSamplerVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectScalarVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectShaderResourceVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectShaderVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectStringVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectTechnique.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectType.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectVariable.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectVariable_ForwardedMethods.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectVectorVariable.h">
       <Filter>Direct3D10\Effect\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>

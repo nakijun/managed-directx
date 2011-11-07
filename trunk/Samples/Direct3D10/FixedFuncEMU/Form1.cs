@@ -395,7 +395,7 @@ namespace FixedFuncEMU
 
             //set constant variables
             PointSize.SetFloat(3.0f);
-            FogModeVariable.SetInt((uint)FogMode.Linear);
+            FogModeVariable.SetInt((int)FogMode.Linear);
             FogStart.SetFloat(12.0f);
             FogEnd.SetFloat(22.0f);
             FogDensity.SetFloat(0.05f);

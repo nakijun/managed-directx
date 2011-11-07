@@ -5,6 +5,12 @@
 
 * Sýk sýk eski versiyonlara yedek al
 
+* dx dökümanýnda tüm method parametrelerini kontrol et.
+    struct larý hep ref '%' (gereken durumlarda da out)olarak geçirdiðimiz için null alabilen durumlarda metodun o parametresi olmayan versiyonu yapýlacak.
+    class [out] ise ve null alabiliyosa o parametre olmayan metod versiyonu yap. ör : Device.CreateTexture2D
+
+* [Out] ^% olan parametreler deðer alamadýðý zaman mutlaka nullptr olsun.
+
 * tüm son classlarý sealed yap : public ref class Factory sealed : Object
 
 * warningleri temizle. (release/debug - x32 / x64 olarak 4 derlemeyi de kontrol et)
@@ -17,8 +23,6 @@
 * mdx(c++) deki tüm if leri tara gerekeni "? :" yap
 
 * String^ olan her yeri marshal/unmarshal try catch yap.
-
-* [Out] ^% olan parametreler deðer alamadýðý zaman mutlaka nullptr olsun.
 
 * public olmayan fonksiyonlarý inline yap. constructor, destructor hariç.
 

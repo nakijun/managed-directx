@@ -101,17 +101,17 @@ public:
 
 	bool GetBreakOnCategory(MessageCategory Category)
 	{
-		return pInfoQueue->GetBreakOnCategory((D3D10_MESSAGE_CATEGORY)Category) != 0;
+		return pInfoQueue->GetBreakOnCategory((D3D10_MESSAGE_CATEGORY)Category);
 	}
 
 	bool GetBreakOnID(MessageID ID)
 	{
-		return pInfoQueue->GetBreakOnID((D3D10_MESSAGE_ID)ID) != 0;
+		return pInfoQueue->GetBreakOnID((D3D10_MESSAGE_ID)ID);
 	}
 
 	bool GetBreakOnSeverity(MessageSeverity Severity)
 	{
-		return pInfoQueue->GetBreakOnSeverity((D3D10_MESSAGE_SEVERITY)Severity) != 0;
+		return pInfoQueue->GetBreakOnSeverity((D3D10_MESSAGE_SEVERITY)Severity);
 	}
 
 	int GetMessage(long long MessageIndex, [Out] SIZE_T% MessageByteLength)
@@ -143,7 +143,7 @@ public:
 
 	bool GetMuteDebugOutput()
 	{
-		return pInfoQueue->GetMuteDebugOutput() != 0;
+		return pInfoQueue->GetMuteDebugOutput();
 	}
 
 	long long GetNumberOfMessagesAllowedByStorageFilter()

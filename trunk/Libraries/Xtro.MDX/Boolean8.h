@@ -16,7 +16,7 @@ public:
 		bool get(int Index)
 		{
 			pin_ptr<int> PinnedThis = &Value0;
-			return ((int*)PinnedThis)[Index] != 0;
+			return ((int*)PinnedThis)[Index];
 		}
 
 		void set(int Index, bool Value)

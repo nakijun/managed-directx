@@ -21,7 +21,7 @@ public:
 	String^ GetMemberTypeName(unsigned int Index)
 	{
 		LPCSTR Result = pShaderReflectionType->GetMemberTypeName(Index);
-		return gcnew String(Result);
+		return Result ? gcnew String(Result) : nullptr;
 	}
 
 	ShaderReflectionType^ GetMemberTypeByIndex(unsigned int Index)

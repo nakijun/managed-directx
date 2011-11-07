@@ -12,7 +12,7 @@ public:
 	{
 		bool get()
 		{
-			return BStencilEnable != 0;
+			return BStencilEnable;
 		}
 
 		void set(bool Value)

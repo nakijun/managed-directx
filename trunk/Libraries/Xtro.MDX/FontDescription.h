@@ -7,7 +7,7 @@ internal:
 		Width = Native->Width;
 		Weight = (FontWeight)Native->Weight;
 		MipLevels = Native->MipLevels;
-		Italic = Native->Italic != 0;
+		Italic = Native->Italic;
 		CharacterSet = (FontCharacterSet)Native->CharSet;
 		OutputPrecision = (FontPrecision)Native->OutputPrecision;
 		Quality = (FontQuality)Native->Quality;

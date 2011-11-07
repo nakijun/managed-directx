@@ -62,7 +62,7 @@ public:
 		pin_ptr<bool> PinnedFullscreen = &Fullscreen;
 
 		IDXGIOutput* pTarget = 0;
-		return pSwapChain->GetFullscreenState((BOOL*)PinnedFullscreen, &pTarget);
+		return pSwapChain->GetFullscreenState((int*)PinnedFullscreen, &pTarget);
 
 		if (pTarget)
 		{	
@@ -76,7 +76,7 @@ public:
 	{
 		pin_ptr<bool> PinnedFullscreen = &Fullscreen;
 
-		return pSwapChain->GetFullscreenState((BOOL*)PinnedFullscreen, 0);
+		return pSwapChain->GetFullscreenState((int*)PinnedFullscreen, 0);
 	}
 
 	int GetLastPresentCount([Out] unsigned int% LastPresentCount)

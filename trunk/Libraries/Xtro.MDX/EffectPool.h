@@ -12,4 +12,16 @@ internal:
 	}
 
 public:
+	Effect^ AsEffect()
+	{
+		ID3D10Effect* pResult = pEffectPool->AsEffect();
+
+		if (pResult)
+		{	
+			try { return (Effect^)Interfaces[IntPtr(pResult)]; }
+			catch (KeyNotFoundException^) { return gcnew Effect(IntPtr(pResult)); }
+		}
+		
+		return nullptr;
+	}
 };
