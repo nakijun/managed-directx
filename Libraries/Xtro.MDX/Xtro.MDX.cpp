@@ -40,6 +40,8 @@ namespace MDX
 
 namespace Generic
 {
+	#include "RefObject.h"
+	#include "ValueObject.h"
 	#include "UnmanagedMemoryGeneric.h"
 }
 

@@ -286,6 +286,8 @@
     <ClInclude Include="FunctionsDXGI.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Multithread.h" />
+    <ClInclude Include="RefObject.h" />
+    <ClInclude Include="ValueObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="AdapterDescription.h" />
     <ClInclude Include="ModeDescription.h" />

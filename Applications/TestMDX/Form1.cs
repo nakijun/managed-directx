@@ -70,6 +70,16 @@ namespace TestMDX
             Xtro.MDX.Direct3D10.Device Device;            
             Result = D3D10Functions.CreateDeviceAndSwapChain(null, DriverType.Hardware, null, CreateDeviceFlag.Debug, ref SwapChainDescription, out SwapChain, out Device);
 
+            var CD = new CounterDescription
+            {
+                Counter = CounterEnum.PixelProcessing,
+                MiscellaneousFlags = 0
+            };
+            CounterType CT;
+            uint AC;
+            var NameLength = new Xtro.MDX.Generic.ValueObject<uint>();
+            Result = Device.CheckCounter(ref CD, out CT, out AC, null, NameLength, null,null,null,null);
+
             Effect Effect;
             Result = D3DX10Functions.CreateEffectFromFile("Tutorial02.fx", null, null, "fx_4_0", ShaderFlag.EnableStrictness | ShaderFlag.Debug, 0, Device, null, out Effect);
 

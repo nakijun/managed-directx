@@ -12,6 +12,28 @@ internal:
 	}
 
 public:
+	int CheckCounter(CounterDescription% Description, [Out] CounterType% Type, [Out] unsigned int% ActiveCounters, Xtro::MDX::Generic::RefObject<String^>^ Name, Xtro::MDX::Generic::ValueObject<unsigned int>^ NameLength, Xtro::MDX::Generic::RefObject<String^>^ Units, Xtro::MDX::Generic::ValueObject<unsigned int>^ UnitsLength, Xtro::MDX::Generic::RefObject<String^>^ DescriptionString, Xtro::MDX::Generic::ValueObject<unsigned int>^ DescriptionLength)
+	{
+		pin_ptr<CounterDescription> PinnedDescription = &Description;
+		pin_ptr<CounterType> PinnedType = &Type;
+		pin_ptr<unsigned int> PinnedActiveCounters = &ActiveCounters;
+		pin_ptr<unsigned int> PinnedNameLength = NameLength == nullptr ? nullptr : &NameLength->Value;
+		pin_ptr<unsigned int> PinnedUnitsLength = UnitsLength == nullptr ? nullptr : &UnitsLength->Value;
+		pin_ptr<unsigned int> PinnedDescriptionLength = DescriptionLength == nullptr ? nullptr : &DescriptionLength->Value;
+
+		LPSTR pName = Name == nullptr ? 0 : new char[NameLength == nullptr ? 0 : NameLength->Value];
+		LPSTR pUnits = Units == nullptr ? 0 : new char[UnitsLength == nullptr ? 0 : UnitsLength->Value];
+		LPSTR pDescriptionString = DescriptionString == nullptr ? 0 : new char[DescriptionLength == nullptr ? 0 : DescriptionLength->Value];
+
+		int Result = pDevice->CheckCounter((D3D10_COUNTER_DESC*)PinnedDescription, (D3D10_COUNTER_TYPE*)PinnedType, PinnedActiveCounters, pName, PinnedNameLength, pUnits, PinnedUnitsLength, pDescriptionString, PinnedDescriptionLength);
+
+		if (Name != nullptr) Name->Value = pName ? gcnew String(pName) : nullptr;
+		if (Units != nullptr) Units->Value = pUnits ? gcnew String(pUnits) : nullptr;
+		if (DescriptionString != nullptr) DescriptionString->Value = pDescriptionString ? gcnew String(pDescriptionString) : nullptr;
+
+		return Result;
+	}
+  	
 	void ClearRenderTargetView(RenderTargetView^ RenderTargetView, Float4% ColorRGBA)
 	{
 		ID3D10RenderTargetView* pRenderTargetView = RenderTargetView == nullptr ? 0 : RenderTargetView->pRenderTargetView;

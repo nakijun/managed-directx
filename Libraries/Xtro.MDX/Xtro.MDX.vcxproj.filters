@@ -49,9 +49,6 @@
     <Filter Include="Base">
       <UniqueIdentifier>{ef4e4d56-15ba-453f-8846-9d7288c62858}</UniqueIdentifier>
     </Filter>
-    <Filter Include="_NotImplementedYet">
-      <UniqueIdentifier>{b213a698-6dbd-4128-ab1f-e58f54760de1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Direct3DX10">
       <UniqueIdentifier>{d190ea87-4c20-473c-a44b-77fa0a994fe3}</UniqueIdentifier>
     </Filter>
@@ -407,15 +404,6 @@
     </ClInclude>
     <ClInclude Include="TechniqueDescription.h">
       <Filter>Direct3D10\Effect\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceD3D10.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="FunctionsD3D10.h">
-      <Filter>_NotImplementedYet</Filter>
-    </ClInclude>
-    <ClInclude Include="FunctionsD3DX10.h">
-      <Filter>_NotImplementedYet</Filter>
     </ClInclude>
     <ClInclude Include="ImageInfo.h">
       <Filter>Direct3DX10\Structures</Filter>
@@ -888,6 +876,21 @@
     </ClInclude>
     <ClInclude Include="EffectVectorVariable.h">
       <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceD3D10.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionsD3D10.h">
+      <Filter>Direct3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionsD3DX10.h">
+      <Filter>Direct3DX10</Filter>
+    </ClInclude>
+    <ClInclude Include="ValueObject.h">
+      <Filter>Base\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="RefObject.h">
+      <Filter>Base\Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
