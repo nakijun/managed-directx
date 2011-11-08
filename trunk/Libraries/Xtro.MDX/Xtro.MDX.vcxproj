@@ -186,6 +186,7 @@
     <ClInclude Include="EffectType.h" />
     <ClInclude Include="EffectTypeDescription.h" />
     <ClInclude Include="EffectVariableDescription.h" />
+    <ClInclude Include="Effect_ForwardedMethods.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Float1025.h" />
     <ClInclude Include="Float8.h" />
@@ -287,6 +288,7 @@
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Multithread.h" />
     <ClInclude Include="RefObject.h" />
+    <ClInclude Include="StateBlock_ForwardedMethods.h" />
     <ClInclude Include="ValueObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="AdapterDescription.h" />

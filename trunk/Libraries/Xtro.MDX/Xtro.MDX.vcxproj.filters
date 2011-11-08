@@ -877,9 +877,6 @@
     <ClInclude Include="EffectVectorVariable.h">
       <Filter>Direct3D10\Effect\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceD3D10.h">
-      <Filter>Direct3D10\Effect\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="FunctionsD3D10.h">
       <Filter>Direct3D10</Filter>
     </ClInclude>
@@ -891,6 +888,15 @@
     </ClInclude>
     <ClInclude Include="RefObject.h">
       <Filter>Base\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceD3D10.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="StateBlock_ForwardedMethods.h">
+      <Filter>Direct3D10\Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect_ForwardedMethods.h">
+      <Filter>Direct3D10\Effect\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

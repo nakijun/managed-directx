@@ -246,14 +246,15 @@ public:
 			Marshal::FreeHGlobal(pFileName); 
 			Marshal::FreeHGlobal(pProfile); 
 
-			if (Defines != nullptr && Defines->Length > 0)
+			if (pDefines)
 			{
 				for (int No = 0; No < Defines->Length; No++)
 				{
 					Defines[No].Unmarshal();
 				}
+
+				 delete[] pDefines;
 			}
-			if (pDefines) delete[] pDefines;
 		}
 
 		if (pEffect)
@@ -303,14 +304,15 @@ public:
 			Marshal::FreeHGlobal(pFileName); 
 			Marshal::FreeHGlobal(pProfile); 
 
-			if (Defines != nullptr && Defines->Length > 0)
+			if (pDefines) 
 			{
 				for (int No = 0; No < Defines->Length; No++)
 				{
 					Defines[No].Unmarshal();
 				}
+
+				delete[] pDefines;
 			}
-			if (pDefines) delete[] pDefines;
 		}
 
 		if (pEffect)
@@ -355,14 +357,15 @@ public:
 			Marshal::FreeHGlobal(pFileName); 
 			Marshal::FreeHGlobal(pProfile); 
 
-			if (Defines != nullptr && Defines->Length > 0)
+			if (pDefines) 
 			{
 				for (int No = 0; No < Defines->Length; No++)
 				{
 					Defines[No].Unmarshal();
 				}
 			}
-			if (pDefines) delete[] pDefines;
+
+			delete[] pDefines;
 		}
 
 		if (pEffect)
@@ -413,14 +416,15 @@ public:
 			Marshal::FreeHGlobal(pFileName); 
 			Marshal::FreeHGlobal(pProfile); 
 
-			if (Defines != nullptr && Defines->Length > 0)
+			if (pDefines) 
 			{
 				for (int No = 0; No < Defines->Length; No++)
 				{
 					Defines[No].Unmarshal();
 				}
+
+				delete[] pDefines;
 			}
-			if (pDefines) delete[] pDefines;
 		}
 
 		if (pEffect)
@@ -519,14 +523,15 @@ public:
 		{
 			Marshal::FreeHGlobal(pPositionSemantic); 
 
-			if (Declaration != nullptr && Declaration->Length > 0)
+			if (pDeclaration) 
 			{
 				for (unsigned int No = 0; No < Count; No++)
 				{
 					Declaration[No].Unmarshal();
 				}
+
+				delete[] pDeclaration;
 			}
-			if (pDeclaration) delete[] pDeclaration;
 		}
 
 		if (pMesh)

@@ -44,14 +44,15 @@ public:
 		}
 		finally
 		{
-			if (Filter != nullptr && Filter->Length > 0)
+			if (pFilter) 
 			{
 				for (int No = 0; No < Filter->Length; No++)
 				{
 					Filter[No].Unmarshal();
 				}
+
+				delete[] pFilter;
 			}
-			if (pFilter) delete[] pFilter;
 		}
 	}
 
@@ -73,14 +74,15 @@ public:
 		}
 		finally
 		{
-			if (Filter != nullptr && Filter->Length > 0)
+			if (pFilter) 
 			{
 				for (int No = 0; No < Filter->Length; No++)
 				{
 					Filter[No].Unmarshal();
 				}
+
+				delete[] pFilter;
 			}
-			if (pFilter) delete[] pFilter;
 		}
 	}
 
