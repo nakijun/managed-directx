@@ -187,9 +187,7 @@ namespace Direct3D10
 	#include "EffectRasterizerVariable.h"
 	#include "SamplerState.h"
 	#include "EffectSamplerVariable.h"
-	#include "DeviceD3D10.h"
 	#include "StateBlock.h"
-	#include "DeviceChild_ForwardedMethods.h"
 	#include "StateBlockMask.h"
 	#include "EffectDepthStencilVariable.h"
 	#include "EffectDepthStencilViewVariable.h"
@@ -223,6 +221,10 @@ namespace Direct3D10
 	#include "ShaderReflectionConstantBuffer.h"
 	#include "ShaderReflection.h"
 	#include "EffectVariable_ForwardedMethods.h"
+	#include "DeviceD3D10.h"
+	#include "DeviceChild_ForwardedMethods.h"
+	#include "StateBlock_ForwardedMethods.h"
+	#include "Effect_ForwardedMethods.h"
 
 	#include "FunctionsD3D10.h"
 }

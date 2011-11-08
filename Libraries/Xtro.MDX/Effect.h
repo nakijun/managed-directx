@@ -48,20 +48,7 @@ public:
 		return pEffect->GetDesc((D3D10_EFFECT_DESC*)PinnedDescription);
 	}
 
-	int GetDevice([Out] Device^% Device)
-	{
-		ID3D10Device* pDevice = 0;
-		int Result = pEffect->GetDevice(&pDevice);
-
-		if (pDevice) 
-		{
-			try { Device = (Xtro::MDX::Direct3D10::Device^)Interfaces[IntPtr(pDevice)]; }
-			catch (KeyNotFoundException^) { Device = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }
-		}
-		else Device = nullptr;
-
-		return Result;
-	}
+	int GetDevice([Out] Device^% Device);
 
 	EffectTechnique^ GetTechniqueByIndex(unsigned int Index)
 	{

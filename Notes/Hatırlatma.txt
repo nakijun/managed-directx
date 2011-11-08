@@ -5,13 +5,8 @@
 
 * Sýk sýk eski versiyonlara yedek al
 
-* Device.CheckCounter gibi null alabilen out parametreleri olan ve parameter signature yüzünden out'suz versiyonlarý yapýlamayan metodlar için RefObject ve ValueObject generic'lerini kullan
-
-* dx dökümanýnda tüm method parametrelerini kontrol et.
-    struct larý hep ref '%' (gereken durumlarda da out)olarak geçirdiðimiz için null alabilen durumlarda metodun o parametresi olmayan versiyonu yapýlacak.
-    class [out] ise ve null alabiliyosa o parametre olmayan metod versiyonu yap. ör : Device.CreateTexture2D
-
-* [Out] ^% olan parametreler deðer alamadýðý zaman mutlaka nullptr olsun.
+* struct ve class'lar '%' veya [out] ise ve null alabiliyosa o parametre olmayan metod versiyonu yap. ör : Device.CreateTexture2D
+    Device.CheckCounter gibi null alabilen out parametreleri olan ve parameter signature yüzünden out'suz versiyonlarý yapýlamayan metodlar için RefObject ve ValueObject generic'lerini kullan.
 
 * tüm son classlarý sealed yap : public ref class Factory sealed : Object
 

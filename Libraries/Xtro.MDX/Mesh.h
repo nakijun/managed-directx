@@ -38,14 +38,15 @@ public:
 		{
 			Marshal::FreeHGlobal(pPositionSemantic);
 
-			if (Description != nullptr && Description->Length > 0)
+			if (pDescription) 
 			{
 				for (unsigned int No = 0; No < Count; No++)
 				{
 					Description[No].Unmarshal();
 				}
+
+				delete[] pDescription;
 			}
-			if (pDescription) delete[] pDescription;
 		}
 
 		if (pMesh)
