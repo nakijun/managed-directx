@@ -866,6 +866,67 @@ public:
 		pDevice->Flush();
 	}
 
+	void GS_GetConstantBuffers(unsigned int StartSlot, unsigned int NumberOfBuffers, array<Buffer^>^ ConstantBuffers)
+	{
+		ID3D10Buffer** pConstantBuffers = ConstantBuffers != nullptr && ConstantBuffers->Length > 0 ? new ID3D10Buffer*[ConstantBuffers->Length] : 0;
+		try
+		{
+			pDevice->GSGetConstantBuffers(StartSlot, NumberOfBuffers, pConstantBuffers);
+
+			unsigned int Count = Math::Min(StartSlot + NumberOfBuffers, (unsigned int)ConstantBuffers->Length);
+			for (unsigned int No = StartSlot; No < Count; No++)
+			{
+				if (pConstantBuffers[No])
+				{
+					try { ConstantBuffers[No] = (Buffer^)Interfaces[IntPtr(pConstantBuffers[No])]; }
+					catch (KeyNotFoundException^) { ConstantBuffers[No] = gcnew Buffer(IntPtr(pConstantBuffers[No])); }
+				}
+				else ConstantBuffers[No] = nullptr;
+			}
+		}
+		finally
+		{
+			if (pConstantBuffers) delete[] pConstantBuffers;
+		}
+	}
+
+	void GS_GetSamplers(unsigned int StartSlot, unsigned int NumberOfSamplers, array<SamplerState^>^ Samplers)
+	{
+		ID3D10SamplerState** pSamplers = Samplers != nullptr && Samplers->Length > 0 ? new ID3D10SamplerState*[Samplers->Length] : 0;
+		try
+		{
+			pDevice->GSGetSamplers(StartSlot, NumberOfSamplers, pSamplers);
+
+			unsigned int Count = Math::Min(StartSlot + NumberOfSamplers, (unsigned int)Samplers->Length);
+			for (unsigned int No = StartSlot; No < Count; No++)
+			{
+				if (pSamplers[No])
+				{
+					try { Samplers[No] = (SamplerState^)Interfaces[IntPtr(pSamplers[No])]; }
+					catch (KeyNotFoundException^) { Samplers[No] = gcnew SamplerState(IntPtr(pSamplers[No])); }
+				}
+				else Samplers[No] = nullptr;
+			}
+		}
+		finally
+		{
+			if (pSamplers) delete[] pSamplers;
+		}
+	}
+
+	void GS_GetShader([Out] GeometryShader^% GeometryShader)
+	{
+		ID3D10GeometryShader* pGeometryShader = 0;
+		pDevice->GSGetShader(&pGeometryShader);
+
+		if (pGeometryShader)
+		{
+			try { GeometryShader = (Xtro::MDX::Direct3D10::GeometryShader^)Interfaces[IntPtr(pGeometryShader)]; }
+			catch (KeyNotFoundException^) { GeometryShader = gcnew Xtro::MDX::Direct3D10::GeometryShader(IntPtr(pGeometryShader)); }					
+		}
+		else GeometryShader = nullptr;
+	}
+
 	void IA_GetInputLayout([Out] InputLayout^% InputLayout)
 	{
 		ID3D10InputLayout* pInputLayout = 0;
