@@ -18,15 +18,15 @@ public:
 		ID3DX10Mesh* pMesh = 0;
 
 		IntPtr pPositionSemantic = Marshal::StringToHGlobalAnsi(PositionSemantic);
-		unsigned int Count;
+		unsigned int Length;
 		D3D10_INPUT_ELEMENT_DESC* pDescription = 0;
 		try
 		{
 			if (Description != nullptr && Description->Length > 0)
 			{
-				Count = Math::Min(DeclarationCount, (unsigned int)Description->Length);
-				pDescription = new D3D10_INPUT_ELEMENT_DESC[Count];
-				for (unsigned int No = 0; No < Count; No++)
+				Length = Math::Min(DeclarationCount, (unsigned int)Description->Length);
+				pDescription = new D3D10_INPUT_ELEMENT_DESC[Length];
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					Description[No].Marshal(&pDescription[No]);
 				}
@@ -40,7 +40,7 @@ public:
 
 			if (pDescription) 
 			{
-				for (unsigned int No = 0; No < Count; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					Description[No].Unmarshal();
 				}
@@ -240,9 +240,9 @@ public:
 
 		if (pDescription)
 		{
-			unsigned int Count = Math::Min(DeclarationCount, (unsigned int)Description->Length);
-			Description = gcnew array<InputElementDescription>(Count);
-			for (unsigned int No = 0; No < Count; No++)
+			unsigned int Length = Math::Min(DeclarationCount, (unsigned int)Description->Length);
+			Description = gcnew array<InputElementDescription>(Length);
+			for (unsigned int No = 0; No < Length; No++)
 			{
 				Description[No].FromNative((D3D10_INPUT_ELEMENT_DESC*)&pDescription[No]);
 			}

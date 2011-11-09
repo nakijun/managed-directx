@@ -25,9 +25,9 @@ public:
 		{
 			if (Sprites != nullptr && Sprites->Length > 0)
 			{
-				unsigned int Count = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
-				pSprites = new D3DX10_SPRITE[Count];
-				for (unsigned int No = 0; No < Count; No++)
+				unsigned int Length = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
+				pSprites = new D3DX10_SPRITE[Length];
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					Sprites[No].ToNative(&pSprites[No]);
 				}
@@ -48,9 +48,9 @@ public:
 		{
 			if (Sprites != nullptr && Sprites->Length > 0)
 			{
-				unsigned int Count = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
-				pSprites = new D3DX10_SPRITE[Count];
-				for (unsigned int No = 0; No < Count; No++)
+				unsigned int Length = Math::Min(SpriteCount, (unsigned int)Sprites->Length);
+				pSprites = new D3DX10_SPRITE[Length];
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					Sprites[No].ToNative(&pSprites[No]);
 				}

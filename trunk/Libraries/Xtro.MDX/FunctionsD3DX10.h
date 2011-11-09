@@ -503,15 +503,15 @@ public:
 		ID3DX10Mesh* pMesh = 0;
 
 		IntPtr pPositionSemantic = Marshal::StringToHGlobalAnsi(PositionSemantic);
-		unsigned int Count;
+		unsigned int Length;
 		D3D10_INPUT_ELEMENT_DESC* pDeclaration = 0;
 		try 
 		{
 			if (Declaration != nullptr && Declaration->Length > 0)
 			{
-				Count = Math::Min(DeclarationCount, (unsigned int)Declaration->Length);
-				pDeclaration = new D3D10_INPUT_ELEMENT_DESC[Count];
-				for (unsigned int No = 0; No < Count; No++)
+				Length = Math::Min(DeclarationCount, (unsigned int)Declaration->Length);
+				pDeclaration = new D3D10_INPUT_ELEMENT_DESC[Length];
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					Declaration[No].Marshal(&pDeclaration[No]);
 				}
@@ -525,7 +525,7 @@ public:
 
 			if (pDeclaration) 
 			{
-				for (unsigned int No = 0; No < Count; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					Declaration[No].Unmarshal();
 				}
