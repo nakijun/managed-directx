@@ -2,9 +2,11 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* GSGetConstantBuffers
+* GSGetShaderResources
 
 * function'larý yap
+
+* XACT3
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 
