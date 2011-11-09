@@ -61,9 +61,9 @@ public:
 		{
 			if (Resources != nullptr && Resources->Length > 0)
 			{
-				unsigned int Count = Math::Min(NumberOfResources, (unsigned int)Resources->Length);
-				pResources = new IUnknown*[Count];
-				for (unsigned int No = 0; No < Count; No++)
+				unsigned int Length = Math::Min(NumberOfResources, (unsigned int)Resources->Length);
+				pResources = new IUnknown*[Length];
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					pResources[No] = Resources[No] == nullptr ? 0 : Resources[No]->pUnknown;
 				}

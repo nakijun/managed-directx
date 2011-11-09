@@ -29,20 +29,23 @@ public:
 
 	int GetDepthStencilArray(array<DepthStencilView^>^ Resources, unsigned int Offset, unsigned int Count)
 	{
-		ID3D10DepthStencilView** pResources = Resources != nullptr && Resources->Length > 0 ? new ID3D10DepthStencilView*[Resources->Length] : 0;
+		unsigned int Length = Resources == nullptr ? 0 : Math::Min(Offset + Count, (unsigned int)Resources->Length);
+		ID3D10DepthStencilView** pResources = Resources != nullptr && Resources->Length > 0 ? new ID3D10DepthStencilView*[Length] : 0;
 		try
 		{
 			int Result = pEffectDepthStencilViewVariable->GetDepthStencilArray(pResources, Offset, Count);
 
-			Count = Math::Min(Offset + Count, (unsigned int)Resources->Length);
-			for (unsigned int No = Offset; No < Count; No++)
+			if (pResources)
 			{
-				if (pResources[No])
+				for (unsigned int No = Offset; No < Length; No++)
 				{
-					try { Resources[No] = (DepthStencilView^)Interfaces[IntPtr(pResources[No])]; }
-					catch (KeyNotFoundException^) { Resources[No] = gcnew DepthStencilView(IntPtr(pResources[No])); }
+					if (pResources[No])
+					{
+						try { Resources[No] = (DepthStencilView^)Interfaces[IntPtr(pResources[No])]; }
+						catch (KeyNotFoundException^) { Resources[No] = gcnew DepthStencilView(IntPtr(pResources[No])); }
+					}
+					else Resources[No] = nullptr;
 				}
-				else Resources[No] = nullptr;
 			}
 
 			return Result;
@@ -66,10 +69,9 @@ public:
 		{
 			if (Resources != nullptr && Resources->Length > 0)
 			{
-				pResources = new ID3D10DepthStencilView*[Resources->Length];
-
-				unsigned int LoopCount = Math::Min(Offset + Count, (unsigned int)Resources->Length);
-				for (unsigned int No = Offset; No < LoopCount; No++)
+				unsigned int Length = Math::Min(Offset + Count, (unsigned int)Resources->Length);
+				pResources = new ID3D10DepthStencilView*[Length];
+				for (unsigned int No = Offset; No < Length; No++)
 				{
 					pResources[No] = Resources[No] == nullptr ? 0 : Resources[No]->pDepthStencilView;
 				}

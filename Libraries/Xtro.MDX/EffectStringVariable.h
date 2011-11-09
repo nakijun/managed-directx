@@ -24,15 +24,18 @@ public:
 
 	int GetStringArray(array<String^>^ Strings, unsigned int Offset, unsigned int Count)
 	{
-		LPCSTR* pStrings = Strings != nullptr && Strings->Length > 0 ? new LPCSTR[Strings->Length] : 0;
+		unsigned int Length = Strings == nullptr ? 0 : Math::Min(Offset + Count, (unsigned int)Strings->Length);
+		LPCSTR* pStrings = Strings != nullptr && Strings->Length > 0 ? new LPCSTR[Length] : 0;
 		try
 		{
 			int Result = pEffectStringVariable->GetStringArray(pStrings, Offset, Count);
 
-			Count = Math::Min(Offset + Count, (unsigned int)Strings->Length);
-			for (unsigned int No = Offset; No < Count; No++)
+			if (pStrings)
 			{
-				Strings[No] = pStrings[No] ? gcnew System::String(pStrings[No]) : nullptr;
+				for (unsigned int No = Offset; No < Length; No++)
+				{
+					Strings[No] = pStrings[No] ? gcnew System::String(pStrings[No]) : nullptr;
+				}
 			}
 
 			return Result;
