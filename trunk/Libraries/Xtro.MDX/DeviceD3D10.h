@@ -1098,6 +1098,22 @@ public:
 		}
 	}
 
+	void IA_GetIndexBuffer([Out] Buffer^% IndexBuffer, [Out] Format% Format, [Out] unsigned int% Offset)
+	{
+		pin_ptr<Xtro::MDX::Direct3D10::Format> PinnedFormat = &Format;
+		pin_ptr<unsigned int> PinnedOffset = &Offset;
+
+		ID3D10Buffer* pIndexBuffer = 0;
+		pDevice->IAGetIndexBuffer(&pIndexBuffer, (DXGI_FORMAT*)PinnedFormat, PinnedOffset);
+
+		if (pIndexBuffer)
+		{
+			try { IndexBuffer = (Buffer^)Interfaces[IntPtr(pIndexBuffer)]; }
+			catch (KeyNotFoundException^) { IndexBuffer = gcnew Buffer(IntPtr(pIndexBuffer)); }					
+		}
+		else IndexBuffer = nullptr;
+	}
+
 	void IA_GetInputLayout([Out] InputLayout^% InputLayout)
 	{
 		ID3D10InputLayout* pInputLayout = 0;
@@ -1116,6 +1132,36 @@ public:
 		pin_ptr<PrimitiveTopology> PinnedTopology = &Topology;
 
 		pDevice->IAGetPrimitiveTopology((D3D10_PRIMITIVE_TOPOLOGY*)PinnedTopology);
+	}
+
+	void IA_GetVertexBuffers(unsigned int StartSlot, unsigned int NumberOfBuffers, array<Buffer^>^ VertexBuffers, array<unsigned int>^ Strides, array<unsigned int>^ Offsets)
+	{
+		pin_ptr<unsigned int> PinnedStrides = Strides != nullptr && Strides->Length > 0 ? &Strides[0] : nullptr;
+		pin_ptr<unsigned int> PinnedOffsets = Offsets != nullptr && Offsets->Length > 0 ? &Offsets[0] : nullptr;
+
+		unsigned int Length = VertexBuffers == nullptr ? 0 : Math::Min(StartSlot + NumberOfBuffers, (unsigned int)VertexBuffers->Length);
+		ID3D10Buffer** pVertexBuffers = VertexBuffers != nullptr && VertexBuffers->Length > 0 ? new ID3D10Buffer*[Length] : 0;
+		try
+		{
+			pDevice->IAGetVertexBuffers(StartSlot, NumberOfBuffers, pVertexBuffers, PinnedStrides, PinnedOffsets);
+
+			if (pVertexBuffers)
+			{
+				for (unsigned int No = StartSlot; No < Length; No++)
+				{
+					if (pVertexBuffers[No])
+					{
+						try { VertexBuffers[No] = (Buffer^)Interfaces[IntPtr(pVertexBuffers[No])]; }
+						catch (KeyNotFoundException^) { VertexBuffers[No] = gcnew Buffer(IntPtr(pVertexBuffers[No])); }
+					}
+					else VertexBuffers[No] = nullptr;
+				}
+			}
+		}
+		finally
+		{
+			if (pVertexBuffers) delete[] pVertexBuffers;
+		}
 	}
 
 	void IA_SetIndexBuffer(Buffer^ IndexBuffer, Format Format, unsigned int Offset)
