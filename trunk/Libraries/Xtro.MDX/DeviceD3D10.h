@@ -929,7 +929,7 @@ public:
 
 	void GS_GetConstantBuffers(unsigned int StartSlot, unsigned int NumberOfBuffers, array<Buffer^>^ ConstantBuffers)
 	{
-		unsigned int Length = ConstantBuffers == nullptr ? 0 : Math::Min(StartSlot + NumberOfBuffers, (unsigned int)ConstantBuffers->Length);
+		unsigned int Length = ConstantBuffers == nullptr ? 0 : Math::Min(NumberOfBuffers, (unsigned int)ConstantBuffers->Length);
 		ID3D10Buffer** pConstantBuffers = ConstantBuffers != nullptr && ConstantBuffers->Length > 0 ? new ID3D10Buffer*[Length] : 0;
 
 		try
@@ -938,7 +938,7 @@ public:
 
 			if (pConstantBuffers)
 			{
-				for (unsigned int No = StartSlot; No < Length; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					if (pConstantBuffers[No])
 					{
@@ -957,7 +957,7 @@ public:
 
 	void GS_GetSamplers(unsigned int StartSlot, unsigned int NumberOfSamplers, array<SamplerState^>^ Samplers)
 	{
-		unsigned int Length = Samplers == nullptr ? 0 : Math::Min(StartSlot + NumberOfSamplers, (unsigned int)Samplers->Length);
+		unsigned int Length = Samplers == nullptr ? 0 : Math::Min(NumberOfSamplers, (unsigned int)Samplers->Length);
 		ID3D10SamplerState** pSamplers = Samplers != nullptr && Samplers->Length > 0 ? new ID3D10SamplerState*[Length] : 0;
 		try
 		{
@@ -965,7 +965,7 @@ public:
 
 			if (pSamplers)
 			{
-				for (unsigned int No = StartSlot; No < Length; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					if (pSamplers[No])
 					{
@@ -997,7 +997,7 @@ public:
 
 	void GS_GetShaderResources(unsigned int StartSlot, unsigned int NumberOfViews, array<ShaderResourceView^>^ ShaderResourceViews)
 	{
-		unsigned int Length = ShaderResourceViews == nullptr ? 0 : Math::Min(StartSlot + NumberOfViews, (unsigned int)ShaderResourceViews->Length);
+		unsigned int Length = ShaderResourceViews == nullptr ? 0 : Math::Min(NumberOfViews, (unsigned int)ShaderResourceViews->Length);
 		ID3D10ShaderResourceView** pShaderResourceViews = ShaderResourceViews != nullptr && ShaderResourceViews->Length > 0 ? new ID3D10ShaderResourceView*[Length] : 0;
 		try
 		{
@@ -1005,7 +1005,7 @@ public:
 
 			if (pShaderResourceViews)
 			{
-				for (unsigned int No = StartSlot; No < Length; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					if (pShaderResourceViews[No])
 					{
@@ -1029,9 +1029,9 @@ public:
 		{
 			if (ConstantBuffers != nullptr && ConstantBuffers->Length > 0)
 			{
-				unsigned int Length = Math::Min(StartSlot + NumberOfBuffers, (unsigned int)ConstantBuffers->Length);
+				unsigned int Length = Math::Min(NumberOfBuffers, (unsigned int)ConstantBuffers->Length);
 				pConstantBuffers = new ID3D10Buffer*[Length];
-				for (unsigned int No = StartSlot; No < Length; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					pConstantBuffers[No] = ConstantBuffers[No] == nullptr ? 0 : ConstantBuffers[No]->pBuffer;
 				}
@@ -1052,9 +1052,9 @@ public:
 		{
 			if (Samplers != nullptr && Samplers->Length > 0)
 			{
-				unsigned int Length = Math::Min(StartSlot + NumberOfSamplers, (unsigned int)Samplers->Length);
+				unsigned int Length = Math::Min(NumberOfSamplers, (unsigned int)Samplers->Length);
 				pSamplers = new ID3D10SamplerState*[Length];
-				for (unsigned int No = StartSlot; No < Length; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					pSamplers[No] = Samplers[No] == nullptr ? 0 : Samplers[No]->pSamplerState;
 				}
@@ -1082,9 +1082,9 @@ public:
 		{
 			if (ShaderResourceViews != nullptr && ShaderResourceViews->Length > 0)
 			{
-				unsigned int Length = Math::Min(StartSlot + NumberOfViews, (unsigned int)ShaderResourceViews->Length);
+				unsigned int Length = Math::Min(NumberOfViews, (unsigned int)ShaderResourceViews->Length);
 				pShaderResourceViews = new ID3D10ShaderResourceView*[Length];
-				for (unsigned int No = StartSlot; No < Length; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					pShaderResourceViews[No] = ShaderResourceViews[No] == nullptr ? 0 : ShaderResourceViews[No]->pShaderResourceView;
 				}
@@ -1139,7 +1139,7 @@ public:
 		pin_ptr<unsigned int> PinnedStrides = Strides != nullptr && Strides->Length > 0 ? &Strides[0] : nullptr;
 		pin_ptr<unsigned int> PinnedOffsets = Offsets != nullptr && Offsets->Length > 0 ? &Offsets[0] : nullptr;
 
-		unsigned int Length = VertexBuffers == nullptr ? 0 : Math::Min(StartSlot + NumberOfBuffers, (unsigned int)VertexBuffers->Length);
+		unsigned int Length = VertexBuffers == nullptr ? 0 : Math::Min(NumberOfBuffers, (unsigned int)VertexBuffers->Length);
 		ID3D10Buffer** pVertexBuffers = VertexBuffers != nullptr && VertexBuffers->Length > 0 ? new ID3D10Buffer*[Length] : 0;
 		try
 		{
@@ -1147,7 +1147,7 @@ public:
 
 			if (pVertexBuffers)
 			{
-				for (unsigned int No = StartSlot; No < Length; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					if (pVertexBuffers[No])
 					{
@@ -1193,9 +1193,9 @@ public:
 		{
 			if (VertexBuffers != nullptr && VertexBuffers->Length > 0)
 			{
-				unsigned int Length = Math::Min(StartSlot + NumberOfBuffers, (unsigned int)VertexBuffers->Length);
+				unsigned int Length = Math::Min(NumberOfBuffers, (unsigned int)VertexBuffers->Length);
 				pVertexBuffers = new ID3D10Buffer*[Length];
-				for (unsigned int No = StartSlot; No < Length; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					pVertexBuffers[No] = VertexBuffers[No] == nullptr ? 0 : VertexBuffers[No]->pBuffer;
 				}
@@ -1223,6 +1223,56 @@ public:
 			catch (KeyNotFoundException^) { BlendState = gcnew Xtro::MDX::Direct3D10::BlendState(IntPtr(pBlendState)); }					
 		}
 		else BlendState = nullptr;
+	}
+
+	void OM_GetDepthStencilState([Out] DepthStencilState^% DepthStencilState, [Out] unsigned int% StencilReference)
+	{
+		pin_ptr<unsigned int> PinnedStencilReference = &StencilReference;
+
+		ID3D10DepthStencilState* pDepthStencilState = 0;
+		pDevice->OMGetDepthStencilState(&pDepthStencilState, PinnedStencilReference);
+
+		if (pDepthStencilState)
+		{
+			try { DepthStencilState = (Xtro::MDX::Direct3D10::DepthStencilState^)Interfaces[IntPtr(pDepthStencilState)]; }
+			catch (KeyNotFoundException^) { DepthStencilState = gcnew Xtro::MDX::Direct3D10::DepthStencilState(IntPtr(pDepthStencilState)); }					
+		}
+		else DepthStencilState = nullptr;
+	}
+
+	void OM_GetRenderTargets(unsigned int NumberOfViews, array<RenderTargetView^>^ RenderTargetViews, [Out] DepthStencilView^% DepthStencilView)
+	{
+		unsigned int Length = RenderTargetViews == nullptr ? 0 : Math::Min(NumberOfViews, (unsigned int)RenderTargetViews->Length);
+		ID3D10RenderTargetView** pRenderTargetViews = RenderTargetViews != nullptr && RenderTargetViews->Length > 0 ? new ID3D10RenderTargetView*[Length] : 0;
+		try
+		{
+			ID3D10DepthStencilView* pDepthStencilView = 0;
+			pDevice->OMGetRenderTargets(NumberOfViews, pRenderTargetViews, &pDepthStencilView);
+
+			if (pRenderTargetViews)
+			{
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					if (pRenderTargetViews[No])
+					{
+						try { RenderTargetViews[No] = (RenderTargetView^)Interfaces[IntPtr(pRenderTargetViews[No])]; }
+						catch (KeyNotFoundException^) { RenderTargetViews[No] = gcnew RenderTargetView(IntPtr(pRenderTargetViews[No])); }
+					}
+					else RenderTargetViews[No] = nullptr;
+				}
+
+				if (pDepthStencilView)
+				{
+					try { DepthStencilView = (Xtro::MDX::Direct3D10::DepthStencilView^)Interfaces[IntPtr(pDepthStencilView)]; }
+					catch (KeyNotFoundException^) { DepthStencilView = gcnew Xtro::MDX::Direct3D10::DepthStencilView(IntPtr(pDepthStencilView)); }					
+				}
+				else DepthStencilView = nullptr;
+			}
+		}
+		finally
+		{
+			if (pRenderTargetViews) delete[] pRenderTargetViews;
+		}
 	}
 
 	void OM_SetBlendState(BlendState^ BlendState, Float4% BlendFactor, unsigned int SampleMask)
@@ -1265,6 +1315,173 @@ public:
 		}
 	}
 
+	int OpenSharedResource(IntPtr ResourceHandle, Type^ ReturnedType, [Out] System::Object^% Resource)
+	{
+		Guid ReturnedInterface;
+		try { ReturnedInterface = (Guid)ReturnedType->GetField("IID", BindingFlags::DeclaredOnly | BindingFlags::NonPublic | BindingFlags::Static)->GetValue(nullptr); }
+		catch (...) { ReturnedInterface = Guid::Empty; }
+
+		void* pResource = 0;
+		int Result = pDevice->OpenSharedResource(ResourceHandle.ToPointer(), IID_Converter::ToNative(ReturnedInterface), &pResource);
+
+		if (pResource) 
+		{				
+			try { Resource = Interfaces[IntPtr(pResource)]; }
+			catch (KeyNotFoundException^) { Resource = Activator::CreateInstance(ReturnedType, BindingFlags::NonPublic | BindingFlags::Instance, nullptr, gcnew array<System::Object^>(1) { IntPtr(pResource) }, CultureInfo::CurrentCulture); }
+		}
+		else Resource = nullptr;
+
+		return Result;
+	}
+
+	void PS_GetConstantBuffers(unsigned int StartSlot, unsigned int NumberOfBuffers, array<Buffer^>^ ConstantBuffers)
+	{
+		unsigned int Length = ConstantBuffers == nullptr ? 0 : Math::Min(NumberOfBuffers, (unsigned int)ConstantBuffers->Length);
+		ID3D10Buffer** pConstantBuffers = ConstantBuffers != nullptr && ConstantBuffers->Length > 0 ? new ID3D10Buffer*[Length] : 0;
+
+		try
+		{
+			pDevice->PSGetConstantBuffers(StartSlot, NumberOfBuffers, pConstantBuffers);
+
+			if (pConstantBuffers)
+			{
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					if (pConstantBuffers[No])
+					{
+						try { ConstantBuffers[No] = (Buffer^)Interfaces[IntPtr(pConstantBuffers[No])]; }
+						catch (KeyNotFoundException^) { ConstantBuffers[No] = gcnew Buffer(IntPtr(pConstantBuffers[No])); }
+					}
+					else ConstantBuffers[No] = nullptr;
+				}
+			}
+		}
+		finally
+		{
+			if (pConstantBuffers) delete[] pConstantBuffers;
+		}
+	}
+
+	void PS_GetSamplers(unsigned int StartSlot, unsigned int NumberOfSamplers, array<SamplerState^>^ Samplers)
+	{
+		unsigned int Length = Samplers == nullptr ? 0 : Math::Min(NumberOfSamplers, (unsigned int)Samplers->Length);
+		ID3D10SamplerState** pSamplers = Samplers != nullptr && Samplers->Length > 0 ? new ID3D10SamplerState*[Length] : 0;
+		try
+		{
+			pDevice->PSGetSamplers(StartSlot, NumberOfSamplers, pSamplers);
+
+			if (pSamplers)
+			{
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					if (pSamplers[No])
+					{
+						try { Samplers[No] = (SamplerState^)Interfaces[IntPtr(pSamplers[No])]; }
+						catch (KeyNotFoundException^) { Samplers[No] = gcnew SamplerState(IntPtr(pSamplers[No])); }
+					}
+					else Samplers[No] = nullptr;
+				}
+			}
+		}
+		finally
+		{
+			if (pSamplers) delete[] pSamplers;
+		}
+	}
+
+	void PS_GetShader([Out] PixelShader^% PixelShader)
+	{
+		ID3D10PixelShader* pPixelShader = 0;
+		pDevice->PSGetShader(&pPixelShader);
+
+		if (pPixelShader)
+		{
+			try { PixelShader = (Xtro::MDX::Direct3D10::PixelShader^)Interfaces[IntPtr(pPixelShader)]; }
+			catch (KeyNotFoundException^) { PixelShader = gcnew Xtro::MDX::Direct3D10::PixelShader(IntPtr(pPixelShader)); }					
+		}
+		else PixelShader = nullptr;
+	}
+
+	void PS_GetShaderResources(unsigned int StartSlot, unsigned int NumberOfViews, array<ShaderResourceView^>^ ShaderResourceViews)
+	{
+		unsigned int Length = ShaderResourceViews == nullptr ? 0 : Math::Min(NumberOfViews, (unsigned int)ShaderResourceViews->Length);
+		ID3D10ShaderResourceView** pShaderResourceViews = ShaderResourceViews != nullptr && ShaderResourceViews->Length > 0 ? new ID3D10ShaderResourceView*[Length] : 0;
+		try
+		{
+			pDevice->PSGetShaderResources(StartSlot, NumberOfViews, pShaderResourceViews);
+
+			if (pShaderResourceViews)
+			{
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					if (pShaderResourceViews[No])
+					{
+						try { ShaderResourceViews[No] = (ShaderResourceView^)Interfaces[IntPtr(pShaderResourceViews[No])]; }
+						catch (KeyNotFoundException^) { ShaderResourceViews[No] = gcnew ShaderResourceView(IntPtr(pShaderResourceViews[No])); }
+					}
+					else ShaderResourceViews[No] = nullptr;
+				}
+			}
+		}
+		finally
+		{
+			if (pShaderResourceViews) delete[] pShaderResourceViews;
+		}
+	}
+
+	void PS_SetConstantBuffers(unsigned int StartSlot, unsigned int NumberOfBuffers, array<Buffer^>^ ConstantBuffers)
+	{
+		ID3D10Buffer** pConstantBuffers = 0;
+		try
+		{
+			if (ConstantBuffers != nullptr && ConstantBuffers->Length > 0)
+			{
+				unsigned int Length = Math::Min(NumberOfBuffers, (unsigned int)ConstantBuffers->Length);
+				pConstantBuffers = new ID3D10Buffer*[Length];
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					pConstantBuffers[No] = ConstantBuffers[No] == nullptr ? 0 : ConstantBuffers[No]->pBuffer;
+				}
+			}
+
+			pDevice->PSSetConstantBuffers(StartSlot, NumberOfBuffers, pConstantBuffers);
+		}
+		finally
+		{
+			if (pConstantBuffers) delete[] pConstantBuffers;
+		}
+	}
+
+	void PS_SetSamplers(unsigned int StartSlot, unsigned int NumberOfSamplers, array<SamplerState^>^ Samplers)
+	{
+		ID3D10SamplerState** pSamplers = 0;
+		try
+		{
+			if (Samplers != nullptr && Samplers->Length > 0)
+			{
+				unsigned int Length = Math::Min(NumberOfSamplers, (unsigned int)Samplers->Length);
+				pSamplers = new ID3D10SamplerState*[Length];
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					pSamplers[No] = Samplers[No] == nullptr ? 0 : Samplers[No]->pSamplerState;
+				}
+			}
+
+			pDevice->PSSetSamplers(StartSlot, NumberOfSamplers, pSamplers);
+		}
+		finally
+		{
+			if (pSamplers) delete[] pSamplers;
+		}
+	}
+
+	void PS_SetShader(PixelShader^ Shader)
+	{
+		ID3D10PixelShader* pShader = Shader == nullptr ? 0 : Shader->pPixelShader;
+
+		pDevice->PSSetShader(pShader);
+	}
+
 	void PS_SetShaderResources(unsigned int StartSlot, unsigned int NumberOfViews, array<ShaderResourceView^>^ ShaderResourceViews)
 	{
 		ID3D10ShaderResourceView** pShaderResourceViews = 0;
@@ -1272,9 +1489,9 @@ public:
 		{
 			if (ShaderResourceViews != nullptr && ShaderResourceViews->Length > 0)
 			{
-				unsigned int Length = Math::Min(StartSlot + NumberOfViews, (unsigned int)ShaderResourceViews->Length);
+				unsigned int Length = Math::Min(NumberOfViews, (unsigned int)ShaderResourceViews->Length);
 				pShaderResourceViews = new ID3D10ShaderResourceView*[Length];
-				for (unsigned int No = StartSlot; No < Length; No++)
+				for (unsigned int No = 0; No < Length; No++)
 				{
 					pShaderResourceViews[No] = ShaderResourceViews[No] == nullptr ? 0 : ShaderResourceViews[No]->pShaderResourceView;
 				}
@@ -1286,6 +1503,14 @@ public:
 		{
 			if (pShaderResourceViews) delete[] pShaderResourceViews;
 		}
+	}
+
+	void ResolveSubresource(Resource^ DestinationResource, unsigned int DestinationSubresource, Resource^ SourceResource, unsigned int SourceSubresource, Format Format)
+	{	   
+		ID3D10Resource* pDestinationResource = DestinationResource == nullptr ? 0 : DestinationResource->pResource;
+		ID3D10Resource* pSourceResource = SourceResource == nullptr ? 0 : SourceResource->pResource;
+
+		pDevice->ResolveSubresource(pDestinationResource, DestinationSubresource, pSourceResource, SourceSubresource, (DXGI_FORMAT)Format);
 	}
 
 	void RS_GetScissorRectangles(unsigned int% NumberOfRectangles, array<System::Drawing::Rectangle>^ Rectangles)
@@ -1338,6 +1563,26 @@ public:
         pDevice->RSGetViewports(PinnedNumberOfViewports, (D3D10_VIEWPORT*)PinnedViewports);
     }
 
+	void RS_SetScissorRectangles(unsigned int NumberOfRectangles, array<System::Drawing::Rectangle>^ Rectangles)
+	{
+		RECT* pRectangles = 0;
+		if (Rectangles != nullptr && Rectangles->Length > 0)
+		{
+			unsigned int Length = Rectangles == nullptr ? 0 : Math::Min(NumberOfRectangles, (unsigned int)Rectangles->Length);
+			pRectangles = new RECT[Length];
+			for (unsigned int No = 0; No < Length; No++)
+			{
+				RECT* pRectangle = &pRectangles[No];
+				pRectangle->left = Rectangles[No].X;
+				pRectangle->top = Rectangles[No].Y;
+				pRectangle->right = Rectangles[No].Right;
+				pRectangle->bottom = Rectangles[No].Bottom;
+			}
+		}
+
+		pDevice->RSSetScissorRects(NumberOfRectangles, pRectangles);
+	}
+
 	void RS_SetState(RasterizerState^ RasterizerState)
 	{
 		ID3D10RasterizerState* pRasterizerState = RasterizerState == nullptr ? 0 : RasterizerState->pRasterizerState;
@@ -1351,6 +1596,96 @@ public:
 
         pDevice->RSSetViewports(NumberOfViewports, (D3D10_VIEWPORT*)PinnedViewports);
     }
+
+	void SO_GetTargets(unsigned int NumberOfBuffers, array<Buffer^>^ StreamOutputTargets, array<unsigned int>^ Offsets)
+	{
+		unsigned int Length = StreamOutputTargets == nullptr ? 0 : Math::Min(NumberOfBuffers, (unsigned int)StreamOutputTargets->Length);
+		ID3D10Buffer** pStreamOutputTargets = StreamOutputTargets != nullptr && StreamOutputTargets->Length > 0 ? new ID3D10Buffer*[Length] : 0;
+
+		pin_ptr <unsigned int> PinnedOffsets = Offsets != nullptr && Offsets->Length > 0 ? &Offsets[0] : nullptr;
+
+		try
+		{
+			pDevice->SOGetTargets(NumberOfBuffers, pStreamOutputTargets, PinnedOffsets);
+
+			if (pStreamOutputTargets)
+			{
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					if (pStreamOutputTargets[No])
+					{
+						try { StreamOutputTargets[No] = (Buffer^)Interfaces[IntPtr(pStreamOutputTargets[No])]; }
+						catch (KeyNotFoundException^) { StreamOutputTargets[No] = gcnew Buffer(IntPtr(pStreamOutputTargets[No])); }
+					}
+					else StreamOutputTargets[No] = nullptr;
+				}
+			}
+		}
+		finally
+		{
+			if (pStreamOutputTargets) delete[] pStreamOutputTargets;
+		}
+	}
+
+	void SO_SetTargets(unsigned int NumberOfBuffers, array<Buffer^>^ StreamOutputTargets, array<unsigned int>^ Offsets)
+	{
+		pin_ptr <unsigned int> PinnedOffsets = Offsets != nullptr && Offsets->Length > 0 ? &Offsets[0] : nullptr;
+
+		ID3D10Buffer** pStreamOutputTargets = 0;
+		try
+		{
+			if (StreamOutputTargets != nullptr && StreamOutputTargets->Length > 0)
+			{
+				unsigned int Length = StreamOutputTargets == nullptr ? 0 : Math::Min(NumberOfBuffers, (unsigned int)StreamOutputTargets->Length);
+				pStreamOutputTargets = new ID3D10Buffer*[Length];
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					if (pStreamOutputTargets[No])
+					{
+						try { StreamOutputTargets[No] = (Buffer^)Interfaces[IntPtr(pStreamOutputTargets[No])]; }
+						catch (KeyNotFoundException^) { StreamOutputTargets[No] = gcnew Buffer(IntPtr(pStreamOutputTargets[No])); }
+					}
+					else StreamOutputTargets[No] = nullptr;
+				}
+			}
+
+			pDevice->SOSetTargets(NumberOfBuffers, pStreamOutputTargets, PinnedOffsets);
+		}
+		finally
+		{
+			if (pStreamOutputTargets) delete[] pStreamOutputTargets;
+		}
+	}
+
+	int SetExceptionMode(RaiseFlag RaiseFlags)
+	{
+		return pDevice->SetExceptionMode((unsigned int)RaiseFlags);
+	}
+
+	void SetPredication(Predicate^ Predicate, bool PredicateValue)
+	{
+		ID3D10Predicate* pPredicate = Predicate == nullptr ? 0 : Predicate->pPredicate;
+
+		pDevice->SetPredication(pPredicate, PredicateValue);
+	}
+
+	int SetPrivateData(Guid Guid, unsigned int DataSize, UnmanagedMemory^ Data)
+	{
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
+
+		int Result = pDevice->SetPrivateData(IID_Converter::ToNative(Guid), DataSize, pData);
+
+		return Result;
+	}
+
+	int SetPrivateDataInterface(Guid Guid, Unknown^ Data)
+	{
+		IUnknown* pData = Data == nullptr ? 0 : Data->pUnknown;
+
+		int Result = pDevice->SetPrivateDataInterface(IID_Converter::ToNative(Guid), pData);
+
+		return Result;
+	}
 
 	void UpdateSubresource(Resource^ DestinationResource, unsigned int DestinationSubresource, Box% DestinationBox, UnmanagedMemory^ SourceData, unsigned int SourceRowPitch, unsigned int SourceDepthPitch)
 	{
@@ -1367,5 +1702,176 @@ public:
 		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
 
 		pDevice->UpdateSubresource(pDestinationResource, DestinationSubresource, 0, pSourceData, SourceRowPitch, SourceDepthPitch);
+	}
+
+	void VS_GetConstantBuffers(unsigned int StartSlot, unsigned int NumberOfBuffers, array<Buffer^>^ ConstantBuffers)
+	{
+		unsigned int Length = ConstantBuffers == nullptr ? 0 : Math::Min(NumberOfBuffers, (unsigned int)ConstantBuffers->Length);
+		ID3D10Buffer** pConstantBuffers = ConstantBuffers != nullptr && ConstantBuffers->Length > 0 ? new ID3D10Buffer*[Length] : 0;
+
+		try
+		{
+			pDevice->VSGetConstantBuffers(StartSlot, NumberOfBuffers, pConstantBuffers);
+
+			if (pConstantBuffers)
+			{
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					if (pConstantBuffers[No])
+					{
+						try { ConstantBuffers[No] = (Buffer^)Interfaces[IntPtr(pConstantBuffers[No])]; }
+						catch (KeyNotFoundException^) { ConstantBuffers[No] = gcnew Buffer(IntPtr(pConstantBuffers[No])); }
+					}
+					else ConstantBuffers[No] = nullptr;
+				}
+			}
+		}
+		finally
+		{
+			if (pConstantBuffers) delete[] pConstantBuffers;
+		}
+	}
+
+	void VS_GetSamplers(unsigned int StartSlot, unsigned int NumberOfSamplers, array<SamplerState^>^ Samplers)
+	{
+		unsigned int Length = Samplers == nullptr ? 0 : Math::Min(NumberOfSamplers, (unsigned int)Samplers->Length);
+		ID3D10SamplerState** pSamplers = Samplers != nullptr && Samplers->Length > 0 ? new ID3D10SamplerState*[Length] : 0;
+		try
+		{
+			pDevice->VSGetSamplers(StartSlot, NumberOfSamplers, pSamplers);
+
+			if (pSamplers)
+			{
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					if (pSamplers[No])
+					{
+						try { Samplers[No] = (SamplerState^)Interfaces[IntPtr(pSamplers[No])]; }
+						catch (KeyNotFoundException^) { Samplers[No] = gcnew SamplerState(IntPtr(pSamplers[No])); }
+					}
+					else Samplers[No] = nullptr;
+				}
+			}
+		}
+		finally
+		{
+			if (pSamplers) delete[] pSamplers;
+		}
+	}
+
+	void VS_GetShader([Out] VertexShader^% VertexShader)
+	{
+		ID3D10VertexShader* pVertexShader = 0;
+		pDevice->VSGetShader(&pVertexShader);
+
+		if (pVertexShader)
+		{
+			try { VertexShader = (Xtro::MDX::Direct3D10::VertexShader^)Interfaces[IntPtr(pVertexShader)]; }
+			catch (KeyNotFoundException^) { VertexShader = gcnew Xtro::MDX::Direct3D10::VertexShader(IntPtr(pVertexShader)); }					
+		}
+		else VertexShader = nullptr;
+	}
+
+	void VS_GetShaderResources(unsigned int StartSlot, unsigned int NumberOfViews, array<ShaderResourceView^>^ ShaderResourceViews)
+	{
+		unsigned int Length = ShaderResourceViews == nullptr ? 0 : Math::Min(NumberOfViews, (unsigned int)ShaderResourceViews->Length);
+		ID3D10ShaderResourceView** pShaderResourceViews = ShaderResourceViews != nullptr && ShaderResourceViews->Length > 0 ? new ID3D10ShaderResourceView*[Length] : 0;
+		try
+		{
+			pDevice->VSGetShaderResources(StartSlot, NumberOfViews, pShaderResourceViews);
+
+			if (pShaderResourceViews)
+			{
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					if (pShaderResourceViews[No])
+					{
+						try { ShaderResourceViews[No] = (ShaderResourceView^)Interfaces[IntPtr(pShaderResourceViews[No])]; }
+						catch (KeyNotFoundException^) { ShaderResourceViews[No] = gcnew ShaderResourceView(IntPtr(pShaderResourceViews[No])); }
+					}
+					else ShaderResourceViews[No] = nullptr;
+				}
+			}
+		}
+		finally
+		{
+			if (pShaderResourceViews) delete[] pShaderResourceViews;
+		}
+	}
+
+	void VS_SetConstantBuffers(unsigned int StartSlot, unsigned int NumberOfBuffers, array<Buffer^>^ ConstantBuffers)
+	{
+		ID3D10Buffer** pConstantBuffers = 0;
+		try
+		{
+			if (ConstantBuffers != nullptr && ConstantBuffers->Length > 0)
+			{
+				unsigned int Length = Math::Min(NumberOfBuffers, (unsigned int)ConstantBuffers->Length);
+				pConstantBuffers = new ID3D10Buffer*[Length];
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					pConstantBuffers[No] = ConstantBuffers[No] == nullptr ? 0 : ConstantBuffers[No]->pBuffer;
+				}
+			}
+
+			pDevice->VSSetConstantBuffers(StartSlot, NumberOfBuffers, pConstantBuffers);
+		}
+		finally
+		{
+			if (pConstantBuffers) delete[] pConstantBuffers;
+		}
+	}
+
+	void VS_SetSamplers(unsigned int StartSlot, unsigned int NumberOfSamplers, array<SamplerState^>^ Samplers)
+	{
+		ID3D10SamplerState** pSamplers = 0;
+		try
+		{
+			if (Samplers != nullptr && Samplers->Length > 0)
+			{
+				unsigned int Length = Math::Min(NumberOfSamplers, (unsigned int)Samplers->Length);
+				pSamplers = new ID3D10SamplerState*[Length];
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					pSamplers[No] = Samplers[No] == nullptr ? 0 : Samplers[No]->pSamplerState;
+				}
+			}
+
+			pDevice->VSSetSamplers(StartSlot, NumberOfSamplers, pSamplers);
+		}
+		finally
+		{
+			if (pSamplers) delete[] pSamplers;
+		}
+	}
+
+	void VS_SetShader(VertexShader^ Shader)
+	{
+		ID3D10VertexShader* pShader = Shader == nullptr ? 0 : Shader->pVertexShader;
+
+		pDevice->VSSetShader(pShader);
+	}
+
+	void VS_SetShaderResources(unsigned int StartSlot, unsigned int NumberOfViews, array<ShaderResourceView^>^ ShaderResourceViews)
+	{
+		ID3D10ShaderResourceView** pShaderResourceViews = 0;
+		try
+		{
+			if (ShaderResourceViews != nullptr && ShaderResourceViews->Length > 0)
+			{
+				unsigned int Length = Math::Min(NumberOfViews, (unsigned int)ShaderResourceViews->Length);
+				pShaderResourceViews = new ID3D10ShaderResourceView*[Length];
+				for (unsigned int No = 0; No < Length; No++)
+				{
+					pShaderResourceViews[No] = ShaderResourceViews[No] == nullptr ? 0 : ShaderResourceViews[No]->pShaderResourceView;
+				}
+			}
+
+			pDevice->VSSetShaderResources(StartSlot, NumberOfViews, pShaderResourceViews);
+		}
+		finally
+		{
+			if (pShaderResourceViews) delete[] pShaderResourceViews;
+		}
 	}
 };

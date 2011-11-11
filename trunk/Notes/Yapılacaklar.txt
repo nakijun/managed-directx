@@ -2,10 +2,6 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* IAGetIndexBuffer gibi pek çok yerde array kaymasý yapmýþýz. geniþlikler ve looplar count'a eþit olmalý.
-
-* IAGetIndexBuffer 
-
 * function'larý yap
 
 * XACT3
