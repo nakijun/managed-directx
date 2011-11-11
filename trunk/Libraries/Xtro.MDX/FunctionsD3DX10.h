@@ -102,10 +102,15 @@ public:
 		int Result = 0;
 		ID3D10Resource* pResource = 0;
 	
-		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
-		LoadInfo.Marshal(&NativeLoadInfo);
-		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pResource, 0); }
+		IntPtr pSourceFile = IntPtr::Zero;
+		try 
+		{
+			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+			LoadInfo.Marshal(&NativeLoadInfo);
+			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+
+			Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pResource, 0); 
+		}
 		finally
 		{
 			Marshal::FreeHGlobal(pSourceFile); 
@@ -195,10 +200,15 @@ public:
 		int Result = 0;
 		ID3D10ShaderResourceView* pShaderResourceView = 0;
 
-		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
-		LoadInfo.Marshal(&NativeLoadInfo);
-		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pShaderResourceView, 0); }
+		IntPtr pSourceFile = IntPtr::Zero;
+		try
+		{
+			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+			LoadInfo.Marshal(&NativeLoadInfo);
+			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+
+			Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pShaderResourceView, 0); 
+		}
 		finally
 		{
 			Marshal::FreeHGlobal(pSourceFile); 
@@ -225,11 +235,14 @@ public:
 		ID3D10Effect* pEffect = 0;
 		ID3D10Blob* pErrors = 0;
 
-		IntPtr pFileName = Marshal::StringToHGlobalUni(FileName);
-		IntPtr pProfile = Marshal::StringToHGlobalAnsi(Profile);
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
 		D3D10_SHADER_MACRO* pDefines = 0;
 		try
 		{
+			pFileName = Marshal::StringToHGlobalUni(FileName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
@@ -283,11 +296,14 @@ public:
 		int Result = 0;
 		ID3D10Effect* pEffect = 0;
 
-		IntPtr pFileName = Marshal::StringToHGlobalUni(FileName);
-		IntPtr pProfile = Marshal::StringToHGlobalAnsi(Profile);
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
 		D3D10_SHADER_MACRO* pDefines = 0;
 		try
 		{
+			pFileName = Marshal::StringToHGlobalUni(FileName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
@@ -336,11 +352,14 @@ public:
 		ID3D10Effect* pEffect = 0;
 		ID3D10Blob* pErrors = 0;
 
-		IntPtr pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
-		IntPtr pProfile = Marshal::StringToHGlobalAnsi(Profile);
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
 		D3D10_SHADER_MACRO* pDefines = 0;
 		try
 		{
+			pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
@@ -395,11 +414,14 @@ public:
 		int Result = 0;
 		ID3D10Effect* pEffect = 0;
 
-		IntPtr pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
-		IntPtr pProfile = Marshal::StringToHGlobalAnsi(Profile);
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
 		D3D10_SHADER_MACRO* pDefines = 0;
 		try
 		{
+			pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
 			if (Defines != nullptr && Defines->Length > 0)
 			{
 				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
