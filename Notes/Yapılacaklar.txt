@@ -2,8 +2,12 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
+* D3D10CreateEffectFromMemory
+
 * function'larý yap
 
+* D3DCompiler
+* ErrorHandling
 * XACT3
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)

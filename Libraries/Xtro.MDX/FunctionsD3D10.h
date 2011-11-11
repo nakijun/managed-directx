@@ -1,6 +1,21 @@
 public ref class Functions abstract sealed
 {
 public:
+	static int CreateBlob(SIZE_T NumberOfBytes, [Out] Blob^% Buffer)
+	{
+		ID3D10Blob* pBuffer = 0;
+		int Result = D3D10CreateBlob(NumberOfBytes, &pBuffer);
+
+		if (pBuffer)
+		{
+			try { Buffer = (Blob^)Interface::Interfaces[IntPtr(pBuffer)]; }
+			catch (KeyNotFoundException^) { Buffer = gcnew Blob(IntPtr(pBuffer)); }					
+		}
+		else Buffer = nullptr;
+
+		return Result;
+	}
+
 	static int CreateDevice(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, [Out] Device^% Device)
 	{
 		IDXGIAdapter* pAdapter = Adapter == nullptr ? 0 : Adapter->pAdapter;
@@ -46,10 +61,340 @@ public:
 		return Result;
 	}
 
-	static int StateBlockMaskEnableAll([Out] StateBlockMask% Mask)
+	static unsigned int CalculateSubresource(unsigned int MipSlice, unsigned int ArraySlice, unsigned int MipLevels)
 	{
-		pin_ptr<StateBlockMask> PinnedMask = &Mask;
-		int Result = D3D10StateBlockMaskEnableAll((D3D10_STATE_BLOCK_MASK*)PinnedMask);
+		return D3D10CalcSubresource(MipSlice, ArraySlice, MipLevels);
+	}
+
+	static int CompileShader(String^ SourceData, SIZE_T SourceDataLength, String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ FunctionName, String^ Profile, ShaderFlag Flags, [Out] Blob^% Shader, [Out] Blob^% ErrorMessages)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShader = 0;
+		ID3D10Blob* pErrorMessages = 0;
+
+		IntPtr pSourceData = IntPtr::Zero;
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pSourceData = Marshal::StringToHGlobalAnsi(SourceData);
+			pFileName = Marshal::StringToHGlobalAnsi(FileName);
+			pFunctionName = Marshal::StringToHGlobalAnsi(FunctionName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3D10CompileShader((LPCSTR)pSourceData.ToPointer(), SourceDataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pFunctionName.ToPointer(), (LPCSTR)pProfile.ToPointer(), (unsigned int)Flags, &pShader, &pErrorMessages);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceData); 
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pFunctionName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+			}
+
+			delete[] pDefines;
+		}
+
+		if (pShader)
+		{
+			try { Shader = (Blob^)Interface::Interfaces[IntPtr(pShader)]; }
+			catch (KeyNotFoundException^) { Shader = gcnew Blob(IntPtr(pShader)); }
+		}
+		else Shader = nullptr;
+
+		if (pErrorMessages)
+		{
+			try { ErrorMessages = (Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
+			catch (KeyNotFoundException^) { ErrorMessages = gcnew Blob(IntPtr(pErrorMessages)); }
+		}
+		else ErrorMessages = nullptr;
+
+		return Result;
+	}
+	
+	static int DisassembleShader(UnmanagedMemory^ Shader, SIZE_T BytecodeLength, bool EnableColorCode, String^ Comments, [Out] Blob^% Disassembly)
+	{
+		void* pShader = Shader == nullptr ? 0 : Shader->pMemory;
+
+		int Result = 0;
+		ID3D10Blob* pDisassembly = 0;
+
+		IntPtr pComments = Marshal::StringToHGlobalAnsi(Comments);
+		try
+		{
+			Result = D3D10DisassembleShader(pShader, BytecodeLength, EnableColorCode, (LPCSTR)pComments.ToPointer(), &pDisassembly);
+		}
+		finally	{ Marshal::FreeHGlobal(pComments); }
+
+		if (pDisassembly)
+		{
+			try { Disassembly = (Blob^)Interface::Interfaces[IntPtr(pDisassembly)]; }
+			catch (KeyNotFoundException^) { Disassembly = gcnew Blob(IntPtr(pDisassembly)); }
+		}
+		else Disassembly = nullptr;
+
+		return Result;
+	}
+
+	static String^ GetGeometryShaderProfile(Device^ Device)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		return gcnew String(D3D10GetGeometryShaderProfile(pDevice));
+	}
+
+	static int GetInputAndOutputSignatureBlob(UnmanagedMemory^ ShaderBytecode, SIZE_T BytecodeLength, [Out] Blob^% SignatureBlob)
+	{
+		void* pShaderBytecode = ShaderBytecode == nullptr ? 0 : ShaderBytecode->pMemory;
+
+		ID3D10Blob* pSignatureBlob = 0;
+		int Result = D3D10GetInputAndOutputSignatureBlob(pShaderBytecode, BytecodeLength, &pSignatureBlob);
+
+		if (pSignatureBlob)
+		{
+			try { SignatureBlob = (Blob^)Interface::Interfaces[IntPtr(pSignatureBlob)]; }
+			catch (KeyNotFoundException^) { SignatureBlob = gcnew Blob(IntPtr(pSignatureBlob)); }
+		}
+		else SignatureBlob = nullptr;
+
+		return Result;
+	}
+
+	static int GetInputSignatureBlob(UnmanagedMemory^ ShaderBytecode, SIZE_T BytecodeLength, [Out] Blob^% SignatureBlob)
+	{
+		void* pShaderBytecode = ShaderBytecode == nullptr ? 0 : ShaderBytecode->pMemory;
+
+		ID3D10Blob* pSignatureBlob = 0;
+		int Result = D3D10GetInputSignatureBlob(pShaderBytecode, BytecodeLength, &pSignatureBlob);
+
+		if (pSignatureBlob)
+		{
+			try { SignatureBlob = (Blob^)Interface::Interfaces[IntPtr(pSignatureBlob)]; }
+			catch (KeyNotFoundException^) { SignatureBlob = gcnew Blob(IntPtr(pSignatureBlob)); }
+		}
+		else SignatureBlob = nullptr;
+
+		return Result;
+	}
+
+	static int GetOutputSignatureBlob(UnmanagedMemory^ ShaderBytecode, SIZE_T BytecodeLength, [Out] Blob^% SignatureBlob)
+	{
+		void* pShaderBytecode = ShaderBytecode == nullptr ? 0 : ShaderBytecode->pMemory;
+
+		ID3D10Blob* pSignatureBlob = 0;
+		int Result = D3D10GetOutputSignatureBlob(pShaderBytecode, BytecodeLength, &pSignatureBlob);
+
+		if (pSignatureBlob)
+		{
+			try { SignatureBlob = (Blob^)Interface::Interfaces[IntPtr(pSignatureBlob)]; }
+			catch (KeyNotFoundException^) { SignatureBlob = gcnew Blob(IntPtr(pSignatureBlob)); }
+		}
+		else SignatureBlob = nullptr;
+
+		return Result;
+	}
+
+	static String^ GetPixelShaderProfile(Device^ Device)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		return gcnew String(D3D10GetPixelShaderProfile(pDevice));
+	}
+
+	static int GetShaderDebugInfo(UnmanagedMemory^ ShaderBytecode, SIZE_T BytecodeLength, [Out] Blob^% DebugInfo)
+	{
+		void* pShaderBytecode = ShaderBytecode == nullptr ? 0 : ShaderBytecode->pMemory;
+
+		ID3D10Blob* pDebugInfo = 0;
+		int Result = D3D10GetShaderDebugInfo(pShaderBytecode, BytecodeLength, &pDebugInfo);
+
+		if (pDebugInfo)
+		{
+			try { DebugInfo = (Blob^)Interface::Interfaces[IntPtr(pDebugInfo)]; }
+			catch (KeyNotFoundException^) { DebugInfo = gcnew Blob(IntPtr(pDebugInfo)); }
+		}
+		else DebugInfo = nullptr;
+
+		return Result;
+	}
+
+	static String^ GetVertexShaderProfile(Device^ Device)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		return gcnew String(D3D10GetVertexShaderProfile(pDevice));
+	}
+
+	static int PreprocessShader(String^ SourceData, SIZE_T SourceDataSize, String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, [Out] Blob^% ShaderText, [Out] Blob^% ErrorMessages)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShaderText = 0;
+		ID3D10Blob* pErrorMessages = 0;
+
+		IntPtr pSourceData = IntPtr::Zero;
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pSourceData = Marshal::StringToHGlobalAnsi(SourceData);
+			pFileName = Marshal::StringToHGlobalAnsi(FileName);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3D10PreprocessShader((LPCSTR)pSourceData.ToPointer(), SourceDataSize, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, &pShaderText, &pErrorMessages);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceData); 
+			Marshal::FreeHGlobal(pFileName); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+			}
+
+			delete[] pDefines;
+		}
+
+		if (pShaderText)
+		{
+			try { ShaderText = (Blob^)Interface::Interfaces[IntPtr(pShaderText)]; }
+			catch (KeyNotFoundException^) { ShaderText = gcnew Blob(IntPtr(pShaderText)); }
+		}
+		else ShaderText = nullptr;
+
+		if (pErrorMessages)
+		{
+			try { ErrorMessages = (Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
+			catch (KeyNotFoundException^) { ErrorMessages = gcnew Blob(IntPtr(pErrorMessages)); }
+		}
+		else ErrorMessages = nullptr;
+
+		return Result;
+	}
+
+	static int ReflectShader(UnmanagedMemory^ ShaderBytecode, SIZE_T BytecodeLength, [Out] ShaderReflection^% Reflector)
+	{
+		void* pShaderBytecode = ShaderBytecode == nullptr ? 0 : ShaderBytecode->pMemory;
+
+		ID3D10ShaderReflection* pReflector = 0;
+		int Result = D3D10ReflectShader(pShaderBytecode, BytecodeLength, &pReflector);
+
+		if (pReflector)
+		{
+			try { Reflector = (ShaderReflection^)Interface::Interfaces[IntPtr(pReflector)]; }
+			catch (KeyNotFoundException^) { Reflector = gcnew ShaderReflection(IntPtr(pReflector)); }
+		}
+		else Reflector = nullptr;
+
+		return Result;
+	}
+
+	static int CompileEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, [Out] Blob^% CompiledEffect, [Out] Blob^% Errors)
+	{
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pCompiledEffect = 0;
+		ID3D10Blob* pErrors = 0;
+
+		IntPtr pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3D10CompileEffectFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, &pCompiledEffect, &pErrors);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+			}
+
+			delete[] pDefines;
+		}
+
+		if (pCompiledEffect)
+		{
+			try { CompiledEffect = (Blob^)Interface::Interfaces[IntPtr(pCompiledEffect)]; }
+			catch (KeyNotFoundException^) { CompiledEffect = gcnew Blob(IntPtr(pCompiledEffect)); }
+		}
+		else CompiledEffect = nullptr;
+
+		if (pErrors)
+		{
+			try { Errors = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
+			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
+		}
+		else Errors = nullptr;
+
+		return Result;
+	}
+		
+	static int CreateStateBlock(Device^ Device, StateBlockMask% StateBlockMask, [Out] StateBlock^% StateBlock)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		pin_ptr<Xtro::MDX::Direct3D10::StateBlockMask> PinnedStateBlockMask = &StateBlockMask;
+
+		ID3D10StateBlock* pStateBlock = 0;
+		int Result = D3D10CreateStateBlock(pDevice, (D3D10_STATE_BLOCK_MASK*)PinnedStateBlockMask, &pStateBlock);
+
+		if (pStateBlock)
+		{
+			try { StateBlock = (Xtro::MDX::Direct3D10::StateBlock^)Interface::Interfaces[IntPtr(pStateBlock)]; }
+			catch (KeyNotFoundException^) { StateBlock = gcnew Xtro::MDX::Direct3D10::StateBlock(IntPtr(pStateBlock)); }					
+		}
+		else StateBlock = nullptr;
 
 		return Result;
 	}
@@ -71,30 +416,19 @@ public:
 		return Result;
 	}
 
+	static int StateBlockMaskEnableAll([Out] StateBlockMask% Mask)
+	{
+		pin_ptr<StateBlockMask> PinnedMask = &Mask;
+		int Result = D3D10StateBlockMaskEnableAll((D3D10_STATE_BLOCK_MASK*)PinnedMask);
+
+		return Result;
+	}
+
 	static int StateBlockMaskEnableCapture(StateBlockMask% Mask, DeviceStateType StateType, unsigned int RangeStart, unsigned int RangeLength)
 	{
 		pin_ptr<StateBlockMask> PinnedMask = &Mask;
 
 		int Result = D3D10StateBlockMaskEnableCapture((D3D10_STATE_BLOCK_MASK*)PinnedMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
-
-		return Result;
-	}
-
-	static int CreateStateBlock(Device^ Device, StateBlockMask% StateBlockMask, [Out] StateBlock^% StateBlock)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-
-		pin_ptr<Xtro::MDX::Direct3D10::StateBlockMask> PinnedStateBlockMask = &StateBlockMask;
-
-		ID3D10StateBlock* pStateBlock = 0;
-		int Result = D3D10CreateStateBlock(pDevice, (D3D10_STATE_BLOCK_MASK*)PinnedStateBlockMask, &pStateBlock);
-
-		if (pStateBlock)
-		{
-			try { StateBlock = (Xtro::MDX::Direct3D10::StateBlock^)Interface::Interfaces[IntPtr(pStateBlock)]; }
-			catch (KeyNotFoundException^) { StateBlock = gcnew Xtro::MDX::Direct3D10::StateBlock(IntPtr(pStateBlock)); }					
-		}
-		else StateBlock = nullptr;
 
 		return Result;
 	}
