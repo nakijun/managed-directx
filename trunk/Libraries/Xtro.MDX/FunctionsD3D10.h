@@ -380,6 +380,43 @@ public:
 		return Result;
 	}
 		
+	static int CreateEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, EffectFlag FX_Flags, Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect)
+	{
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		ID3D10EffectPool* pEffectPool = EffectPool == nullptr ? 0 : EffectPool->pEffectPool;
+
+		ID3D10Effect* pEffect = 0;
+		int Result = D3D10CreateEffectFromMemory(pData, DataLength, (unsigned int)FX_Flags, pDevice, pEffectPool, &pEffect);
+
+		if (pEffect)
+		{
+			try { Effect = (Xtro::MDX::Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
+			catch (KeyNotFoundException^) { Effect = gcnew Xtro::MDX::Direct3D10::Effect(IntPtr(pEffect)); }
+		}
+		else Effect = nullptr;
+
+		return Result;
+	}
+	
+	static int CreateEffectPoolFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, EffectFlag FX_Flags, Device^ Device, [Out] EffectPool^% EffectPool)
+	{
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		ID3D10EffectPool* pEffectPool = 0;
+		int Result = D3D10CreateEffectPoolFromMemory(pData, DataLength, (unsigned int)FX_Flags, pDevice, &pEffectPool);
+
+		if (pEffectPool)
+		{
+			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+		}
+		else EffectPool = nullptr;
+
+		return Result;
+	}
+	
 	static int CreateStateBlock(Device^ Device, StateBlockMask% StateBlockMask, [Out] StateBlock^% StateBlock)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
@@ -399,37 +436,77 @@ public:
 		return Result;
 	}
 
+	static int DisassembleEffect(Effect^ Effect, bool EnableColorCode, [Out] Blob^% Disassembly)
+	{
+		ID3D10Effect* pEffect = Effect == nullptr ? 0 : Effect->pEffect;
+
+		ID3D10Blob* pDisassembly = 0;
+		int Result = D3D10DisassembleEffect(pEffect, EnableColorCode, &pDisassembly);
+
+		if (pDisassembly)
+		{
+			try { Disassembly = (Blob^)Interface::Interfaces[IntPtr(pDisassembly)]; }
+			catch (KeyNotFoundException^) { Disassembly = gcnew Blob(IntPtr(pDisassembly)); }
+		}
+		else Disassembly = nullptr;
+
+		return Result;
+	}
+
+	static int StateBlockMaskDifference(StateBlockMask% A, StateBlockMask% B, [Out] StateBlockMask% Result)
+	{
+		pin_ptr<StateBlockMask> PinnedA = &A;
+		pin_ptr<StateBlockMask> PinnedB = &B;
+		pin_ptr<StateBlockMask> PinnedResult = &Result;
+
+		return D3D10StateBlockMaskDifference((D3D10_STATE_BLOCK_MASK*)PinnedA, (D3D10_STATE_BLOCK_MASK*)PinnedB, (D3D10_STATE_BLOCK_MASK*)PinnedResult);
+	}
+
 	static int StateBlockMaskDisableAll([Out] StateBlockMask% Mask)
 	{
 		pin_ptr<StateBlockMask> PinnedMask = &Mask;
-		int Result = D3D10StateBlockMaskDisableAll((D3D10_STATE_BLOCK_MASK*)PinnedMask);
-
-		return Result;
+		return D3D10StateBlockMaskDisableAll((D3D10_STATE_BLOCK_MASK*)PinnedMask);
 	}
 
 	static int StateBlockMaskDisableCapture(StateBlockMask% Mask, DeviceStateType StateType, unsigned int RangeStart, unsigned int RangeLength)
 	{
 		pin_ptr<StateBlockMask> PinnedMask = &Mask;
-
-		int Result = D3D10StateBlockMaskDisableCapture((D3D10_STATE_BLOCK_MASK*)PinnedMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
-
-		return Result;
+		return D3D10StateBlockMaskDisableCapture((D3D10_STATE_BLOCK_MASK*)PinnedMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
 	}
 
 	static int StateBlockMaskEnableAll([Out] StateBlockMask% Mask)
 	{
 		pin_ptr<StateBlockMask> PinnedMask = &Mask;
-		int Result = D3D10StateBlockMaskEnableAll((D3D10_STATE_BLOCK_MASK*)PinnedMask);
-
-		return Result;
+		return D3D10StateBlockMaskEnableAll((D3D10_STATE_BLOCK_MASK*)PinnedMask);
 	}
 
 	static int StateBlockMaskEnableCapture(StateBlockMask% Mask, DeviceStateType StateType, unsigned int RangeStart, unsigned int RangeLength)
 	{
 		pin_ptr<StateBlockMask> PinnedMask = &Mask;
+		return D3D10StateBlockMaskEnableCapture((D3D10_STATE_BLOCK_MASK*)PinnedMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
+	}
 
-		int Result = D3D10StateBlockMaskEnableCapture((D3D10_STATE_BLOCK_MASK*)PinnedMask, (D3D10_DEVICE_STATE_TYPES)StateType, RangeStart, RangeLength);
+	static int StateBlockMaskGetSetting(StateBlockMask% Mask, DeviceStateType StateType, unsigned int Entry)
+	{
+		pin_ptr<StateBlockMask> PinnedMask = &Mask;
+		return D3D10StateBlockMaskGetSetting((D3D10_STATE_BLOCK_MASK*)PinnedMask, (D3D10_DEVICE_STATE_TYPES)StateType, Entry);
+	}
 
-		return Result;
+	static int StateBlockMaskIntersect(StateBlockMask% A, StateBlockMask% B, [Out] StateBlockMask% Result)
+	{
+		pin_ptr<StateBlockMask> PinnedA = &A;
+		pin_ptr<StateBlockMask> PinnedB = &B;
+		pin_ptr<StateBlockMask> PinnedResult = &Result;
+
+		return D3D10StateBlockMaskIntersect((D3D10_STATE_BLOCK_MASK*)PinnedA, (D3D10_STATE_BLOCK_MASK*)PinnedB, (D3D10_STATE_BLOCK_MASK*)PinnedResult);
+	}
+
+	static int StateBlockMaskUnion(StateBlockMask% A, StateBlockMask% B, [Out] StateBlockMask% Result)
+	{
+		pin_ptr<StateBlockMask> PinnedA = &A;
+		pin_ptr<StateBlockMask> PinnedB = &B;
+		pin_ptr<StateBlockMask> PinnedResult = &Result;
+
+		return D3D10StateBlockMaskUnion((D3D10_STATE_BLOCK_MASK*)PinnedA, (D3D10_STATE_BLOCK_MASK*)PinnedB, (D3D10_STATE_BLOCK_MASK*)PinnedResult);
 	}
 };
