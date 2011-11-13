@@ -1,6 +1,7 @@
 public ref class Constants abstract sealed
 {
 public:
+	literal int SdkVersion = D3D10_SDK_VERSION;
 	static Guid GuidDeviceType = IID_Converter::ToManaged(GUID_DeviceType);
 
 	literal int x16BitIndexStripCutValue = D3D10_16BIT_INDEX_STRIP_CUT_VALUE;

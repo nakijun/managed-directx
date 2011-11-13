@@ -2,9 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* D3D10CreateEffectFromMemory
-
-* function'larý yap
+* math functions
 
 * D3DCompiler
 * ErrorHandling

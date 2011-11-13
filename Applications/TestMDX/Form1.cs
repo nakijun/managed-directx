@@ -7,6 +7,7 @@ using Object = Xtro.MDX.DXGI.Object;
 using Xtro.MDX.Direct3DX10;
 using D3D10Functions = Xtro.MDX.Direct3D10.Functions;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
+using Constants = Xtro.MDX.Direct3D10.Constants;
 using Xtro.MDX.Direct3D10;
 using System.Runtime.InteropServices;
 using System.IO;
@@ -67,8 +68,8 @@ namespace TestMDX
 
             int Result = 0;
             SwapChain SwapChain;
-            Xtro.MDX.Direct3D10.Device Device;            
-            Result = D3D10Functions.CreateDeviceAndSwapChain(null, DriverType.Hardware, null, CreateDeviceFlag.Debug, ref SwapChainDescription, out SwapChain, out Device);
+            Xtro.MDX.Direct3D10.Device Device;
+            Result = D3D10Functions.CreateDeviceAndSwapChain(null, DriverType.Hardware, null, CreateDeviceFlag.Debug, Constants.SdkVersion, ref SwapChainDescription, out SwapChain, out Device);
 
             var CD = new CounterDescription
             {

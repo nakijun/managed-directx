@@ -850,7 +850,7 @@ namespace Xtro.MDX.Utilities
                 if (NewDeviceSettings.DriverType == DriverType.Hardware) Result = Factory.EnumerateAdapters(NewDeviceSettings.AdapterOrdinal, out Adapter);
                 if (Result >= 0)
                 {
-                    Result = D3D10Functions.CreateDevice(Adapter, NewDeviceSettings.DriverType, null, NewDeviceSettings.CreateFlags, out Device);
+                    Result = D3D10Functions.CreateDevice(Adapter, NewDeviceSettings.DriverType, null, NewDeviceSettings.CreateFlags, Constants.SdkVersion, out Device);
 
                     if (Result >= 0)
                     {

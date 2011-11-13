@@ -16,13 +16,13 @@ public:
 		return Result;
 	}
 
-	static int CreateDevice(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, [Out] Device^% Device)
+	static int CreateDevice(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, unsigned int SdkVersion, [Out] Device^% Device)
 	{
 		IDXGIAdapter* pAdapter = Adapter == nullptr ? 0 : Adapter->pAdapter;
 		HMODULE hSoftware = Software == nullptr ? 0 : (HMODULE)Marshal::GetHINSTANCE(Software).ToPointer();
 
 		ID3D10Device* pDevice = 0;
-		int Result = D3D10CreateDevice(pAdapter, (D3D10_DRIVER_TYPE)DriverType, hSoftware, (unsigned int)Flags, D3D10_SDK_VERSION, &pDevice);
+		int Result = D3D10CreateDevice(pAdapter, (D3D10_DRIVER_TYPE)DriverType, hSoftware, (unsigned int)Flags, SdkVersion, &pDevice);
 
 		if (pDevice)
 		{
@@ -34,7 +34,7 @@ public:
 		return Result;
 	}
 
-	static int CreateDeviceAndSwapChain(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, SwapChainDescription% SwapChainDescription, [Out] SwapChain^% SwapChain, [Out] Device^% Device)
+	static int CreateDeviceAndSwapChain(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, unsigned int SdkVersion, SwapChainDescription% SwapChainDescription, [Out] SwapChain^% SwapChain, [Out] Device^% Device)
 	{
 		IDXGIAdapter* pAdapter = Adapter == nullptr ? 0 : Adapter->pAdapter;
 		HMODULE hSoftware = Software == nullptr ? 0 : (HMODULE)Marshal::GetHINSTANCE(Software).ToPointer();
@@ -42,7 +42,7 @@ public:
 
 		ID3D10Device* pDevice = 0;
 		IDXGISwapChain* pSwapChain = 0;
-		int Result = D3D10CreateDeviceAndSwapChain(pAdapter, (D3D10_DRIVER_TYPE)DriverType, hSoftware, (unsigned int)Flags, D3D10_SDK_VERSION, (DXGI_SWAP_CHAIN_DESC*)PinnedSwapChainDescription, &pSwapChain, &pDevice);
+		int Result = D3D10CreateDeviceAndSwapChain(pAdapter, (D3D10_DRIVER_TYPE)DriverType, hSoftware, (unsigned int)Flags, SdkVersion, (DXGI_SWAP_CHAIN_DESC*)PinnedSwapChainDescription, &pSwapChain, &pDevice);
 
 		if (pDevice)
 		{
@@ -128,6 +128,64 @@ public:
 			catch (KeyNotFoundException^) { ErrorMessages = gcnew Blob(IntPtr(pErrorMessages)); }
 		}
 		else ErrorMessages = nullptr;
+
+		return Result;
+	}
+	
+	static int CompileShader(String^ SourceData, SIZE_T SourceDataLength, String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ FunctionName, String^ Profile, ShaderFlag Flags, [Out] Blob^% Shader)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShader = 0;
+
+		IntPtr pSourceData = IntPtr::Zero;
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pSourceData = Marshal::StringToHGlobalAnsi(SourceData);
+			pFileName = Marshal::StringToHGlobalAnsi(FileName);
+			pFunctionName = Marshal::StringToHGlobalAnsi(FunctionName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3D10CompileShader((LPCSTR)pSourceData.ToPointer(), SourceDataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pFunctionName.ToPointer(), (LPCSTR)pProfile.ToPointer(), (unsigned int)Flags, &pShader, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceData); 
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pFunctionName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+			}
+
+			delete[] pDefines;
+		}
+
+		if (pShader)
+		{
+			try { Shader = (Blob^)Interface::Interfaces[IntPtr(pShader)]; }
+			catch (KeyNotFoundException^) { Shader = gcnew Blob(IntPtr(pShader)); }
+		}
+		else Shader = nullptr;
 
 		return Result;
 	}
@@ -307,6 +365,60 @@ public:
 		return Result;
 	}
 
+	static int PreprocessShader(String^ SourceData, SIZE_T SourceDataSize, String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, [Out] Blob^% ShaderText)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShaderText = 0;
+	
+		IntPtr pSourceData = IntPtr::Zero;
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pSourceData = Marshal::StringToHGlobalAnsi(SourceData);
+			pFileName = Marshal::StringToHGlobalAnsi(FileName);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3D10PreprocessShader((LPCSTR)pSourceData.ToPointer(), SourceDataSize, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, &pShaderText, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceData); 
+			Marshal::FreeHGlobal(pFileName); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+			}
+
+			delete[] pDefines;
+		}
+
+		if (pShaderText)
+		{
+			try { ShaderText = (Blob^)Interface::Interfaces[IntPtr(pShaderText)]; }
+			catch (KeyNotFoundException^) { ShaderText = gcnew Blob(IntPtr(pShaderText)); }
+		}
+		else ShaderText = nullptr;
+
+		return Result;
+	}
+
 	static int ReflectShader(UnmanagedMemory^ ShaderBytecode, SIZE_T BytecodeLength, [Out] ShaderReflection^% Reflector)
 	{
 		void* pShaderBytecode = ShaderBytecode == nullptr ? 0 : ShaderBytecode->pMemory;
@@ -376,6 +488,54 @@ public:
 			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
 		}
 		else Errors = nullptr;
+
+		return Result;
+	}
+		
+	static int CompileEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, [Out] Blob^% CompiledEffect)
+	{
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pCompiledEffect = 0;
+
+		IntPtr pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3D10CompileEffectFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, &pCompiledEffect, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+			}
+
+			delete[] pDefines;
+		}
+
+		if (pCompiledEffect)
+		{
+			try { CompiledEffect = (Blob^)Interface::Interfaces[IntPtr(pCompiledEffect)]; }
+			catch (KeyNotFoundException^) { CompiledEffect = gcnew Blob(IntPtr(pCompiledEffect)); }
+		}
+		else CompiledEffect = nullptr;
 
 		return Result;
 	}
