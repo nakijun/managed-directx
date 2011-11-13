@@ -2,6 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
+* D3DXMatrixDecompose
 * math functions
 
 * D3DCompiler
