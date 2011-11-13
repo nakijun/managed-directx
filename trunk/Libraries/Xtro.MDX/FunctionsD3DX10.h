@@ -8,19 +8,19 @@ private:
 
 		switch (Type)
 		{
-			case D3D10_RESOURCE_DIMENSION_TEXTURE1D : 
-				try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
-				catch (KeyNotFoundException^) { return gcnew Texture1D(IntPtr(pResource)); }
-				break;
-			case D3D10_RESOURCE_DIMENSION_TEXTURE2D : 
-				try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
-				catch (KeyNotFoundException^) { return gcnew Texture2D(IntPtr(pResource)); }
-				break;
-			case D3D10_RESOURCE_DIMENSION_TEXTURE3D : 
-				try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
-				catch (KeyNotFoundException^) { return gcnew Texture3D(IntPtr(pResource)); }
-				break;
-			default: return nullptr;
+		case D3D10_RESOURCE_DIMENSION_TEXTURE1D : 
+			try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
+			catch (KeyNotFoundException^) { return gcnew Texture1D(IntPtr(pResource)); }
+			break;
+		case D3D10_RESOURCE_DIMENSION_TEXTURE2D : 
+			try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
+			catch (KeyNotFoundException^) { return gcnew Texture2D(IntPtr(pResource)); }
+			break;
+		case D3D10_RESOURCE_DIMENSION_TEXTURE3D : 
+			try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
+			catch (KeyNotFoundException^) { return gcnew Texture3D(IntPtr(pResource)); }
+			break;
+		default: return nullptr;
 		}
 	}
 
@@ -35,196 +35,298 @@ public:
 		return Radian * (180.0 / D3DX_PI);
 	}
 
-	static int SaveTextureToFile(Xtro::MDX::Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
+	static int CheckVersion(unsigned int D3D_SdkVersion, unsigned int D3DX10_SdkVersion)
 	{
-		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
-
-		IntPtr pDestinationFile = Marshal::StringToHGlobalUni(DestinationFile);
-		try { return D3DX10SaveTextureToFile(pSourceTexture, (D3DX10_IMAGE_FILE_FORMAT)DestinationFormat, (LPCWSTR)pDestinationFile.ToPointer()); }
-		finally { Marshal::FreeHGlobal(pDestinationFile); }
-	}
-	
-	static int SaveTextureToMemory(Xtro::MDX::Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, [Out] Blob^% DestinationBuffer, unsigned int Flags)
-	{
-		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
-
-		ID3D10Blob* pDestinationBuffer = 0;
-		int Result = D3DX10SaveTextureToMemory(pSourceTexture, (D3DX10_IMAGE_FILE_FORMAT)DestinationFormat, &pDestinationBuffer, Flags);
-
-		if (pDestinationBuffer)
-		{
-			try { DestinationBuffer = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pDestinationBuffer)]; }
-			catch (KeyNotFoundException^) { DestinationBuffer = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pDestinationBuffer)); }
-		}
-		else DestinationBuffer = nullptr;
-
-		return Result;
-	}
-	
-	static int GetImageInfoFromFile(String^ SourceFile, [Out] ImageInfo% SourceInfo)
-	{
-		pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo;
-
-		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { return D3DX10GetImageInfoFromFile((LPCWSTR)pSourceFile.ToPointer(), 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0); }
-		finally { Marshal::FreeHGlobal(pSourceFile); }
+		return D3DX10CheckVersion(D3D_SdkVersion, D3DX10_SdkVersion);
 	}
 
-	static int GetImageInfoFromMemory(UnmanagedMemory^ SourceData, [Out] ImageInfo% SourceInfo)
+	static int CompileFromFile(String^ SourceFile, array<ShaderMacro>^ Defines, Include^ Include, String^ FunctionName, String^ Profile, ShaderFlag Flags1, EffectFlag Flags2, [Out] Blob^% Shader, [Out] Blob^% ErrorMessages)
 	{
-		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-		SIZE_T Size = SourceData == nullptr ? 0 : SourceData->FSize;
-		pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo;
-
-		return D3DX10GetImageInfoFromMemory(pSourceData, Size, 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0);
-	}
-
-	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
 
 		int Result = 0;
-		ID3D10Resource* pResource = 0;
-	
-		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pResource, 0); }
-		finally { Marshal::FreeHGlobal(pSourceFile); }
-
-		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
-
-		return Result;
-	}
-		
-	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-
-		int Result = 0;
-		ID3D10Resource* pResource = 0;
-	
-		IntPtr pSourceFile = IntPtr::Zero;
-		try 
-		{
-			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
-			LoadInfo.Marshal(&NativeLoadInfo);
-			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-
-			Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pResource, 0); 
-		}
-		finally
-		{
-			Marshal::FreeHGlobal(pSourceFile); 
-			LoadInfo.Unmarshal();
-		}
-
-		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
-
-		return Result;
-	}
-		
-	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-
-		int Result = 0;
-		ID3D10Resource* pResource = 0;
-		Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, 0, 0, &pResource, 0);
-
-		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
-
-		return Result;
-	}
-		
-	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, ImageLoadInfo% LoadInfo, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-
-		int Result = 0;
-		ID3D10Resource* pResource = 0;
-
-		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
-		LoadInfo.Marshal(&NativeLoadInfo);
-		try { Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, &NativeLoadInfo, 0, &pResource, 0); }
-		finally { LoadInfo.Unmarshal(); }
-			  
-		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
-
-		return Result;
-	}
-		
-	static void FilterTexture(Xtro::MDX::Direct3D10::Resource^ Texture, unsigned int SourceLevel, FilterFlag MipFilter)
-	{
-		ID3D10Resource *pTexture = Texture == nullptr ? 0 : Texture->pResource;
-
-		D3DX10FilterTexture(pTexture, SourceLevel, (unsigned int)MipFilter);
-	}
-
-	static int LoadTextureFromTexture(Xtro::MDX::Direct3D10::Resource^ SourceTexture, TextureLoadInfo% LoadInfo, Xtro::MDX::Direct3D10::Resource^ DestinationTexture)
-	{
-		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
-		ID3D10Resource* pDestinationTexture = DestinationTexture == nullptr ? 0 : DestinationTexture->pResource;
-
-		D3DX10_TEXTURE_LOAD_INFO NativeLoadInfo;
-		LoadInfo.Marshal(&NativeLoadInfo);
-		try { return D3DX10LoadTextureFromTexture(pSourceTexture, &NativeLoadInfo, pDestinationTexture); }
-		finally { LoadInfo.Unmarshal(); }
-	}
-
-	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] ShaderResourceView^% ShaderResourceView)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-
-		int Result = 0;
-		ID3D10ShaderResourceView* pShaderResourceView = 0;
-
-		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pShaderResourceView, 0); }
-		finally { Marshal::FreeHGlobal(pSourceFile); }
-
-		if (pShaderResourceView)
-		{
-			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
-			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
-		}
-		else ShaderResourceView = nullptr;
-
-		return Result;
-	}
-		 
-	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-
-		int Result = 0;
-		ID3D10ShaderResourceView* pShaderResourceView = 0;
+		ID3D10Blob* pShader = 0;
+		ID3D10Blob* pErrorMessages = 0;
 
 		IntPtr pSourceFile = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
 		try
 		{
-			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
-			LoadInfo.Marshal(&NativeLoadInfo);
 			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+			pFunctionName = Marshal::StringToHGlobalUni(FunctionName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
 
-			Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pShaderResourceView, 0); 
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10CompileFromFile((LPCWSTR)pSourceFile.ToPointer(), pDefines, pInclude, (LPCSTR)pFunctionName.ToPointer(), (LPCSTR)pProfile.ToPointer(), (unsigned int)Flags1, (unsigned int)Flags2, 0, &pShader, &pErrorMessages, 0);
 		}
 		finally
 		{
 			Marshal::FreeHGlobal(pSourceFile); 
-			LoadInfo.Unmarshal();
+			Marshal::FreeHGlobal(pFunctionName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines)
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+
+				 delete[] pDefines;
+			}
 		}
 
-		if (pShaderResourceView)
+		if (pShader)
 		{
-			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
-			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+			try { Shader = (Blob^)Interface::Interfaces[IntPtr(pShader)]; }
+			catch (KeyNotFoundException^) { Shader = gcnew Blob(IntPtr(pShader)); }
 		}
-		else ShaderResourceView = nullptr;
+		else Shader = nullptr;
+
+		if (pErrorMessages)
+		{
+			try { ErrorMessages = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
+			catch (KeyNotFoundException^) { ErrorMessages = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrorMessages)); }
+		}
+		else ErrorMessages = nullptr;
 
 		return Result;
 	}
-		 
+	
+	static int CompileFromFile(String^ SourceFile, array<ShaderMacro>^ Defines, Include^ Include, String^ FunctionName, String^ Profile, ShaderFlag Flags1, EffectFlag Flags2, [Out] Blob^% Shader)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShader = 0;
+
+		IntPtr pSourceFile = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+			pFunctionName = Marshal::StringToHGlobalUni(FunctionName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10CompileFromFile((LPCWSTR)pSourceFile.ToPointer(), pDefines, pInclude, (LPCSTR)pFunctionName.ToPointer(), (LPCSTR)pProfile.ToPointer(), (unsigned int)Flags1, (unsigned int)Flags2, 0, &pShader, 0, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceFile); 
+			Marshal::FreeHGlobal(pFunctionName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines)
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+
+				 delete[] pDefines;
+			}
+		}
+
+		if (pShader)
+		{
+			try { Shader = (Blob^)Interface::Interfaces[IntPtr(pShader)]; }
+			catch (KeyNotFoundException^) { Shader = gcnew Blob(IntPtr(pShader)); }
+		}
+		else Shader = nullptr;
+
+		return Result;
+	}
+	
+	static int CompileFromMemory(String^ SourceData, SIZE_T SourceDataLength, String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ FunctionName, String^ Profile, ShaderFlag Flags1, EffectFlag Flags2, [Out] Blob^% Shader, [Out] Blob^% ErrorMessages)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShader = 0;
+		ID3D10Blob* pErrorMessages = 0;
+
+		IntPtr pSourceData = IntPtr::Zero;
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pSourceData = Marshal::StringToHGlobalUni(SourceData);
+			pFileName = Marshal::StringToHGlobalUni(FileName);
+			pFunctionName = Marshal::StringToHGlobalUni(FunctionName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10CompileFromMemory((LPCSTR)pSourceData.ToPointer(), SourceDataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pFunctionName.ToPointer(), (LPCSTR)pProfile.ToPointer(), (unsigned int)Flags1, (unsigned int)Flags2, 0, &pShader, &pErrorMessages, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceData); 
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pFunctionName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines)
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+
+				 delete[] pDefines;
+			}
+		}
+
+		if (pShader)
+		{
+			try { Shader = (Blob^)Interface::Interfaces[IntPtr(pShader)]; }
+			catch (KeyNotFoundException^) { Shader = gcnew Blob(IntPtr(pShader)); }
+		}
+		else Shader = nullptr;
+
+		if (pErrorMessages)
+		{
+			try { ErrorMessages = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
+			catch (KeyNotFoundException^) { ErrorMessages = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrorMessages)); }
+		}
+		else ErrorMessages = nullptr;
+
+		return Result;
+	}
+	
+	static int CompileFromMemory(String^ SourceData, SIZE_T SourceDataLength, String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ FunctionName, String^ Profile, ShaderFlag Flags1, EffectFlag Flags2, [Out] Blob^% Shader)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShader = 0;
+
+		IntPtr pSourceData = IntPtr::Zero;
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pSourceData = Marshal::StringToHGlobalUni(SourceData);
+			pFileName = Marshal::StringToHGlobalUni(FileName);
+			pFunctionName = Marshal::StringToHGlobalUni(FunctionName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10CompileFromMemory((LPCSTR)pSourceData.ToPointer(), SourceDataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pFunctionName.ToPointer(), (LPCSTR)pProfile.ToPointer(), (unsigned int)Flags1, (unsigned int)Flags2, 0, &pShader, 0, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceData); 
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pFunctionName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines)
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+
+				 delete[] pDefines;
+			}
+		}
+
+		if (pShader)
+		{
+			try { Shader = (Blob^)Interface::Interfaces[IntPtr(pShader)]; }
+			catch (KeyNotFoundException^) { Shader = gcnew Blob(IntPtr(pShader)); }
+		}
+		else Shader = nullptr;
+
+		return Result;
+	}
+	
+	static int CreateDevice(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, [Out] Xtro::MDX::Direct3D10::Device^% Device_)
+	{
+		IDXGIAdapter* pAdapter = Adapter == nullptr ? 0 : Adapter->pAdapter;
+		HMODULE hSoftware = Software == nullptr ? 0 : (HMODULE)Marshal::GetHINSTANCE(Software).ToPointer();
+
+		ID3D10Device* pDevice = 0;
+		int Result = D3DX10CreateDevice(pAdapter, (D3D10_DRIVER_TYPE)DriverType, hSoftware, (unsigned int)Flags, &pDevice);
+
+		if (pDevice)
+		{
+			try { Device_ = (Xtro::MDX::Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
+			catch (KeyNotFoundException^) { Device_ = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }					
+		}
+		else Device_ = nullptr;
+
+		return Result;
+	}
+
+	static int CreateDeviceAndSwapChain(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, SwapChainDescription% SwapChainDescription, [Out] SwapChain^% SwapChain, [Out] Xtro::MDX::Direct3D10::Device^% Device_)
+	{
+		IDXGIAdapter* pAdapter = Adapter == nullptr ? 0 : Adapter->pAdapter;
+		HMODULE hSoftware = Software == nullptr ? 0 : (HMODULE)Marshal::GetHINSTANCE(Software).ToPointer();
+		pin_ptr<Xtro::MDX::DXGI::SwapChainDescription> PinnedSwapChainDescription = &SwapChainDescription;
+
+		ID3D10Device* pDevice = 0;
+		IDXGISwapChain* pSwapChain = 0;
+		int Result = D3DX10CreateDeviceAndSwapChain(pAdapter, (D3D10_DRIVER_TYPE)DriverType, hSoftware, (unsigned int)Flags, (DXGI_SWAP_CHAIN_DESC*)PinnedSwapChainDescription, &pSwapChain, &pDevice);
+
+		if (pDevice)
+		{
+			try { Device_ = (Xtro::MDX::Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
+			catch (KeyNotFoundException^) { Device_ = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }					
+		}
+		else Device_ = nullptr;
+
+		if (pSwapChain)
+		{
+			try { SwapChain = (Xtro::MDX::DXGI::SwapChain^)Interface::Interfaces[IntPtr(pSwapChain)]; }
+			catch (KeyNotFoundException^) { SwapChain = gcnew Xtro::MDX::DXGI::SwapChain(IntPtr(pSwapChain)); }
+		}
+		else SwapChain = nullptr;
+
+		return Result;
+	}
+
 	static int CreateEffectFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect, [Out] Blob^% Errors)
 	{
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
@@ -459,22 +561,232 @@ public:
 		return Result;
 	}
 
-	static int CreateFontIndirect(Xtro::MDX::Direct3D10::Device^ Device, FontDescription% Description, [Out] Font^% Font)
+	static int CreateEffectPoolFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool, [Out] Blob^% Errors)
 	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
-		D3DX10_FONT_DESC NativeDescription;
-		Description.ToNative(&NativeDescription);
+		int Result = 0;
+		ID3D10EffectPool* pEffectPool = 0;
+		ID3D10Blob* pErrors = 0;
 
-		ID3DX10Font* pFont = 0;
-		int Result = D3DX10CreateFontIndirectW(pDevice, &NativeDescription, &pFont);
-
-		if (pFont)
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
 		{
-			try { Font = (Xtro::MDX::Direct3DX10::Font^)Interface::Interfaces[IntPtr(pFont)]; }
-			catch (KeyNotFoundException^) { Font = gcnew Xtro::MDX::Direct3DX10::Font(IntPtr(pFont)); }
+			pFileName = Marshal::StringToHGlobalUni(FileName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10CreateEffectPoolFromFile((LPCWSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, 0, &pEffectPool, &pErrors, 0);
 		}
-		else Font = nullptr;
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines)
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+
+				 delete[] pDefines;
+			}
+		}
+
+		if (pEffectPool)
+		{
+			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+		}
+		else EffectPool = nullptr;
+
+		if (pErrors)
+		{
+			try { Errors = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
+			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
+		}
+		else Errors = nullptr;
+
+		return Result;
+	}
+	
+	static int CreateEffectPollFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10EffectPool* pEffectPool = 0;
+
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pFileName = Marshal::StringToHGlobalUni(FileName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10CreateEffectPoolFromFile((LPCWSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, 0, &pEffectPool, 0, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+
+				delete[] pDefines;
+			}
+		}
+
+		if (pEffectPool)
+		{
+			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+		}
+		else EffectPool = nullptr;
+
+		return Result;
+	}
+
+	static int CreateEffectPoolFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool, [Out] Blob^% Errors)
+	{
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10EffectPool* pEffectPool = 0;
+		ID3D10Blob* pErrors = 0;
+
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10CreateEffectPoolFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, 0, &pEffectPool, &pErrors, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+			}
+
+			delete[] pDefines;
+		}
+
+		if (pEffectPool)
+		{
+			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+		}
+		else EffectPool = nullptr;
+
+		if (pErrors)
+		{
+			try { Errors = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
+			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
+		}
+		else Errors = nullptr;
+
+		return Result;
+	}
+	
+	static int CreateEffectPoolFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool)
+	{
+		void* pData = Data == nullptr ? 0 : Data->pMemory;
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10EffectPool* pEffectPool = 0;
+
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+			pProfile = Marshal::StringToHGlobalAnsi(Profile);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10CreateEffectPoolFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (LPCSTR)pProfile.ToPointer(), (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, pDevice, 0, &pEffectPool, 0, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pProfile); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+
+				delete[] pDefines;
+			}
+		}
+
+		if (pEffectPool)
+		{
+			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+		}
+		else EffectPool = nullptr;
 
 		return Result;
 	}
@@ -489,6 +801,26 @@ public:
 		IntPtr pFaceName = Marshal::StringToHGlobalUni(FaceName);
 		try { Result = D3DX10CreateFontW(pDevice, Height, Width, Weight, MipLevels, Italic, (unsigned int)CharSet, (unsigned int)OutputPrecision, (unsigned int)Quality, (unsigned int)PitchAndFamily, (LPCWSTR)pFaceName.ToPointer(), &pFont); }		
 		finally { Marshal::FreeHGlobal(pFaceName); }
+
+		if (pFont)
+		{
+			try { Font = (Xtro::MDX::Direct3DX10::Font^)Interface::Interfaces[IntPtr(pFont)]; }
+			catch (KeyNotFoundException^) { Font = gcnew Xtro::MDX::Direct3DX10::Font(IntPtr(pFont)); }
+		}
+		else Font = nullptr;
+
+		return Result;
+	}
+
+	static int CreateFontIndirect(Xtro::MDX::Direct3D10::Device^ Device, FontDescription% Description, [Out] Font^% Font)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		D3DX10_FONT_DESC NativeDescription;
+		Description.ToNative(&NativeDescription);
+
+		ID3DX10Font* pFont = 0;
+		int Result = D3DX10CreateFontIndirectW(pDevice, &NativeDescription, &pFont);
 
 		if (pFont)
 		{
@@ -517,6 +849,421 @@ public:
 		return Result;
 	}
 
+	static int PreprocessShaderFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, [Out] Blob^% ShaderText, [Out] Blob^% ErrorMessages)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShaderText = 0;
+		ID3D10Blob* pErrorMessages = 0;
+
+		IntPtr pFileName = Marshal::StringToHGlobalUni(FileName);
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10PreprocessShaderFromFile((LPCWSTR)pFileName.ToPointer(), pDefines, pInclude, 0, &pShaderText, &pErrorMessages, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+
+			if (pDefines)
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+
+				 delete[] pDefines;
+			}
+		}
+
+		if (pShaderText)
+		{
+			try { ShaderText = (Blob^)Interface::Interfaces[IntPtr(pShaderText)]; }
+			catch (KeyNotFoundException^) { ShaderText = gcnew Blob(IntPtr(pShaderText)); }
+		}
+		else ShaderText = nullptr;
+
+		if (pErrorMessages)
+		{
+			try { ErrorMessages = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
+			catch (KeyNotFoundException^) { ErrorMessages = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrorMessages)); }
+		}
+		else ErrorMessages = nullptr;
+
+		return Result;
+	}
+	
+	static int PreprocessShaderFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, [Out] Blob^% ShaderText)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShaderText = 0;
+
+		IntPtr pFileName = Marshal::StringToHGlobalUni(FileName);
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10PreprocessShaderFromFile((LPCWSTR)pFileName.ToPointer(), pDefines, pInclude, 0, &pShaderText, 0, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pFileName); 
+
+			if (pDefines)
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+
+				 delete[] pDefines;
+			}
+		}
+
+		if (pShaderText)
+		{
+			try { ShaderText = (Blob^)Interface::Interfaces[IntPtr(pShaderText)]; }
+			catch (KeyNotFoundException^) { ShaderText = gcnew Blob(IntPtr(pShaderText)); }
+		}
+		else ShaderText = nullptr;
+
+		return Result;
+	}
+	
+	static int PreprocessShaderFromMemory(String^ SourceData, SIZE_T SourceDataSize, String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, [Out] Blob^% ShaderText, [Out] Blob^% ErrorMessages)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShaderText = 0;
+		ID3D10Blob* pErrorMessages = 0;
+
+		IntPtr pSourceData = IntPtr::Zero;
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pSourceData = Marshal::StringToHGlobalAnsi(SourceData);
+			pFileName = Marshal::StringToHGlobalAnsi(FileName);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10PreprocessShaderFromMemory((LPCSTR)pSourceData.ToPointer(), SourceDataSize, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, 0, &pShaderText, &pErrorMessages, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceData); 
+			Marshal::FreeHGlobal(pFileName); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+			}
+
+			delete[] pDefines;
+		}
+
+		if (pShaderText)
+		{
+			try { ShaderText = (Blob^)Interface::Interfaces[IntPtr(pShaderText)]; }
+			catch (KeyNotFoundException^) { ShaderText = gcnew Blob(IntPtr(pShaderText)); }
+		}
+		else ShaderText = nullptr;
+
+		if (pErrorMessages)
+		{
+			try { ErrorMessages = (Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
+			catch (KeyNotFoundException^) { ErrorMessages = gcnew Blob(IntPtr(pErrorMessages)); }
+		}
+		else ErrorMessages = nullptr;
+
+		return Result;
+	}
+
+	static int PreprocessShaderFromMemory(String^ SourceData, SIZE_T SourceDataSize, String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, [Out] Blob^% ShaderText)
+	{
+		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
+
+		int Result = 0;
+		ID3D10Blob* pShaderText = 0;
+	
+		IntPtr pSourceData = IntPtr::Zero;
+		IntPtr pFileName = IntPtr::Zero;
+		IntPtr pFunctionName = IntPtr::Zero;
+		IntPtr pProfile = IntPtr::Zero;
+		D3D10_SHADER_MACRO* pDefines = 0;
+		try
+		{
+			pSourceData = Marshal::StringToHGlobalAnsi(SourceData);
+			pFileName = Marshal::StringToHGlobalAnsi(FileName);
+
+			if (Defines != nullptr && Defines->Length > 0)
+			{
+				pDefines = new D3D10_SHADER_MACRO[Defines->Length];
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Marshal(&pDefines[No]);
+				}
+			}
+
+			Result = D3DX10PreprocessShaderFromMemory((LPCSTR)pSourceData.ToPointer(), SourceDataSize, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, 0, &pShaderText, 0, 0);
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceData); 
+			Marshal::FreeHGlobal(pFileName); 
+
+			if (pDefines) 
+			{
+				for (int No = 0; No < Defines->Length; No++)
+				{
+					Defines[No].Unmarshal();
+				}
+			}
+
+			delete[] pDefines;
+		}
+
+		if (pShaderText)
+		{
+			try { ShaderText = (Blob^)Interface::Interfaces[IntPtr(pShaderText)]; }
+			catch (KeyNotFoundException^) { ShaderText = gcnew Blob(IntPtr(pShaderText)); }
+		}
+		else ShaderText = nullptr;
+
+		return Result;
+	}
+
+	static int UnsetAllDeviceObjects(Xtro::MDX::Direct3D10::Device^ Device)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		return D3DX10UnsetAllDeviceObjects(pDevice);
+	}
+
+	static int SaveTextureToFile(Xtro::MDX::Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
+	{
+		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
+
+		IntPtr pDestinationFile = Marshal::StringToHGlobalUni(DestinationFile);
+		try { return D3DX10SaveTextureToFile(pSourceTexture, (D3DX10_IMAGE_FILE_FORMAT)DestinationFormat, (LPCWSTR)pDestinationFile.ToPointer()); }
+		finally { Marshal::FreeHGlobal(pDestinationFile); }
+	}
+	
+	static int SaveTextureToMemory(Xtro::MDX::Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, [Out] Blob^% DestinationBuffer, unsigned int Flags)
+	{
+		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
+
+		ID3D10Blob* pDestinationBuffer = 0;
+		int Result = D3DX10SaveTextureToMemory(pSourceTexture, (D3DX10_IMAGE_FILE_FORMAT)DestinationFormat, &pDestinationBuffer, Flags);
+
+		if (pDestinationBuffer)
+		{
+			try { DestinationBuffer = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pDestinationBuffer)]; }
+			catch (KeyNotFoundException^) { DestinationBuffer = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pDestinationBuffer)); }
+		}
+		else DestinationBuffer = nullptr;
+
+		return Result;
+	}
+	
+	static int GetImageInfoFromFile(String^ SourceFile, [Out] ImageInfo% SourceInfo)
+	{
+		pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo;
+
+		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+		try { return D3DX10GetImageInfoFromFile((LPCWSTR)pSourceFile.ToPointer(), 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0); }
+		finally { Marshal::FreeHGlobal(pSourceFile); }
+	}
+
+	static int GetImageInfoFromMemory(UnmanagedMemory^ SourceData, [Out] ImageInfo% SourceInfo)
+	{
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+		SIZE_T Size = SourceData == nullptr ? 0 : SourceData->FSize;
+		pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo;
+
+		return D3DX10GetImageInfoFromMemory(pSourceData, Size, 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0);
+	}
+
+	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10Resource* pResource = 0;
+	
+		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pResource, 0); }
+		finally { Marshal::FreeHGlobal(pSourceFile); }
+
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
+
+		return Result;
+	}
+		
+	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10Resource* pResource = 0;
+	
+		IntPtr pSourceFile = IntPtr::Zero;
+		try 
+		{
+			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+			LoadInfo.Marshal(&NativeLoadInfo);
+			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+
+			Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pResource, 0); 
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceFile); 
+			LoadInfo.Unmarshal();
+		}
+
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
+
+		return Result;
+	}
+		
+	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+
+		int Result = 0;
+		ID3D10Resource* pResource = 0;
+		Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, 0, 0, &pResource, 0);
+
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
+
+		return Result;
+	}
+		
+	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, ImageLoadInfo% LoadInfo, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+
+		int Result = 0;
+		ID3D10Resource* pResource = 0;
+
+		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+		LoadInfo.Marshal(&NativeLoadInfo);
+		try { Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, &NativeLoadInfo, 0, &pResource, 0); }
+		finally { LoadInfo.Unmarshal(); }
+			  
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
+
+		return Result;
+	}
+		
+	static void FilterTexture(Xtro::MDX::Direct3D10::Resource^ Texture, unsigned int SourceLevel, FilterFlag MipFilter)
+	{
+		ID3D10Resource *pTexture = Texture == nullptr ? 0 : Texture->pResource;
+
+		D3DX10FilterTexture(pTexture, SourceLevel, (unsigned int)MipFilter);
+	}
+
+	static int LoadTextureFromTexture(Xtro::MDX::Direct3D10::Resource^ SourceTexture, TextureLoadInfo% LoadInfo, Xtro::MDX::Direct3D10::Resource^ DestinationTexture)
+	{
+		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
+		ID3D10Resource* pDestinationTexture = DestinationTexture == nullptr ? 0 : DestinationTexture->pResource;
+
+		D3DX10_TEXTURE_LOAD_INFO NativeLoadInfo;
+		LoadInfo.Marshal(&NativeLoadInfo);
+		try { return D3DX10LoadTextureFromTexture(pSourceTexture, &NativeLoadInfo, pDestinationTexture); }
+		finally { LoadInfo.Unmarshal(); }
+	}
+
+	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] ShaderResourceView^% ShaderResourceView)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10ShaderResourceView* pShaderResourceView = 0;
+
+		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+		try { Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pShaderResourceView, 0); }
+		finally { Marshal::FreeHGlobal(pSourceFile); }
+
+		if (pShaderResourceView)
+		{
+			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+		}
+		else ShaderResourceView = nullptr;
+
+		return Result;
+	}
+		 
+	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10ShaderResourceView* pShaderResourceView = 0;
+
+		IntPtr pSourceFile = IntPtr::Zero;
+		try
+		{
+			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+			LoadInfo.Marshal(&NativeLoadInfo);
+			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+
+			Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pShaderResourceView, 0); 
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceFile); 
+			LoadInfo.Unmarshal();
+		}
+
+		if (pShaderResourceView)
+		{
+			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+		}
+		else ShaderResourceView = nullptr;
+
+		return Result;
+	}
+		 
 	static int CreateMesh(Xtro::MDX::Direct3D10::Device^ Device, array<InputElementDescription>^ Declaration, unsigned int DeclarationCount, String^ PositionSemantic, unsigned int VertexCount, unsigned int FaceCount, MeshFlag Options, [Out] Mesh^% Mesh)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;

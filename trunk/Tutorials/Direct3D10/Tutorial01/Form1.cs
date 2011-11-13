@@ -96,7 +96,7 @@ namespace Tutorial01
 
             foreach (var Type in DriverTypes)
             {
-                Result = Functions.CreateDeviceAndSwapChain(null, Type, null, CreateDeviceFlags, ref SwapChainDescription, out SwapChain, out Device);
+                Result = Functions.CreateDeviceAndSwapChain(null, Type, null, CreateDeviceFlags, Constants.SdkVersion, ref SwapChainDescription, out SwapChain, out Device);
                 if (Result >= 0) break;
             }
 

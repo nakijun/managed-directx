@@ -149,7 +149,7 @@ namespace Xtro.MDX.Utilities
                 Adapter Adapter = null;
                 if (DeviceType == DriverType.Hardware) Adapter = AdapterInfo.Adapter;
 
-                var Result = D3D10Functions.CreateDevice(Adapter, DeviceType, null, 0, out Device);
+                var Result = D3D10Functions.CreateDevice(Adapter, DeviceType, null, 0, Constants.SdkVersion, out Device);
                 if (Result < 0) continue;
 
                 if (DeviceType != DriverType.Hardware)
@@ -337,7 +337,7 @@ namespace Xtro.MDX.Utilities
             Adapter Adapter = null;
             if (DeviceCombo.DeviceType == DriverType.Hardware) Functions.GetFactory().EnumerateAdapters(DeviceCombo.AdapterInfo.AdapterOrdinal, out Adapter);
 
-            if (D3D10Functions.CreateDevice(Adapter, DeviceCombo.DeviceType, null, 0, out Device) < 0) return;
+            if (D3D10Functions.CreateDevice(Adapter, DeviceCombo.DeviceType, null, 0, Constants.SdkVersion, out Device) < 0) return;
 
             for (var I = (uint)1; I <= Constants.MaximumMultisampleSampleCount; I++)
             {

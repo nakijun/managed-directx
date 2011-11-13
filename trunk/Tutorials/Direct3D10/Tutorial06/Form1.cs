@@ -12,6 +12,7 @@ using Functions = Xtro.MDX.Direct3D10.Functions;
 using Buffer = Xtro.MDX.Direct3D10.Buffer;
 using Error = Xtro.MDX.Direct3D10.Error;
 using Xtro.MDX.Direct3DX10;
+using Constants = Xtro.MDX.Direct3D10.Constants;
 using D3DX10Constants = Xtro.MDX.Direct3DX10.Constants;
 using D3DX10Functions = Xtro.MDX.Direct3DX10.Functions;
 
@@ -133,7 +134,7 @@ namespace Tutorial06
 
             foreach (var Type in DriverTypes)
             {
-                Result = Functions.CreateDeviceAndSwapChain(null, Type, null, CreateDeviceFlags, ref SwapChainDescription, out SwapChain, out Device);
+                Result = Functions.CreateDeviceAndSwapChain(null, Type, null, CreateDeviceFlags, Constants.SdkVersion, ref SwapChainDescription, out SwapChain, out Device);
                 if (Result >= 0) break;
             }
 
