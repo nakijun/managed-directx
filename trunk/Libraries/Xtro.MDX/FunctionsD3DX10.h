@@ -1074,6 +1074,89 @@ public:
 		return D3DX10UnsetAllDeviceObjects(pDevice);
 	}
 
+	static void ColorAdjustContrast([Out] Color% Out, Color% Color, float C)
+	{
+		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedOut = &Out;
+		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedColor = &Color;
+		D3DXColorAdjustContrast((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor, C);
+	}
+
+	static void ColorAdjustSaturation([Out] Color% Out, Color% Color, float S)
+	{
+		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedOut = &Out;
+		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedColor = &Color;
+		D3DXColorAdjustSaturation((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor, S);
+	}
+
+	static void ColorLerp([Out] Color% Out, Color% Color1, Color% Color2, float S)
+	{
+		pin_ptr<Color> PinnedOut = &Out;
+		pin_ptr<Color> PinnedColor1 = &Color1;
+		pin_ptr<Color> PinnedColor2 = &Color2;
+		D3DXColorLerp((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor1, (D3DXCOLOR*)PinnedColor2, S);
+	}
+
+	static int CreateMatrixStack(unsigned int Flags, [Out] MatrixStack^% Stack_)
+	{
+		ID3DXMatrixStack* pMatrixStack = 0;
+
+		int Result = D3DXCreateMatrixStack(Flags, &pMatrixStack);
+
+		if (pMatrixStack)
+		{
+			try { Stack_ = (MatrixStack^)Interface::Interfaces[IntPtr(pMatrixStack)]; }
+			catch (KeyNotFoundException^) { Stack_ = gcnew MatrixStack(IntPtr(pMatrixStack)); }
+		}
+		else Stack_ = nullptr;
+
+		return Result;
+	}
+
+	static CpuOptimization CpuOptimizations(bool Enable)
+	{
+		return (CpuOptimization)D3DXCpuOptimizations(Enable);
+	}
+
+	static void Float16To32Array(array<float>^ Out, array<Float16bit>^ In, unsigned int N)
+	{
+		pin_ptr<float> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Float16bit> PinnedIn = In != nullptr && In->Length > 0 ? &In[0] : nullptr;
+
+		D3DXFloat16To32Array(PinnedOut, (D3DXFLOAT16*)PinnedIn, N);
+	}
+
+	static void Float32To16Array(array<Float16bit>^ Out, array<float>^ In, unsigned int N)
+	{
+		pin_ptr<Float16bit> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<float> PinnedIn = In != nullptr && In->Length > 0 ? &In[0] : nullptr;
+
+		D3DXFloat32To16Array((D3DXFLOAT16*)PinnedOut, PinnedIn, N);
+	}
+
+	static float FresnelTerm(float CosTheta, float RefractionIndex)
+	{
+		return D3DXFresnelTerm(CosTheta, RefractionIndex);
+	}
+
+	static void MatrixAffineTransformation([Out] Matrix% Out, float Scaling, Xtro::MDX::Generic::ValueObject<Vector3>^ RotationCenter, Xtro::MDX::Generic::ValueObject<Quaternion>^ Rotation, Xtro::MDX::Generic::ValueObject<Vector3>^ Translation)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedRotationCenter = RotationCenter == nullptr ? nullptr : &RotationCenter->Value;
+		pin_ptr<Quaternion> PinnedRotation = Rotation == nullptr ? nullptr : &Rotation->Value;
+		pin_ptr<Vector3> PinnedTranslation = Translation == nullptr ? nullptr : &Translation->Value;
+
+		D3DXMatrixAffineTransformation((D3DXMATRIX*)PinnedOut, Scaling, (D3DXVECTOR3*)PinnedRotationCenter, (D3DXQUATERNION*)PinnedRotation, (D3DXVECTOR3*)PinnedTranslation);
+	}
+
+	static void MatrixAffineTransformation2D([Out] Matrix% Out, float Scaling, Xtro::MDX::Generic::ValueObject<Vector2>^ RotationCenter, float Rotation, Xtro::MDX::Generic::ValueObject<Vector2>^ Translation)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedRotationCenter = RotationCenter == nullptr ? nullptr : &RotationCenter->Value;
+		pin_ptr<Vector2> PinnedTranslation = Translation == nullptr ? nullptr : &Translation->Value;
+
+		D3DXMatrixAffineTransformation2D((D3DXMATRIX*)PinnedOut, Scaling, (D3DXVECTOR2*)PinnedRotationCenter, Rotation, (D3DXVECTOR2*)PinnedTranslation);
+	}
+
 	static int SaveTextureToFile(Xtro::MDX::Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
 	{
 		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
@@ -1499,13 +1582,5 @@ public:
 	{
 		pin_ptr<Matrix> PinnedOut = &Out;
 		D3DXMatrixOrthoOffCenterLH((D3DXMATRIX*)PinnedOut, L, R, B, T, ZN, ZF);
-	}
-
-	static void ColorLerp([Out] Color% Out, Color% Color1, Color% Color2, float S)
-	{
-		pin_ptr<Color> PinnedOut = &Out;
-		pin_ptr<Color> PinnedColor1 = &Color1;
-		pin_ptr<Color> PinnedColor2 = &Color2;
-		D3DXColorLerp((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor1, (D3DXCOLOR*)PinnedColor2, S);
 	}
 };
