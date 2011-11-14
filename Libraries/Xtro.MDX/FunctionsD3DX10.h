@@ -1,7 +1,7 @@
 public ref class Functions abstract sealed
 {
 private:
-	inline static Xtro::MDX::Direct3D10::Resource^ CreateTextureByType(ID3D10Resource*	pResource)
+	inline static Direct3D10::Resource^ CreateTextureByType(ID3D10Resource*	pResource)
 	{
 		D3D10_RESOURCE_DIMENSION Type;
 		pResource->GetType(&Type);
@@ -9,15 +9,15 @@ private:
 		switch (Type)
 		{
 		case D3D10_RESOURCE_DIMENSION_TEXTURE1D : 
-			try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
+			try { return (Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
 			catch (KeyNotFoundException^) { return gcnew Texture1D(IntPtr(pResource)); }
 			break;
 		case D3D10_RESOURCE_DIMENSION_TEXTURE2D : 
-			try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
+			try { return (Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
 			catch (KeyNotFoundException^) { return gcnew Texture2D(IntPtr(pResource)); }
 			break;
 		case D3D10_RESOURCE_DIMENSION_TEXTURE3D : 
-			try { return (Xtro::MDX::Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
+			try { return (Direct3D10::Resource^)Interface::Interfaces[IntPtr(pResource)]; }
 			catch (KeyNotFoundException^) { return gcnew Texture3D(IntPtr(pResource)); }
 			break;
 		default: return nullptr;
@@ -95,8 +95,8 @@ public:
 
 		if (pErrorMessages)
 		{
-			try { ErrorMessages = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
-			catch (KeyNotFoundException^) { ErrorMessages = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrorMessages)); }
+			try { ErrorMessages = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
+			catch (KeyNotFoundException^) { ErrorMessages = gcnew Direct3D10::Blob(IntPtr(pErrorMessages)); }
 		}
 		else ErrorMessages = nullptr;
 
@@ -216,8 +216,8 @@ public:
 
 		if (pErrorMessages)
 		{
-			try { ErrorMessages = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
-			catch (KeyNotFoundException^) { ErrorMessages = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrorMessages)); }
+			try { ErrorMessages = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
+			catch (KeyNotFoundException^) { ErrorMessages = gcnew Direct3D10::Blob(IntPtr(pErrorMessages)); }
 		}
 		else ErrorMessages = nullptr;
 
@@ -282,7 +282,7 @@ public:
 		return Result;
 	}
 	
-	static int CreateDevice(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, [Out] Xtro::MDX::Direct3D10::Device^% Device_)
+	static int CreateDevice(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, [Out] Direct3D10::Device^% Device_)
 	{
 		IDXGIAdapter* pAdapter = Adapter == nullptr ? 0 : Adapter->pAdapter;
 		HMODULE hSoftware = Software == nullptr ? 0 : (HMODULE)Marshal::GetHINSTANCE(Software).ToPointer();
@@ -292,19 +292,19 @@ public:
 
 		if (pDevice)
 		{
-			try { Device_ = (Xtro::MDX::Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
-			catch (KeyNotFoundException^) { Device_ = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }					
+			try { Device_ = (Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
+			catch (KeyNotFoundException^) { Device_ = gcnew Direct3D10::Device(IntPtr(pDevice)); }					
 		}
 		else Device_ = nullptr;
 
 		return Result;
 	}
 
-	static int CreateDeviceAndSwapChain(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, SwapChainDescription% SwapChainDescription, [Out] SwapChain^% SwapChain, [Out] Xtro::MDX::Direct3D10::Device^% Device_)
+	static int CreateDeviceAndSwapChain(Adapter^ Adapter, DriverType DriverType, Module^ Software, CreateDeviceFlag Flags, SwapChainDescription% SwapChainDescription, [Out] SwapChain^% SwapChain, [Out] Direct3D10::Device^% Device_)
 	{
 		IDXGIAdapter* pAdapter = Adapter == nullptr ? 0 : Adapter->pAdapter;
 		HMODULE hSoftware = Software == nullptr ? 0 : (HMODULE)Marshal::GetHINSTANCE(Software).ToPointer();
-		pin_ptr<Xtro::MDX::DXGI::SwapChainDescription> PinnedSwapChainDescription = &SwapChainDescription;
+		pin_ptr<DXGI::SwapChainDescription> PinnedSwapChainDescription = &SwapChainDescription;
 
 		ID3D10Device* pDevice = 0;
 		IDXGISwapChain* pSwapChain = 0;
@@ -312,22 +312,22 @@ public:
 
 		if (pDevice)
 		{
-			try { Device_ = (Xtro::MDX::Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
-			catch (KeyNotFoundException^) { Device_ = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }					
+			try { Device_ = (Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
+			catch (KeyNotFoundException^) { Device_ = gcnew Direct3D10::Device(IntPtr(pDevice)); }					
 		}
 		else Device_ = nullptr;
 
 		if (pSwapChain)
 		{
-			try { SwapChain = (Xtro::MDX::DXGI::SwapChain^)Interface::Interfaces[IntPtr(pSwapChain)]; }
-			catch (KeyNotFoundException^) { SwapChain = gcnew Xtro::MDX::DXGI::SwapChain(IntPtr(pSwapChain)); }
+			try { SwapChain = (DXGI::SwapChain^)Interface::Interfaces[IntPtr(pSwapChain)]; }
+			catch (KeyNotFoundException^) { SwapChain = gcnew DXGI::SwapChain(IntPtr(pSwapChain)); }
 		}
 		else SwapChain = nullptr;
 
 		return Result;
 	}
 
-	static int CreateEffectFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect, [Out] Blob^% Errors)
+	static int CreateEffectFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect, [Out] Blob^% Errors)
 	{
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
@@ -374,22 +374,22 @@ public:
 
 		if (pEffect)
 		{
-			try { Effect = (Xtro::MDX::Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
-			catch (KeyNotFoundException^) { Effect = gcnew Xtro::MDX::Direct3D10::Effect(IntPtr(pEffect)); }
+			try { Effect = (Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
+			catch (KeyNotFoundException^) { Effect = gcnew Direct3D10::Effect(IntPtr(pEffect)); }
 		}
 		else Effect = nullptr;
 
 		if (pErrors)
 		{
-			try { Errors = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
-			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
+			try { Errors = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
+			catch (KeyNotFoundException^) { Errors = gcnew Direct3D10::Blob(IntPtr(pErrors)); }
 		}
 		else Errors = nullptr;
 
 		return Result;
 	}
 	
-	static int CreateEffectFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect)
+	static int CreateEffectFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect)
 	{
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
@@ -435,15 +435,15 @@ public:
 
 		if (pEffect)
 		{
-			try { Effect = (Xtro::MDX::Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
-			catch (KeyNotFoundException^) { Effect = gcnew Xtro::MDX::Direct3D10::Effect(IntPtr(pEffect)); }
+			try { Effect = (Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
+			catch (KeyNotFoundException^) { Effect = gcnew Direct3D10::Effect(IntPtr(pEffect)); }
 		}
 		else Effect = nullptr;
 
 		return Result;
 	}
 
-	static int CreateEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect, [Out] Blob^% Errors)
+	static int CreateEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect, [Out] Blob^% Errors)
 	{
 		void* pData = Data == nullptr ? 0 : Data->pMemory;
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
@@ -491,22 +491,22 @@ public:
 
 		if (pEffect)
 		{
-			try { Effect = (Xtro::MDX::Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
-			catch (KeyNotFoundException^) { Effect = gcnew Xtro::MDX::Direct3D10::Effect(IntPtr(pEffect)); }
+			try { Effect = (Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
+			catch (KeyNotFoundException^) { Effect = gcnew Direct3D10::Effect(IntPtr(pEffect)); }
 		}
 		else Effect = nullptr;
 
 		if (pErrors)
 		{
-			try { Errors = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
-			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
+			try { Errors = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
+			catch (KeyNotFoundException^) { Errors = gcnew Direct3D10::Blob(IntPtr(pErrors)); }
 		}
 		else Errors = nullptr;
 
 		return Result;
 	}
 	
-	static int CreateEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect)
+	static int CreateEffectFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Direct3D10::Device^ Device, EffectPool^ EffectPool, [Out] Effect^% Effect)
 	{
 		void* pData = Data == nullptr ? 0 : Data->pMemory;
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
@@ -553,15 +553,15 @@ public:
 
 		if (pEffect)
 		{
-			try { Effect = (Xtro::MDX::Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
-			catch (KeyNotFoundException^) { Effect = gcnew Xtro::MDX::Direct3D10::Effect(IntPtr(pEffect)); }
+			try { Effect = (Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
+			catch (KeyNotFoundException^) { Effect = gcnew Direct3D10::Effect(IntPtr(pEffect)); }
 		}
 		else Effect = nullptr;
 
 		return Result;
 	}
 
-	static int CreateEffectPoolFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool, [Out] Blob^% Errors)
+	static int CreateEffectPoolFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool, [Out] Blob^% Errors)
 	{
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
@@ -607,22 +607,22 @@ public:
 
 		if (pEffectPool)
 		{
-			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
-			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+			try { EffectPool = (Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Direct3D10::EffectPool(IntPtr(pEffectPool)); }
 		}
 		else EffectPool = nullptr;
 
 		if (pErrors)
 		{
-			try { Errors = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
-			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
+			try { Errors = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
+			catch (KeyNotFoundException^) { Errors = gcnew Direct3D10::Blob(IntPtr(pErrors)); }
 		}
 		else Errors = nullptr;
 
 		return Result;
 	}
 	
-	static int CreateEffectPollFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool)
+	static int CreateEffectPollFromFile(String^ FileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool)
 	{
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
@@ -667,15 +667,15 @@ public:
 
 		if (pEffectPool)
 		{
-			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
-			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+			try { EffectPool = (Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Direct3D10::EffectPool(IntPtr(pEffectPool)); }
 		}
 		else EffectPool = nullptr;
 
 		return Result;
 	}
 
-	static int CreateEffectPoolFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool, [Out] Blob^% Errors)
+	static int CreateEffectPoolFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool, [Out] Blob^% Errors)
 	{
 		void* pData = Data == nullptr ? 0 : Data->pMemory;
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
@@ -722,22 +722,22 @@ public:
 
 		if (pEffectPool)
 		{
-			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
-			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+			try { EffectPool = (Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Direct3D10::EffectPool(IntPtr(pEffectPool)); }
 		}
 		else EffectPool = nullptr;
 
 		if (pErrors)
 		{
-			try { Errors = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
-			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
+			try { Errors = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
+			catch (KeyNotFoundException^) { Errors = gcnew Direct3D10::Blob(IntPtr(pErrors)); }
 		}
 		else Errors = nullptr;
 
 		return Result;
 	}
 	
-	static int CreateEffectPoolFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Xtro::MDX::Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool)
+	static int CreateEffectPoolFromMemory(UnmanagedMemory^ Data, SIZE_T DataLength, String^ SourceFileName, array<ShaderMacro>^ Defines, Include^ Include, String^ Profile, ShaderFlag HLSL_Flags, EffectFlag FX_Flags, Direct3D10::Device^ Device, [Out] EffectPool^% EffectPool)
 	{
 		void* pData = Data == nullptr ? 0 : Data->pMemory;
 		ID3D10Include* pInclude = Include == nullptr ? 0 : Include->pInclude;
@@ -783,15 +783,15 @@ public:
 
 		if (pEffectPool)
 		{
-			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
-			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+			try { EffectPool = (Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Direct3D10::EffectPool(IntPtr(pEffectPool)); }
 		}
 		else EffectPool = nullptr;
 
 		return Result;
 	}
 
-	static int CreateFont(Xtro::MDX::Direct3D10::Device^ Device, int Height, unsigned int Width, unsigned int Weight, unsigned int MipLevels, bool Italic, FontCharacterSet CharSet, FontPrecision OutputPrecision, FontQuality Quality, FontPitchAndFamilyFlag PitchAndFamily, String^ FaceName, [Out] Font^% Font)
+	static int CreateFont(Direct3D10::Device^ Device, int Height, unsigned int Width, unsigned int Weight, unsigned int MipLevels, bool Italic, FontCharacterSet CharSet, FontPrecision OutputPrecision, FontQuality Quality, FontPitchAndFamilyFlag PitchAndFamily, String^ FaceName, [Out] Font^% Font)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
@@ -804,15 +804,15 @@ public:
 
 		if (pFont)
 		{
-			try { Font = (Xtro::MDX::Direct3DX10::Font^)Interface::Interfaces[IntPtr(pFont)]; }
-			catch (KeyNotFoundException^) { Font = gcnew Xtro::MDX::Direct3DX10::Font(IntPtr(pFont)); }
+			try { Font = (Direct3DX10::Font^)Interface::Interfaces[IntPtr(pFont)]; }
+			catch (KeyNotFoundException^) { Font = gcnew Direct3DX10::Font(IntPtr(pFont)); }
 		}
 		else Font = nullptr;
 
 		return Result;
 	}
 
-	static int CreateFontIndirect(Xtro::MDX::Direct3D10::Device^ Device, FontDescription% Description, [Out] Font^% Font)
+	static int CreateFontIndirect(Direct3D10::Device^ Device, FontDescription% Description, [Out] Font^% Font)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
@@ -824,15 +824,15 @@ public:
 
 		if (pFont)
 		{
-			try { Font = (Xtro::MDX::Direct3DX10::Font^)Interface::Interfaces[IntPtr(pFont)]; }
-			catch (KeyNotFoundException^) { Font = gcnew Xtro::MDX::Direct3DX10::Font(IntPtr(pFont)); }
+			try { Font = (Direct3DX10::Font^)Interface::Interfaces[IntPtr(pFont)]; }
+			catch (KeyNotFoundException^) { Font = gcnew Direct3DX10::Font(IntPtr(pFont)); }
 		}
 		else Font = nullptr;
 
 		return Result;
 	}
 
-	static int CreateSprite(Xtro::MDX::Direct3D10::Device^ Device, unsigned int DeviceBufferSize, [Out] Sprite^% Sprite)
+	static int CreateSprite(Direct3D10::Device^ Device, unsigned int DeviceBufferSize, [Out] Sprite^% Sprite)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
@@ -841,8 +841,8 @@ public:
 
 		if (pSprite)
 		{
-			try { Sprite = (Xtro::MDX::Direct3DX10::Sprite^)Interface::Interfaces[IntPtr(pSprite)]; }
-			catch (KeyNotFoundException^) { Sprite = gcnew Xtro::MDX::Direct3DX10::Sprite(IntPtr(pSprite)); }
+			try { Sprite = (Direct3DX10::Sprite^)Interface::Interfaces[IntPtr(pSprite)]; }
+			catch (KeyNotFoundException^) { Sprite = gcnew Direct3DX10::Sprite(IntPtr(pSprite)); }
 		}
 		else Sprite = nullptr;
 
@@ -896,8 +896,8 @@ public:
 
 		if (pErrorMessages)
 		{
-			try { ErrorMessages = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
-			catch (KeyNotFoundException^) { ErrorMessages = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrorMessages)); }
+			try { ErrorMessages = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrorMessages)]; }
+			catch (KeyNotFoundException^) { ErrorMessages = gcnew Direct3D10::Blob(IntPtr(pErrorMessages)); }
 		}
 		else ErrorMessages = nullptr;
 
@@ -1067,7 +1067,7 @@ public:
 		return Result;
 	}
 
-	static int UnsetAllDeviceObjects(Xtro::MDX::Direct3D10::Device^ Device)
+	static int UnsetAllDeviceObjects(Direct3D10::Device^ Device)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
@@ -1076,15 +1076,15 @@ public:
 
 	static void ColorAdjustContrast([Out] Color% Out, Color% Color, float C)
 	{
-		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedOut = &Out;
-		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedColor = &Color;
+		pin_ptr<Direct3DX10::Color> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Color> PinnedColor = &Color;
 		D3DXColorAdjustContrast((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor, C);
 	}
 
 	static void ColorAdjustSaturation([Out] Color% Out, Color% Color, float S)
 	{
-		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedOut = &Out;
-		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedColor = &Color;
+		pin_ptr<Direct3DX10::Color> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Color> PinnedColor = &Color;
 		D3DXColorAdjustSaturation((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor, S);
 	}
 
@@ -1138,7 +1138,7 @@ public:
 		return D3DXFresnelTerm(CosTheta, RefractionIndex);
 	}
 
-	static void MatrixAffineTransformation([Out] Matrix% Out, float Scaling, Xtro::MDX::Generic::ValueObject<Vector3>^ RotationCenter, Xtro::MDX::Generic::ValueObject<Quaternion>^ Rotation, Xtro::MDX::Generic::ValueObject<Vector3>^ Translation)
+	static void MatrixAffineTransformation([Out] Matrix% Out, float Scaling, Generic::ValueObject<Vector3>^ RotationCenter, Generic::ValueObject<Quaternion>^ Rotation, Generic::ValueObject<Vector3>^ Translation)
 	{
 		pin_ptr<Matrix> PinnedOut = &Out;
 		pin_ptr<Vector3> PinnedRotationCenter = RotationCenter == nullptr ? nullptr : &RotationCenter->Value;
@@ -1184,14 +1184,14 @@ public:
 		pin_ptr<Vector3> PinnedOutScale = &OutScale;
 		pin_ptr<Quaternion> PinnedOutRotation = &OutRotation;
 		pin_ptr<Vector3> PinnedOutTranslation = &OutTranslation;
-		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 
 		return D3DXMatrixDecompose((D3DXVECTOR3*)PinnedOutScale, (D3DXQUATERNION*)PinnedOutRotation, (D3DXVECTOR3*)PinnedOutTranslation, (D3DXMATRIX*)PinnedMatrix);
 	}
 
 	static float MatrixDeterminant(Matrix% Matrix)
 	{
-		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 		return D3DXMatrixDeterminant((D3DXMATRIX*)PinnedMatrix);
 	}
 
@@ -1313,7 +1313,7 @@ public:
 	static void MatrixReflect([Out] Matrix% Out, Plane% Plane)
 	{
 		pin_ptr<Matrix> PinnedOut = &Out;
-		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = &Plane;
 
 		D3DXMatrixReflect((D3DXMATRIX*)PinnedOut, (D3DXPLANE*)PinnedPlane);
 	}
@@ -1368,12 +1368,12 @@ public:
 	{
 		pin_ptr<Matrix> PinnedOut = &Out;
 		pin_ptr<Vector4> PinnedLight = &Light;
-		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = &Plane;
 
 		D3DXMatrixShadow((D3DXMATRIX*)PinnedOut, (D3DXVECTOR4*)PinnedLight, (D3DXPLANE*)PinnedPlane);
 	}
 
-	static void MatrixTransformation([Out] Matrix% Out, Xtro::MDX::Generic::ValueObject<Vector3>^ ScalingCenter, Xtro::MDX::Generic::ValueObject<Quaternion>^ ScalingRotation, Xtro::MDX::Generic::ValueObject<Vector3>^ Scaling, Xtro::MDX::Generic::ValueObject<Vector3>^ RotationCenter, Xtro::MDX::Generic::ValueObject<Quaternion>^ Rotation, Xtro::MDX::Generic::ValueObject<Vector3>^ Translation)
+	static void MatrixTransformation([Out] Matrix% Out, Generic::ValueObject<Vector3>^ ScalingCenter, Generic::ValueObject<Quaternion>^ ScalingRotation, Generic::ValueObject<Vector3>^ Scaling, Generic::ValueObject<Vector3>^ RotationCenter, Generic::ValueObject<Quaternion>^ Rotation, Generic::ValueObject<Vector3>^ Translation)
 	{
 		pin_ptr<Matrix> PinnedOut = &Out;
 		pin_ptr<Vector3> PinnedScalingCenter = ScalingCenter == nullptr ? nullptr : &ScalingCenter->Value;
@@ -1386,7 +1386,7 @@ public:
 		D3DXMatrixTransformation((D3DXMATRIX*)PinnedOut, (D3DXVECTOR3*)PinnedScalingCenter, (D3DXQUATERNION*)PinnedScalingRotation, (D3DXVECTOR3*)PinnedScaling, (D3DXVECTOR3*)PinnedRotationCenter, (D3DXQUATERNION*)PinnedRotation, (D3DXVECTOR3*)PinnedTranslation);
 	}
 
-	static void MatrixTransformation2D([Out] Matrix% Out, Xtro::MDX::Generic::ValueObject<Vector2>^ ScalingCenter, float ScalingRotation, Xtro::MDX::Generic::ValueObject<Vector2>^ Scaling, Xtro::MDX::Generic::ValueObject<Vector2>^ RotationCenter, float Rotation, Xtro::MDX::Generic::ValueObject<Vector2>^ Translation)
+	static void MatrixTransformation2D([Out] Matrix% Out, Generic::ValueObject<Vector2>^ ScalingCenter, float ScalingRotation, Generic::ValueObject<Vector2>^ Scaling, Generic::ValueObject<Vector2>^ RotationCenter, float Rotation, Generic::ValueObject<Vector2>^ Translation)
 	{
 		pin_ptr<Matrix> PinnedOut = &Out;
 		pin_ptr<Vector2> PinnedScalingCenter = ScalingCenter == nullptr ? nullptr : &ScalingCenter->Value;
@@ -1405,8 +1405,8 @@ public:
 
 	static void MatrixTranspose([Out] Matrix% Out, Matrix% Matrix)
 	{
-		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedOut = &Out;
-		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		pin_ptr<Direct3DX10::Matrix> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 
 		D3DXMatrixTranspose((D3DXMATRIX*)PinnedOut, (D3DXMATRIX*)PinnedMatrix);
 	}
@@ -1423,9 +1423,9 @@ public:
 	static void PlaneFromPoints([Out] Plane% Out, Vector3% Vector1, Vector3% Vector2, Vector3% Vector3)
 	{
 		pin_ptr<Plane> PinnedOut = &Out;
-		pin_ptr<Xtro::MDX::Direct3DX10::Vector3> PinnedVector1 = &Vector1;
-		pin_ptr<Xtro::MDX::Direct3DX10::Vector3> PinnedVector2 = &Vector2;
-		pin_ptr<Xtro::MDX::Direct3DX10::Vector3> PinnedVector3 = &Vector3;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector2 = &Vector2;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector3 = &Vector3;
 
 		D3DXPlaneFromPoints((D3DXPLANE*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2, (D3DXVECTOR3*)PinnedVector3);
 	}
@@ -1433,7 +1433,7 @@ public:
 	static void PlaneIntersectLine([Out] Vector3% Out, Plane% Plane, Vector3% Vector1, Vector3% Vector2)
 	{
 		pin_ptr<Vector3> PinnedOut = &Out;
-		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = &Plane;
 		pin_ptr<Vector3> PinnedVector1 = &Vector1;
 		pin_ptr<Vector3> PinnedVector2 = &Vector2;
 
@@ -1442,31 +1442,161 @@ public:
 
 	static void PlaneNormalize([Out] Plane% Out, Plane% Plane)
 	{
-		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedOut = &Out;
-		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Direct3DX10::Plane> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = &Plane;
 
 		D3DXPlaneNormalize((D3DXPLANE*)PinnedOut, (D3DXPLANE*)PinnedPlane);
 	}
 
 	static void PlaneTransform([Out] Plane% Out, Plane% Plane, Matrix% Matrix)
 	{
-		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedOut = &Out;
-		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
-		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		pin_ptr<Direct3DX10::Plane> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 
 		D3DXPlaneTransform((D3DXPLANE*)PinnedOut, (D3DXPLANE*)PinnedPlane, (D3DXMATRIX*)PinnedMatrix);
 	}
 
 	static void PlaneTransformArray(array<Plane>^ Out, unsigned int OutStride, array<Plane>^ Plane, unsigned int PlaneStride, Matrix% Matrix, unsigned int N)
 	{
-		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
-		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = Plane != nullptr && Plane->Length > 0 ? &Plane[0] : nullptr;
-		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		pin_ptr<Direct3DX10::Plane> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = Plane != nullptr && Plane->Length > 0 ? &Plane[0] : nullptr;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 
 		D3DXPlaneTransformArray((D3DXPLANE*)PinnedOut, OutStride, (D3DXPLANE*)PinnedPlane, PlaneStride, (D3DXMATRIX*)PinnedMatrix, N);
 	}
 
-	static int SaveTextureToFile(Xtro::MDX::Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
+	static void QuaternionBaryCentric([Out] Quaternion% Out, Quaternion% Quaternion1, Quaternion% Quaternion2, Quaternion% Quaternion3, float F, float G)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		pin_ptr<Quaternion> PinnedQuaternion1 = &Quaternion1;
+		pin_ptr<Quaternion> PinnedQuaternion2 = &Quaternion2;
+		pin_ptr<Quaternion> PinnedQuaternion3 = &Quaternion3;
+
+		D3DXQuaternionBaryCentric((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion1, (D3DXQUATERNION*)PinnedQuaternion2, (D3DXQUATERNION*)PinnedQuaternion3, F, G);
+	}
+
+	static void QuaternionExp([Out] Quaternion% Out, Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+
+		D3DXQuaternionExp((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static void QuaternionIdentity([Out] Quaternion% Out)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		D3DXQuaternionIdentity((D3DXQUATERNION*)PinnedOut);
+	}
+
+	static void QuaternionInverse([Out] Quaternion% Out, Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+
+		D3DXQuaternionInverse((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static void QuaternionLn([Out] Quaternion% Out, Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+
+		D3DXQuaternionLn((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static void QuaternionMultiply([Out] Quaternion% Out, Quaternion% Quaternion1, Quaternion% Quaternion2)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		pin_ptr<Quaternion> PinnedQuaternion1 = &Quaternion1;
+		pin_ptr<Quaternion> PinnedQuaternion2 = &Quaternion2;
+
+		D3DXQuaternionMultiply((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion1, (D3DXQUATERNION*)PinnedQuaternion2);
+	}
+
+	static void QuaternionNormalize([Out] Quaternion% Out, Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+
+		D3DXQuaternionNormalize((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static void QuaternionRotationAxis([Out] Quaternion% Out, Vector3% Vector, float Angle)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+
+		D3DXQuaternionRotationAxis((D3DXQUATERNION*)PinnedOut, (D3DXVECTOR3*)PinnedVector, Angle);
+	}
+
+	static void QuaternionRotationMatrix([Out] Quaternion% Out, Matrix% Matrix)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXQuaternionRotationMatrix((D3DXQUATERNION*)PinnedOut, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void QuaternionRotationYawPitchRoll([Out] Quaternion% Out, float Yaw, float Pitch, float Roll)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		D3DXQuaternionRotationYawPitchRoll((D3DXQUATERNION*)PinnedOut, Yaw,  Pitch,  Roll);
+	}
+
+	static void QuaternionSlerp([Out] Quaternion% Out, Quaternion% Quaternion1, Quaternion% Quaternion2, float T)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		pin_ptr<Quaternion> PinnedQuaternion1 = &Quaternion1;
+		pin_ptr<Quaternion> PinnedQuaternion2 = &Quaternion2;
+
+		D3DXQuaternionSlerp((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion1, (D3DXQUATERNION*)PinnedQuaternion2, T);
+	}
+
+	static void QuaternionSquad([Out] Quaternion% Out, Quaternion% Quaternion1, Quaternion% QuaternionA, Quaternion% QuaternionB, Quaternion% QuaternionC, float T)
+	{
+		pin_ptr<Quaternion> PinnedOut = &Out;
+		pin_ptr<Quaternion> PinnedQuaternion1 = &Quaternion1;
+		pin_ptr<Quaternion> PinnedQuaternionA = &QuaternionA;
+		pin_ptr<Quaternion> PinnedQuaternionB = &QuaternionB;
+		pin_ptr<Quaternion> PinnedQuaternionC = &QuaternionC;
+
+		D3DXQuaternionSquad((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion1, (D3DXQUATERNION*)PinnedQuaternionA, (D3DXQUATERNION*)PinnedQuaternionB, (D3DXQUATERNION*)PinnedQuaternionC, T);
+	}
+
+	static void QuaternionSquadSetup([Out] Quaternion% OutA, [Out] Quaternion% OutB, [Out] Quaternion% OutC, Quaternion% Quaternion0, Quaternion% Quaternion1, Quaternion% Quaternion2, Quaternion% Quaternion3)
+	{
+		pin_ptr<Quaternion> PinnedOutA = &OutA;
+		pin_ptr<Quaternion> PinnedOutB = &OutB;
+		pin_ptr<Quaternion> PinnedOutC = &OutC;
+		pin_ptr<Quaternion> PinnedQuaternion0 = &Quaternion0;
+		pin_ptr<Quaternion> PinnedQuaternion1 = &Quaternion1;
+		pin_ptr<Quaternion> PinnedQuaternion2 = &Quaternion2;
+		pin_ptr<Quaternion> PinnedQuaternion3 = &Quaternion3;
+
+		D3DXQuaternionSquadSetup((D3DXQUATERNION*)PinnedOutA, (D3DXQUATERNION*)PinnedOutB, (D3DXQUATERNION*)PinnedOutC, (D3DXQUATERNION*)PinnedQuaternion0, (D3DXQUATERNION*)PinnedQuaternion1, (D3DXQUATERNION*)PinnedQuaternion2, (D3DXQUATERNION*)PinnedQuaternion3);
+	}
+
+	static void QuaternionToAxisAngle(Quaternion% Quaternion, Vector3% Axis, float% Angle)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+		pin_ptr<Vector3> PinnedAxis = &Axis;
+		pin_ptr<float> PinnedAngle = &Angle;
+
+		D3DXQuaternionToAxisAngle((D3DXQUATERNION*)PinnedQuaternion, (D3DXVECTOR3*)PinnedAxis, PinnedAngle);
+	}
+
+	static void SH_Add(Generic::UnmanagedMemory<float>^ Out, unsigned int Order, Generic::UnmanagedMemory<float>^ A, Generic::UnmanagedMemory<float>^ B)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		float* pA = A == nullptr ? 0 : (float*)A->pMemory;
+		float* pB = B == nullptr ? 0 : (float*)B->pMemory;
+
+		D3DXSHAdd(pOut, Order, pA, pB);
+	}
+
+	static int SaveTextureToFile(Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
 	{
 		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
 
@@ -1475,7 +1605,7 @@ public:
 		finally { Marshal::FreeHGlobal(pDestinationFile); }
 	}
 	
-	static int SaveTextureToMemory(Xtro::MDX::Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, [Out] Blob^% DestinationBuffer, unsigned int Flags)
+	static int SaveTextureToMemory(Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, [Out] Blob^% DestinationBuffer, unsigned int Flags)
 	{
 		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
 
@@ -1484,8 +1614,8 @@ public:
 
 		if (pDestinationBuffer)
 		{
-			try { DestinationBuffer = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pDestinationBuffer)]; }
-			catch (KeyNotFoundException^) { DestinationBuffer = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pDestinationBuffer)); }
+			try { DestinationBuffer = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pDestinationBuffer)]; }
+			catch (KeyNotFoundException^) { DestinationBuffer = gcnew Direct3D10::Blob(IntPtr(pDestinationBuffer)); }
 		}
 		else DestinationBuffer = nullptr;
 
@@ -1510,7 +1640,7 @@ public:
 		return D3DX10GetImageInfoFromMemory(pSourceData, Size, 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0);
 	}
 
-	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
+	static int CreateTextureFromFile(Direct3D10::Device^ Device, String^ SourceFile, [Out] Direct3D10::Resource^% Texture)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
@@ -1526,7 +1656,7 @@ public:
 		return Result;
 	}
 		
-	static int CreateTextureFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] Xtro::MDX::Direct3D10::Resource^% Texture)
+	static int CreateTextureFromFile(Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] Direct3D10::Resource^% Texture)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
@@ -1553,7 +1683,7 @@ public:
 		return Result;
 	}
 		
-	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
+	static int CreateTextureFromMemory(Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, [Out]Direct3D10::Resource^% Texture)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
@@ -1567,7 +1697,7 @@ public:
 		return Result;
 	}
 		
-	static int CreateTextureFromMemory(Xtro::MDX::Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, ImageLoadInfo% LoadInfo, [Out]Xtro::MDX::Direct3D10::Resource^% Texture)
+	static int CreateTextureFromMemory(Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, ImageLoadInfo% LoadInfo, [Out]Direct3D10::Resource^% Texture)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
@@ -1585,14 +1715,14 @@ public:
 		return Result;
 	}
 		
-	static void FilterTexture(Xtro::MDX::Direct3D10::Resource^ Texture, unsigned int SourceLevel, FilterFlag MipFilter)
+	static void FilterTexture(Direct3D10::Resource^ Texture, unsigned int SourceLevel, FilterFlag MipFilter)
 	{
 		ID3D10Resource *pTexture = Texture == nullptr ? 0 : Texture->pResource;
 
 		D3DX10FilterTexture(pTexture, SourceLevel, (unsigned int)MipFilter);
 	}
 
-	static int LoadTextureFromTexture(Xtro::MDX::Direct3D10::Resource^ SourceTexture, TextureLoadInfo% LoadInfo, Xtro::MDX::Direct3D10::Resource^ DestinationTexture)
+	static int LoadTextureFromTexture(Direct3D10::Resource^ SourceTexture, TextureLoadInfo% LoadInfo, Direct3D10::Resource^ DestinationTexture)
 	{
 		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
 		ID3D10Resource* pDestinationTexture = DestinationTexture == nullptr ? 0 : DestinationTexture->pResource;
@@ -1603,7 +1733,7 @@ public:
 		finally { LoadInfo.Unmarshal(); }
 	}
 
-	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, [Out] ShaderResourceView^% ShaderResourceView)
+	static int CreateShaderResourceViewFromFile(Direct3D10::Device^ Device, String^ SourceFile, [Out] ShaderResourceView^% ShaderResourceView)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
@@ -1616,15 +1746,15 @@ public:
 
 		if (pShaderResourceView)
 		{
-			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
-			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
 		}
 		else ShaderResourceView = nullptr;
 
 		return Result;
 	}
 		 
-	static int CreateShaderResourceViewFromFile(Xtro::MDX::Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
+	static int CreateShaderResourceViewFromFile(Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
@@ -1648,15 +1778,15 @@ public:
 
 		if (pShaderResourceView)
 		{
-			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
-			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
 		}
 		else ShaderResourceView = nullptr;
 
 		return Result;
 	}
 		 
-	static int CreateMesh(Xtro::MDX::Direct3D10::Device^ Device, array<InputElementDescription>^ Declaration, unsigned int DeclarationCount, String^ PositionSemantic, unsigned int VertexCount, unsigned int FaceCount, MeshFlag Options, [Out] Mesh^% Mesh)
+	static int CreateMesh(Direct3D10::Device^ Device, array<InputElementDescription>^ Declaration, unsigned int DeclarationCount, String^ PositionSemantic, unsigned int VertexCount, unsigned int FaceCount, MeshFlag Options, [Out] Mesh^% Mesh)
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
@@ -1697,8 +1827,8 @@ public:
 
 		if (pMesh)
 		{
-			try { Mesh = (Xtro::MDX::Direct3DX10::Mesh^)Interface::Interfaces[IntPtr(pMesh)]; }
-			catch (KeyNotFoundException^) { Mesh = gcnew Xtro::MDX::Direct3DX10::Mesh(IntPtr(pMesh)); }
+			try { Mesh = (Direct3DX10::Mesh^)Interface::Interfaces[IntPtr(pMesh)]; }
+			catch (KeyNotFoundException^) { Mesh = gcnew Direct3DX10::Mesh(IntPtr(pMesh)); }
 		}
 		else Mesh = nullptr;
 
@@ -1715,7 +1845,7 @@ public:
 	{
 		pin_ptr<Vector4> PinnedOut = &Out;
 		pin_ptr<Vector3> PinnedVector = &Vector;
-		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 		D3DXVec3Transform((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
 	}
 	
@@ -1723,7 +1853,7 @@ public:
 	{
 		pin_ptr<Vector3> PinnedOut = &Out;
 		pin_ptr<Vector3> PinnedVector = &Vector;
-		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 		D3DXVec3TransformNormal((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
 	}
 	
@@ -1775,40 +1905,5 @@ public:
 		pin_ptr<Vector3> PinnedVector1 = &Vector1;
 		pin_ptr<Vector3> PinnedVector2 = &Vector2;
 		D3DXVec3Subtract((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
-	}
-
-	static void QuaternionMultiply([Out] Quaternion% Out, Quaternion% Quaternion1, Quaternion% Quaternion2)
-	{
-		pin_ptr<Quaternion> PinnedOut = &Out;
-		pin_ptr<Quaternion> PinnedQuaternion1 = &Quaternion1;
-		pin_ptr<Quaternion> PinnedQuaternion2 = &Quaternion2;
-		D3DXQuaternionMultiply((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion1, (D3DXQUATERNION*)PinnedQuaternion2);
-	}
-
-	static void QuaternionIdentity([Out] Quaternion% Out)
-	{
-		pin_ptr<Quaternion> PinnedOut = &Out;
-		D3DXQuaternionIdentity((D3DXQUATERNION*)PinnedOut);
-	}
-
-	static void QuaternionNormalize([Out] Quaternion% Out, Quaternion% Quaternion)
-	{
-		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
-		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
-		D3DXQuaternionNormalize((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
-	}
-
-	static void QuaternionInverse([Out] Quaternion% Out, Quaternion% Quaternion)
-	{
-		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
-		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
-		D3DXQuaternionInverse((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
-	}
-
-	static void QuaternionRotationMatrix([Out] Quaternion% Out, Matrix% Matrix)
-	{
-		pin_ptr<Quaternion> PinnedOut = &Out;
-		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
-		D3DXQuaternionRotationMatrix((D3DXQUATERNION*)PinnedOut, (D3DXMATRIX*)PinnedMatrix);
 	}
 };

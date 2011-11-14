@@ -16,7 +16,7 @@ public:
 	{
 		ID3DX10Sprite* pSprite = Sprite == nullptr ? 0 : Sprite->pSprite;
 		RECT NativeRectangle = { Rectangle.Left, Rectangle.Top, Rectangle.Right, Rectangle.Bottom };
-		pin_ptr<Xtro::MDX::Direct3DX10::Color> PinnedColor = &Color;
+		pin_ptr<Direct3DX10::Color> PinnedColor = &Color;
 
 		if (Count == -1 && String != nullptr) Count = String->Length;
 
@@ -41,15 +41,15 @@ public:
 		return Result;
 	}
 
-	int GetDevice([Out] Xtro::MDX::Direct3D10::Device^% Device_)
+	int GetDevice([Out] Direct3D10::Device^% Device_)
 	{
 		ID3D10Device* pDevice = 0;
 		int Result = pFont->GetDevice(&pDevice);
 
 		if (pDevice) 
 		{
-			try { Device_ = (Xtro::MDX::Direct3D10::Device^)Interfaces[IntPtr(pDevice)]; }
-			catch (KeyNotFoundException^) { Device_ = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }
+			try { Device_ = (Direct3D10::Device^)Interfaces[IntPtr(pDevice)]; }
+			catch (KeyNotFoundException^) { Device_ = gcnew Direct3D10::Device(IntPtr(pDevice)); }
 		}
 		else Device_ = nullptr;
 

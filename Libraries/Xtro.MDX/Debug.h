@@ -31,8 +31,8 @@ public:
 
 		if (pSwapChain)
 		{	
-			try { SwapChain = (Xtro::MDX::Direct3D10::SwapChain^)Interfaces[IntPtr(pSwapChain)]; }
-			catch (KeyNotFoundException^) { SwapChain = gcnew Xtro::MDX::Direct3D10::SwapChain(IntPtr(pSwapChain)); }
+			try { SwapChain = (Direct3D10::SwapChain^)Interfaces[IntPtr(pSwapChain)]; }
+			catch (KeyNotFoundException^) { SwapChain = gcnew Direct3D10::SwapChain(IntPtr(pSwapChain)); }
 		}
 		else SwapChain = nullptr;
 

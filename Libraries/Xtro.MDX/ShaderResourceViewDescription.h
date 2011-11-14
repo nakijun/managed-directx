@@ -43,7 +43,7 @@ public:
 
 	virtual bool Equals(ShaderResourceViewDescription Value)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::Format> PinnedThis = &Format;
+		pin_ptr<Direct3D10::Format> PinnedThis = &Format;
 		pin_ptr<ShaderResourceViewDescription> PinnedValue = &Value;
 
 		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(ShaderResourceViewDescription::typeid)) == 0;

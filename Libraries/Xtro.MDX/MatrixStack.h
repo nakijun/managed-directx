@@ -12,11 +12,11 @@ internal:
 	}
 
 public:
-	Xtro::MDX::Generic::UnmanagedMemory<Matrix>^ GetTop()
+	Generic::UnmanagedMemory<Matrix>^ GetTop()
 	{
 		D3DXMATRIX* pResult = pMatrixStack->GetTop();
 
-		return gcnew Xtro::MDX::Generic::UnmanagedMemory<Matrix>(IntPtr(pResult), sizeof(D3DXMATRIX));
+		return gcnew Generic::UnmanagedMemory<Matrix>(IntPtr(pResult), sizeof(D3DXMATRIX));
 	}
 
 	int LoadIdentity()

@@ -15,15 +15,15 @@ public:
 	int CreateSurface(SurfaceDescription% Description, unsigned int NumberOfSurfaces, UsageFlag Usage, SharedResource% SharedResource, [Out] Surface^% Surface)
 	{
 		pin_ptr<SurfaceDescription> PinnedDescription = &Description;
-		pin_ptr<Xtro::MDX::DXGI::SharedResource> PinnedSharedResource = &SharedResource;
+		pin_ptr<DXGI::SharedResource> PinnedSharedResource = &SharedResource;
 
 		IDXGISurface* pSurface = 0;
 		int Result = pDevice->CreateSurface((DXGI_SURFACE_DESC*)PinnedDescription, NumberOfSurfaces, (DXGI_USAGE)Usage, (DXGI_SHARED_RESOURCE*)PinnedSharedResource, &pSurface);
 
 		if (pSurface) 
 		{
-			try { Surface = (Xtro::MDX::DXGI::Surface^)Interfaces[IntPtr(pSurface)]; }
-			catch (KeyNotFoundException^) { Surface = gcnew Xtro::MDX::DXGI::Surface(IntPtr(pSurface)); }
+			try { Surface = (DXGI::Surface^)Interfaces[IntPtr(pSurface)]; }
+			catch (KeyNotFoundException^) { Surface = gcnew DXGI::Surface(IntPtr(pSurface)); }
 		}
 		else Surface = nullptr;
 
@@ -37,8 +37,8 @@ public:
 
 		if (pAdapter) 
 		{
-			try { Adapter = (Xtro::MDX::DXGI::Adapter^)Interfaces[IntPtr(pAdapter)]; }
-			catch (KeyNotFoundException^) { Adapter = gcnew Xtro::MDX::DXGI::Adapter(IntPtr(pAdapter)); }
+			try { Adapter = (DXGI::Adapter^)Interfaces[IntPtr(pAdapter)]; }
+			catch (KeyNotFoundException^) { Adapter = gcnew DXGI::Adapter(IntPtr(pAdapter)); }
 		}
 		else Adapter = nullptr;
 

@@ -14,7 +14,7 @@ internal:
 public:
 	int ComputeStateBlockMask([Out] StateBlockMask% StateBlockMask)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::StateBlockMask> PinnedStateBlockMask = &StateBlockMask;
+		pin_ptr<Direct3D10::StateBlockMask> PinnedStateBlockMask = &StateBlockMask;
 		return pEffectTechnique->ComputeStateBlockMask((D3D10_STATE_BLOCK_MASK*)PinnedStateBlockMask);
 	}
 

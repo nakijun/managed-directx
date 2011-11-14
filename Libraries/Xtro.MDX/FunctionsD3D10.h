@@ -26,8 +26,8 @@ public:
 
 		if (pDevice)
 		{
-			try { Device = (Xtro::MDX::Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
-			catch (KeyNotFoundException^) { Device = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }					
+			try { Device = (Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
+			catch (KeyNotFoundException^) { Device = gcnew Direct3D10::Device(IntPtr(pDevice)); }					
 		}
 		else Device = nullptr;
 
@@ -38,7 +38,7 @@ public:
 	{
 		IDXGIAdapter* pAdapter = Adapter == nullptr ? 0 : Adapter->pAdapter;
 		HMODULE hSoftware = Software == nullptr ? 0 : (HMODULE)Marshal::GetHINSTANCE(Software).ToPointer();
-		pin_ptr<Xtro::MDX::DXGI::SwapChainDescription> PinnedSwapChainDescription = &SwapChainDescription;
+		pin_ptr<DXGI::SwapChainDescription> PinnedSwapChainDescription = &SwapChainDescription;
 
 		ID3D10Device* pDevice = 0;
 		IDXGISwapChain* pSwapChain = 0;
@@ -46,15 +46,15 @@ public:
 
 		if (pDevice)
 		{
-			try { Device = (Xtro::MDX::Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
-			catch (KeyNotFoundException^) { Device = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }					
+			try { Device = (Direct3D10::Device^)Interface::Interfaces[IntPtr(pDevice)]; }
+			catch (KeyNotFoundException^) { Device = gcnew Direct3D10::Device(IntPtr(pDevice)); }					
 		}
 		else Device = nullptr;
 
 		if (pSwapChain)
 		{
-			try { SwapChain = (Xtro::MDX::DXGI::SwapChain^)Interface::Interfaces[IntPtr(pSwapChain)]; }
-			catch (KeyNotFoundException^) { SwapChain = gcnew Xtro::MDX::DXGI::SwapChain(IntPtr(pSwapChain)); }
+			try { SwapChain = (DXGI::SwapChain^)Interface::Interfaces[IntPtr(pSwapChain)]; }
+			catch (KeyNotFoundException^) { SwapChain = gcnew DXGI::SwapChain(IntPtr(pSwapChain)); }
 		}
 		else SwapChain = nullptr;
 
@@ -484,8 +484,8 @@ public:
 
 		if (pErrors)
 		{
-			try { Errors = (Xtro::MDX::Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
-			catch (KeyNotFoundException^) { Errors = gcnew Xtro::MDX::Direct3D10::Blob(IntPtr(pErrors)); }
+			try { Errors = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pErrors)]; }
+			catch (KeyNotFoundException^) { Errors = gcnew Direct3D10::Blob(IntPtr(pErrors)); }
 		}
 		else Errors = nullptr;
 
@@ -551,8 +551,8 @@ public:
 
 		if (pEffect)
 		{
-			try { Effect = (Xtro::MDX::Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
-			catch (KeyNotFoundException^) { Effect = gcnew Xtro::MDX::Direct3D10::Effect(IntPtr(pEffect)); }
+			try { Effect = (Direct3D10::Effect^)Interface::Interfaces[IntPtr(pEffect)]; }
+			catch (KeyNotFoundException^) { Effect = gcnew Direct3D10::Effect(IntPtr(pEffect)); }
 		}
 		else Effect = nullptr;
 
@@ -569,8 +569,8 @@ public:
 
 		if (pEffectPool)
 		{
-			try { EffectPool = (Xtro::MDX::Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
-			catch (KeyNotFoundException^) { EffectPool = gcnew Xtro::MDX::Direct3D10::EffectPool(IntPtr(pEffectPool)); }
+			try { EffectPool = (Direct3D10::EffectPool^)Interface::Interfaces[IntPtr(pEffectPool)]; }
+			catch (KeyNotFoundException^) { EffectPool = gcnew Direct3D10::EffectPool(IntPtr(pEffectPool)); }
 		}
 		else EffectPool = nullptr;
 
@@ -581,15 +581,15 @@ public:
 	{
 		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
 
-		pin_ptr<Xtro::MDX::Direct3D10::StateBlockMask> PinnedStateBlockMask = &StateBlockMask;
+		pin_ptr<Direct3D10::StateBlockMask> PinnedStateBlockMask = &StateBlockMask;
 
 		ID3D10StateBlock* pStateBlock = 0;
 		int Result = D3D10CreateStateBlock(pDevice, (D3D10_STATE_BLOCK_MASK*)PinnedStateBlockMask, &pStateBlock);
 
 		if (pStateBlock)
 		{
-			try { StateBlock = (Xtro::MDX::Direct3D10::StateBlock^)Interface::Interfaces[IntPtr(pStateBlock)]; }
-			catch (KeyNotFoundException^) { StateBlock = gcnew Xtro::MDX::Direct3D10::StateBlock(IntPtr(pStateBlock)); }					
+			try { StateBlock = (Direct3D10::StateBlock^)Interface::Interfaces[IntPtr(pStateBlock)]; }
+			catch (KeyNotFoundException^) { StateBlock = gcnew Direct3D10::StateBlock(IntPtr(pStateBlock)); }					
 		}
 		else StateBlock = nullptr;
 

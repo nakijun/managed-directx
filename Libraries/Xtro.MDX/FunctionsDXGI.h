@@ -12,8 +12,8 @@ public:
 
 		if (pFactory) 
 		{
-			try { Factory = (Xtro::MDX::DXGI::Factory^)Interface::Interfaces[IntPtr(pFactory)]; }
-			catch (KeyNotFoundException^) { Factory = gcnew Xtro::MDX::DXGI::Factory(IntPtr(pFactory)); }
+			try { Factory = (DXGI::Factory^)Interface::Interfaces[IntPtr(pFactory)]; }
+			catch (KeyNotFoundException^) { Factory = gcnew DXGI::Factory(IntPtr(pFactory)); }
 		}
 		else Factory = nullptr;
 

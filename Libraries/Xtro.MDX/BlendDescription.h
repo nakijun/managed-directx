@@ -8,7 +8,7 @@ public:
     BlendOperation BlendOperation;
     Blend SourceBlendAlpha;
     Blend DestinationBlendAlpha;
-    Xtro::MDX::Direct3D10::BlendOperation BlendOperationAlpha;
+    Direct3D10::BlendOperation BlendOperationAlpha;
 	Byte8 RenderTargetWriteMask;
 
 	static bool operator == (BlendDescription Left, BlendDescription Right)

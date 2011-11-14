@@ -21,8 +21,8 @@ public:
 
 		if (pAdapter) 
 		{
-			try { Adapter = (Xtro::MDX::DXGI::Adapter^)Interfaces[IntPtr(pAdapter)]; }
-			catch (KeyNotFoundException^) { Adapter = gcnew Xtro::MDX::DXGI::Adapter(IntPtr(pAdapter)); }
+			try { Adapter = (DXGI::Adapter^)Interfaces[IntPtr(pAdapter)]; }
+			catch (KeyNotFoundException^) { Adapter = gcnew DXGI::Adapter(IntPtr(pAdapter)); }
 		}
 		else Adapter = nullptr;
 
@@ -40,8 +40,8 @@ public:
 
 		if (pSwapChain) 
 		{
-			try { SwapChain = (Xtro::MDX::DXGI::SwapChain^)Interfaces[IntPtr(pSwapChain)]; }
-			catch (KeyNotFoundException^) { SwapChain = gcnew Xtro::MDX::DXGI::SwapChain(IntPtr(pSwapChain)); }
+			try { SwapChain = (DXGI::SwapChain^)Interfaces[IntPtr(pSwapChain)]; }
+			catch (KeyNotFoundException^) { SwapChain = gcnew DXGI::SwapChain(IntPtr(pSwapChain)); }
 		}
 		else SwapChain = nullptr;
 
@@ -55,8 +55,8 @@ public:
 
 		if (pAdapter) 
 		{
-			try { Adapter = (Xtro::MDX::DXGI::Adapter^)Interfaces[IntPtr(pAdapter)]; }
-			catch (KeyNotFoundException^) { Adapter = gcnew Xtro::MDX::DXGI::Adapter(IntPtr(pAdapter)); }
+			try { Adapter = (DXGI::Adapter^)Interfaces[IntPtr(pAdapter)]; }
+			catch (KeyNotFoundException^) { Adapter = gcnew DXGI::Adapter(IntPtr(pAdapter)); }
 		}
 		else Adapter = nullptr;
 

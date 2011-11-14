@@ -38,7 +38,7 @@ public:
 
 		if (pData)
 		{
-			try	{ Unknown = (Xtro::MDX::Unknown^)Interfaces[IntPtr(pData)];	}
+			try	{ Unknown = (MDX::Unknown^)Interfaces[IntPtr(pData)];	}
 			catch (KeyNotFoundException^) { Unknown = nullptr; }
 		}
 

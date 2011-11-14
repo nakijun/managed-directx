@@ -23,8 +23,8 @@ public:
 
 		if (pParent) 
 		{				
-			try { Object = (Xtro::MDX::DXGI::Object^)Interfaces[IntPtr(pParent)]; }
-			catch (KeyNotFoundException^) { Object = (Xtro::MDX::DXGI::Object^)Activator::CreateInstance(Type, BindingFlags::NonPublic | BindingFlags::Instance, nullptr, gcnew array<System::Object^>(1) { IntPtr(pParent) }, CultureInfo::CurrentCulture); }
+			try { Object = (DXGI::Object^)Interfaces[IntPtr(pParent)]; }
+			catch (KeyNotFoundException^) { Object = (DXGI::Object^)Activator::CreateInstance(Type, BindingFlags::NonPublic | BindingFlags::Instance, nullptr, gcnew array<System::Object^>(1) { IntPtr(pParent) }, CultureInfo::CurrentCulture); }
 		}
 		else Object = nullptr;
 
@@ -55,7 +55,7 @@ public:
 
 		if (pData)
 		{
-			try	{ Unknown = (Xtro::MDX::Unknown^)Interfaces[IntPtr(pData)];	}
+			try	{ Unknown = (MDX::Unknown^)Interfaces[IntPtr(pData)];	}
 			catch (KeyNotFoundException^) { Unknown = nullptr; }
 		}
 

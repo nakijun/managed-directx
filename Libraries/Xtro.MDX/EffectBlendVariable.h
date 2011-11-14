@@ -14,7 +14,7 @@ internal:
 public:
 	int GetBackingStore(unsigned int Index, [Out] BlendDescription% BlendDescription)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::BlendDescription> PinnedBlendDescription = &BlendDescription;
+		pin_ptr<Direct3D10::BlendDescription> PinnedBlendDescription = &BlendDescription;
 		return pEffectBlendVariable->GetBackingStore(Index, (D3D10_BLEND_DESC*)PinnedBlendDescription);
 	}
 
@@ -25,8 +25,8 @@ public:
 
 		if (pBlendState) 
 		{
-			try { BlendState = (Xtro::MDX::Direct3D10::BlendState^)Interfaces[IntPtr(pBlendState)]; }
-			catch (KeyNotFoundException^) { BlendState = gcnew Xtro::MDX::Direct3D10::BlendState(IntPtr(pBlendState)); }
+			try { BlendState = (Direct3D10::BlendState^)Interfaces[IntPtr(pBlendState)]; }
+			catch (KeyNotFoundException^) { BlendState = gcnew Direct3D10::BlendState(IntPtr(pBlendState)); }
 		}
 		else BlendState = nullptr;
 

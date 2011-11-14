@@ -19,8 +19,8 @@ public:
 
 		if (pGeometryShader) 
 		{
-			try { GeometryShader = (Xtro::MDX::Direct3D10::GeometryShader^)Interfaces[IntPtr(pGeometryShader)]; }
-			catch (KeyNotFoundException^) { GeometryShader = gcnew Xtro::MDX::Direct3D10::GeometryShader(IntPtr(pGeometryShader)); }
+			try { GeometryShader = (Direct3D10::GeometryShader^)Interfaces[IntPtr(pGeometryShader)]; }
+			catch (KeyNotFoundException^) { GeometryShader = gcnew Direct3D10::GeometryShader(IntPtr(pGeometryShader)); }
 		}
 		else GeometryShader = nullptr;
 
@@ -54,8 +54,8 @@ public:
 
 		if (pPixelShader) 
 		{
-			try { PixelShader = (Xtro::MDX::Direct3D10::PixelShader^)Interfaces[IntPtr(pPixelShader)]; }
-			catch (KeyNotFoundException^) { PixelShader = gcnew Xtro::MDX::Direct3D10::PixelShader(IntPtr(pPixelShader)); }
+			try { PixelShader = (Direct3D10::PixelShader^)Interfaces[IntPtr(pPixelShader)]; }
+			catch (KeyNotFoundException^) { PixelShader = gcnew Direct3D10::PixelShader(IntPtr(pPixelShader)); }
 		}
 		else PixelShader = nullptr;
 
@@ -79,8 +79,8 @@ public:
 
 		if (pVertexShader) 
 		{
-			try { VertexShader = (Xtro::MDX::Direct3D10::VertexShader^)Interfaces[IntPtr(pVertexShader)]; }
-			catch (KeyNotFoundException^) { VertexShader = gcnew Xtro::MDX::Direct3D10::VertexShader(IntPtr(pVertexShader)); }
+			try { VertexShader = (Direct3D10::VertexShader^)Interfaces[IntPtr(pVertexShader)]; }
+			catch (KeyNotFoundException^) { VertexShader = gcnew Direct3D10::VertexShader(IntPtr(pVertexShader)); }
 		}
 		else VertexShader = nullptr;
 
