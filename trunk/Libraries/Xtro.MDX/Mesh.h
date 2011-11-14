@@ -51,8 +51,8 @@ public:
 
 		if (pMesh)
 		{
-			try { CloneMesh = (Xtro::MDX::Direct3DX10::Mesh^)Interfaces[IntPtr(pMesh)]; }
-			catch (KeyNotFoundException^) { CloneMesh = gcnew Xtro::MDX::Direct3DX10::Mesh(IntPtr(pMesh)); }					
+			try { CloneMesh = (Direct3DX10::Mesh^)Interfaces[IntPtr(pMesh)]; }
+			catch (KeyNotFoundException^) { CloneMesh = gcnew Direct3DX10::Mesh(IntPtr(pMesh)); }					
 		}
 		else CloneMesh = nullptr;
 
@@ -124,7 +124,7 @@ public:
 		return Result;
 	}
 
-	int GetAttributeTable(Xtro::MDX::Generic::UnmanagedMemory<AttributeRange>^ AttribTable, unsigned int% AttribTableSize)
+	int GetAttributeTable(Generic::UnmanagedMemory<AttributeRange>^ AttribTable, unsigned int% AttribTableSize)
 	{
 		pin_ptr<unsigned int> PinnedAttribTableSize = &AttribTableSize;
 		D3DX10_ATTRIBUTE_RANGE* pAttribTable = AttribTable == nullptr ? 0 : (D3DX10_ATTRIBUTE_RANGE*)AttribTable->pMemory;
@@ -148,7 +148,7 @@ public:
 		return Result;
 	}
 
-	int GetDeviceVertexBuffer(unsigned int Buffer, [Out] Xtro::MDX::Direct3D10::Buffer^% VertexBuffer)
+	int GetDeviceVertexBuffer(unsigned int Buffer, [Out] Direct3D10::Buffer^% VertexBuffer)
 	{
 		ID3D10Buffer* pVertexBuffer = 0;
 
@@ -156,8 +156,8 @@ public:
 
 		if (pVertexBuffer)
 		{
-			try { VertexBuffer = (Xtro::MDX::Direct3D10::Buffer^)Interfaces[IntPtr(pVertexBuffer)]; }
-			catch (KeyNotFoundException^) { VertexBuffer = gcnew Xtro::MDX::Direct3D10::Buffer(IntPtr(pVertexBuffer)); }					
+			try { VertexBuffer = (Direct3D10::Buffer^)Interfaces[IntPtr(pVertexBuffer)]; }
+			catch (KeyNotFoundException^) { VertexBuffer = gcnew Direct3D10::Buffer(IntPtr(pVertexBuffer)); }					
 		}
 		else VertexBuffer = nullptr;
 
@@ -300,7 +300,7 @@ public:
 		return Result;
 	}
 
-	int Optimize(unsigned int Flags, Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ FaceRemap, [Out] Blob^% VertexRemap)
+	int Optimize(unsigned int Flags, Generic::UnmanagedMemory<unsigned int>^ FaceRemap, [Out] Blob^% VertexRemap)
 	{
 		unsigned int* pFaceRemap = FaceRemap == nullptr ? 0 : (unsigned int*)FaceRemap->pMemory;
 
@@ -318,21 +318,21 @@ public:
 		return Result;
 	}
 
-	int SetAdjacencyData(Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ Adjacency)
+	int SetAdjacencyData(Generic::UnmanagedMemory<unsigned int>^ Adjacency)
 	{
 		unsigned int* pAdjacency = Adjacency == nullptr ? 0 : (unsigned int*)Adjacency->pMemory;
 
 		return pMesh->SetAdjacencyData(pAdjacency);
 	}
 
-	int SetAttributeData(Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ Data)
+	int SetAttributeData(Generic::UnmanagedMemory<unsigned int>^ Data)
 	{
 		unsigned int* pData = Data == nullptr ? 0 : (unsigned int*)Data->pMemory;
 
 		return pMesh->SetAttributeData(pData);
 	}
 
-	int SetAttributeTable(Xtro::MDX::Generic::UnmanagedMemory<AttributeRange>^ AttribTable, unsigned int AttributeTableSize)
+	int SetAttributeTable(Generic::UnmanagedMemory<AttributeRange>^ AttribTable, unsigned int AttributeTableSize)
 	{
 		D3DX10_ATTRIBUTE_RANGE* pAttribTable = AttribTable == nullptr ? 0 : (D3DX10_ATTRIBUTE_RANGE*)AttribTable->pMemory;
 
@@ -346,7 +346,7 @@ public:
 		return pMesh->SetIndexData(pData, Indices);
 	}
 
-	int SetPointRepData(Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ PointReps)
+	int SetPointRepData(Generic::UnmanagedMemory<unsigned int>^ PointReps)
 	{
 		unsigned int* pPointReps = PointReps == nullptr ? 0 : (unsigned int*)PointReps->pMemory;
 

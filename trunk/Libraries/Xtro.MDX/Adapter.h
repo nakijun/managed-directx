@@ -30,8 +30,8 @@ public:
 
 		if (pOutput)
 		{
-			try { Output = (Xtro::MDX::DXGI::Output^)Interfaces[IntPtr(pOutput)]; }
-			catch (KeyNotFoundException^) { Output = gcnew Xtro::MDX::DXGI::Output(IntPtr(pOutput)); }					
+			try { Output = (DXGI::Output^)Interfaces[IntPtr(pOutput)]; }
+			catch (KeyNotFoundException^) { Output = gcnew DXGI::Output(IntPtr(pOutput)); }					
 		}
 		else Output = nullptr;
 

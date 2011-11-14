@@ -11,7 +11,7 @@ internal:
 		DesktopCoordinates.Height = Native->DesktopCoordinates.bottom - Native->DesktopCoordinates.top;
 
 		AttachedToDesktop = Native->AttachedToDesktop;
-		Rotation = (Xtro::MDX::DXGI::ModeRotation)Native->Rotation;
+		Rotation = (DXGI::ModeRotation)Native->Rotation;
 		Monitor = IntPtr(Native->Monitor);
 	}
 

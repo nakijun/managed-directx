@@ -12,7 +12,7 @@ internal:
 	}
 
 public:
-	int AddBoneInfluences(unsigned int BoneIndex, unsigned int InfluenceCount, Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ Indices, Xtro::MDX::Generic::UnmanagedMemory<float>^ Weights)
+	int AddBoneInfluences(unsigned int BoneIndex, unsigned int InfluenceCount, Generic::UnmanagedMemory<unsigned int>^ Indices, Generic::UnmanagedMemory<float>^ Weights)
 	{
 		unsigned int* pIndices = Indices == nullptr ? 0 : (unsigned int*)Indices->pMemory;
 		float* pWeights = Weights == nullptr ? 0 : (float*)Weights->pMemory;
@@ -40,7 +40,7 @@ public:
 		return pSkinInfo->Compact(MaximumPerVertexInfluences, (unsigned int)ScaleMode, MinimumWeight);
 	}
 
-	int DoSoftwareSkinning(unsigned int StartVertex, unsigned int VertexCount, UnmanagedMemory^ SourceVertices, unsigned int SourceStride, UnmanagedMemory^ DestinationVertices, unsigned int DestinationStride, Xtro::MDX::Generic::UnmanagedMemory<Matrix>^ BoneMatrices, Xtro::MDX::Generic::UnmanagedMemory<Matrix>^ InverseTransposeBoneMatrices, Xtro::MDX::Generic::UnmanagedMemory<SkinningChannel>^ ChannelDescriptions, unsigned int NumberOfChannels)
+	int DoSoftwareSkinning(unsigned int StartVertex, unsigned int VertexCount, UnmanagedMemory^ SourceVertices, unsigned int SourceStride, UnmanagedMemory^ DestinationVertices, unsigned int DestinationStride, Generic::UnmanagedMemory<Matrix>^ BoneMatrices, Generic::UnmanagedMemory<Matrix>^ InverseTransposeBoneMatrices, Generic::UnmanagedMemory<SkinningChannel>^ ChannelDescriptions, unsigned int NumberOfChannels)
 	{
 		void* pSourceVertices = SourceVertices == nullptr ? 0 : (void*)SourceVertices->pMemory;
 		void* pDestinationVertices = DestinationVertices == nullptr ? 0 : (void*)DestinationVertices->pMemory;
@@ -70,7 +70,7 @@ public:
 		return pSkinInfo->GetBoneInfluenceCount(BoneIndex);
 	}
 
-	int GetBoneInfluences(unsigned int BoneIndex, unsigned int Offset, unsigned int Count, Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ DestinationIndices, Xtro::MDX::Generic::UnmanagedMemory<float>^ DestinationWeights)
+	int GetBoneInfluences(unsigned int BoneIndex, unsigned int Offset, unsigned int Count, Generic::UnmanagedMemory<unsigned int>^ DestinationIndices, Generic::UnmanagedMemory<float>^ DestinationWeights)
 	{
 		unsigned int* pDestinationIndices = DestinationIndices == nullptr ? 0 : (unsigned int*)DestinationIndices->pMemory;
 		float* pDestinationWeights = DestinationWeights == nullptr ? 0 : (float*)DestinationWeights->pMemory;
@@ -93,14 +93,14 @@ public:
 		return pSkinInfo->GetNumVertices();
 	}
 
-	int RemapBones(unsigned int NewBoneCount, Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ BoneRemap)
+	int RemapBones(unsigned int NewBoneCount, Generic::UnmanagedMemory<unsigned int>^ BoneRemap)
 	{
 		unsigned int* pBoneRemap = BoneRemap == nullptr ? 0 : (unsigned int*)BoneRemap->pMemory;
 
 		return pSkinInfo->RemapBones(NewBoneCount, pBoneRemap);
 	}
 
-	int RemapVertices(unsigned int NewVertexCount, Xtro::MDX::Generic::UnmanagedMemory<unsigned int>^ VertexRemap)
+	int RemapVertices(unsigned int NewVertexCount, Generic::UnmanagedMemory<unsigned int>^ VertexRemap)
 	{
 		unsigned int* pVertexRemap = VertexRemap == nullptr ? 0 : (unsigned int*)VertexRemap->pMemory;
 

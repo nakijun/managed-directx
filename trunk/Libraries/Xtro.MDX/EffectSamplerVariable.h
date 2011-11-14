@@ -14,7 +14,7 @@ internal:
 public:
 	int GetBackingStore(unsigned int Index, [Out] SamplerDescription% SamplerDescription)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::SamplerDescription> PinnedSamplerDescription = &SamplerDescription;
+		pin_ptr<Direct3D10::SamplerDescription> PinnedSamplerDescription = &SamplerDescription;
 		return pEffectSamplerVariable->GetBackingStore(Index, (D3D10_SAMPLER_DESC*)PinnedSamplerDescription);
 	}
 

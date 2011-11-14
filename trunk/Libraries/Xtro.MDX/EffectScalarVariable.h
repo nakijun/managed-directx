@@ -18,7 +18,7 @@ public:
 		return pEffectScalarVariable->GetBool((int*)PinnedValue);
 	}
 
-	int GetBoolArray(Xtro::MDX::Generic::UnmanagedMemory<bool>^ Data, unsigned Offset, unsigned int Count)
+	int GetBoolArray(Generic::UnmanagedMemory<bool>^ Data, unsigned Offset, unsigned int Count)
 	{											   
 		int* pData = Data == nullptr ? 0 : (int*)Data->pMemory;
 
@@ -31,7 +31,7 @@ public:
 		return pEffectScalarVariable->GetFloat((float*)PinnedValue);
 	}
 
-	int GetFloatArray(Xtro::MDX::Generic::UnmanagedMemory<float>^ Data, unsigned Offset, unsigned int Count)
+	int GetFloatArray(Generic::UnmanagedMemory<float>^ Data, unsigned Offset, unsigned int Count)
 	{											   
 		float* pData = Data == nullptr ? 0 : (float*)Data->pMemory;
 
@@ -44,7 +44,7 @@ public:
 		return pEffectScalarVariable->GetInt((int*)PinnedValue);
 	}
 
-	int GetIntArray(Xtro::MDX::Generic::UnmanagedMemory<int>^ Data, unsigned Offset, unsigned int Count)
+	int GetIntArray(Generic::UnmanagedMemory<int>^ Data, unsigned Offset, unsigned int Count)
 	{											   
 		int* pData = Data == nullptr ? 0 : (int*)Data->pMemory;
 
@@ -56,7 +56,7 @@ public:
 		return pEffectScalarVariable->SetBool(Value);
 	}
 
-	int SetBoolArray(Xtro::MDX::Generic::UnmanagedMemory<bool>^ Data, unsigned Offset, unsigned int Count)
+	int SetBoolArray(Generic::UnmanagedMemory<bool>^ Data, unsigned Offset, unsigned int Count)
 	{											   
 		int* pData = Data == nullptr ? 0 : (int*)Data->pMemory;
 
@@ -68,7 +68,7 @@ public:
 		return pEffectScalarVariable->SetFloat(Value);
 	}
 
-	int SetFloatArray(Xtro::MDX::Generic::UnmanagedMemory<float>^ Data, unsigned Offset, unsigned int Count)
+	int SetFloatArray(Generic::UnmanagedMemory<float>^ Data, unsigned Offset, unsigned int Count)
 	{											   
 		float* pData = Data == nullptr ? 0 : (float*)Data->pMemory;
 
@@ -80,7 +80,7 @@ public:
 		return pEffectScalarVariable->SetInt(Value);
 	}
 
-	int SetIntArray(Xtro::MDX::Generic::UnmanagedMemory<int>^ Data, unsigned Offset, unsigned int Count)
+	int SetIntArray(Generic::UnmanagedMemory<int>^ Data, unsigned Offset, unsigned int Count)
 	{											   
 		int* pData = Data == nullptr ? 0 : (int*)Data->pMemory;
 

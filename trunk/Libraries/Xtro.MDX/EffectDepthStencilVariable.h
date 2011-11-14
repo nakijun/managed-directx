@@ -14,7 +14,7 @@ internal:
 public:
 	int GetBackingStore(unsigned int Index, [Out] DepthStencilDescription% DepthStencilDescription)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::DepthStencilDescription> PinnedDepthStencilDescription = &DepthStencilDescription;
+		pin_ptr<Direct3D10::DepthStencilDescription> PinnedDepthStencilDescription = &DepthStencilDescription;
 		return pEffectDepthStencilVariable->GetBackingStore(Index, (D3D10_DEPTH_STENCIL_DESC*)PinnedDepthStencilDescription);
 	}
 
@@ -25,8 +25,8 @@ public:
 
 		if (pDepthStencilState) 
 		{
-			try { DepthStencilState = (Xtro::MDX::Direct3D10::DepthStencilState^)Interfaces[IntPtr(pDepthStencilState)]; }
-			catch (KeyNotFoundException^) { DepthStencilState = gcnew Xtro::MDX::Direct3D10::DepthStencilState(IntPtr(pDepthStencilState)); }
+			try { DepthStencilState = (Direct3D10::DepthStencilState^)Interfaces[IntPtr(pDepthStencilState)]; }
+			catch (KeyNotFoundException^) { DepthStencilState = gcnew Direct3D10::DepthStencilState(IntPtr(pDepthStencilState)); }
 		}
 		else DepthStencilState = nullptr;
 

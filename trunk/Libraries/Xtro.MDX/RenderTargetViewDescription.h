@@ -42,7 +42,7 @@ public:
 
 	virtual bool Equals(RenderTargetViewDescription Value)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::Format> PinnedThis = &Format;
+		pin_ptr<Direct3D10::Format> PinnedThis = &Format;
 		pin_ptr<RenderTargetViewDescription> PinnedValue = &Value;
 
 		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(RenderTargetViewDescription::typeid)) == 0;

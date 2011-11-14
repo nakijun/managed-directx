@@ -5,8 +5,8 @@ void DeviceChild::GetDevice([Out] Device^% Device)
 
 	if (pDevice) 
 	{
-		try { Device = (Xtro::MDX::Direct3D10::Device^)Interfaces[IntPtr(pDevice)]; }
-		catch (KeyNotFoundException^) { Device = gcnew Xtro::MDX::Direct3D10::Device(IntPtr(pDevice)); }
+		try { Device = (Direct3D10::Device^)Interfaces[IntPtr(pDevice)]; }
+		catch (KeyNotFoundException^) { Device = gcnew Direct3D10::Device(IntPtr(pDevice)); }
 	}
 	else Device = nullptr;
 }

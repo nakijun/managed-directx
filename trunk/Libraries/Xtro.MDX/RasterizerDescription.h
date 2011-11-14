@@ -102,7 +102,7 @@ public:
 
 	virtual bool Equals(RasterizerDescription Value)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::FillMode> PinnedThis = &FillMode;
+		pin_ptr<Direct3D10::FillMode> PinnedThis = &FillMode;
 		pin_ptr<RasterizerDescription> PinnedValue = &Value;
 
 		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(RasterizerDescription::typeid)) == 0;

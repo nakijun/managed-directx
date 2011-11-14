@@ -1,12 +1,12 @@
 generic<typename T> where T : value class
-public ref class UnmanagedMemory sealed : Xtro::MDX::UnmanagedMemory
+public ref class UnmanagedMemory sealed : MDX::UnmanagedMemory
 {
 public:
-	UnmanagedMemory(unsigned int Size) : Xtro::MDX::UnmanagedMemory(Size)
+	UnmanagedMemory(unsigned int Size) : MDX::UnmanagedMemory(Size)
 	{
 	}
 
-	UnmanagedMemory(IntPtr Pointer, unsigned int Size) : Xtro::MDX::UnmanagedMemory(Pointer, Size)
+	UnmanagedMemory(IntPtr Pointer, unsigned int Size) : MDX::UnmanagedMemory(Pointer, Size)
 	{
 	}
 

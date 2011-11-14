@@ -81,7 +81,7 @@ namespace DXGI
 
 namespace Direct3D10
 {
-	using namespace Xtro::MDX::DXGI;
+	using namespace DXGI;
 
 	ref class Device;
 	ref class EffectBlendVariable;
@@ -231,7 +231,7 @@ namespace Direct3D10
 
 namespace Direct3DX10
 {
-	using namespace Xtro::MDX::Direct3D10;
+	using namespace Direct3D10;
 
 	#include "EnumsD3DX10.h"
 	#include "ConstantsD3DX10.h"

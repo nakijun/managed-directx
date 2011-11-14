@@ -14,7 +14,7 @@ internal:
 public:
 	int GetBackingStore(unsigned int Index, [Out] RasterizerDescription% RasterizerDescription)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::RasterizerDescription> PinnedRasterizerDescription = &RasterizerDescription;
+		pin_ptr<Direct3D10::RasterizerDescription> PinnedRasterizerDescription = &RasterizerDescription;
 		return pEffectRasterizerVariable->GetBackingStore(Index, (D3D10_RASTERIZER_DESC*)PinnedRasterizerDescription);
 	}
 
@@ -25,8 +25,8 @@ public:
 
 		if (pRasterizerState) 
 		{
-			try { RasterizerState = (Xtro::MDX::Direct3D10::RasterizerState^)Interfaces[IntPtr(pRasterizerState)]; }
-			catch (KeyNotFoundException^) { RasterizerState = gcnew Xtro::MDX::Direct3D10::RasterizerState(IntPtr(pRasterizerState)); }
+			try { RasterizerState = (Direct3D10::RasterizerState^)Interfaces[IntPtr(pRasterizerState)]; }
+			catch (KeyNotFoundException^) { RasterizerState = gcnew Direct3D10::RasterizerState(IntPtr(pRasterizerState)); }
 		}
 		else RasterizerState = nullptr;
 

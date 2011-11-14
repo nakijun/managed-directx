@@ -9,7 +9,7 @@ internal:
 		SemanticName = Native->SemanticName ? gcnew String(Native->SemanticName) : nullptr;
 			
 		SemanticIndex = Native->SemanticIndex;
-		Format = (Xtro::MDX::DXGI::Format)Native->Format;
+		Format = (DXGI::Format)Native->Format;
 		InputSlot = Native->InputSlot;
 		AlignedByteOffset = Native->AlignedByteOffset;
 		InputSlotClass = (InputClassification)Native->InputSlotClass;

@@ -12,7 +12,7 @@ internal:
 	}
 
 public:
-	int CheckCounter(CounterDescription% Description, [Out] CounterType% Type, [Out] unsigned int% ActiveCounters, Xtro::MDX::Generic::RefObject<String^>^ Name, Xtro::MDX::Generic::ValueObject<unsigned int>^ NameLength, Xtro::MDX::Generic::RefObject<String^>^ Units, Xtro::MDX::Generic::ValueObject<unsigned int>^ UnitsLength, Xtro::MDX::Generic::RefObject<String^>^ DescriptionString, Xtro::MDX::Generic::ValueObject<unsigned int>^ DescriptionLength)
+	int CheckCounter(CounterDescription% Description, [Out] CounterType% Type, [Out] unsigned int% ActiveCounters, Generic::RefObject<String^>^ Name, Generic::ValueObject<unsigned int>^ NameLength, Generic::RefObject<String^>^ Units, Generic::ValueObject<unsigned int>^ UnitsLength, Generic::RefObject<String^>^ DescriptionString, Generic::ValueObject<unsigned int>^ DescriptionLength)
 	{
 		pin_ptr<CounterDescription> PinnedDescription = &Description;
 		pin_ptr<CounterType> PinnedType = &Type;
@@ -49,13 +49,13 @@ public:
 
 	void CheckCounterInfo(CounterInfo% CounterInfo)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::CounterInfo> PinnedCounterInfo = &CounterInfo;
+		pin_ptr<Direct3D10::CounterInfo> PinnedCounterInfo = &CounterInfo;
 		pDevice->CheckCounterInfo((D3D10_COUNTER_INFO*)PinnedCounterInfo);
 	}
   	
 	int CheckFormatSupport(Format Format, [Out] FormatSupport% FormatSupport)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::FormatSupport> PinnedFormatSupport = &FormatSupport;
+		pin_ptr<Direct3D10::FormatSupport> PinnedFormatSupport = &FormatSupport;
 		return pDevice->CheckFormatSupport((DXGI_FORMAT)Format, (unsigned int*)PinnedFormatSupport);
 	}
 
@@ -119,8 +119,8 @@ public:
 
 		if (pBlendState)
 		{
-			try { BlendState = (Xtro::MDX::Direct3D10::BlendState^)Interfaces[IntPtr(pBlendState)]; }
-			catch (KeyNotFoundException^) { BlendState = gcnew Xtro::MDX::Direct3D10::BlendState(IntPtr(pBlendState)); }					
+			try { BlendState = (Direct3D10::BlendState^)Interfaces[IntPtr(pBlendState)]; }
+			catch (KeyNotFoundException^) { BlendState = gcnew Direct3D10::BlendState(IntPtr(pBlendState)); }					
 		}
 		else BlendState = nullptr;
 
@@ -142,8 +142,8 @@ public:
 
 		if (pBuffer)
 		{
-			try { Buffer = (Xtro::MDX::Direct3D10::Buffer^)Interfaces[IntPtr(pBuffer)]; }
-			catch (KeyNotFoundException^) { Buffer = gcnew Xtro::MDX::Direct3D10::Buffer(IntPtr(pBuffer)); }					
+			try { Buffer = (Direct3D10::Buffer^)Interfaces[IntPtr(pBuffer)]; }
+			catch (KeyNotFoundException^) { Buffer = gcnew Direct3D10::Buffer(IntPtr(pBuffer)); }					
 		}
 		else Buffer = nullptr;
 
@@ -162,8 +162,8 @@ public:
 
 		if (pBuffer)
 		{
-			try { Buffer = (Xtro::MDX::Direct3D10::Buffer^)Interfaces[IntPtr(pBuffer)]; }
-			catch (KeyNotFoundException^) { Buffer = gcnew Xtro::MDX::Direct3D10::Buffer(IntPtr(pBuffer)); }					
+			try { Buffer = (Direct3D10::Buffer^)Interfaces[IntPtr(pBuffer)]; }
+			catch (KeyNotFoundException^) { Buffer = gcnew Direct3D10::Buffer(IntPtr(pBuffer)); }					
 		}
 		else Buffer = nullptr;
 
@@ -179,8 +179,8 @@ public:
 
 		if (pCounter)
 		{
-			try { Counter = (Xtro::MDX::Direct3D10::Counter^)Interfaces[IntPtr(pCounter)]; }
-			catch (KeyNotFoundException^) { Counter = gcnew Xtro::MDX::Direct3D10::Counter(IntPtr(pCounter)); }					
+			try { Counter = (Direct3D10::Counter^)Interfaces[IntPtr(pCounter)]; }
+			catch (KeyNotFoundException^) { Counter = gcnew Direct3D10::Counter(IntPtr(pCounter)); }					
 		}
 		else Counter = nullptr;
 
@@ -189,15 +189,15 @@ public:
 
 	int CreateDepthStencilState(DepthStencilDescription% DepthStencilDescription, [Out] DepthStencilState^% DepthStencilState)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::DepthStencilDescription> PinnedDepthStencilDescription = &DepthStencilDescription;
+		pin_ptr<Direct3D10::DepthStencilDescription> PinnedDepthStencilDescription = &DepthStencilDescription;
 
 		ID3D10DepthStencilState* pDepthStencilState = 0;
 		int Result = pDevice->CreateDepthStencilState((D3D10_DEPTH_STENCIL_DESC*)PinnedDepthStencilDescription, &pDepthStencilState);
 
 		if (pDepthStencilState)
 		{
-			try { DepthStencilState = (Xtro::MDX::Direct3D10::DepthStencilState^)Interfaces[IntPtr(pDepthStencilState)]; }
-			catch (KeyNotFoundException^) { DepthStencilState = gcnew Xtro::MDX::Direct3D10::DepthStencilState(IntPtr(pDepthStencilState)); }					
+			try { DepthStencilState = (Direct3D10::DepthStencilState^)Interfaces[IntPtr(pDepthStencilState)]; }
+			catch (KeyNotFoundException^) { DepthStencilState = gcnew Direct3D10::DepthStencilState(IntPtr(pDepthStencilState)); }					
 		}
 		else DepthStencilState = nullptr;
 
@@ -214,8 +214,8 @@ public:
 
 		if (pDepthStencilView)
 		{	
-			try { DepthStencilView = (Xtro::MDX::Direct3D10::DepthStencilView^)Interfaces[IntPtr(pDepthStencilView)]; }
-			catch (KeyNotFoundException^) { DepthStencilView = gcnew Xtro::MDX::Direct3D10::DepthStencilView(IntPtr(pDepthStencilView)); }
+			try { DepthStencilView = (Direct3D10::DepthStencilView^)Interfaces[IntPtr(pDepthStencilView)]; }
+			catch (KeyNotFoundException^) { DepthStencilView = gcnew Direct3D10::DepthStencilView(IntPtr(pDepthStencilView)); }
 		}
 		else DepthStencilView = nullptr;
 
@@ -231,8 +231,8 @@ public:
 
 		if (pDepthStencilView)
 		{	
-			try { DepthStencilView = (Xtro::MDX::Direct3D10::DepthStencilView^)Interfaces[IntPtr(pDepthStencilView)]; }
-			catch (KeyNotFoundException^) { DepthStencilView = gcnew Xtro::MDX::Direct3D10::DepthStencilView(IntPtr(pDepthStencilView)); }
+			try { DepthStencilView = (Direct3D10::DepthStencilView^)Interfaces[IntPtr(pDepthStencilView)]; }
+			catch (KeyNotFoundException^) { DepthStencilView = gcnew Direct3D10::DepthStencilView(IntPtr(pDepthStencilView)); }
 		}
 		else DepthStencilView = nullptr;
 
@@ -262,8 +262,8 @@ public:
 
 		if (pGeometryShader)
 		{
-			try { GeometryShader = (Xtro::MDX::Direct3D10::GeometryShader^)Interfaces[IntPtr(pGeometryShader)]; }
-			catch (KeyNotFoundException^) { GeometryShader = gcnew Xtro::MDX::Direct3D10::GeometryShader(IntPtr(pGeometryShader)); }					
+			try { GeometryShader = (Direct3D10::GeometryShader^)Interfaces[IntPtr(pGeometryShader)]; }
+			catch (KeyNotFoundException^) { GeometryShader = gcnew Direct3D10::GeometryShader(IntPtr(pGeometryShader)); }					
 		}
 		else GeometryShader = nullptr;
 
@@ -314,8 +314,8 @@ public:
 
 		if (pGeometryShader)
 		{
-			try { GeometryShader = (Xtro::MDX::Direct3D10::GeometryShader^)Interfaces[IntPtr(pGeometryShader)]; }
-			catch (KeyNotFoundException^) { GeometryShader = gcnew Xtro::MDX::Direct3D10::GeometryShader(IntPtr(pGeometryShader)); }					
+			try { GeometryShader = (Direct3D10::GeometryShader^)Interfaces[IntPtr(pGeometryShader)]; }
+			catch (KeyNotFoundException^) { GeometryShader = gcnew Direct3D10::GeometryShader(IntPtr(pGeometryShader)); }					
 		}
 		else GeometryShader = nullptr;
 
@@ -394,8 +394,8 @@ public:
 
 		if (pInputLayout)
 		{
-			try { InputLayout = (Xtro::MDX::Direct3D10::InputLayout^)Interfaces[IntPtr(pInputLayout)]; }
-			catch (KeyNotFoundException^) { InputLayout = gcnew Xtro::MDX::Direct3D10::InputLayout(IntPtr(pInputLayout)); }					
+			try { InputLayout = (Direct3D10::InputLayout^)Interfaces[IntPtr(pInputLayout)]; }
+			catch (KeyNotFoundException^) { InputLayout = gcnew Direct3D10::InputLayout(IntPtr(pInputLayout)); }					
 		}
 		else InputLayout = nullptr;
 
@@ -445,8 +445,8 @@ public:
 
 		if (pPixelShader)
 		{
-			try { PixelShader = (Xtro::MDX::Direct3D10::PixelShader^)Interfaces[IntPtr(pPixelShader)]; }
-			catch (KeyNotFoundException^) { PixelShader = gcnew Xtro::MDX::Direct3D10::PixelShader(IntPtr(pPixelShader)); }					
+			try { PixelShader = (Direct3D10::PixelShader^)Interfaces[IntPtr(pPixelShader)]; }
+			catch (KeyNotFoundException^) { PixelShader = gcnew Direct3D10::PixelShader(IntPtr(pPixelShader)); }					
 		}
 		else PixelShader = nullptr;
 
@@ -468,8 +468,8 @@ public:
 
 		if (pPredicate)
 		{
-			try { Predicate = (Xtro::MDX::Direct3D10::Predicate^)Interfaces[IntPtr(pPredicate)]; }
-			catch (KeyNotFoundException^) { Predicate = gcnew Xtro::MDX::Direct3D10::Predicate(IntPtr(pPredicate)); }					
+			try { Predicate = (Direct3D10::Predicate^)Interfaces[IntPtr(pPredicate)]; }
+			catch (KeyNotFoundException^) { Predicate = gcnew Direct3D10::Predicate(IntPtr(pPredicate)); }					
 		}
 		else Predicate = nullptr;
 
@@ -478,15 +478,15 @@ public:
 
 	int CreateQuery(QueryDescription% QueryDescription, [Out] Query^% Query)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::QueryDescription> PinnedQueryDescription = &QueryDescription;
+		pin_ptr<Direct3D10::QueryDescription> PinnedQueryDescription = &QueryDescription;
 
 		ID3D10Query* pQuery = 0;
 		int Result = pDevice->CreateQuery((D3D10_QUERY_DESC*)PinnedQueryDescription, &pQuery);
 
 		if (pQuery)
 		{
-			try { Query = (Xtro::MDX::Direct3D10::Query^)Interfaces[IntPtr(pQuery)]; }
-			catch (KeyNotFoundException^) { Query = gcnew Xtro::MDX::Direct3D10::Query(IntPtr(pQuery)); }					
+			try { Query = (Direct3D10::Query^)Interfaces[IntPtr(pQuery)]; }
+			catch (KeyNotFoundException^) { Query = gcnew Direct3D10::Query(IntPtr(pQuery)); }					
 		}
 		else Query = nullptr;
 
@@ -502,15 +502,15 @@ public:
 
 		if (pRasterizerState)
 		{
-			try { RasterizerState = (Xtro::MDX::Direct3D10::RasterizerState^)Interfaces[IntPtr(pRasterizerState)]; }
-			catch (KeyNotFoundException^) { RasterizerState = gcnew Xtro::MDX::Direct3D10::RasterizerState(IntPtr(pRasterizerState)); }					
+			try { RasterizerState = (Direct3D10::RasterizerState^)Interfaces[IntPtr(pRasterizerState)]; }
+			catch (KeyNotFoundException^) { RasterizerState = gcnew Direct3D10::RasterizerState(IntPtr(pRasterizerState)); }					
 		}
 		else RasterizerState = nullptr;
 
 		return Result;
 	}
 
-	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource, RenderTargetViewDescription% Description, [Out] RenderTargetView^% RenderTargetView)
+	int CreateRenderTargetView(Direct3D10::Resource^ Resource, RenderTargetViewDescription% Description, [Out] RenderTargetView^% RenderTargetView)
 	{
 		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
 		pin_ptr<RenderTargetViewDescription> PinnedDescription = &Description;
@@ -520,15 +520,15 @@ public:
 
 		if (pRenderTargetView)
 		{	
-			try { RenderTargetView = (Xtro::MDX::Direct3D10::RenderTargetView^)Interfaces[IntPtr(pRenderTargetView)]; }
-			catch (KeyNotFoundException^) { RenderTargetView = gcnew Xtro::MDX::Direct3D10::RenderTargetView(IntPtr(pRenderTargetView)); }
+			try { RenderTargetView = (Direct3D10::RenderTargetView^)Interfaces[IntPtr(pRenderTargetView)]; }
+			catch (KeyNotFoundException^) { RenderTargetView = gcnew Direct3D10::RenderTargetView(IntPtr(pRenderTargetView)); }
 		}
 		else RenderTargetView = nullptr;
 
 		return Result;
 	}
 
-	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource, [Out] RenderTargetView^% RenderTargetView)
+	int CreateRenderTargetView(Direct3D10::Resource^ Resource, [Out] RenderTargetView^% RenderTargetView)
 	{
 		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
 
@@ -537,15 +537,15 @@ public:
 
 		if (pRenderTargetView)
 		{	
-			try { RenderTargetView = (Xtro::MDX::Direct3D10::RenderTargetView^)Interfaces[IntPtr(pRenderTargetView)]; }
-			catch (KeyNotFoundException^) { RenderTargetView = gcnew Xtro::MDX::Direct3D10::RenderTargetView(IntPtr(pRenderTargetView)); }
+			try { RenderTargetView = (Direct3D10::RenderTargetView^)Interfaces[IntPtr(pRenderTargetView)]; }
+			catch (KeyNotFoundException^) { RenderTargetView = gcnew Direct3D10::RenderTargetView(IntPtr(pRenderTargetView)); }
 		}
 		else RenderTargetView = nullptr;
 
 		return Result;
 	}
 
-	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource, RenderTargetViewDescription% Description)
+	int CreateRenderTargetView(Direct3D10::Resource^ Resource, RenderTargetViewDescription% Description)
 	{
 		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
 		pin_ptr<RenderTargetViewDescription> PinnedDescription = &Description;
@@ -553,7 +553,7 @@ public:
 		return pDevice->CreateRenderTargetView(pResource, (D3D10_RENDER_TARGET_VIEW_DESC*)PinnedDescription, 0);
 	}
 
-	int CreateRenderTargetView(Xtro::MDX::Direct3D10::Resource^ Resource)
+	int CreateRenderTargetView(Direct3D10::Resource^ Resource)
 	{
 		ID3D10Resource* pResource = Resource == nullptr ? 0 : Resource->pResource;
 
@@ -569,8 +569,8 @@ public:
 
 		if (pSamplerState)
 		{
-			try { SamplerState = (Xtro::MDX::Direct3D10::SamplerState^)Interfaces[IntPtr(pSamplerState)]; }
-			catch (KeyNotFoundException^) { SamplerState = gcnew Xtro::MDX::Direct3D10::SamplerState(IntPtr(pSamplerState)); }					
+			try { SamplerState = (Direct3D10::SamplerState^)Interfaces[IntPtr(pSamplerState)]; }
+			catch (KeyNotFoundException^) { SamplerState = gcnew Direct3D10::SamplerState(IntPtr(pSamplerState)); }					
 		}
 		else SamplerState = nullptr;
 
@@ -587,8 +587,8 @@ public:
 
 		if (pShaderResourceView)
 		{
-			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interfaces[IntPtr(pShaderResourceView)]; }
-			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }					
+			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }					
 		}
 		else ShaderResourceView = nullptr;
 
@@ -604,8 +604,8 @@ public:
 
 		if (pShaderResourceView)
 		{
-			try { ShaderResourceView = (Xtro::MDX::Direct3D10::ShaderResourceView^)Interfaces[IntPtr(pShaderResourceView)]; }
-			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Xtro::MDX::Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }					
+			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }					
 		}
 		else ShaderResourceView = nullptr;
 
@@ -655,8 +655,8 @@ public:
 
 		if (pTexture1D)
 		{
-			try { Texture1D = (Xtro::MDX::Direct3D10::Texture1D^)Interfaces[IntPtr(pTexture1D)]; }
-			catch (KeyNotFoundException^) { Texture1D = gcnew Xtro::MDX::Direct3D10::Texture1D(IntPtr(pTexture1D)); }					
+			try { Texture1D = (Direct3D10::Texture1D^)Interfaces[IntPtr(pTexture1D)]; }
+			catch (KeyNotFoundException^) { Texture1D = gcnew Direct3D10::Texture1D(IntPtr(pTexture1D)); }					
 		}
 		else Texture1D = nullptr;
 
@@ -715,8 +715,8 @@ public:
 
 		if (pTexture2D)
 		{
-			try { Texture2D = (Xtro::MDX::Direct3D10::Texture2D^)Interfaces[IntPtr(pTexture2D)]; }
-			catch (KeyNotFoundException^) { Texture2D = gcnew Xtro::MDX::Direct3D10::Texture2D(IntPtr(pTexture2D)); }					
+			try { Texture2D = (Direct3D10::Texture2D^)Interfaces[IntPtr(pTexture2D)]; }
+			catch (KeyNotFoundException^) { Texture2D = gcnew Direct3D10::Texture2D(IntPtr(pTexture2D)); }					
 		}
 		else Texture2D = nullptr;
 
@@ -775,8 +775,8 @@ public:
 
 		if (pTexture3D)
 		{
-			try { Texture3D = (Xtro::MDX::Direct3D10::Texture3D^)Interfaces[IntPtr(pTexture3D)]; }
-			catch (KeyNotFoundException^) { Texture3D = gcnew Xtro::MDX::Direct3D10::Texture3D(IntPtr(pTexture3D)); }					
+			try { Texture3D = (Direct3D10::Texture3D^)Interfaces[IntPtr(pTexture3D)]; }
+			catch (KeyNotFoundException^) { Texture3D = gcnew Direct3D10::Texture3D(IntPtr(pTexture3D)); }					
 		}
 		else Texture3D = nullptr;
 
@@ -816,8 +816,8 @@ public:
 
 		if (pVertexShader)
 		{
-			try { VertexShader = (Xtro::MDX::Direct3D10::VertexShader^)Interfaces[IntPtr(pVertexShader)]; }
-			catch (KeyNotFoundException^) { VertexShader = gcnew Xtro::MDX::Direct3D10::VertexShader(IntPtr(pVertexShader)); }					
+			try { VertexShader = (Direct3D10::VertexShader^)Interfaces[IntPtr(pVertexShader)]; }
+			catch (KeyNotFoundException^) { VertexShader = gcnew Direct3D10::VertexShader(IntPtr(pVertexShader)); }					
 		}
 		else VertexShader = nullptr;
 
@@ -890,8 +890,8 @@ public:
 
 		if (pPredicate)
 		{
-			try { Predicate = (Xtro::MDX::Direct3D10::Predicate^)Interfaces[IntPtr(pPredicate)]; }
-			catch (KeyNotFoundException^) { Predicate = gcnew Xtro::MDX::Direct3D10::Predicate(IntPtr(pPredicate)); }					
+			try { Predicate = (Direct3D10::Predicate^)Interfaces[IntPtr(pPredicate)]; }
+			catch (KeyNotFoundException^) { Predicate = gcnew Direct3D10::Predicate(IntPtr(pPredicate)); }					
 		}
 		else Predicate = nullptr;
 	}
@@ -920,7 +920,7 @@ public:
 
 		if (pData)
 		{
-			try	{ Unknown = (Xtro::MDX::Unknown^)Interfaces[IntPtr(pData)];	}
+			try	{ Unknown = (MDX::Unknown^)Interfaces[IntPtr(pData)];	}
 			catch (KeyNotFoundException^) { Unknown = nullptr; }
 		}
 
@@ -989,8 +989,8 @@ public:
 
 		if (pGeometryShader)
 		{
-			try { GeometryShader = (Xtro::MDX::Direct3D10::GeometryShader^)Interfaces[IntPtr(pGeometryShader)]; }
-			catch (KeyNotFoundException^) { GeometryShader = gcnew Xtro::MDX::Direct3D10::GeometryShader(IntPtr(pGeometryShader)); }					
+			try { GeometryShader = (Direct3D10::GeometryShader^)Interfaces[IntPtr(pGeometryShader)]; }
+			catch (KeyNotFoundException^) { GeometryShader = gcnew Direct3D10::GeometryShader(IntPtr(pGeometryShader)); }					
 		}
 		else GeometryShader = nullptr;
 	}
@@ -1100,7 +1100,7 @@ public:
 
 	void IA_GetIndexBuffer([Out] Buffer^% IndexBuffer, [Out] Format% Format, [Out] unsigned int% Offset)
 	{
-		pin_ptr<Xtro::MDX::Direct3D10::Format> PinnedFormat = &Format;
+		pin_ptr<Direct3D10::Format> PinnedFormat = &Format;
 		pin_ptr<unsigned int> PinnedOffset = &Offset;
 
 		ID3D10Buffer* pIndexBuffer = 0;
@@ -1121,8 +1121,8 @@ public:
 
 		if (pInputLayout)
 		{
-			try { InputLayout = (Xtro::MDX::Direct3D10::InputLayout^)Interfaces[IntPtr(pInputLayout)]; }
-			catch (KeyNotFoundException^) { InputLayout = gcnew Xtro::MDX::Direct3D10::InputLayout(IntPtr(pInputLayout)); }					
+			try { InputLayout = (Direct3D10::InputLayout^)Interfaces[IntPtr(pInputLayout)]; }
+			catch (KeyNotFoundException^) { InputLayout = gcnew Direct3D10::InputLayout(IntPtr(pInputLayout)); }					
 		}
 		else InputLayout = nullptr;
 	}
@@ -1219,8 +1219,8 @@ public:
 
 		if (pBlendState)
 		{
-			try { BlendState = (Xtro::MDX::Direct3D10::BlendState^)Interfaces[IntPtr(pBlendState)]; }
-			catch (KeyNotFoundException^) { BlendState = gcnew Xtro::MDX::Direct3D10::BlendState(IntPtr(pBlendState)); }					
+			try { BlendState = (Direct3D10::BlendState^)Interfaces[IntPtr(pBlendState)]; }
+			catch (KeyNotFoundException^) { BlendState = gcnew Direct3D10::BlendState(IntPtr(pBlendState)); }					
 		}
 		else BlendState = nullptr;
 	}
@@ -1234,8 +1234,8 @@ public:
 
 		if (pDepthStencilState)
 		{
-			try { DepthStencilState = (Xtro::MDX::Direct3D10::DepthStencilState^)Interfaces[IntPtr(pDepthStencilState)]; }
-			catch (KeyNotFoundException^) { DepthStencilState = gcnew Xtro::MDX::Direct3D10::DepthStencilState(IntPtr(pDepthStencilState)); }					
+			try { DepthStencilState = (Direct3D10::DepthStencilState^)Interfaces[IntPtr(pDepthStencilState)]; }
+			catch (KeyNotFoundException^) { DepthStencilState = gcnew Direct3D10::DepthStencilState(IntPtr(pDepthStencilState)); }					
 		}
 		else DepthStencilState = nullptr;
 	}
@@ -1263,8 +1263,8 @@ public:
 
 				if (pDepthStencilView)
 				{
-					try { DepthStencilView = (Xtro::MDX::Direct3D10::DepthStencilView^)Interfaces[IntPtr(pDepthStencilView)]; }
-					catch (KeyNotFoundException^) { DepthStencilView = gcnew Xtro::MDX::Direct3D10::DepthStencilView(IntPtr(pDepthStencilView)); }					
+					try { DepthStencilView = (Direct3D10::DepthStencilView^)Interfaces[IntPtr(pDepthStencilView)]; }
+					catch (KeyNotFoundException^) { DepthStencilView = gcnew Direct3D10::DepthStencilView(IntPtr(pDepthStencilView)); }					
 				}
 				else DepthStencilView = nullptr;
 			}
@@ -1396,8 +1396,8 @@ public:
 
 		if (pPixelShader)
 		{
-			try { PixelShader = (Xtro::MDX::Direct3D10::PixelShader^)Interfaces[IntPtr(pPixelShader)]; }
-			catch (KeyNotFoundException^) { PixelShader = gcnew Xtro::MDX::Direct3D10::PixelShader(IntPtr(pPixelShader)); }					
+			try { PixelShader = (Direct3D10::PixelShader^)Interfaces[IntPtr(pPixelShader)]; }
+			catch (KeyNotFoundException^) { PixelShader = gcnew Direct3D10::PixelShader(IntPtr(pPixelShader)); }					
 		}
 		else PixelShader = nullptr;
 	}
@@ -1549,8 +1549,8 @@ public:
 
 		if (pRasterizerState)
 		{
-			try { RasterizerState = (Xtro::MDX::Direct3D10::RasterizerState^)Interfaces[IntPtr(pRasterizerState)]; }
-			catch (KeyNotFoundException^) { RasterizerState = gcnew Xtro::MDX::Direct3D10::RasterizerState(IntPtr(pRasterizerState)); }					
+			try { RasterizerState = (Direct3D10::RasterizerState^)Interfaces[IntPtr(pRasterizerState)]; }
+			catch (KeyNotFoundException^) { RasterizerState = gcnew Direct3D10::RasterizerState(IntPtr(pRasterizerState)); }					
 		}
 		else RasterizerState = nullptr;
 	}
@@ -1766,8 +1766,8 @@ public:
 
 		if (pVertexShader)
 		{
-			try { VertexShader = (Xtro::MDX::Direct3D10::VertexShader^)Interfaces[IntPtr(pVertexShader)]; }
-			catch (KeyNotFoundException^) { VertexShader = gcnew Xtro::MDX::Direct3D10::VertexShader(IntPtr(pVertexShader)); }					
+			try { VertexShader = (Direct3D10::VertexShader^)Interfaces[IntPtr(pVertexShader)]; }
+			catch (KeyNotFoundException^) { VertexShader = gcnew Direct3D10::VertexShader(IntPtr(pVertexShader)); }					
 		}
 		else VertexShader = nullptr;
 	}
