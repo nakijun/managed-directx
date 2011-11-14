@@ -5,6 +5,8 @@
 
 * Sýk sýk eski versiyonlara yedek al
 
+* ValueObject ve RefObject sadece ve sadece zorunlu kalýnan durumlarda kullanýlmalý. (ör: MatrixAffineTransformation zorunlu ama MatrixAffineTransformation2D zorunlu deðil)
+
 * struct ve class'lar '%' veya [out] ise ve null alabiliyosa o parametre olmayan metod versiyonu yap. ör : Device.CreateTexture2D
     Device.CheckCounter gibi null alabilen out parametreleri olan ve parameter signature yüzünden out'suz versiyonlarý yapýlamayan metodlar için RefObject ve ValueObject generic'lerini kullan.
 

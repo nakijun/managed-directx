@@ -1148,13 +1148,322 @@ public:
 		D3DXMatrixAffineTransformation((D3DXMATRIX*)PinnedOut, Scaling, (D3DXVECTOR3*)PinnedRotationCenter, (D3DXQUATERNION*)PinnedRotation, (D3DXVECTOR3*)PinnedTranslation);
 	}
 
-	static void MatrixAffineTransformation2D([Out] Matrix% Out, float Scaling, Xtro::MDX::Generic::ValueObject<Vector2>^ RotationCenter, float Rotation, Xtro::MDX::Generic::ValueObject<Vector2>^ Translation)
+	static void MatrixAffineTransformation2D([Out] Matrix% Out, float Scaling, Vector2% RotationCenter, float Rotation, Vector2% Translation)
 	{
 		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedRotationCenter = &RotationCenter;
+		pin_ptr<Vector2> PinnedTranslation = &Translation;
+
+		D3DXMatrixAffineTransformation2D((D3DXMATRIX*)PinnedOut, Scaling, (D3DXVECTOR2*)PinnedRotationCenter, Rotation, (D3DXVECTOR2*)PinnedTranslation);
+	}
+
+	static void MatrixAffineTransformation2D([Out] Matrix% Out, float Scaling, float Rotation, Vector2% Translation)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedTranslation = &Translation;
+
+		D3DXMatrixAffineTransformation2D((D3DXMATRIX*)PinnedOut, Scaling, 0, Rotation, (D3DXVECTOR2*)PinnedTranslation);
+	}
+
+	static void MatrixAffineTransformation2D([Out] Matrix% Out, float Scaling, Vector2% RotationCenter, float Rotation)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedRotationCenter = &RotationCenter;
+
+		D3DXMatrixAffineTransformation2D((D3DXMATRIX*)PinnedOut, Scaling, (D3DXVECTOR2*)PinnedRotationCenter, Rotation, 0);
+	}
+
+	static void MatrixAffineTransformation2D([Out] Matrix% Out, float Scaling, float Rotation)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixAffineTransformation2D((D3DXMATRIX*)PinnedOut, Scaling, 0, Rotation, 0);
+	}
+
+	static int MatrixDecompose([Out] Vector3% OutScale, [Out] Quaternion% OutRotation, [Out] Vector3% OutTranslation, Matrix% Matrix)
+	{
+		pin_ptr<Vector3> PinnedOutScale = &OutScale;
+		pin_ptr<Quaternion> PinnedOutRotation = &OutRotation;
+		pin_ptr<Vector3> PinnedOutTranslation = &OutTranslation;
+		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		return D3DXMatrixDecompose((D3DXVECTOR3*)PinnedOutScale, (D3DXQUATERNION*)PinnedOutRotation, (D3DXVECTOR3*)PinnedOutTranslation, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static float MatrixDeterminant(Matrix% Matrix)
+	{
+		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		return D3DXMatrixDeterminant((D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void MatrixInverse([Out] Matrix% Out, [Out] float% Determinant, Matrix% Matrix)
+	{
+		pin_ptr<Direct3DX10::Matrix> PinnedOut = &Out;
+		pin_ptr<float> PinnedDeterminant = &Determinant;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXMatrixInverse((D3DXMATRIX*)PinnedOut, PinnedDeterminant, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void MatrixInverse([Out] Matrix% Out, Matrix% Matrix)
+	{
+		pin_ptr<Direct3DX10::Matrix> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXMatrixInverse((D3DXMATRIX*)PinnedOut, 0, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void MatrixLookAtLH([Out] Matrix% Out, Vector3% Eye, Vector3% At, Vector3% Up)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedEye = &Eye;
+		pin_ptr<Vector3> PinnedAt = &At;
+		pin_ptr<Vector3> PinnedUp = &Up;
+
+		D3DXMatrixLookAtLH((D3DXMATRIX*)PinnedOut, (D3DXVECTOR3*)PinnedEye, (D3DXVECTOR3*)PinnedAt, (D3DXVECTOR3*)PinnedUp);
+	}
+
+	static void MatrixLookAtRH([Out] Matrix% Out, Vector3% Eye, Vector3% At, Vector3% Up)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedEye = &Eye;
+		pin_ptr<Vector3> PinnedAt = &At;
+		pin_ptr<Vector3> PinnedUp = &Up;
+
+		D3DXMatrixLookAtRH((D3DXMATRIX*)PinnedOut, (D3DXVECTOR3*)PinnedEye, (D3DXVECTOR3*)PinnedAt, (D3DXVECTOR3*)PinnedUp);
+	}
+
+	static void MatrixMultiply([Out] Matrix% Out, Matrix% Matrix1, Matrix% Matrix2)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Matrix> PinnedMatrix1 = &Matrix1;
+		pin_ptr<Matrix> PinnedMatrix2 = &Matrix2;
+
+		D3DXMatrixMultiply((D3DXMATRIX*)PinnedOut, (D3DXMATRIX*)PinnedMatrix1, (D3DXMATRIX*)PinnedMatrix2);
+	}
+
+	static void MatrixMultiplyTranspose([Out] Matrix% Out, Matrix% Matrix1, Matrix% Matrix2)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Matrix> PinnedMatrix1 = &Matrix1;
+		pin_ptr<Matrix> PinnedMatrix2 = &Matrix2;
+
+		D3DXMatrixMultiplyTranspose((D3DXMATRIX*)PinnedOut, (D3DXMATRIX*)PinnedMatrix1, (D3DXMATRIX*)PinnedMatrix2);
+	}
+
+	static void MatrixOrthoLH([Out] Matrix% Out, float W, float H, float ZN, float ZF)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixOrthoLH((D3DXMATRIX*)PinnedOut, W, H, ZN, ZF);
+	}
+
+	static void MatrixOrthoOffCenterLH([Out] Matrix% Out, float L, float R, float B, float T, float ZN, float ZF)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixOrthoOffCenterLH((D3DXMATRIX*)PinnedOut, L, R, B, T, ZN, ZF);
+	}
+
+	static void MatrixOrthoOffCenterRH([Out] Matrix% Out, float L, float R, float B, float T, float ZN, float ZF)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixOrthoOffCenterRH((D3DXMATRIX*)PinnedOut, L, R, B, T, ZN, ZF);
+	}
+
+	static void MatrixOrthoRH([Out] Matrix% Out, float W, float H, float ZN, float ZF)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixOrthoRH((D3DXMATRIX*)PinnedOut, W, H, ZN, ZF);
+	}
+
+	static void MatrixPerspectiveFovLH([Out] Matrix% Out, float FovY, float Aspect, float Z_Near, float Z_Far)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixPerspectiveFovLH((D3DXMATRIX*)PinnedOut, FovY, Aspect, Z_Near, Z_Far);
+	}
+
+	static void MatrixPerspectiveFovRH([Out] Matrix% Out, float FovY, float Aspect, float Z_Near, float Z_Far)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixPerspectiveFovRH((D3DXMATRIX*)PinnedOut, FovY, Aspect, Z_Near, Z_Far);
+	}
+
+	static void MatrixPerspectiveLH([Out] Matrix% Out, float W, float H, float Z_Near, float Z_Far)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixPerspectiveLH((D3DXMATRIX*)PinnedOut, W, H, Z_Near, Z_Far);
+	}
+
+	static void MatrixPerspectiveOffCenterLH([Out] Matrix% Out, float L, float R, float T, float B, float Z_Near, float Z_Far)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixPerspectiveOffCenterLH((D3DXMATRIX*)PinnedOut, L, R, T, B, Z_Near, Z_Far);
+	}
+
+	static void MatrixPerspectiveOffCenterRH([Out] Matrix% Out, float L, float R, float T, float B, float Z_Near, float Z_Far)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixPerspectiveOffCenterRH((D3DXMATRIX*)PinnedOut, L, R, T, B, Z_Near, Z_Far);
+	}
+
+	static void MatrixPerspectiveRH([Out] Matrix% Out, float W, float H, float Z_Near, float Z_Far)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixPerspectiveRH((D3DXMATRIX*)PinnedOut, W, H, Z_Near, Z_Far);
+	}
+
+	static void MatrixReflect([Out] Matrix% Out, Plane% Plane)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
+
+		D3DXMatrixReflect((D3DXMATRIX*)PinnedOut, (D3DXPLANE*)PinnedPlane);
+	}
+
+	static void MatrixRotationAxis([Out] Matrix% Out, Vector3% Vector, float Angle)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+
+		D3DXMatrixRotationAxis((D3DXMATRIX*)PinnedOut, (D3DXVECTOR3*)PinnedVector, Angle);
+	}
+
+	static void MatrixRotationQuaternion([Out] Matrix% Out, Quaternion% Quaternion)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+
+		D3DXMatrixRotationQuaternion((D3DXMATRIX*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static void MatrixRotationX([Out] Matrix% Out, float Angle)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixRotationX((D3DXMATRIX*)PinnedOut, Angle);
+	}
+
+	static void MatrixRotationY([Out] Matrix% Out, float Angle)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixRotationY((D3DXMATRIX*)PinnedOut, Angle);
+	}
+
+	static void MatrixRotationYawPitchRoll([Out] Matrix% Out, float Yaw, float Pitch, float Roll)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixRotationYawPitchRoll((D3DXMATRIX*)PinnedOut, Yaw,  Pitch,  Roll);
+	}
+
+	static void MatrixRotationZ([Out] Matrix% Out, float Angle)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixRotationZ((D3DXMATRIX*)PinnedOut, Angle);
+	}
+
+	static void MatrixScaling([Out] Matrix% Out, float X, float Y, float Z)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixScaling((D3DXMATRIX*)PinnedOut, X, Y, Z);
+	}
+
+	static void MatrixShadow([Out] Matrix% Out, Vector4% Light, Plane% Plane)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedLight = &Light;
+		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
+
+		D3DXMatrixShadow((D3DXMATRIX*)PinnedOut, (D3DXVECTOR4*)PinnedLight, (D3DXPLANE*)PinnedPlane);
+	}
+
+	static void MatrixTransformation([Out] Matrix% Out, Xtro::MDX::Generic::ValueObject<Vector3>^ ScalingCenter, Xtro::MDX::Generic::ValueObject<Quaternion>^ ScalingRotation, Xtro::MDX::Generic::ValueObject<Vector3>^ Scaling, Xtro::MDX::Generic::ValueObject<Vector3>^ RotationCenter, Xtro::MDX::Generic::ValueObject<Quaternion>^ Rotation, Xtro::MDX::Generic::ValueObject<Vector3>^ Translation)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedScalingCenter = ScalingCenter == nullptr ? nullptr : &ScalingCenter->Value;
+		pin_ptr<Quaternion> PinnedScalingRotation = ScalingRotation == nullptr ? nullptr : &ScalingRotation->Value;
+		pin_ptr<Vector3> PinnedScaling = Scaling == nullptr ? nullptr : &Scaling->Value;
+		pin_ptr<Vector3> PinnedRotationCenter = RotationCenter == nullptr ? nullptr : &RotationCenter->Value;
+		pin_ptr<Quaternion> PinnedRotation = Rotation == nullptr ? nullptr : &Rotation->Value;
+		pin_ptr<Vector3> PinnedTranslation = Translation == nullptr ? nullptr : &Translation->Value;
+
+		D3DXMatrixTransformation((D3DXMATRIX*)PinnedOut, (D3DXVECTOR3*)PinnedScalingCenter, (D3DXQUATERNION*)PinnedScalingRotation, (D3DXVECTOR3*)PinnedScaling, (D3DXVECTOR3*)PinnedRotationCenter, (D3DXQUATERNION*)PinnedRotation, (D3DXVECTOR3*)PinnedTranslation);
+	}
+
+	static void MatrixTransformation2D([Out] Matrix% Out, Xtro::MDX::Generic::ValueObject<Vector2>^ ScalingCenter, float ScalingRotation, Xtro::MDX::Generic::ValueObject<Vector2>^ Scaling, Xtro::MDX::Generic::ValueObject<Vector2>^ RotationCenter, float Rotation, Xtro::MDX::Generic::ValueObject<Vector2>^ Translation)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedScalingCenter = ScalingCenter == nullptr ? nullptr : &ScalingCenter->Value;
+		pin_ptr<Vector2> PinnedScaling = Scaling == nullptr ? nullptr : &Scaling->Value;
 		pin_ptr<Vector2> PinnedRotationCenter = RotationCenter == nullptr ? nullptr : &RotationCenter->Value;
 		pin_ptr<Vector2> PinnedTranslation = Translation == nullptr ? nullptr : &Translation->Value;
 
-		D3DXMatrixAffineTransformation2D((D3DXMATRIX*)PinnedOut, Scaling, (D3DXVECTOR2*)PinnedRotationCenter, Rotation, (D3DXVECTOR2*)PinnedTranslation);
+		D3DXMatrixTransformation2D((D3DXMATRIX*)PinnedOut, (D3DXVECTOR2*)PinnedScalingCenter, ScalingRotation, (D3DXVECTOR2*)PinnedScaling, (D3DXVECTOR2*)PinnedRotationCenter, Rotation, (D3DXVECTOR2*)PinnedTranslation);
+	}
+
+	static void MatrixTranslation([Out] Matrix% Out, float X, float Y, float Z)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixTranslation((D3DXMATRIX*)PinnedOut, X, Y, Z);
+	}
+
+	static void MatrixTranspose([Out] Matrix% Out, Matrix% Matrix)
+	{
+		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedOut = &Out;
+		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXMatrixTranspose((D3DXMATRIX*)PinnedOut, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void PlaneFromPointNormal([Out] Plane% Out, Vector3% Point, Vector3% Normal)
+	{
+		pin_ptr<Plane> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedPoint = &Point;
+		pin_ptr<Vector3> PinnedNormal = &Normal;
+
+		D3DXPlaneFromPointNormal((D3DXPLANE*)PinnedOut, (D3DXVECTOR3*)PinnedPoint, (D3DXVECTOR3*)PinnedNormal);
+	}
+
+	static void PlaneFromPoints([Out] Plane% Out, Vector3% Vector1, Vector3% Vector2, Vector3% Vector3)
+	{
+		pin_ptr<Plane> PinnedOut = &Out;
+		pin_ptr<Xtro::MDX::Direct3DX10::Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Xtro::MDX::Direct3DX10::Vector3> PinnedVector2 = &Vector2;
+		pin_ptr<Xtro::MDX::Direct3DX10::Vector3> PinnedVector3 = &Vector3;
+
+		D3DXPlaneFromPoints((D3DXPLANE*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2, (D3DXVECTOR3*)PinnedVector3);
+	}
+
+	static void PlaneIntersectLine([Out] Vector3% Out, Plane% Plane, Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+
+		D3DXPlaneIntersectLine((D3DXVECTOR3*)PinnedOut, (D3DXPLANE*)PinnedPlane, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
+	}
+
+	static void PlaneNormalize([Out] Plane% Out, Plane% Plane)
+	{
+		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedOut = &Out;
+		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
+
+		D3DXPlaneNormalize((D3DXPLANE*)PinnedOut, (D3DXPLANE*)PinnedPlane);
+	}
+
+	static void PlaneTransform([Out] Plane% Out, Plane% Plane, Matrix% Matrix)
+	{
+		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedOut = &Out;
+		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXPlaneTransform((D3DXPLANE*)PinnedOut, (D3DXPLANE*)PinnedPlane, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void PlaneTransformArray(array<Plane>^ Out, unsigned int OutStride, array<Plane>^ Plane, unsigned int PlaneStride, Matrix% Matrix, unsigned int N)
+	{
+		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Xtro::MDX::Direct3DX10::Plane> PinnedPlane = Plane != nullptr && Plane->Length > 0 ? &Plane[0] : nullptr;
+		pin_ptr<Xtro::MDX::Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXPlaneTransformArray((D3DXPLANE*)PinnedOut, OutStride, (D3DXPLANE*)PinnedPlane, PlaneStride, (D3DXMATRIX*)PinnedMatrix, N);
 	}
 
 	static int SaveTextureToFile(Xtro::MDX::Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
@@ -1402,74 +1711,6 @@ public:
 		D3DXMatrixIdentity((D3DXMATRIX*)PinnedOut);
 	}
 
-	static void MatrixInverse([Out] Matrix% Out, [Out] float% Determinant, Matrix% Matrix)
-	{
-		pin_ptr<Direct3DX10::Matrix> PinnedOut = &Out;
-		pin_ptr<float> PinnedDeterminant = &Determinant;
-		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
-		D3DXMatrixInverse((D3DXMATRIX*)PinnedOut, PinnedDeterminant, (D3DXMATRIX*)PinnedMatrix);
-	}
-
-	static void MatrixInverse([Out] Matrix% Out, Matrix% Matrix)
-	{
-		pin_ptr<Direct3DX10::Matrix> PinnedOut = &Out;
-		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
-		D3DXMatrixInverse((D3DXMATRIX*)PinnedOut, 0, (D3DXMATRIX*)PinnedMatrix);
-	}
-
-	static void MatrixLookAtLH([Out] Matrix% Out, Vector3% Eye, Vector3% At, Vector3% Up)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		pin_ptr<Vector3> PinnedEye = &Eye;
-		pin_ptr<Vector3> PinnedAt = &At;
-		pin_ptr<Vector3> PinnedUp = &Up;
-		D3DXMatrixLookAtLH((D3DXMATRIX*)PinnedOut, (D3DXVECTOR3*)PinnedEye, (D3DXVECTOR3*)PinnedAt, (D3DXVECTOR3*)PinnedUp);
-	}
-
-	static void MatrixPerspectiveFovLH([Out] Matrix% Out, float FovY, float Aspect, float Z_Near, float Z_Far)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		D3DXMatrixPerspectiveFovLH((D3DXMATRIX*)PinnedOut, FovY, Aspect, Z_Near, Z_Far);
-	}
-
-	static void MatrixRotationX([Out] Matrix% Out, float Angle)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		D3DXMatrixRotationX((D3DXMATRIX*)PinnedOut, Angle);
-	}
-
-	static void MatrixRotationY([Out] Matrix% Out, float Angle)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		D3DXMatrixRotationY((D3DXMATRIX*)PinnedOut, Angle);
-	}
-
-	static void MatrixRotationZ([Out] Matrix% Out, float Angle)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		D3DXMatrixRotationZ((D3DXMATRIX*)PinnedOut, Angle);
-	}
-
-	static void MatrixTranslation([Out] Matrix% Out, float X, float Y, float Z)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		D3DXMatrixTranslation((D3DXMATRIX*)PinnedOut, X, Y, Z);
-	}
-
-	static void MatrixScaling([Out] Matrix% Out, float X, float Y, float Z)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		D3DXMatrixScaling((D3DXMATRIX*)PinnedOut, X, Y, Z);
-	}
-
-	static void MatrixMultiply([Out] Matrix% Out, Matrix% Matrix1, Matrix% Matrix2)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		pin_ptr<Matrix> PinnedMatrix1 = &Matrix1;
-		pin_ptr<Matrix> PinnedMatrix2 = &Matrix2;
-		D3DXMatrixMultiply((D3DXMATRIX*)PinnedOut, (D3DXMATRIX*)PinnedMatrix1, (D3DXMATRIX*)PinnedMatrix2);
-	}
-
 	static void Vector3Transform([Out] Vector4% Out, Vector3% Vector, Matrix% Matrix)
 	{
 		pin_ptr<Vector4> PinnedOut = &Out;
@@ -1569,18 +1810,5 @@ public:
 		pin_ptr<Quaternion> PinnedOut = &Out;
 		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 		D3DXQuaternionRotationMatrix((D3DXQUATERNION*)PinnedOut, (D3DXMATRIX*)PinnedMatrix);
-	}
-
-	static void MatrixRotationQuaternion([Out] Matrix% Out, Quaternion% Quaternion)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
-		D3DXMatrixRotationQuaternion((D3DXMATRIX*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
-	}
-
-	static void MatrixOrthoOffCenterLH([Out] Matrix% Out, float L, float R, float B, float T, float ZN, float ZF)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		D3DXMatrixOrthoOffCenterLH((D3DXMATRIX*)PinnedOut, L, R, B, T, ZN, ZF);
 	}
 };
