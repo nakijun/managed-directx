@@ -1596,6 +1596,144 @@ public:
 		D3DXSHAdd(pOut, Order, pA, pB);
 	}
 
+	static float SH_Dot(unsigned int Order, Generic::UnmanagedMemory<float>^ A, Generic::UnmanagedMemory<float>^ B)
+	{
+		float* pA = A == nullptr ? 0 : (float*)A->pMemory;
+		float* pB = B == nullptr ? 0 : (float*)B->pMemory;
+
+		return D3DXSHDot(Order, pA, pB);
+	}
+
+	static int SH_EvaluateConeLight(unsigned int Order, Vector3% Direction, float Radius, float RedIntensity, float GreenIntensity, float BlueIntensity, Generic::UnmanagedMemory<float>^ RedOut, Generic::UnmanagedMemory<float>^ GreenOut, Generic::UnmanagedMemory<float>^ BlueOut)
+	{
+		pin_ptr<Vector3> PinnedDirection = &Direction;
+		float* pRedOut = RedOut == nullptr ? 0 : (float*)RedOut->pMemory;
+		float* pGreenOut = GreenOut == nullptr ? 0 : (float*)GreenOut->pMemory;
+		float* pBlueOut = BlueOut == nullptr ? 0 : (float*)BlueOut->pMemory;
+
+		return D3DXSHEvalConeLight(Order, (D3DXVECTOR3*) PinnedDirection, Radius, RedIntensity, GreenIntensity, BlueIntensity, pRedOut, pGreenOut, pBlueOut);
+	}
+
+	static void SH_EvaluateDirection(Generic::UnmanagedMemory<float>^ Out, unsigned int Order, Vector3% Direction)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		pin_ptr<Vector3> PinnedDirection = &Direction;
+
+		D3DXSHEvalDirection(pOut, Order, (D3DXVECTOR3*) PinnedDirection);
+	}
+
+	static int SH_EvaluateDirectionalLight(unsigned int Order, Vector3% Direction, float RedIntensity, float GreenIntensity, float BlueIntensity, Generic::UnmanagedMemory<float>^ RedOut, Generic::UnmanagedMemory<float>^ GreenOut, Generic::UnmanagedMemory<float>^ BlueOut)
+	{
+		pin_ptr<Vector3> PinnedDirection = &Direction;
+		float* pRedOut = RedOut == nullptr ? 0 : (float*)RedOut->pMemory;
+		float* pGreenOut = GreenOut == nullptr ? 0 : (float*)GreenOut->pMemory;
+		float* pBlueOut = BlueOut == nullptr ? 0 : (float*)BlueOut->pMemory;
+
+		return D3DXSHEvalDirectionalLight(Order, (D3DXVECTOR3*) PinnedDirection, RedIntensity, GreenIntensity, BlueIntensity, pRedOut, pGreenOut, pBlueOut);
+	}
+
+	static int SH_EvaluateHemisphereLight(unsigned int Order, Vector3% Direction, Color% Top, Color% Bottom, Generic::UnmanagedMemory<float>^ RedOut, Generic::UnmanagedMemory<float>^ GreenOut, Generic::UnmanagedMemory<float>^ BlueOut)
+	{
+		pin_ptr<Vector3> PinnedDirection = &Direction;
+		pin_ptr<Color> PinnedTop = &Top;
+		pin_ptr<Color> PinnedBottom = &Bottom;
+		float* pRedOut = RedOut == nullptr ? 0 : (float*)RedOut->pMemory;
+		float* pGreenOut = GreenOut == nullptr ? 0 : (float*)GreenOut->pMemory;
+		float* pBlueOut = BlueOut == nullptr ? 0 : (float*)BlueOut->pMemory;
+
+		return D3DXSHEvalHemisphereLight(Order, (D3DXVECTOR3*) PinnedDirection, *(D3DXCOLOR*)PinnedTop, *(D3DXCOLOR*)PinnedBottom, pRedOut, pGreenOut, pBlueOut);
+	}
+
+	static int SH_EvaluateSphericalLight(unsigned int Order, Vector3% Position, float Radius, float RedIntensity, float GreenIntensity, float BlueIntensity, Generic::UnmanagedMemory<float>^ RedOut, Generic::UnmanagedMemory<float>^ GreenOut, Generic::UnmanagedMemory<float>^ BlueOut)
+	{
+		pin_ptr<Vector3> PinnedPosition = &Position;
+		float* pRedOut = RedOut == nullptr ? 0 : (float*)RedOut->pMemory;
+		float* pGreenOut = GreenOut == nullptr ? 0 : (float*)GreenOut->pMemory;
+		float* pBlueOut = BlueOut == nullptr ? 0 : (float*)BlueOut->pMemory;
+
+		return D3DXSHEvalSphericalLight(Order, (D3DXVECTOR3*) PinnedPosition, Radius, RedIntensity, GreenIntensity, BlueIntensity, pRedOut, pGreenOut, pBlueOut);
+	}
+
+	static void SH_Multiply2(Generic::UnmanagedMemory<float>^ Out, Generic::UnmanagedMemory<float>^ F, Generic::UnmanagedMemory<float>^ G)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		float* pF = F == nullptr ? 0 : (float*)F->pMemory;
+		float* pG = G == nullptr ? 0 : (float*)G->pMemory;
+
+		D3DXSHMultiply2(pOut, pF, pG);
+	}
+
+	static void SH_Multiply3(Generic::UnmanagedMemory<float>^ Out, Generic::UnmanagedMemory<float>^ F, Generic::UnmanagedMemory<float>^ G)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		float* pF = F == nullptr ? 0 : (float*)F->pMemory;
+		float* pG = G == nullptr ? 0 : (float*)G->pMemory;
+
+		D3DXSHMultiply3(pOut, pF, pG);
+	}
+
+	static void SH_Multiply4(Generic::UnmanagedMemory<float>^ Out, Generic::UnmanagedMemory<float>^ F, Generic::UnmanagedMemory<float>^ G)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		float* pF = F == nullptr ? 0 : (float*)F->pMemory;
+		float* pG = G == nullptr ? 0 : (float*)G->pMemory;
+
+		D3DXSHMultiply4(pOut, pF, pG);
+	}
+
+	static void SH_Multiply5(Generic::UnmanagedMemory<float>^ Out, Generic::UnmanagedMemory<float>^ F, Generic::UnmanagedMemory<float>^ G)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		float* pF = F == nullptr ? 0 : (float*)F->pMemory;
+		float* pG = G == nullptr ? 0 : (float*)G->pMemory;
+
+		D3DXSHMultiply5(pOut, pF, pG);
+	}
+
+	static void SH_Multiply6(Generic::UnmanagedMemory<float>^ Out, Generic::UnmanagedMemory<float>^ F, Generic::UnmanagedMemory<float>^ G)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		float* pF = F == nullptr ? 0 : (float*)F->pMemory;
+		float* pG = G == nullptr ? 0 : (float*)G->pMemory;
+
+		D3DXSHMultiply6(pOut, pF, pG);
+	}
+
+	static int SH_ProjectCubeMap(unsigned int Order, Texture2D^ CubeMap, Generic::UnmanagedMemory<float>^ RedOut, Generic::UnmanagedMemory<float>^ GreenOut, Generic::UnmanagedMemory<float>^ BlueOut)
+	{
+		ID3D10Texture2D* pCubeMap = CubeMap == nullptr ? 0 : CubeMap->pTexture2D;
+		float* pRedOut = RedOut == nullptr ? 0 : (float*)RedOut->pMemory;
+		float* pGreenOut = GreenOut == nullptr ? 0 : (float*)GreenOut->pMemory;
+		float* pBlueOut = BlueOut == nullptr ? 0 : (float*)BlueOut->pMemory;
+
+		return D3DX10SHProjectCubeMap(Order, pCubeMap, pRedOut, pGreenOut, pBlueOut);
+	}
+
+	static void SH_Rotate(Generic::UnmanagedMemory<float>^ Out, unsigned int Order, Matrix% Matrix, Generic::UnmanagedMemory<float>^ In)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		float* pIn = In == nullptr ? 0 : (float*)In->pMemory;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXSHRotate(pOut, Order, (D3DXMATRIX*) PinnedMatrix, pIn);
+	}
+
+	static void SH_RotateZ(Generic::UnmanagedMemory<float>^ Out, unsigned int Order, float Angle, Generic::UnmanagedMemory<float>^ In)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		float* pIn = In == nullptr ? 0 : (float*)In->pMemory;
+
+		D3DXSHRotateZ(pOut, Order, Angle, pIn);
+	}
+
+	static void SH_Scale(Generic::UnmanagedMemory<float>^ Out, unsigned int Order, Generic::UnmanagedMemory<float>^ In, float Scale)
+	{
+		float* pOut = Out == nullptr ? 0 : (float*)Out->pMemory;
+		float* pIn = In == nullptr ? 0 : (float*)In->pMemory;
+
+		D3DXSHScale(pOut, Order, pIn, Scale);
+	}
+
 	static int SaveTextureToFile(Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
 	{
 		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
