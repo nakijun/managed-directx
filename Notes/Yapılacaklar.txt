@@ -2,7 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* D3DXSHDot
+* D3DXVec2BaryCentric
 * math functions
 
 * D3DCompiler
