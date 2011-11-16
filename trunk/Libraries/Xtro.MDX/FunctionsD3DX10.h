@@ -1195,6 +1195,12 @@ public:
 		return D3DXMatrixDeterminant((D3DXMATRIX*)PinnedMatrix);
 	}
 
+	static void MatrixIdentity([Out] Matrix% Out)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		D3DXMatrixIdentity((D3DXMATRIX*)PinnedOut);
+	}
+
 	static void MatrixInverse([Out] Matrix% Out, [Out] float% Determinant, Matrix% Matrix)
 	{
 		pin_ptr<Direct3DX10::Matrix> PinnedOut = &Out;
@@ -1734,6 +1740,279 @@ public:
 		D3DXSHScale(pOut, Order, pIn, Scale);
 	}
 
+	static void Vector2BaryCentric([Out] Vector2% Out, Vector2% Vector1, Vector2% Vector2, Direct3DX10::Vector2% Vector3, float F, float G)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector3 = &Vector3;
+
+		D3DXVec2BaryCentric((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2, (D3DXVECTOR2*)PinnedVector3, F, G);
+	}
+
+	static void Vector2CatmullRom([Out] Vector2% Out, Vector2% Vector0, Vector2% Vector1, Vector2% Vector2, Direct3DX10::Vector2% Vector3, float S)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector0 = &Vector0;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector3 = &Vector3;
+
+		D3DXVec2CatmullRom((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector0, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2, (D3DXVECTOR2*)PinnedVector3, S);
+	}
+
+	static void Vector2Hermite([Out] Vector2% Out, Vector2% Vector1, Vector2% Tangent1, Vector2% Vector2, Direct3DX10::Vector2% Tangent2, float S)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedTangent1 = &Tangent1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+		pin_ptr<Direct3DX10::Vector2> PinnedTangent2 = &Tangent2;
+
+		D3DXVec2Hermite((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedTangent1, (D3DXVECTOR2*)PinnedVector2, (D3DXVECTOR2*)PinnedTangent2, S);
+	}
+
+	static void Vector2Normalize([Out] Vector2% Out, Vector2% Vector)
+	{
+		pin_ptr<Vector2> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedVector = &Vector;
+
+		D3DXVec2Normalize((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector);
+	}
+
+	static void Vector2Transform([Out] Vector4% Out, Vector2% Vector, Matrix% Matrix)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedVector = &Vector;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec2Transform((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR2*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void Vector2TransformArray(array<Vector4>^ Out, unsigned int OutStride, array<Vector2>^ Vector, unsigned int VectorStride, Matrix% Matrix, unsigned int N)
+	{
+		pin_ptr<Vector4> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Vector2> PinnedVector = Vector != nullptr && Vector->Length > 0 ? &Vector[0] : nullptr;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec2TransformArray((D3DXVECTOR4*)PinnedOut, OutStride, (D3DXVECTOR2*)PinnedVector, VectorStride, (D3DXMATRIX*)PinnedMatrix, N);
+	}
+
+	static void Vector2TransformCoordinate([Out] Vector2% Out, Vector2% Vector, Matrix% Matrix)
+	{
+		pin_ptr<Vector2> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedVector = &Vector;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec2TransformCoord((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void Vector2TransformCoordinateArray(array<Vector2>^ Out, unsigned int OutStride, array<Vector2>^ Vector, unsigned int VectorStride, Matrix% Matrix, unsigned int N)
+	{
+		pin_ptr<Vector2> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Vector2> PinnedVector = Vector != nullptr && Vector->Length > 0 ? &Vector[0] : nullptr;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec2TransformCoordArray((D3DXVECTOR2*)PinnedOut, OutStride, (D3DXVECTOR2*)PinnedVector, VectorStride, (D3DXMATRIX*)PinnedMatrix, N);
+	}
+
+	static void Vector2TransformNormal([Out] Vector2% Out, Vector2% Vector, Matrix% Matrix)
+	{
+		pin_ptr<Vector2> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedVector = &Vector;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec2TransformNormal((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void Vector2TransformNormalArray(array<Vector2>^ Out, unsigned int OutStride, array<Vector2>^ Vector, unsigned int VectorStride, Matrix% Matrix, unsigned int N)
+	{
+		pin_ptr<Vector2> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Vector2> PinnedVector = Vector != nullptr && Vector->Length > 0 ? &Vector[0] : nullptr;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec2TransformNormalArray((D3DXVECTOR2*)PinnedOut, OutStride, (D3DXVECTOR2*)PinnedVector, VectorStride, (D3DXMATRIX*)PinnedMatrix, N);
+	}
+
+	static void Vector3BaryCentric([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2, Vector3% Vector3, float F, float G)
+	{
+		pin_ptr<Direct3DX10::Vector3> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector2 = &Vector2;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector3 = &Vector3;
+
+		D3DXVec3BaryCentric((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2, (D3DXVECTOR3*)PinnedVector3, F, G);
+	}
+
+	static void Vector3CatmullRom([Out] Vector3% Out, Vector3% Vector0, Vector3% Vector1, Vector3% Vector2, Vector3% Vector3, float S)
+	{
+		pin_ptr<Direct3DX10::Vector3> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector0 = &Vector0;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector2 = &Vector2;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector3 = &Vector3;
+
+		D3DXVec3CatmullRom((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector0, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2, (D3DXVECTOR3*)PinnedVector3, S);
+	}
+
+	static void Vector3Cross([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+
+		D3DXVec3Cross((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
+	}
+
+	static float Vector3Dot(Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+
+		return D3DXVec3Dot((D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
+	}
+
+	static void Vector3Hermite([Out] Vector3% Out, Vector3% Vector1, Vector3% Tangent1, Vector3% Vector2, Vector3% Tangent2, float S)
+	{
+		pin_ptr<Direct3DX10::Vector3> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector3> PinnedTangent1 = &Tangent1;
+		pin_ptr<Direct3DX10::Vector3> PinnedVector2 = &Vector2;
+		pin_ptr<Direct3DX10::Vector3> PinnedTangent2 = &Tangent2;
+
+		D3DXVec3Hermite((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedTangent1, (D3DXVECTOR3*)PinnedVector2, (D3DXVECTOR3*)PinnedTangent2, S);
+	}
+
+	static float Vector3Length(Vector3% Vector)
+	{
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		return D3DXVec3Length((D3DXVECTOR3*)PinnedVector);
+	}
+
+	static float Vector3LengthSquare(Vector3% Vector)
+	{
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		return D3DXVec3LengthSq((D3DXVECTOR3*)PinnedVector);
+	}
+
+	static void Vector3Normalize([Out] Vector3% Out, Vector3% Vector)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+
+		D3DXVec3Normalize((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector);
+	}
+
+	static void Vector3Project([Out] Vector3% Out, Vector3% Vector, Viewport% Viewport, Matrix% Projection, Matrix% View, Matrix% World)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		pin_ptr<Direct3D10::Viewport> PinnedViewport = &Viewport;
+		pin_ptr<Matrix> PinnedProjection = &Projection;
+		pin_ptr<Matrix> PinnedView = &View;
+		pin_ptr<Matrix> PinnedWorld = &World;
+
+		D3DXVec3Project((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3D10_VIEWPORT*)PinnedViewport, (D3DXMATRIX*)PinnedProjection, (D3DXMATRIX*)PinnedView, (D3DXMATRIX*)PinnedWorld);
+	}
+
+	static void Vector3ProjectArray(array<Vector3>^ Out, unsigned int OutStride, array<Vector3>^ Vector, unsigned int VectorStride, Viewport% Viewport, Matrix% Projection, Matrix% View, Matrix% World, unsigned int N)
+	{
+		pin_ptr<Vector3> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Vector3> PinnedVector = Vector != nullptr && Vector->Length > 0 ? &Vector[0] : nullptr;
+		pin_ptr<Direct3D10::Viewport> PinnedViewport = &Viewport;
+		pin_ptr<Matrix> PinnedProjection = &Projection;
+		pin_ptr<Matrix> PinnedView = &View;
+		pin_ptr<Matrix> PinnedWorld = &World;
+
+		D3DXVec3ProjectArray((D3DXVECTOR3*)PinnedOut, OutStride, (D3DXVECTOR3*)PinnedVector, VectorStride, (D3D10_VIEWPORT*)PinnedViewport, (D3DXMATRIX*)PinnedProjection, (D3DXMATRIX*)PinnedView, (D3DXMATRIX*)PinnedWorld, N);
+	}
+
+	static void Vector3Subtract([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+
+		D3DXVec3Subtract((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
+	}
+
+	static void Vector3Transform([Out] Vector4% Out, Vector3% Vector, Matrix% Matrix)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec3Transform((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
+	}
+	
+	static void Vector3TransformArray(array<Vector4>^ Out, unsigned int OutStride, array<Vector3>^ Vector, unsigned int VectorStride, Matrix% Matrix, unsigned int N)
+	{
+		pin_ptr<Vector4> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Vector3> PinnedVector = Vector != nullptr && Vector->Length > 0 ? &Vector[0] : nullptr;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec3TransformArray((D3DXVECTOR4*)PinnedOut, OutStride, (D3DXVECTOR3*)PinnedVector, VectorStride, (D3DXMATRIX*)PinnedMatrix, N);
+	}
+
+	static void Vector3TransformCoordinate([Out] Vector3% Out, Vector3% Vector, Matrix% Matrix)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		D3DXVec3TransformCoord((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void Vector3TransformCoordinateArray(array<Vector3>^ Out, unsigned int OutStride, array<Vector3>^ Vector, unsigned int VectorStride, Matrix% Matrix, unsigned int N)
+	{
+		pin_ptr<Vector3> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Vector3> PinnedVector = Vector != nullptr && Vector->Length > 0 ? &Vector[0] : nullptr;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec3TransformCoordArray((D3DXVECTOR3*)PinnedOut, OutStride, (D3DXVECTOR3*)PinnedVector, VectorStride, (D3DXMATRIX*)PinnedMatrix, N);
+	}
+
+	static void Vector3TransformNormal([Out] Vector3% Out, Vector3% Vector, Matrix% Matrix)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec3TransformNormal((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static void Vector3TransformNormalArray(array<Vector3>^ Out, unsigned int OutStride, array<Vector3>^ Vector, unsigned int VectorStride, Matrix% Matrix, unsigned int N)
+	{
+		pin_ptr<Vector3> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Vector3> PinnedVector = Vector != nullptr && Vector->Length > 0 ? &Vector[0] : nullptr;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec3TransformNormalArray((D3DXVECTOR3*)PinnedOut, OutStride, (D3DXVECTOR3*)PinnedVector, VectorStride, (D3DXMATRIX*)PinnedMatrix, N);
+	}
+
+	static void Vector3Unproject([Out] Vector3% Out, Vector3% Vector, Viewport% Viewport, Matrix% Projection, Matrix% View, Matrix% World)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+		pin_ptr<Direct3D10::Viewport> PinnedViewport = &Viewport;
+		pin_ptr<Matrix> PinnedProjection = &Projection;
+		pin_ptr<Matrix> PinnedView = &View;
+		pin_ptr<Matrix> PinnedWorld = &World;
+
+		D3DXVec3Unproject((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3D10_VIEWPORT*)PinnedViewport, (D3DXMATRIX*)PinnedProjection, (D3DXMATRIX*)PinnedView, (D3DXMATRIX*)PinnedWorld);
+	}
+
+	static void Vector3UnprojectArray(array<Vector3>^ Out, unsigned int OutStride, array<Vector3>^ Vector, unsigned int VectorStride, Viewport% Viewport, Matrix% Projection, Matrix% View, Matrix% World, unsigned int N)
+	{
+		pin_ptr<Vector3> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Vector3> PinnedVector = Vector != nullptr && Vector->Length > 0 ? &Vector[0] : nullptr;
+		pin_ptr<Direct3D10::Viewport> PinnedViewport = &Viewport;
+		pin_ptr<Matrix> PinnedProjection = &Projection;
+		pin_ptr<Matrix> PinnedView = &View;
+		pin_ptr<Matrix> PinnedWorld = &World;
+
+		D3DXVec3UnprojectArray((D3DXVECTOR3*)PinnedOut, OutStride, (D3DXVECTOR3*)PinnedVector, VectorStride, (D3D10_VIEWPORT*)PinnedViewport, (D3DXMATRIX*)PinnedProjection, (D3DXMATRIX*)PinnedView, (D3DXMATRIX*)PinnedWorld, N);
+	}
+
 	static int SaveTextureToFile(Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
 	{
 		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
@@ -1971,77 +2250,5 @@ public:
 		else Mesh = nullptr;
 
 		return Result;
-	}
-
-	static void MatrixIdentity([Out] Matrix% Out)
-	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		D3DXMatrixIdentity((D3DXMATRIX*)PinnedOut);
-	}
-
-	static void Vector3Transform([Out] Vector4% Out, Vector3% Vector, Matrix% Matrix)
-	{
-		pin_ptr<Vector4> PinnedOut = &Out;
-		pin_ptr<Vector3> PinnedVector = &Vector;
-		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
-		D3DXVec3Transform((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
-	}
-	
-	static void Vector3TransformNormal([Out] Vector3% Out, Vector3% Vector, Matrix% Matrix)
-	{
-		pin_ptr<Vector3> PinnedOut = &Out;
-		pin_ptr<Vector3> PinnedVector = &Vector;
-		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
-		D3DXVec3TransformNormal((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
-	}
-	
-	static void Vector3Normalize([Out] Vector3% Out, Vector3% Vector)
-	{
-		pin_ptr<Vector3> PinnedOut = &Out;
-		pin_ptr<Vector3> PinnedVector = &Vector;
-		D3DXVec3Normalize((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector);
-	}
-
-	static void Vector3Cross([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
-	{
-		pin_ptr<Vector3> PinnedOut = &Out;
-		pin_ptr<Vector3> PinnedVector1 = &Vector1;
-		pin_ptr<Vector3> PinnedVector2 = &Vector2;
-		D3DXVec3Cross((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
-	}
-
-	static void Vector3TransformCoordinates([Out] Vector3% Out, Vector3% Vector, Matrix% Matrix)
-	{
-		pin_ptr<Vector3> PinnedOut = &Out;
-		pin_ptr<Vector3> PinnedVector = &Vector;
-		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
-		D3DXVec3TransformCoord((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
-	}
-
-	static float Vector3Dot(Vector3% Vector1, Vector3% Vector2)
-	{
-		pin_ptr<Vector3> PinnedVector1 = &Vector1;
-		pin_ptr<Vector3> PinnedVector2 = &Vector2;
-		return D3DXVec3Dot((D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
-	}
-
-	static float Vector3LengthSquare(Vector3% Vector)
-	{
-		pin_ptr<Vector3> PinnedVector = &Vector;
-		return D3DXVec3LengthSq((D3DXVECTOR3*)PinnedVector);
-	}
-
-	static float Vector3Length(Vector3% Vector)
-	{
-		pin_ptr<Vector3> PinnedVector = &Vector;
-		return D3DXVec3Length((D3DXVECTOR3*)PinnedVector);
-	}
-
-	static void Vector3Subtract([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
-	{
-		pin_ptr<Vector3> PinnedOut = &Out;
-		pin_ptr<Vector3> PinnedVector1 = &Vector1;
-		pin_ptr<Vector3> PinnedVector2 = &Vector2;
-		D3DXVec3Subtract((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
 	}
 };

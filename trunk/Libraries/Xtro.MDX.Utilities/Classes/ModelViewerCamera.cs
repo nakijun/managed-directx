@@ -144,12 +144,12 @@ namespace Xtro.MDX.Utilities
             Vector3 WorldUp, WorldAhead;
             var LocalUp = new Vector3(0, 1, 0);
             var LocalAhead = new Vector3(0, 0, 1);
-            D3DX10Functions.Vector3TransformCoordinates(out WorldUp, ref LocalUp, ref CameraRotation);
-            D3DX10Functions.Vector3TransformCoordinates(out WorldAhead, ref LocalAhead, ref CameraRotation);
+            D3DX10Functions.Vector3TransformCoordinate(out WorldUp, ref LocalUp, ref CameraRotation);
+            D3DX10Functions.Vector3TransformCoordinate(out WorldAhead, ref LocalAhead, ref CameraRotation);
 
             // Transform the position delta by the camera's rotation 
             Vector3 PositionDeltaWorld;
-            D3DX10Functions.Vector3TransformCoordinates(out PositionDeltaWorld, ref PositionDelta, ref CameraRotation);
+            D3DX10Functions.Vector3TransformCoordinate(out PositionDeltaWorld, ref PositionDelta, ref CameraRotation);
 
             // Move the lookAt position 
             LookAt += PositionDeltaWorld;

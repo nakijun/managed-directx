@@ -2,8 +2,12 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* D3DXVec2BaryCentric
+* D3DXVec4BaryCentric
 * math functions
+* eksik d3dx9 math fonksiyonlarý
+
+* PinnedThis = &*this;
+* PassDescription.FromNative : BlendFactor = *(Float4*)&Native->BlendFactor;
 
 * D3DCompiler
 * ErrorHandling
