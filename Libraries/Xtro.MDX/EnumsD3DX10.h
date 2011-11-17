@@ -57,7 +57,7 @@ public enum class ImageFileFormat
 	TIFF = D3DX10_IFF_TIFF,
 	GIF = D3DX10_IFF_GIF,
 	WMP = D3DX10_IFF_WMP,
-	ForceDword = D3DX10_IFF_FORCE_DWORD
+	ForceDWORD = D3DX10_IFF_FORCE_DWORD
 }; 
 
 [Flags]
