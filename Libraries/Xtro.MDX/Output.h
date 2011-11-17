@@ -36,7 +36,7 @@ public:
 		pin_ptr<unsigned int> PinnedNumberOfModes = &NumberOfModes;
 		pin_ptr<ModeDescription> PinnedDescriptions = Descriptions != nullptr && Descriptions->Length > 0 ? PinnedDescriptions = &Descriptions[0] : nullptr;
 
-		int Result = pOutput->GetDisplayModeList((DXGI_FORMAT)EnumerationFormat, (unsigned int)Flags, (unsigned int*)PinnedNumberOfModes, (DXGI_MODE_DESC*)PinnedDescriptions);
+		int Result = pOutput->GetDisplayModeList((DXGI_FORMAT)EnumerationFormat, (unsigned int)Flags, PinnedNumberOfModes, (DXGI_MODE_DESC*)PinnedDescriptions);
 
 		return Result;
 	}

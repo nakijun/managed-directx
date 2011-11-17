@@ -2,14 +2,14 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* d3dx9 : D3DXPlaneDot
-
-* PinnedThis = &*this;
-* PassDescription.FromNative : BlendFactor = *(Float4*)&Native->BlendFactor;
-
 * D3DCompiler
 * ErrorHandling
 * XACT3
+
+* PinnedThis = &*this;
+* PassDescription.FromNative : BlendFactor = *(Float4*)&Native->BlendFactor;
+  http://www.codeguru.com/forum/showthread.php?p=2043035#post2043035
+* Float1025 get : return (&Value0000)[Index];
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 

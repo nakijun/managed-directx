@@ -28,7 +28,7 @@ public:
 	int GetFloat([Out] float% Value)
 	{
 		pin_ptr<float> PinnedValue = &Value;
-		return pEffectScalarVariable->GetFloat((float*)PinnedValue);
+		return pEffectScalarVariable->GetFloat(PinnedValue);
 	}
 
 	int GetFloatArray(Generic::UnmanagedMemory<float>^ Data, unsigned Offset, unsigned int Count)
@@ -41,7 +41,7 @@ public:
 	int GetInt(int Value)
 	{
 		pin_ptr<int> PinnedValue = &Value;
-		return pEffectScalarVariable->GetInt((int*)PinnedValue);
+		return pEffectScalarVariable->GetInt(PinnedValue);
 	}
 
 	int GetIntArray(Generic::UnmanagedMemory<int>^ Data, unsigned Offset, unsigned int Count)
