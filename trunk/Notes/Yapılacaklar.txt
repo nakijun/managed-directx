@@ -2,7 +2,8 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* D3DCompiler
+* D3DDisassemble10Effect
+
 * ErrorHandling
 * XACT3
 

@@ -1,6 +1,9 @@
 #include "StdAfx.h"
 #include "Windows.h"
+#include "Microsoft DirectX SDK (August 2009)/Include/D3D10_1.h" // to enable of compiling the D3DCompiler.h
 #include "Microsoft DirectX SDK (August 2009)/Include/D3DX10.h"
+#include "Microsoft DirectX SDK (August 2009)/Include/D3D11.h" // to enable of compiling the D3DCompiler.h
+#include "Microsoft DirectX SDK (August 2009)/Include/D3DCompiler.h"
 
 #pragma warning (disable : 4800)
 
@@ -227,6 +230,14 @@ namespace Direct3D10
 	#include "Effect_ForwardedMethods.h"
 
 	#include "FunctionsD3D10.h"
+}
+
+namespace Direct3D_Compiler
+{
+	using namespace Direct3D10;
+
+	#include "EnumsD3DCompiler.h"
+	#include "FunctionsD3DCompiler.h"
 }
 
 namespace Direct3DX10

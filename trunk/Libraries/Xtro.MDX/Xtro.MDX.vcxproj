@@ -188,11 +188,13 @@
     <ClInclude Include="EffectVariableDescription.h" />
     <ClInclude Include="Effect_ForwardedMethods.h" />
     <ClInclude Include="Enums.h" />
+    <ClInclude Include="EnumsD3DCompiler.h" />
     <ClInclude Include="Float1025.h" />
     <ClInclude Include="Float8.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FontDescription.h" />
     <ClInclude Include="FrameStatistics.h" />
+    <ClInclude Include="FunctionsD3DCompiler.h" />
     <ClInclude Include="GammaControl.h" />
     <ClInclude Include="GammaControlCapabilities.h" />
     <ClInclude Include="GeometryShader.h" />

@@ -79,6 +79,9 @@
     <Filter Include="Direct3D10\Effect\Interfaces">
       <UniqueIdentifier>{78035625-fede-430b-b5cf-2f39718767ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Direct3D_Compiler">
+      <UniqueIdentifier>{b081d359-5049-473a-b2f5-a5b10e9fa989}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h">
@@ -897,6 +900,12 @@
     </ClInclude>
     <ClInclude Include="Effect_ForwardedMethods.h">
       <Filter>Direct3D10\Effect\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumsD3DCompiler.h">
+      <Filter>Direct3D_Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionsD3DCompiler.h">
+      <Filter>Direct3D_Compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
