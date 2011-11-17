@@ -55,14 +55,14 @@ public:
 	{
 		pin_ptr<unsigned int> PinnedInfluenceIndex = &InfluenceIndex;
 
-		return pSkinInfo->FindBoneInfluenceIndex(BoneIndex, VertexIndex, (unsigned int*)PinnedInfluenceIndex);
+		return pSkinInfo->FindBoneInfluenceIndex(BoneIndex, VertexIndex, PinnedInfluenceIndex);
 	}
 
 	int GetBoneInfluence(unsigned int BoneIndex, unsigned int InfluenceIndex, [Out] float% Weight)
 	{
 		pin_ptr<float> PinnedWeight = &Weight;
 
-		return pSkinInfo->GetBoneInfluence(BoneIndex, InfluenceIndex, (float*)PinnedWeight);
+		return pSkinInfo->GetBoneInfluence(BoneIndex, InfluenceIndex, PinnedWeight);
 	}
 
 	int GetBoneInfluenceCount(unsigned int BoneIndex)

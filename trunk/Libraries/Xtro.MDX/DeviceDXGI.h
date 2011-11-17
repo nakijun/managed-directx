@@ -49,7 +49,7 @@ public:
 	{
 		pin_ptr<int> PinnedPriority = &Priority;
 
-		return pDevice->GetGPUThreadPriority((int*)PinnedPriority);
+		return pDevice->GetGPUThreadPriority(PinnedPriority);
 	}
 
 	int QueryResourceResidency(array<Unknown^>^ Resources, [Out] ResidencyFlag% ResidencyStatus, unsigned int NumberOfResources)

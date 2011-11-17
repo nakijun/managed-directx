@@ -1264,10 +1264,10 @@ public:
 		D3DXMatrixInverse((D3DXMATRIX*)PinnedOut, 0, (D3DXMATRIX*)PinnedMatrix);
 	}
 
-	static bool MatrixIsIdentity([Out] Matrix% Out)
+	static bool MatrixIsIdentity(Matrix% Matrix)
 	{
-		pin_ptr<Matrix> PinnedOut = &Out;
-		return D3DXMatrixIsIdentity((D3DXMATRIX*)PinnedOut);
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+		return D3DXMatrixIsIdentity((D3DXMATRIX*)PinnedMatrix);
 	}
 
 	static void MatrixLookAtLH([Out] Matrix% Out, Vector3% Eye, Vector3% At, Vector3% Up)
@@ -1469,6 +1469,30 @@ public:
 		D3DXMatrixTranspose((D3DXMATRIX*)PinnedOut, (D3DXMATRIX*)PinnedMatrix);
 	}
 
+	static float PlaneDot([Out] Plane% Plane, Vector4% Vector)
+	{
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Vector4> PinnedVector = &Vector;
+
+		return D3DXPlaneDot((D3DXPLANE*)PinnedPlane, (D3DXVECTOR4*)PinnedVector);
+	}
+
+	static float PlaneDotCoordinate([Out] Plane% Plane, Vector3% Vector)
+	{
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+
+		return D3DXPlaneDotCoord((D3DXPLANE*)PinnedPlane, (D3DXVECTOR3*)PinnedVector);
+	}
+
+	static float PlaneDotNormal([Out] Plane% Plane, Vector3% Vector)
+	{
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = &Plane;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+
+		return D3DXPlaneDotNormal((D3DXPLANE*)PinnedPlane, (D3DXVECTOR3*)PinnedVector);
+	}
+
 	static void PlaneFromPointNormal([Out] Plane% Out, Vector3% Point, Vector3% Normal)
 	{
 		pin_ptr<Plane> PinnedOut = &Out;
@@ -1506,6 +1530,14 @@ public:
 		D3DXPlaneNormalize((D3DXPLANE*)PinnedOut, (D3DXPLANE*)PinnedPlane);
 	}
 
+	static void PlaneScale([Out] Plane% Out, Plane% Plane, float S)
+	{
+		pin_ptr<Direct3DX10::Plane> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Plane> PinnedPlane = &Plane;
+
+		D3DXPlaneScale((D3DXPLANE*)PinnedOut, (D3DXPLANE*)PinnedPlane, S);
+	}
+
 	static void PlaneTransform([Out] Plane% Out, Plane% Plane, Matrix% Matrix)
 	{
 		pin_ptr<Direct3DX10::Plane> PinnedOut = &Out;
@@ -1534,6 +1566,22 @@ public:
 		D3DXQuaternionBaryCentric((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion1, (D3DXQUATERNION*)PinnedQuaternion2, (D3DXQUATERNION*)PinnedQuaternion3, F, G);
 	}
 
+	static void QuaternionConjugate([Out] Quaternion% Out, Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+
+		D3DXQuaternionConjugate((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static float QuaternionDot(Quaternion% Quaternion1, Quaternion% Quaternion2)
+	{
+		pin_ptr<Quaternion> PinnedQuaternion1 = &Quaternion1;
+		pin_ptr<Quaternion> PinnedQuaternion2 = &Quaternion2;
+
+		return D3DXQuaternionDot((D3DXQUATERNION*)PinnedQuaternion1, (D3DXQUATERNION*)PinnedQuaternion2);
+	}
+
 	static void QuaternionExp([Out] Quaternion% Out, Quaternion% Quaternion)
 	{
 		pin_ptr<Direct3DX10::Quaternion> PinnedOut = &Out;
@@ -1554,6 +1602,24 @@ public:
 		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
 
 		D3DXQuaternionInverse((D3DXQUATERNION*)PinnedOut, (D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static bool QuaternionIsIdentity(Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+		return D3DXQuaternionIsIdentity((D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static float QuaternionLength(Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+		return D3DXQuaternionLength((D3DXQUATERNION*)PinnedQuaternion);
+	}
+
+	static float QuaternionLengthSquare(Quaternion% Quaternion)
+	{
+		pin_ptr<Direct3DX10::Quaternion> PinnedQuaternion = &Quaternion;
+		return D3DXQuaternionLengthSq((D3DXQUATERNION*)PinnedQuaternion);
 	}
 
 	static void QuaternionLn([Out] Quaternion% Out, Quaternion% Quaternion)
@@ -1792,6 +1858,15 @@ public:
 		D3DXSHScale(pOut, Order, pIn, Scale);
 	}
 
+	static void Vector2Add([Out] Vector2% Out, Vector2% Vector1, Vector2% Vector2)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+
+		D3DXVec2Add((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2);
+	}
+
 	static void Vector2BaryCentric([Out] Vector2% Out, Vector2% Vector1, Vector2% Vector2, Direct3DX10::Vector2% Vector3, float F, float G)
 	{
 		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
@@ -1813,6 +1888,22 @@ public:
 		D3DXVec2CatmullRom((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector0, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2, (D3DXVECTOR2*)PinnedVector3, S);
 	}
 
+	static float Vector2CCW(Vector2% Vector1, Vector2% Vector2)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+
+		return D3DXVec2CCW((D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2);
+	}
+
+	static float Vector2Dot(Vector2% Vector1, Vector2% Vector2)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+
+		return D3DXVec2Dot((D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2);
+	}
+
 	static void Vector2Hermite([Out] Vector2% Out, Vector2% Vector1, Vector2% Tangent1, Vector2% Vector2, Direct3DX10::Vector2% Tangent2, float S)
 	{
 		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
@@ -1824,12 +1915,68 @@ public:
 		D3DXVec2Hermite((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedTangent1, (D3DXVECTOR2*)PinnedVector2, (D3DXVECTOR2*)PinnedTangent2, S);
 	}
 
+	static float Vector2Length(Vector2% Vector)
+	{
+		pin_ptr<Vector2> PinnedVector = &Vector;
+		return D3DXVec2Length((D3DXVECTOR2*)PinnedVector);
+	}
+
+	static float Vector2LengthSquare(Vector2% Vector)
+	{
+		pin_ptr<Vector2> PinnedVector = &Vector;
+		return D3DXVec2LengthSq((D3DXVECTOR2*)PinnedVector);
+	}
+
+	static void Vector2Lerp([Out] Vector2% Out, Vector2% Vector1, Vector2% Vector2, float S)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+
+		D3DXVec2Lerp((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2, S);
+	}
+
+	static void Vector2Maximize([Out] Vector2% Out, Vector2% Vector1, Vector2% Vector2)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+
+		D3DXVec2Maximize((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2);
+	}
+
+	static void Vector2Minimize([Out] Vector2% Out, Vector2% Vector1, Vector2% Vector2)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+
+		D3DXVec2Minimize((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2);
+	}
+
 	static void Vector2Normalize([Out] Vector2% Out, Vector2% Vector)
 	{
 		pin_ptr<Vector2> PinnedOut = &Out;
 		pin_ptr<Vector2> PinnedVector = &Vector;
 
 		D3DXVec2Normalize((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector);
+	}
+
+	static void Vector2Scale([Out] Vector2% Out, Vector2% Vector, float S)
+	{
+		pin_ptr<Vector2> PinnedOut = &Out;
+		pin_ptr<Vector2> PinnedVector = &Vector;
+
+		D3DXVec2Scale((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector, S);
+	}
+
+	static void Vector2Subtract([Out] Vector2% Out, Vector2% Vector1, Vector2% Vector2)
+	{
+		pin_ptr<Direct3DX10::Vector2> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector1 = &Vector1;
+		pin_ptr<Direct3DX10::Vector2> PinnedVector2 = &Vector2;
+
+		D3DXVec2Subtract((D3DXVECTOR2*)PinnedOut, (D3DXVECTOR2*)PinnedVector1, (D3DXVECTOR2*)PinnedVector2);
 	}
 
 	static void Vector2Transform([Out] Vector4% Out, Vector2% Vector, Matrix% Matrix)
@@ -1886,6 +2033,15 @@ public:
 		D3DXVec2TransformNormalArray((D3DXVECTOR2*)PinnedOut, OutStride, (D3DXVECTOR2*)PinnedVector, VectorStride, (D3DXMATRIX*)PinnedMatrix, N);
 	}
 
+	static void Vector3Add([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+
+		D3DXVec3Add((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
+	}
+
 	static void Vector3BaryCentric([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2, Vector3% Vector3, float F, float G)
 	{
 		pin_ptr<Direct3DX10::Vector3> PinnedOut = &Out;
@@ -1926,11 +2082,11 @@ public:
 
 	static void Vector3Hermite([Out] Vector3% Out, Vector3% Vector1, Vector3% Tangent1, Vector3% Vector2, Vector3% Tangent2, float S)
 	{
-		pin_ptr<Direct3DX10::Vector3> PinnedOut = &Out;
-		pin_ptr<Direct3DX10::Vector3> PinnedVector1 = &Vector1;
-		pin_ptr<Direct3DX10::Vector3> PinnedTangent1 = &Tangent1;
-		pin_ptr<Direct3DX10::Vector3> PinnedVector2 = &Vector2;
-		pin_ptr<Direct3DX10::Vector3> PinnedTangent2 = &Tangent2;
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedTangent1 = &Tangent1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+		pin_ptr<Vector3> PinnedTangent2 = &Tangent2;
 
 		D3DXVec3Hermite((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedTangent1, (D3DXVECTOR3*)PinnedVector2, (D3DXVECTOR3*)PinnedTangent2, S);
 	}
@@ -1945,6 +2101,33 @@ public:
 	{
 		pin_ptr<Vector3> PinnedVector = &Vector;
 		return D3DXVec3LengthSq((D3DXVECTOR3*)PinnedVector);
+	}
+
+	static void Vector3Lerp([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2, float S)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+
+		D3DXVec3Lerp((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2, S);
+	}
+
+	static void Vector3Maximize([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+
+		D3DXVec3Maximize((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
+	}
+
+	static void Vector3Minimize([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+
+		D3DXVec3Minimize((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2);
 	}
 
 	static void Vector3Normalize([Out] Vector3% Out, Vector3% Vector)
@@ -1977,6 +2160,14 @@ public:
 		pin_ptr<Matrix> PinnedWorld = &World;
 
 		D3DXVec3ProjectArray((D3DXVECTOR3*)PinnedOut, OutStride, (D3DXVECTOR3*)PinnedVector, VectorStride, (D3D10_VIEWPORT*)PinnedViewport, (D3DXMATRIX*)PinnedProjection, (D3DXMATRIX*)PinnedView, (D3DXMATRIX*)PinnedWorld, N);
+	}
+
+	static void Vector3Scale([Out] Vector3% Out, Vector3% Vector, float S)
+	{
+		pin_ptr<Vector3> PinnedOut = &Out;
+		pin_ptr<Vector3> PinnedVector = &Vector;
+
+		D3DXVec3Scale((D3DXVECTOR3*)PinnedOut, (D3DXVECTOR3*)PinnedVector, S);
 	}
 
 	static void Vector3Subtract([Out] Vector3% Out, Vector3% Vector1, Vector3% Vector2)
@@ -2065,6 +2256,15 @@ public:
 		D3DXVec3UnprojectArray((D3DXVECTOR3*)PinnedOut, OutStride, (D3DXVECTOR3*)PinnedVector, VectorStride, (D3D10_VIEWPORT*)PinnedViewport, (D3DXMATRIX*)PinnedProjection, (D3DXMATRIX*)PinnedView, (D3DXMATRIX*)PinnedWorld, N);
 	}
 
+	static void Vector4Add([Out] Vector4% Out, Vector4% Vector1, Vector4% Vector2)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+
+		D3DXVec4Add((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedVector2);
+	}
+
 	static void Vector4BaryCentric([Out] Vector4% Out, Vector4% Vector1, Vector4% Vector2, Vector4% Vector3, float F, float G)
 	{
 		pin_ptr<Vector4> PinnedOut = &Out;
@@ -2127,12 +2327,47 @@ public:
 		return D3DXVec4LengthSq((D3DXVECTOR4*)PinnedVector);
 	}
 
+	static void Vector4Lerp([Out] Vector4% Out, Vector4% Vector1, Vector4% Vector2, float S)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+
+		D3DXVec4Lerp((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedVector2, S);
+	}
+
+	static void Vector4Maximize([Out] Vector4% Out, Vector4% Vector1, Vector4% Vector2)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+
+		D3DXVec4Maximize((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedVector2);
+	}
+
+	static void Vector4Minimize([Out] Vector4% Out, Vector4% Vector1, Vector4% Vector2)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+
+		D3DXVec4Minimize((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedVector2);
+	}
+
 	static void Vector4Normalize([Out] Vector4% Out, Vector4% Vector)
 	{
 		pin_ptr<Vector4> PinnedOut = &Out;
 		pin_ptr<Vector4> PinnedVector = &Vector;
 
 		D3DXVec4Normalize((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector);
+	}
+
+	static void Vector4Scale([Out] Vector4% Out, Vector4% Vector, float S)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector = &Vector;
+
+		D3DXVec4Scale((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector, S);
 	}
 
 	static void Vector4Subtract([Out] Vector4% Out, Vector4% Vector1, Vector4% Vector2)
@@ -2160,196 +2395,6 @@ public:
 		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 
 		D3DXVec4TransformArray((D3DXVECTOR4*)PinnedOut, OutStride, (D3DXVECTOR4*)PinnedVector, VectorStride, (D3DXMATRIX*)PinnedMatrix, N);
-	}
-
-	static int SaveTextureToFile(Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
-	{
-		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
-
-		IntPtr pDestinationFile = Marshal::StringToHGlobalUni(DestinationFile);
-		try { return D3DX10SaveTextureToFile(pSourceTexture, (D3DX10_IMAGE_FILE_FORMAT)DestinationFormat, (LPCWSTR)pDestinationFile.ToPointer()); }
-		finally { Marshal::FreeHGlobal(pDestinationFile); }
-	}
-	
-	static int SaveTextureToMemory(Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, [Out] Blob^% DestinationBuffer, unsigned int Flags)
-	{
-		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
-
-		ID3D10Blob* pDestinationBuffer = 0;
-		int Result = D3DX10SaveTextureToMemory(pSourceTexture, (D3DX10_IMAGE_FILE_FORMAT)DestinationFormat, &pDestinationBuffer, Flags);
-
-		if (pDestinationBuffer)
-		{
-			try { DestinationBuffer = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pDestinationBuffer)]; }
-			catch (KeyNotFoundException^) { DestinationBuffer = gcnew Direct3D10::Blob(IntPtr(pDestinationBuffer)); }
-		}
-		else DestinationBuffer = nullptr;
-
-		return Result;
-	}
-	
-	static int GetImageInfoFromFile(String^ SourceFile, [Out] ImageInfo% SourceInfo)
-	{
-		pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo;
-
-		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { return D3DX10GetImageInfoFromFile((LPCWSTR)pSourceFile.ToPointer(), 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0); }
-		finally { Marshal::FreeHGlobal(pSourceFile); }
-	}
-
-	static int GetImageInfoFromMemory(UnmanagedMemory^ SourceData, [Out] ImageInfo% SourceInfo)
-	{
-		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-		SIZE_T Size = SourceData == nullptr ? 0 : SourceData->FSize;
-		pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo;
-
-		return D3DX10GetImageInfoFromMemory(pSourceData, Size, 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0);
-	}
-
-	static int CreateTextureFromFile(Direct3D10::Device^ Device, String^ SourceFile, [Out] Direct3D10::Resource^% Texture)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-
-		int Result = 0;
-		ID3D10Resource* pResource = 0;
-	
-		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pResource, 0); }
-		finally { Marshal::FreeHGlobal(pSourceFile); }
-
-		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
-
-		return Result;
-	}
-		
-	static int CreateTextureFromFile(Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] Direct3D10::Resource^% Texture)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-
-		int Result = 0;
-		ID3D10Resource* pResource = 0;
-	
-		IntPtr pSourceFile = IntPtr::Zero;
-		try 
-		{
-			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
-			LoadInfo.Marshal(&NativeLoadInfo);
-			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-
-			Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pResource, 0); 
-		}
-		finally
-		{
-			Marshal::FreeHGlobal(pSourceFile); 
-			LoadInfo.Unmarshal();
-		}
-
-		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
-
-		return Result;
-	}
-		
-	static int CreateTextureFromMemory(Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, [Out]Direct3D10::Resource^% Texture)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-
-		int Result = 0;
-		ID3D10Resource* pResource = 0;
-		Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, 0, 0, &pResource, 0);
-
-		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
-
-		return Result;
-	}
-		
-	static int CreateTextureFromMemory(Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, ImageLoadInfo% LoadInfo, [Out]Direct3D10::Resource^% Texture)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
-
-		int Result = 0;
-		ID3D10Resource* pResource = 0;
-
-		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
-		LoadInfo.Marshal(&NativeLoadInfo);
-		try { Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, &NativeLoadInfo, 0, &pResource, 0); }
-		finally { LoadInfo.Unmarshal(); }
-			  
-		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
-
-		return Result;
-	}
-		
-	static void FilterTexture(Direct3D10::Resource^ Texture, unsigned int SourceLevel, FilterFlag MipFilter)
-	{
-		ID3D10Resource *pTexture = Texture == nullptr ? 0 : Texture->pResource;
-
-		D3DX10FilterTexture(pTexture, SourceLevel, (unsigned int)MipFilter);
-	}
-
-	static int LoadTextureFromTexture(Direct3D10::Resource^ SourceTexture, TextureLoadInfo% LoadInfo, Direct3D10::Resource^ DestinationTexture)
-	{
-		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
-		ID3D10Resource* pDestinationTexture = DestinationTexture == nullptr ? 0 : DestinationTexture->pResource;
-
-		D3DX10_TEXTURE_LOAD_INFO NativeLoadInfo;
-		LoadInfo.Marshal(&NativeLoadInfo);
-		try { return D3DX10LoadTextureFromTexture(pSourceTexture, &NativeLoadInfo, pDestinationTexture); }
-		finally { LoadInfo.Unmarshal(); }
-	}
-
-	static int CreateShaderResourceViewFromFile(Direct3D10::Device^ Device, String^ SourceFile, [Out] ShaderResourceView^% ShaderResourceView)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-
-		int Result = 0;
-		ID3D10ShaderResourceView* pShaderResourceView = 0;
-
-		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-		try { Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pShaderResourceView, 0); }
-		finally { Marshal::FreeHGlobal(pSourceFile); }
-
-		if (pShaderResourceView)
-		{
-			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
-			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
-		}
-		else ShaderResourceView = nullptr;
-
-		return Result;
-	}
-		 
-	static int CreateShaderResourceViewFromFile(Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
-	{
-		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
-
-		int Result = 0;
-		ID3D10ShaderResourceView* pShaderResourceView = 0;
-
-		IntPtr pSourceFile = IntPtr::Zero;
-		try
-		{
-			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
-			LoadInfo.Marshal(&NativeLoadInfo);
-			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-
-			Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pShaderResourceView, 0); 
-		}
-		finally
-		{
-			Marshal::FreeHGlobal(pSourceFile); 
-			LoadInfo.Unmarshal();
-		}
-
-		if (pShaderResourceView)
-		{
-			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
-			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
-		}
-		else ShaderResourceView = nullptr;
-
-		return Result;
 	}
 		 
 	static int CreateMesh(Direct3D10::Device^ Device, array<InputElementDescription>^ Declaration, unsigned int DeclarationCount, String^ PositionSemantic, unsigned int VertexCount, unsigned int FaceCount, MeshFlag Options, [Out] Mesh^% Mesh)
@@ -2397,6 +2442,310 @@ public:
 			catch (KeyNotFoundException^) { Mesh = gcnew Direct3DX10::Mesh(IntPtr(pMesh)); }
 		}
 		else Mesh = nullptr;
+
+		return Result;
+	}
+
+	static int CreateSkinInfo([Out] SkinInfo^% SkinInfo)
+	{
+		ID3DX10SkinInfo* pSkinInfo = 0;
+		int Result = D3DX10CreateSkinInfo(&pSkinInfo);
+
+		if (pSkinInfo)
+		{
+			try { SkinInfo = (Direct3DX10::SkinInfo^)Interface::Interfaces[IntPtr(pSkinInfo)]; }
+			catch (KeyNotFoundException^) { SkinInfo = gcnew Direct3DX10::SkinInfo(IntPtr(pSkinInfo)); }
+		}
+		else SkinInfo = nullptr;
+
+		return Result;
+	}
+
+	static bool BoxBoundProbe(Vector3% Minimum, Vector3% Maximum, Vector3% RayPosition, Vector3% RayDirection)
+	{
+		pin_ptr<Vector3> PinnedMinimum = &Minimum;
+		pin_ptr<Vector3> PinnedMaximum = &Maximum;
+		pin_ptr<Vector3> PinnedRayPosition = &RayPosition;
+		pin_ptr<Vector3> PinnedRayDirection = &RayDirection;
+
+		return D3DXBoxBoundProbe((D3DXVECTOR3*)PinnedMinimum, (D3DXVECTOR3*)PinnedMaximum, (D3DXVECTOR3*)PinnedRayPosition, (D3DXVECTOR3*)PinnedRayDirection);
+	}
+
+	static int ComputeBoundingBox(Vector3% FirstPosition, unsigned long NumberOfVertices, unsigned long Stride, [Out] Vector3% Minimum, [Out] Vector3% Maximum)
+	{
+		pin_ptr<Vector3> PinnedFirstPosition = &FirstPosition;
+		pin_ptr<Vector3> PinnedMinimum = &Minimum;
+		pin_ptr<Vector3> PinnedMaximum = &Maximum;
+
+		return D3DXComputeBoundingBox((D3DXVECTOR3*)PinnedFirstPosition, NumberOfVertices, Stride, (D3DXVECTOR3*)PinnedMinimum, (D3DXVECTOR3*)PinnedMaximum);
+	}
+
+	static int ComputeBoundingSphere(Vector3% FirstPosition, unsigned long NumberOfVertices, unsigned long Stride, [Out] Vector3% Center, [Out] float% Radius)
+	{
+		pin_ptr<Vector3> PinnedFirstPosition = &FirstPosition;
+		pin_ptr<Vector3> PinnedCenter = &Center;
+		pin_ptr<float> PinnedRadius = &Radius;
+
+		return D3DXComputeBoundingSphere((D3DXVECTOR3*)PinnedFirstPosition, NumberOfVertices, Stride, (D3DXVECTOR3*)PinnedCenter, PinnedRadius);
+	}
+
+	static bool IntersectTri(Vector3% Vector0, Vector3% Vector1, Vector3% Vector2, Vector3% RayPosition, Vector3% RayDirection, [Out] float% U, [Out] float% V, [Out] float% Distance)
+	{
+		pin_ptr<Vector3> PinnedVector0 = &Vector0;
+		pin_ptr<Vector3> PinnedVector1 = &Vector1;
+		pin_ptr<Vector3> PinnedVector2 = &Vector2;
+		pin_ptr<Vector3> PinnedRayPosition = &RayPosition;
+		pin_ptr<Vector3> PinnedRayDirection = &RayDirection;
+		pin_ptr<float> PinnedU = &U;
+		pin_ptr<float> PinnedV = &V;
+		pin_ptr<float> PinnedDistance = &Distance;
+
+		return D3DXIntersectTri((D3DXVECTOR3*)PinnedVector0, (D3DXVECTOR3*)PinnedVector1, (D3DXVECTOR3*)PinnedVector2, (D3DXVECTOR3*)PinnedRayPosition, (D3DXVECTOR3*)PinnedRayDirection, PinnedU, PinnedV, PinnedDistance);
+	}
+
+	static bool SphereBoundProbe(Vector3% Center, float Radius, Vector3% RayPosition, Vector3% RayDirection)
+	{
+		pin_ptr<Vector3> PinnedCenter = &Center;
+		pin_ptr<Vector3> PinnedRayPosition = &RayPosition;
+		pin_ptr<Vector3> PinnedRayDirection = &RayDirection;
+
+		return D3DXSphereBoundProbe((D3DXVECTOR3*)PinnedCenter, Radius, (D3DXVECTOR3*)PinnedRayPosition, (D3DXVECTOR3*)PinnedRayDirection);
+	}
+
+	static int ComputeNormalMap(Texture2D^ SourceTexture, NormalMapFlag Flags, ChannelFlag Channel, float Amplitude, Texture2D^ DestinationTexture)
+	{
+		ID3D10Texture2D* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pTexture2D;
+		ID3D10Texture2D* pDestinationTexture = DestinationTexture == nullptr ? 0 : DestinationTexture->pTexture2D;
+
+		return D3DX10ComputeNormalMap(pSourceTexture, (unsigned int)Flags, (unsigned int)Channel, Amplitude, pDestinationTexture);
+	}
+
+	static int CreateShaderResourceViewFromFile(Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10ShaderResourceView* pShaderResourceView = 0;
+
+		IntPtr pSourceFile = IntPtr::Zero;
+		try
+		{
+			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+			LoadInfo.Marshal(&NativeLoadInfo);
+			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+
+			Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pShaderResourceView, 0); 
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceFile); 
+			LoadInfo.Unmarshal();
+		}
+
+		if (pShaderResourceView)
+		{
+			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+		}
+		else ShaderResourceView = nullptr;
+
+		return Result;
+	}
+
+	static int CreateShaderResourceViewFromFile(Direct3D10::Device^ Device, String^ SourceFile, [Out] ShaderResourceView^% ShaderResourceView)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10ShaderResourceView* pShaderResourceView = 0;
+
+		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+		try { Result = D3DX10CreateShaderResourceViewFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pShaderResourceView, 0); }
+		finally { Marshal::FreeHGlobal(pSourceFile); }
+
+		if (pShaderResourceView)
+		{
+			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+		}
+		else ShaderResourceView = nullptr;
+
+		return Result;
+	}
+		 
+	static int CreateShaderResourceViewFromMemory(Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, ImageLoadInfo% LoadInfo, [Out] ShaderResourceView^% ShaderResourceView)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+
+		int Result = 0;
+		ID3D10ShaderResourceView* pShaderResourceView = 0;
+
+		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+		LoadInfo.Marshal(&NativeLoadInfo);
+		try	{ Result = D3DX10CreateShaderResourceViewFromMemory(pDevice, pSourceData, SourceDataSize, &NativeLoadInfo, 0, &pShaderResourceView, 0); }
+		finally	{ LoadInfo.Unmarshal(); }
+
+		if (pShaderResourceView)
+		{
+			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+		}
+		else ShaderResourceView = nullptr;
+
+		return Result;
+	}
+
+	static int CreateShaderResourceViewFromMemory(Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, [Out] ShaderResourceView^% ShaderResourceView)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+
+		ID3D10ShaderResourceView* pShaderResourceView = 0;
+		int Result = D3DX10CreateShaderResourceViewFromMemory(pDevice, pSourceData, SourceDataSize, 0, 0, &pShaderResourceView, 0);
+
+		if (pShaderResourceView)
+		{
+			try { ShaderResourceView = (Direct3D10::ShaderResourceView^)Interface::Interfaces[IntPtr(pShaderResourceView)]; }
+			catch (KeyNotFoundException^) { ShaderResourceView = gcnew Direct3D10::ShaderResourceView(IntPtr(pShaderResourceView)); }
+		}
+		else ShaderResourceView = nullptr;
+
+		return Result;
+	}
+
+	static int CreateTextureFromFile(Direct3D10::Device^ Device, String^ SourceFile, ImageLoadInfo% LoadInfo, [Out] Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10Resource* pResource = 0;
+	
+		IntPtr pSourceFile = IntPtr::Zero;
+		try 
+		{
+			D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+			LoadInfo.Marshal(&NativeLoadInfo);
+			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+
+			Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), &NativeLoadInfo, 0, &pResource, 0); 
+		}
+		finally
+		{
+			Marshal::FreeHGlobal(pSourceFile); 
+			LoadInfo.Unmarshal();
+		}
+
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
+
+		return Result;
+	}
+		
+	static int CreateTextureFromFile(Direct3D10::Device^ Device, String^ SourceFile, [Out] Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+
+		int Result = 0;
+		ID3D10Resource* pResource = 0;
+	
+		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+		try { Result = D3DX10CreateTextureFromFile(pDevice, (LPCWSTR)pSourceFile.ToPointer(), 0, 0, &pResource, 0); }
+		finally { Marshal::FreeHGlobal(pSourceFile); }
+
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
+
+		return Result;
+	}
+		
+	static int CreateTextureFromMemory(Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, ImageLoadInfo% LoadInfo, [Out]Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+
+		int Result = 0;
+		ID3D10Resource* pResource = 0;
+
+		D3DX10_IMAGE_LOAD_INFO NativeLoadInfo;
+		LoadInfo.Marshal(&NativeLoadInfo);
+		try { Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, &NativeLoadInfo, 0, &pResource, 0); }
+		finally { LoadInfo.Unmarshal(); }
+			  
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
+
+		return Result;
+	}
+		
+	static int CreateTextureFromMemory(Direct3D10::Device^ Device, UnmanagedMemory^ SourceData, SIZE_T SourceDataSize, [Out]Direct3D10::Resource^% Texture)
+	{
+		ID3D10Device* pDevice = Device == nullptr ? 0 : Device->pDevice;
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+
+		ID3D10Resource* pResource = 0;
+		int Result = D3DX10CreateTextureFromMemory(pDevice, pSourceData, SourceDataSize, 0, 0, &pResource, 0);
+
+		Texture = pResource ? CreateTextureByType(pResource) : nullptr;
+
+		return Result;
+	}
+		
+	static void FilterTexture(Direct3D10::Resource^ Texture, unsigned int SourceLevel, FilterFlag MipFilter)
+	{
+		ID3D10Resource *pTexture = Texture == nullptr ? 0 : Texture->pResource;
+
+		D3DX10FilterTexture(pTexture, SourceLevel, (unsigned int)MipFilter);
+	}
+
+	static int GetImageInfoFromFile(String^ SourceFile, [Out] ImageInfo% SourceInfo)
+	{
+		pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo;
+
+		IntPtr pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
+		try { return D3DX10GetImageInfoFromFile((LPCWSTR)pSourceFile.ToPointer(), 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0); }
+		finally { Marshal::FreeHGlobal(pSourceFile); }
+	}
+
+	static int GetImageInfoFromMemory(UnmanagedMemory^ SourceData, [Out] ImageInfo% SourceInfo)
+	{
+		void* pSourceData = SourceData == nullptr ? 0 : SourceData->pMemory;
+		SIZE_T Size = SourceData == nullptr ? 0 : SourceData->FSize;
+		pin_ptr<ImageInfo> PinnedSourceInfo = &SourceInfo;
+
+		return D3DX10GetImageInfoFromMemory(pSourceData, Size, 0, (D3DX10_IMAGE_INFO*)PinnedSourceInfo, 0);
+	}
+
+	static int LoadTextureFromTexture(Direct3D10::Resource^ SourceTexture, TextureLoadInfo% LoadInfo, Direct3D10::Resource^ DestinationTexture)
+	{
+		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
+		ID3D10Resource* pDestinationTexture = DestinationTexture == nullptr ? 0 : DestinationTexture->pResource;
+
+		D3DX10_TEXTURE_LOAD_INFO NativeLoadInfo;
+		LoadInfo.Marshal(&NativeLoadInfo);
+		try { return D3DX10LoadTextureFromTexture(pSourceTexture, &NativeLoadInfo, pDestinationTexture); }
+		finally { LoadInfo.Unmarshal(); }
+	}
+
+	static int SaveTextureToFile(Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)
+	{
+		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
+
+		IntPtr pDestinationFile = Marshal::StringToHGlobalUni(DestinationFile);
+		try { return D3DX10SaveTextureToFile(pSourceTexture, (D3DX10_IMAGE_FILE_FORMAT)DestinationFormat, (LPCWSTR)pDestinationFile.ToPointer()); }
+		finally { Marshal::FreeHGlobal(pDestinationFile); }
+	}
+	
+	static int SaveTextureToMemory(Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, [Out] Blob^% DestinationBuffer, unsigned int Flags)
+	{
+		ID3D10Resource* pSourceTexture = SourceTexture == nullptr ? 0 : SourceTexture->pResource;
+
+		ID3D10Blob* pDestinationBuffer = 0;
+		int Result = D3DX10SaveTextureToMemory(pSourceTexture, (D3DX10_IMAGE_FILE_FORMAT)DestinationFormat, &pDestinationBuffer, Flags);
+
+		if (pDestinationBuffer)
+		{
+			try { DestinationBuffer = (Direct3D10::Blob^)Interface::Interfaces[IntPtr(pDestinationBuffer)]; }
+			catch (KeyNotFoundException^) { DestinationBuffer = gcnew Direct3D10::Blob(IntPtr(pDestinationBuffer)); }
+		}
+		else DestinationBuffer = nullptr;
 
 		return Result;
 	}

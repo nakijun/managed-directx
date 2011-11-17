@@ -62,7 +62,7 @@ public:
 	int CheckMultisampleQualityLevels(Format Format, unsigned int SampleCount, [Out] unsigned int% NumberOfQualityLevels)
 	{
 		pin_ptr<unsigned int> PinnedNumberOfQualityLevels = &NumberOfQualityLevels;
-		return pDevice->CheckMultisampleQualityLevels((DXGI_FORMAT)Format, SampleCount, (unsigned int*)PinnedNumberOfQualityLevels);
+		return pDevice->CheckMultisampleQualityLevels((DXGI_FORMAT)Format, SampleCount, PinnedNumberOfQualityLevels);
 	}
 
 	void ClearDepthStencilView(DepthStencilView^ DepthStencilView, ClearFlag ClearFlags, float Depth, Byte Stencil)
