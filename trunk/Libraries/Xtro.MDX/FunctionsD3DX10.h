@@ -1074,10 +1074,20 @@ public:
 		return D3DX10UnsetAllDeviceObjects(pDevice);
 	}
 
+	static void ColorAdd([Out] Color% Out, Color% Color1, Color% Color2)
+	{
+		pin_ptr<Color> PinnedOut = &Out;
+		pin_ptr<Color> PinnedColor1 = &Color1;
+		pin_ptr<Color> PinnedColor2 = &Color2;
+
+		D3DXColorAdd((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor1, (D3DXCOLOR*)PinnedColor2);
+	}
+
 	static void ColorAdjustContrast([Out] Color% Out, Color% Color, float C)
 	{
 		pin_ptr<Direct3DX10::Color> PinnedOut = &Out;
 		pin_ptr<Direct3DX10::Color> PinnedColor = &Color;
+
 		D3DXColorAdjustContrast((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor, C);
 	}
 
@@ -1085,6 +1095,7 @@ public:
 	{
 		pin_ptr<Direct3DX10::Color> PinnedOut = &Out;
 		pin_ptr<Direct3DX10::Color> PinnedColor = &Color;
+
 		D3DXColorAdjustSaturation((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor, S);
 	}
 
@@ -1093,7 +1104,42 @@ public:
 		pin_ptr<Color> PinnedOut = &Out;
 		pin_ptr<Color> PinnedColor1 = &Color1;
 		pin_ptr<Color> PinnedColor2 = &Color2;
+
 		D3DXColorLerp((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor1, (D3DXCOLOR*)PinnedColor2, S);
+	}
+
+	static void ColorModulate([Out] Color% Out, Color% Color1, Color% Color2)
+	{
+		pin_ptr<Color> PinnedOut = &Out;
+		pin_ptr<Color> PinnedColor1 = &Color1;
+		pin_ptr<Color> PinnedColor2 = &Color2;
+
+		D3DXColorModulate((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor1, (D3DXCOLOR*)PinnedColor2);
+	}
+
+	static void ColorNegative([Out] Color% Out, Color% Color)
+	{
+		pin_ptr<Direct3DX10::Color> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Color> PinnedColor = &Color;
+
+		D3DXColorNegative((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor);
+	}
+
+	static void ColorScale([Out] Color% Out, Color% Color, float S)
+	{
+		pin_ptr<Direct3DX10::Color> PinnedOut = &Out;
+		pin_ptr<Direct3DX10::Color> PinnedColor = &Color;
+
+		D3DXColorScale((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor, S);
+	}
+
+	static void ColorSubtract([Out] Color% Out, Color% Color1, Color% Color2)
+	{
+		pin_ptr<Color> PinnedOut = &Out;
+		pin_ptr<Color> PinnedColor1 = &Color1;
+		pin_ptr<Color> PinnedColor2 = &Color2;
+
+		D3DXColorSubtract((D3DXCOLOR*)PinnedOut, (D3DXCOLOR*)PinnedColor1, (D3DXCOLOR*)PinnedColor2);
 	}
 
 	static int CreateMatrixStack(unsigned int Flags, [Out] MatrixStack^% Stack_)
@@ -1216,6 +1262,12 @@ public:
 		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
 
 		D3DXMatrixInverse((D3DXMATRIX*)PinnedOut, 0, (D3DXMATRIX*)PinnedMatrix);
+	}
+
+	static bool MatrixIsIdentity([Out] Matrix% Out)
+	{
+		pin_ptr<Matrix> PinnedOut = &Out;
+		return D3DXMatrixIsIdentity((D3DXMATRIX*)PinnedOut);
 	}
 
 	static void MatrixLookAtLH([Out] Matrix% Out, Vector3% Eye, Vector3% At, Vector3% Up)
@@ -2011,6 +2063,103 @@ public:
 		pin_ptr<Matrix> PinnedWorld = &World;
 
 		D3DXVec3UnprojectArray((D3DXVECTOR3*)PinnedOut, OutStride, (D3DXVECTOR3*)PinnedVector, VectorStride, (D3D10_VIEWPORT*)PinnedViewport, (D3DXMATRIX*)PinnedProjection, (D3DXMATRIX*)PinnedView, (D3DXMATRIX*)PinnedWorld, N);
+	}
+
+	static void Vector4BaryCentric([Out] Vector4% Out, Vector4% Vector1, Vector4% Vector2, Vector4% Vector3, float F, float G)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+		pin_ptr<Vector4> PinnedVector3 = &Vector3;
+
+		D3DXVec4BaryCentric((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedVector2, (D3DXVECTOR4*)PinnedVector3, F, G);
+	}
+
+	static void Vector4CatmullRom([Out] Vector4% Out, Vector4% Vector0, Vector4% Vector1, Vector4% Vector2, Vector4% Vector3, float S)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector0 = &Vector0;
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+		pin_ptr<Vector4> PinnedVector3 = &Vector3;
+
+		D3DXVec4CatmullRom((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector0, (D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedVector2, (D3DXVECTOR4*)PinnedVector3, S);
+	}
+
+	static void Vector4Cross([Out] Vector4% Out, Vector4% Vector1, Vector4% Vector2, Vector4% Vector3)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+		pin_ptr<Vector4> PinnedVector3 = &Vector3;
+
+		D3DXVec4Cross((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedVector2, (D3DXVECTOR4*)PinnedVector3);
+	}
+
+	static float Vector4Dot(Vector4% Vector1, Vector4% Vector2)
+	{
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+
+		return D3DXVec4Dot((D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedVector2);
+	}
+
+	static void Vector4Hermite([Out] Vector4% Out, Vector4% Vector1, Vector4% Tangent1, Vector4% Vector2, Vector4% Tangent2, float S)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedTangent1 = &Tangent1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+		pin_ptr<Vector4> PinnedTangent2 = &Tangent2;
+
+		D3DXVec4Hermite((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedTangent1, (D3DXVECTOR4*)PinnedVector2, (D3DXVECTOR4*)PinnedTangent2, S);
+	}
+
+	static float Vector4Length(Vector4% Vector)
+	{
+		pin_ptr<Vector4> PinnedVector = &Vector;
+		return D3DXVec4Length((D3DXVECTOR4*)PinnedVector);
+	}
+
+	static float Vector4LengthSquare(Vector4% Vector)
+	{
+		pin_ptr<Vector4> PinnedVector = &Vector;
+		return D3DXVec4LengthSq((D3DXVECTOR4*)PinnedVector);
+	}
+
+	static void Vector4Normalize([Out] Vector4% Out, Vector4% Vector)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector = &Vector;
+
+		D3DXVec4Normalize((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector);
+	}
+
+	static void Vector4Subtract([Out] Vector4% Out, Vector4% Vector1, Vector4% Vector2)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector1 = &Vector1;
+		pin_ptr<Vector4> PinnedVector2 = &Vector2;
+
+		D3DXVec4Subtract((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector1, (D3DXVECTOR4*)PinnedVector2);
+	}
+
+	static void Vector4Transform([Out] Vector4% Out, Vector4% Vector, Matrix% Matrix)
+	{
+		pin_ptr<Vector4> PinnedOut = &Out;
+		pin_ptr<Vector4> PinnedVector = &Vector;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec4Transform((D3DXVECTOR4*)PinnedOut, (D3DXVECTOR4*)PinnedVector, (D3DXMATRIX*)PinnedMatrix);
+	}
+	
+	static void Vector4TransformArray(array<Vector4>^ Out, unsigned int OutStride, array<Vector4>^ Vector, unsigned int VectorStride, Matrix% Matrix, unsigned int N)
+	{
+		pin_ptr<Vector4> PinnedOut = Out != nullptr && Out->Length > 0 ? &Out[0] : nullptr;
+		pin_ptr<Vector4> PinnedVector = Vector != nullptr && Vector->Length > 0 ? &Vector[0] : nullptr;
+		pin_ptr<Direct3DX10::Matrix> PinnedMatrix = &Matrix;
+
+		D3DXVec4TransformArray((D3DXVECTOR4*)PinnedOut, OutStride, (D3DXVECTOR4*)PinnedVector, VectorStride, (D3DXMATRIX*)PinnedMatrix, N);
 	}
 
 	static int SaveTextureToFile(Direct3D10::Resource^ SourceTexture, ImageFileFormat DestinationFormat, String^ DestinationFile)

@@ -2,9 +2,7 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* D3DXVec4BaryCentric
-* math functions
-* eksik d3dx9 math fonksiyonlarý
+* d3dx9 : D3DXPlaneDot
 
 * PinnedThis = &*this;
 * PassDescription.FromNative : BlendFactor = *(Float4*)&Native->BlendFactor;
