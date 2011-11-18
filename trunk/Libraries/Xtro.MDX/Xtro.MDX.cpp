@@ -1,10 +1,11 @@
 #include "StdAfx.h"
 #include "Windows.h"
-#include "Microsoft DirectX SDK (August 2009)/Include/D3D10_1.h" // to enable of compiling the D3DCompiler.h
-#include "Microsoft DirectX SDK (August 2009)/Include/D3DX10.h"
-#include "Microsoft DirectX SDK (August 2009)/Include/D3D11.h" // to enable of compiling the D3DCompiler.h
-#include "Microsoft DirectX SDK (August 2009)/Include/D3DCompiler.h"
-#include "Microsoft DirectX SDK (August 2009)/Include/DxErr.h"
+#include "D3D10_1.h" // to enable of compiling the D3DCompiler.h
+#include "D3DX10.h"
+#include "D3D11.h" // to enable of compiling the D3DCompiler.h
+#include "D3DCompiler.h"
+#include "XACT3.h"
+#include "DxErr.h"
 
 #pragma warning (disable : 4800)
 
@@ -285,6 +286,12 @@ namespace Direct3DX10
 
 	#include "FunctionsD3DX10.h"
 	#include "Quaternion_ForwardedMethods.h"
+}
+
+namespace XACT3
+{
+	#include "EnumsXACT3.h"
+	#include "CallbacksXACT3.h"
 }
 }
 }

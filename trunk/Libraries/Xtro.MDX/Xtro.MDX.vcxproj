@@ -94,6 +94,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>Microsoft DirectX SDK (August 2009)/Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>User32.lib</AdditionalDependencies>
@@ -160,6 +161,7 @@
     <ClInclude Include="Byte16.h" />
     <ClInclude Include="Byte2.h" />
     <ClInclude Include="Byte8.h" />
+    <ClInclude Include="CallbacksXACT3.h" />
     <ClInclude Include="ConstantsD3DX10.h" />
     <ClInclude Include="Counter.h" />
     <ClInclude Include="Asynchronous.h" />
@@ -192,6 +194,7 @@
     <ClInclude Include="Effect_ForwardedMethods.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="EnumsD3DCompiler.h" />
+    <ClInclude Include="EnumsXACT3.h" />
     <ClInclude Include="Float1025.h" />
     <ClInclude Include="Float8.h" />
     <ClInclude Include="Font.h" />
