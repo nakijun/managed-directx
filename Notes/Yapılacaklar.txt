@@ -2,14 +2,11 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* D3DDisassemble10Effect
-
-* ErrorHandling
 * XACT3
 
 * PinnedThis = &*this;
 * PassDescription.FromNative : BlendFactor = *(Float4*)&Native->BlendFactor;
-  http://www.codeguru.com/forum/showthread.php?p=2043035#post2043035
+  http://www.codeguru.com/forum/showthread.php?p=2043098#post2043098
 * Float1025 get : return (&Value0000)[Index];
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)

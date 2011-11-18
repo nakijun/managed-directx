@@ -4,6 +4,7 @@
 #include "Microsoft DirectX SDK (August 2009)/Include/D3DX10.h"
 #include "Microsoft DirectX SDK (August 2009)/Include/D3D11.h" // to enable of compiling the D3DCompiler.h
 #include "Microsoft DirectX SDK (August 2009)/Include/D3DCompiler.h"
+#include "Microsoft DirectX SDK (August 2009)/Include/DxErr.h"
 
 #pragma warning (disable : 4800)
 
@@ -11,6 +12,9 @@
 #undef GetTextMetrics
 #undef CreateFont
 #undef CreateFontIndirect
+#undef DXGetErrorDescription
+#undef DXGetErrorString
+#undef DXTrace
 
 using namespace System;
 using namespace System::IO;
@@ -46,6 +50,11 @@ namespace Generic
 	#include "RefObject.h"
 	#include "ValueObject.h"
 	#include "UnmanagedMemoryGeneric.h"
+}
+
+namespace ErrorHandling
+{									   
+	#include "FunctionsErrorHandling.h"
 }
 
 namespace DXGI

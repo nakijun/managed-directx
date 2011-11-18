@@ -96,9 +96,12 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>User32.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -195,6 +198,7 @@
     <ClInclude Include="FontDescription.h" />
     <ClInclude Include="FrameStatistics.h" />
     <ClInclude Include="FunctionsD3DCompiler.h" />
+    <ClInclude Include="FunctionsErrorHandling.h" />
     <ClInclude Include="GammaControl.h" />
     <ClInclude Include="GammaControlCapabilities.h" />
     <ClInclude Include="GeometryShader.h" />
