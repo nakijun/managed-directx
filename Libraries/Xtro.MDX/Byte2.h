@@ -9,14 +9,12 @@ public:
 	{
 		unsigned char get(int Index)
 		{
-			pin_ptr<unsigned char> PinnedThis = &Value0;
-			return ((unsigned char*)PinnedThis)[Index];
+			return ((unsigned char*)&*this)[Index];
 		}
 
 		void set(int Index, unsigned char Value)
 		{
-			pin_ptr<unsigned char> PinnedThis = &Value0;
-			((unsigned char*)PinnedThis)[Index] = Value;
+			((unsigned char*)&*this)[Index] = Value;
 		}
 	}
 

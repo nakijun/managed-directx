@@ -120,14 +120,12 @@ public:
 	{
 		float get(int Index)
 		{
-			pin_ptr<float> PinnedThis = &Value0000;
-			return ((float*)PinnedThis)[Index];
+			return ((float*)&*this)[Index];
 		}
 
 		void set(int Index, float Value)
 		{
-			pin_ptr<float> PinnedThis = &Value0000;
-			((float*)PinnedThis)[Index] = Value;
+			((float*)&*this)[Index] = Value;
 		}
 	}
 
