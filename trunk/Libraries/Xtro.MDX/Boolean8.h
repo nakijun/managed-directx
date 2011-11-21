@@ -15,14 +15,12 @@ public:
 	{
 		bool get(int Index)
 		{
-			pin_ptr<int> PinnedThis = &Value0;
-			return ((int*)PinnedThis)[Index];
+			return ((int*)&*this)[Index];
 		}
 
 		void set(int Index, bool Value)
 		{
-			pin_ptr<int> PinnedThis = &Value0;
-			((int*)PinnedThis)[Index] = Value;
+			((int*)&*this)[Index] = Value;
 		}
 	}
 
@@ -31,8 +29,7 @@ public:
 		if (Booleans == nullptr || Booleans->Length < 8) return;
 
 		pin_ptr<bool> PinnedBooleans = &Booleans[0];
-		pin_ptr<int> PinnedThis = &Value0;
-		memcpy(PinnedThis, PinnedBooleans, Marshal::SizeOf(Boolean8::typeid));
+		memcpy(&*this, PinnedBooleans, Marshal::SizeOf(Boolean8::typeid));
 	}
 
 	static explicit operator array<bool>^(Boolean8 Value)

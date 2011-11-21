@@ -120,14 +120,12 @@ public:
 	{
 		Rgb get(int Index)
 		{
-			pin_ptr<Rgb> PinnedThis = &Value0000;
-			return ((Rgb*)PinnedThis)[Index];
+			return ((Rgb*)&*this)[Index];
 		}
 
 		void set(int Index, Rgb Value)
 		{
-			pin_ptr<Rgb> PinnedThis = &Value0000;
-			((Rgb*)PinnedThis)[Index] = Value;
+			((Rgb*)&*this)[Index] = Value;
 		}
 	}
 
