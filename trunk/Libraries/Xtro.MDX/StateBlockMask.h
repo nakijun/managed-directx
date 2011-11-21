@@ -76,10 +76,8 @@ public:
 
 	virtual bool Equals(StateBlockMask Value)
 	{
-		pin_ptr<unsigned char> PinnedThis = &VS;
 		pin_ptr<StateBlockMask> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(StateBlockMask::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(StateBlockMask::typeid)) == 0;
 	}
 
 	static bool Equals(StateBlockMask% Value1, StateBlockMask% Value2)

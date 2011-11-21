@@ -48,10 +48,8 @@ public:
 
 	virtual bool Equals(SamplerDescription Value)
 	{
-		pin_ptr<Direct3D10::Filter> PinnedThis = &Filter;
 		pin_ptr<SamplerDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SamplerDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(SamplerDescription::typeid)) == 0;
 	}
 
 	static bool Equals(SamplerDescription% Value1, SamplerDescription% Value2)

@@ -77,10 +77,8 @@ public:
 
 	virtual bool Equals(Boolean8 Value)
 	{
-		pin_ptr<int> PinnedThis = &Value0;
 		pin_ptr<Boolean8> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Boolean8::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Boolean8::typeid)) == 0;
 	}
 
 	static bool Equals(Boolean8% Value1, Boolean8% Value2)

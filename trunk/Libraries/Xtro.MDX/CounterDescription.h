@@ -32,10 +32,8 @@ public:
 
 	virtual bool Equals(CounterDescription Value)
 	{
-		pin_ptr<CounterEnum> PinnedThis = &Counter;
 		pin_ptr<CounterDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(CounterDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(CounterDescription::typeid)) == 0;
 	}
 
 	static bool Equals(CounterDescription% Value1, CounterDescription% Value2)

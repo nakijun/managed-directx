@@ -23,8 +23,7 @@ public:
 		if (Bytes == nullptr || Bytes->Length < 2) return;
 
 		pin_ptr<unsigned char> PinnedBytes = &Bytes[0];
-		pin_ptr<unsigned char> PinnedThis = &Value0;
-		memcpy(PinnedThis, PinnedBytes, Marshal::SizeOf(Byte2::typeid));
+		memcpy(&*this, PinnedBytes, Marshal::SizeOf(Byte2::typeid));
 	}
 
 	static explicit operator array<unsigned char>^(Byte2 Value)
@@ -66,10 +65,8 @@ public:
 
 	virtual bool Equals(Byte2 Value)
 	{
-		pin_ptr<unsigned char> PinnedThis = &Value0;
 		pin_ptr<Byte2> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Byte2::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Byte2::typeid)) == 0;
 	}
 
 	static bool Equals(Byte2% Value1, Byte2% Value2)

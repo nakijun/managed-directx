@@ -36,10 +36,8 @@ public:
 
 	virtual bool Equals(DepthStencilOperationDescription Value)
 	{
-		pin_ptr<StencilOperation> PinnedThis = &StencilFailOperation;
 		pin_ptr<DepthStencilOperationDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(DepthStencilOperationDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(DepthStencilOperationDescription::typeid)) == 0;
 	}
 
 	static bool Equals(DepthStencilOperationDescription% Value1, DepthStencilOperationDescription% Value2)

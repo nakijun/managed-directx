@@ -134,8 +134,7 @@ public:
 		if (Floats == nullptr || Floats->Length < 1025) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedThis = &Value0000;
-		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Float1025::typeid));
+		memcpy(&*this, PinnedFloats, Marshal::SizeOf(Float1025::typeid));
 	}
 
 	static explicit operator array<float>^(Float1025 Value)
@@ -207,10 +206,8 @@ public:
 
 	virtual bool Equals(Float1025 Value)
 	{
-		pin_ptr<float> PinnedThis = &Value0000;
 		pin_ptr<Float1025> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Float1025::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Float1025::typeid)) == 0;
 	}
 
 	static bool Equals(Float1025% Value1, Float1025% Value2)
