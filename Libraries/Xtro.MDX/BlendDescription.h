@@ -46,10 +46,8 @@ public:
 
 	virtual bool Equals(BlendDescription Value)
 	{
-		pin_ptr<bool> PinnedThis = &AlphaToCoverageEnable;
 		pin_ptr<BlendDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(BlendDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(BlendDescription::typeid)) == 0;
 	}
 
 	static bool Equals(BlendDescription% Value1, BlendDescription% Value2)

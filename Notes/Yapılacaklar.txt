@@ -4,7 +4,7 @@
 
 * XACT3
 
-* PinnedThis = &*this;
+* pin_ptr ara. PinnedThis = &*this; (bitince PinnedThis ara. hiç kalmasýn)
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 

@@ -40,10 +40,8 @@ public:
 
 	virtual bool Equals(Box Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &Left;
 		pin_ptr<Box> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Box::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Box::typeid)) == 0;
 	}
 
 	static bool Equals(Box% Value1, Box% Value2)

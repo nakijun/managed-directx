@@ -32,10 +32,8 @@ public:
 
 	virtual bool Equals(BufferRTV Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &ElementOffset;
 		pin_ptr<BufferRTV> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(BufferRTV::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(BufferRTV::typeid)) == 0;
 	}
 
 	static bool Equals(BufferRTV% Value1, BufferRTV% Value2)

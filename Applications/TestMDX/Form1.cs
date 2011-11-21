@@ -25,9 +25,9 @@ namespace TestMDX
         private void Form1_Shown(object Sender, EventArgs E)
         {
             var b8a = new Boolean8();
-            b8a[0] = true;
-            b8a[7] = true;
-            var KK=b8a == new Boolean8();
+            //b8a[0] = true;
+            //b8a[7] = true;
+            var KK = b8a.Equals(new Boolean8());
 
             var at = new TextureLoadInfo { Filter = FilterFlag.Box, DestinationBox = new Box { Back=1} };
             var bt = new TextureLoadInfo { Filter = FilterFlag.Box, DestinationBox = new Box() };

@@ -44,10 +44,8 @@ public:
 
 	virtual bool Equals(PassShaderDescription Value)
 	{
-		pin_ptr<EffectShaderVariable^> PinnedThis = &ShaderVariable;
 		pin_ptr<PassShaderDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(PassShaderDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(PassShaderDescription::typeid)) == 0;
 	}
 
 	static bool Equals(PassShaderDescription% Value1, PassShaderDescription% Value2)
