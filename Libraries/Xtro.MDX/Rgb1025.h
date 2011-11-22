@@ -206,8 +206,7 @@ public:
 
 	virtual bool Equals(Rgb1025 Value)
 	{
-		pin_ptr<Rgb1025> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Rgb1025::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Rgb1025::typeid)) == 0;
 	}
 
 	static bool Equals(Rgb1025% Value1, Rgb1025% Value2)

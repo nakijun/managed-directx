@@ -102,8 +102,7 @@ public:
 
 	virtual bool Equals(RasterizerDescription Value)
 	{
-		pin_ptr<RasterizerDescription> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(RasterizerDescription::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(RasterizerDescription::typeid)) == 0;
 	}
 
 	static bool Equals(RasterizerDescription% Value1, RasterizerDescription% Value2)

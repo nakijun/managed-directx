@@ -135,8 +135,7 @@ public:
 
 	virtual bool Equals(Vector3 Value)
 	{
-		pin_ptr<Vector3> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Vector3::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Vector3::typeid)) == 0;
 	}
 
 	static bool Equals(Vector3% Value1, Vector3% Value2)

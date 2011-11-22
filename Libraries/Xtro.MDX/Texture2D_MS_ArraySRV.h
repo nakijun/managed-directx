@@ -32,8 +32,7 @@ public:
 
 	virtual bool Equals(Texture2D_MS_ArraySRV Value)
 	{
-		pin_ptr<Texture2D_MS_ArraySRV> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Texture2D_MS_ArraySRV::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Texture2D_MS_ArraySRV::typeid)) == 0;
 	}
 
 	static bool Equals(Texture2D_MS_ArraySRV% Value1, Texture2D_MS_ArraySRV% Value2)

@@ -32,8 +32,7 @@ public:
 
 	virtual bool Equals(QueryDescription Value)
 	{
-		pin_ptr<QueryDescription> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(QueryDescription::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(QueryDescription::typeid)) == 0;
 	}
 
 	static bool Equals(QueryDescription% Value1, QueryDescription% Value2)

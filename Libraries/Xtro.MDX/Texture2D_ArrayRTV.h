@@ -34,8 +34,7 @@ public:
 
 	virtual bool Equals(Texture2DArrayRTV Value)
 	{
-		pin_ptr<Texture2DArrayRTV> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Texture2DArrayRTV::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Texture2DArrayRTV::typeid)) == 0;
 	}
 
 	static bool Equals(Texture2DArrayRTV% Value1, Texture2DArrayRTV% Value2)
