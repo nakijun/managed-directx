@@ -88,6 +88,12 @@
     <Filter Include="XACT3">
       <UniqueIdentifier>{e977b8cf-eca1-4886-a4f2-98c71fc4e87e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XACT3\Structures">
+      <UniqueIdentifier>{ac276dc1-1a3d-48a0-a369-4dd520145830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XACT3\Interfaces">
+      <UniqueIdentifier>{080b9101-a7a3-4f16-b083-80145e614f1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h">
@@ -918,6 +924,9 @@
     </ClInclude>
     <ClInclude Include="CallbacksXACT3.h">
       <Filter>XACT3</Filter>
+    </ClInclude>
+    <ClInclude Include="Cue.h">
+      <Filter>XACT3\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

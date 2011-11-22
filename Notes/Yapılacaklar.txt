@@ -2,9 +2,9 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* virtual bool Equals ---> tüm parametreler pin_ptr'siz olacak
-
 * XACT3
+
+* XACT3 örnekleri
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 
