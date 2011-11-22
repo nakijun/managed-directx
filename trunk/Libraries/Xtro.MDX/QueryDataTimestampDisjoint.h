@@ -32,8 +32,7 @@ public:
 
 	virtual bool Equals(QueryDataTimestampDisjoint Value)
 	{
-		pin_ptr<QueryDataTimestampDisjoint> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(QueryDataTimestampDisjoint::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(QueryDataTimestampDisjoint::typeid)) == 0;
 	}
 
 	static bool Equals(QueryDataTimestampDisjoint% Value1, QueryDataTimestampDisjoint% Value2)

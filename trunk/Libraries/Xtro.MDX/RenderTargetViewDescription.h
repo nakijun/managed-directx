@@ -42,8 +42,7 @@ public:
 
 	virtual bool Equals(RenderTargetViewDescription Value)
 	{
-		pin_ptr<RenderTargetViewDescription> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(RenderTargetViewDescription::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(RenderTargetViewDescription::typeid)) == 0;
 	}
 
 	static bool Equals(RenderTargetViewDescription% Value1, RenderTargetViewDescription% Value2)

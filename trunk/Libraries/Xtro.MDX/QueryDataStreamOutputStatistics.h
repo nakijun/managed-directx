@@ -32,8 +32,7 @@ public:
 
 	virtual bool Equals(QueryDataStreamOutputStatistics Value)
 	{
-		pin_ptr<QueryDataStreamOutputStatistics> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(QueryDataStreamOutputStatistics::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(QueryDataStreamOutputStatistics::typeid)) == 0;
 	}
 
 	static bool Equals(QueryDataStreamOutputStatistics% Value1, QueryDataStreamOutputStatistics% Value2)

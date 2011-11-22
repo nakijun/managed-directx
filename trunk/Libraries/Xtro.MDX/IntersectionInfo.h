@@ -36,8 +36,7 @@ public:
 
 	virtual bool Equals(IntersectionInfo Value)
 	{
-		pin_ptr<IntersectionInfo> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(IntersectionInfo::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(IntersectionInfo::typeid)) == 0;
 	}
 
 	static bool Equals(IntersectionInfo% Value1, IntersectionInfo% Value2)

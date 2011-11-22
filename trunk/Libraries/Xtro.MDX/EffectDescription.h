@@ -40,8 +40,7 @@ public:
 
 	virtual bool Equals(EffectDescription Value)
 	{
-		pin_ptr<EffectDescription> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(EffectDescription::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(EffectDescription::typeid)) == 0;
 	}
 
 	static bool Equals(EffectDescription% Value1, EffectDescription% Value2)

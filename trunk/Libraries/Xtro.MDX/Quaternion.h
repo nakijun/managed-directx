@@ -151,8 +151,7 @@ public:
 
 	virtual bool Equals(Quaternion Value)
 	{
-		pin_ptr<Quaternion> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Quaternion::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Quaternion::typeid)) == 0;
 	}
 
 	static bool Equals(Quaternion% Value1, Quaternion% Value2)

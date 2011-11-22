@@ -34,8 +34,7 @@ public:
 
 	virtual bool Equals(Vector Value)
 	{
-		pin_ptr<Vector> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Vector::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Vector::typeid)) == 0;
 	}
 
 	static bool Equals(Vector% Value1, Vector% Value2)

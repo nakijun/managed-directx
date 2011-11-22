@@ -40,8 +40,7 @@ public:
 
 	virtual bool Equals(Viewport Value)
 	{
-		pin_ptr<Viewport> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Viewport::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Viewport::typeid)) == 0;
 	}
 
 	static bool Equals(Viewport% Value1, Viewport% Value2)

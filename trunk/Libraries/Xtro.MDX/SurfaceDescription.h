@@ -36,8 +36,7 @@ public:
 
 	virtual bool Equals(SurfaceDescription Value)
 	{
-		pin_ptr<SurfaceDescription> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(SurfaceDescription::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(SurfaceDescription::typeid)) == 0;
 	}
 
 	static bool Equals(SurfaceDescription% Value1, SurfaceDescription% Value2)

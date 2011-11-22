@@ -115,8 +115,7 @@ public:
 
 	virtual bool Equals(ImageLoadInfo Value)
 	{
-		pin_ptr<ImageLoadInfo> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(ImageLoadInfo::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(ImageLoadInfo::typeid)) == 0;
 	}
 
 	static bool Equals(ImageLoadInfo% Value1, ImageLoadInfo% Value2)

@@ -44,8 +44,7 @@ public:
 
 	virtual bool Equals(QueryDataPipelineStatistics Value)
 	{
-		pin_ptr<QueryDataPipelineStatistics> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(QueryDataPipelineStatistics::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(QueryDataPipelineStatistics::typeid)) == 0;
 	}
 
 	static bool Equals(QueryDataPipelineStatistics% Value1, QueryDataPipelineStatistics% Value2)

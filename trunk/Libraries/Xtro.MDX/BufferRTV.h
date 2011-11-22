@@ -32,8 +32,7 @@ public:
 
 	virtual bool Equals(BufferRTV Value)
 	{
-		pin_ptr<BufferRTV> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(BufferRTV::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(BufferRTV::typeid)) == 0;
 	}
 
 	static bool Equals(BufferRTV% Value1, BufferRTV% Value2)

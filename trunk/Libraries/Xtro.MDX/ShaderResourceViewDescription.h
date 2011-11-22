@@ -43,8 +43,7 @@ public:
 
 	virtual bool Equals(ShaderResourceViewDescription Value)
 	{
-		pin_ptr<ShaderResourceViewDescription> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(ShaderResourceViewDescription::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(ShaderResourceViewDescription::typeid)) == 0;
 	}
 
 	static bool Equals(ShaderResourceViewDescription% Value1, ShaderResourceViewDescription% Value2)

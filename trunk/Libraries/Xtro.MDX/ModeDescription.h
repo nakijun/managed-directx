@@ -40,8 +40,7 @@ public:
 
 	virtual bool Equals(ModeDescription Value)
 	{
-		pin_ptr<ModeDescription> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(ModeDescription::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(ModeDescription::typeid)) == 0;
 	}
 
 	static bool Equals(ModeDescription% Value1, ModeDescription% Value2)

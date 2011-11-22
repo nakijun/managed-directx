@@ -42,8 +42,7 @@ public:
 
 	virtual bool Equals(MappedTexture3D Value)
 	{
-		pin_ptr<MappedTexture3D> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(MappedTexture3D::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(MappedTexture3D::typeid)) == 0;
 	}
 
 	static bool Equals(MappedTexture3D% Value1, MappedTexture3D% Value2)

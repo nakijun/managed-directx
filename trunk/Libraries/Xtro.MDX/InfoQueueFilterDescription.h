@@ -132,8 +132,7 @@ public:
 
 	virtual bool Equals(InfoQueueFilterDescription Value)
 	{
-		pin_ptr<InfoQueueFilterDescription> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(InfoQueueFilterDescription::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(InfoQueueFilterDescription::typeid)) == 0;
 	}
 
 	static bool Equals(InfoQueueFilterDescription% Value1, InfoQueueFilterDescription% Value2)

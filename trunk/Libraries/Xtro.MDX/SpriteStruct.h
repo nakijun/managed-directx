@@ -59,8 +59,7 @@ public:
 
 	virtual bool Equals(SpriteStruct Value)
 	{
-		pin_ptr<SpriteStruct> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(SpriteStruct::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(SpriteStruct::typeid)) == 0;
 	}
 
 	static bool Equals(SpriteStruct% Value1, SpriteStruct% Value2)

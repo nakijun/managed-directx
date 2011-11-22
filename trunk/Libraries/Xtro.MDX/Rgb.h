@@ -34,8 +34,7 @@ public:
 
 	virtual bool Equals(Rgb Value)
 	{
-		pin_ptr<Rgb> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Rgb::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Rgb::typeid)) == 0;
 	}
 
 	static bool Equals(Rgb% Value1, Rgb% Value2)

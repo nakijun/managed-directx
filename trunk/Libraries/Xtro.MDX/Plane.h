@@ -136,8 +136,7 @@ public:
 
 	virtual bool Equals(Plane Value)
 	{
-		pin_ptr<Plane> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Plane::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Plane::typeid)) == 0;
 	}
 
 	static bool Equals(Plane% Value1, Plane% Value2)
