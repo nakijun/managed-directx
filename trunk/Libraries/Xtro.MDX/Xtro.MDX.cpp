@@ -290,6 +290,9 @@ namespace Direct3DX10
 namespace XACT3
 {
 	#include "EnumsXACT3.h"
+			   
+	#include "Cue.h"
+
 	#include "CallbacksXACT3.h"
 }
 }

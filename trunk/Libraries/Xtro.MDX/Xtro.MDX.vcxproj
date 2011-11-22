@@ -429,6 +429,7 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="Stdafx.h" />
+    <ClInclude Include="Cue.h" />
     <ClInclude Include="WeldEpsilons.h" />
   </ItemGroup>
   <ItemGroup>
