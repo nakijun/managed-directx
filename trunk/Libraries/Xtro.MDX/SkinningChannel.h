@@ -34,10 +34,8 @@ public:
 
 	virtual bool Equals(SkinningChannel Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &SourceOffset;
 		pin_ptr<SkinningChannel> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SkinningChannel::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(SkinningChannel::typeid)) == 0;
 	}
 
 	static bool Equals(SkinningChannel% Value1, SkinningChannel% Value2)

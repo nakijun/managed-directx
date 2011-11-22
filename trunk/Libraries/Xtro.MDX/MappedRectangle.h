@@ -39,10 +39,8 @@ public:
 
 	virtual bool Equals(MappedRectangle Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &Pitch;
 		pin_ptr<MappedRectangle> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(MappedRectangle::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(MappedRectangle::typeid)) == 0;
 	}
 
 	static bool Equals(MappedRectangle% Value1, MappedRectangle% Value2)

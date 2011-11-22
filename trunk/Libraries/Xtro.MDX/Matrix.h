@@ -22,14 +22,12 @@ public:
 	{
 		float get(unsigned int Index1, unsigned int Index2)
 		{
-			pin_ptr<float> PinnedThis = &Value11;
-			return ((float**)PinnedThis)[Index1][Index2];
+			return ((float**)&*this)[Index1][Index2];
 		}
 
 		void set(unsigned int Index1, unsigned int Index2, float Value)
 		{
-			pin_ptr<float> PinnedThis = &Value11;
-			((float**)PinnedThis)[Index1][Index2] = Value;
+			((float**)&*this)[Index1][Index2] = Value;
 		}
 	}
 
@@ -38,8 +36,7 @@ public:
 		if (Floats == nullptr || Floats->Length < 16) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedThis = &Value11;
-		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Matrix::typeid));
+		memcpy(&*this, PinnedFloats, Marshal::SizeOf(Matrix::typeid));
 	}
 		
 	Matrix(array<Float16bit>^ Floats)
@@ -98,14 +95,13 @@ public:
 		return Floats;
 	}
 
-	void Multiply(Matrix Value)
+	void Multiply(Matrix% Value)
 	{
-		pin_ptr<Matrix> PinnedThis = this;
 		pin_ptr<Matrix> PinnedValue = &Value;
-		D3DXMatrixMultiply((D3DXMATRIX*)PinnedThis, (D3DXMATRIX*)PinnedThis, (D3DXMATRIX*)PinnedValue);
+		D3DXMatrixMultiply((D3DXMATRIX*)&*this, (D3DXMATRIX*)&*this, (D3DXMATRIX*)PinnedValue);
 	}
 
-	void Add(Matrix Value)
+	void Add(Matrix% Value)
 	{
 		Value11 += Value.Value11;
 		Value12 += Value.Value12;
@@ -125,7 +121,7 @@ public:
 		Value44 += Value.Value44;
 	}
 
-	void Subtract(Matrix Value)
+	void Subtract(Matrix% Value)
 	{
 		Value11 -= Value.Value11;
 		Value12 -= Value.Value12;
@@ -286,10 +282,7 @@ public:
 
 	virtual bool Equals(Matrix Value)
 	{
-		pin_ptr<float> PinnedThis = &Value11;
-		pin_ptr<Matrix> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Matrix::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Matrix::typeid)) == 0;
 	}
 
 	static bool Equals(Matrix% Value1, Matrix% Value2)

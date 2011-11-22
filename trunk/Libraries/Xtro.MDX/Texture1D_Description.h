@@ -44,10 +44,8 @@ public:
 
 	virtual bool Equals(Texture1D_Description Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &Width;
 		pin_ptr<Texture1D_Description> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Texture1D_Description::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Texture1D_Description::typeid)) == 0;
 	}
 
 	static bool Equals(Texture1D_Description% Value1, Texture1D_Description% Value2)

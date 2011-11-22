@@ -38,10 +38,8 @@ public:
 
 	virtual bool Equals(FrameStatistics Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &PresentCount;
 		pin_ptr<FrameStatistics> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(FrameStatistics::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(FrameStatistics::typeid)) == 0;
 	}
 
 	static bool Equals(FrameStatistics% Value1, FrameStatistics% Value2)

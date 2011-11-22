@@ -20,8 +20,7 @@ public:
 		if (Floats == nullptr || Floats->Length < 4) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedThis = &R;
-		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Color::typeid));
+		memcpy(&*this, PinnedFloats, Marshal::SizeOf(Color::typeid));
 	}
 
 	Color(array<Float16bit>^ Floats)
@@ -53,7 +52,7 @@ public:
 		return Floats;
 	}
 
-	void Add(Color Value)
+	void Add(Color% Value)
 	{
 		R += Value.R;
 		G += Value.G;
@@ -61,7 +60,7 @@ public:
 		A += Value.A;
 	}
 
-	void Subtract(Color Value)
+	void Subtract(Color% Value)
 	{
 		R -= Value.R;
 		G -= Value.G;
@@ -146,10 +145,8 @@ public:
 
 	virtual bool Equals(Color Value)
 	{
-		pin_ptr<float> PinnedThis = &R;
 		pin_ptr<Color> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Color::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Color::typeid)) == 0;
 	}
 
 	static bool Equals(Color% Value1, Color% Value2)

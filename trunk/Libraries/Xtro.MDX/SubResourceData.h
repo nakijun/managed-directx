@@ -42,10 +42,8 @@ public:
 
 	virtual bool Equals(SubResourceData Value)
 	{
-		pin_ptr<UnmanagedMemory^> PinnedThis = &SystemMemory;
 		pin_ptr<SubResourceData> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SubResourceData::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(SubResourceData::typeid)) == 0;
 	}
 
 	static bool Equals(SubResourceData% Value1, SubResourceData% Value2)

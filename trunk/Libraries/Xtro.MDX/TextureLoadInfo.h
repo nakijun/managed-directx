@@ -100,10 +100,8 @@ public:
 
 	virtual bool Equals(TextureLoadInfo Value)
 	{
-		pin_ptr<D3D10_BOX*> PinnedThis = &pSourceBox;
 		pin_ptr<TextureLoadInfo> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(TextureLoadInfo::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(TextureLoadInfo::typeid)) == 0;
 	}
 
 	static bool Equals(TextureLoadInfo% Value1, TextureLoadInfo% Value2)

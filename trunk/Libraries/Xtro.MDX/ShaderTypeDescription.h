@@ -42,10 +42,8 @@ public:
 
 	virtual bool Equals(ShaderTypeDescription Value)
 	{
-		pin_ptr<ShaderVariableClass> PinnedThis = &Class;
 		pin_ptr<ShaderTypeDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(ShaderTypeDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(ShaderTypeDescription::typeid)) == 0;
 	}
 
 	static bool Equals(ShaderTypeDescription% Value1, ShaderTypeDescription% Value2)

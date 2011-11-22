@@ -40,10 +40,8 @@ public:
 
 	virtual bool Equals(DepthStencilViewDescription Value)
 	{
-		pin_ptr<Direct3D10::Format> PinnedThis = &Format;
 		pin_ptr<DepthStencilViewDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(DepthStencilViewDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(DepthStencilViewDescription::typeid)) == 0;
 	}
 
 	static bool Equals(DepthStencilViewDescription% Value1, DepthStencilViewDescription% Value2)

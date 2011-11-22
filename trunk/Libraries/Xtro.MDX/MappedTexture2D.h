@@ -39,10 +39,8 @@ public:
 
 	virtual bool Equals(MappedTexture2D Value)
 	{
-		pin_ptr<UnmanagedMemory^> PinnedThis = &Data;
 		pin_ptr<MappedTexture2D> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(MappedTexture2D::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(MappedTexture2D::typeid)) == 0;
 	}
 
 	static bool Equals(MappedTexture2D% Value1, MappedTexture2D% Value2)

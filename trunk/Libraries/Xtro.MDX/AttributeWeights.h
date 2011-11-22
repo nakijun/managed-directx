@@ -44,10 +44,8 @@ public:
 
 	virtual bool Equals(AttributeWeights Value)
 	{
-		pin_ptr<float> PinnedThis = &Position;
 		pin_ptr<AttributeWeights> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(AttributeWeights::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(AttributeWeights::typeid)) == 0;
 	}
 
 	static bool Equals(AttributeWeights% Value1, AttributeWeights% Value2)

@@ -487,9 +487,6 @@
     <ClInclude Include="Quaternion.h">
       <Filter>Direct3DX10\Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Quaternion_ForwardedMethods.h">
-      <Filter>Direct3DX10\Structures</Filter>
-    </ClInclude>
     <ClInclude Include="EnumsDXGI.h">
       <Filter>DXGI</Filter>
     </ClInclude>

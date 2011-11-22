@@ -11,8 +11,7 @@ public:
 		if (Floats == nullptr || Floats->Length < 4) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedThis = &A;
-		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Plane::typeid));
+		memcpy(&*this, PinnedFloats, Marshal::SizeOf(Plane::typeid));
 	}
 
 	Plane(array<Float16bit>^ Floats)
@@ -44,7 +43,7 @@ public:
 		return Floats;
 	}
 
-	void Add(Plane Value)
+	void Add(Plane% Value)
 	{
 		A += Value.A;
 		B += Value.B;
@@ -52,7 +51,7 @@ public:
 		D += Value.D;
 	}
 
-	void Subtract(Plane Value)
+	void Subtract(Plane% Value)
 	{
 		A -= Value.A;
 		B -= Value.B;
@@ -137,10 +136,8 @@ public:
 
 	virtual bool Equals(Plane Value)
 	{
-		pin_ptr<float> PinnedThis = &A;
 		pin_ptr<Plane> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Plane::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Plane::typeid)) == 0;
 	}
 
 	static bool Equals(Plane% Value1, Plane% Value2)

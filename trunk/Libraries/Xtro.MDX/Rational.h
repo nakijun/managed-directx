@@ -32,10 +32,8 @@ public:
 
 	virtual bool Equals(Rational Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &Numerator;
 		pin_ptr<Rational> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Rational::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Rational::typeid)) == 0;
 	}
 
 	static bool Equals(Rational% Value1, Rational% Value2)

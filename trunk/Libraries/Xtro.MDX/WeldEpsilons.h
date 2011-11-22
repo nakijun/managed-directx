@@ -48,10 +48,8 @@ public:
 
 	virtual bool Equals(WeldEpsilons Value)
 	{
-		pin_ptr<float> PinnedThis = &Position;
 		pin_ptr<WeldEpsilons> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(WeldEpsilons::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(WeldEpsilons::typeid)) == 0;
 	}
 
 	static bool Equals(WeldEpsilons% Value1, WeldEpsilons% Value2)

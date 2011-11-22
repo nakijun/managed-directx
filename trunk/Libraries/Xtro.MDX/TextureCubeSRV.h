@@ -31,10 +31,8 @@ public:
 
 	virtual bool Equals(TextureCubeSRV Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &MostDetailedMip;
 		pin_ptr<TextureCubeSRV> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(TextureCubeSRV::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(TextureCubeSRV::typeid)) == 0;
 	}
 
 	static bool Equals(TextureCubeSRV% Value1, TextureCubeSRV% Value2)

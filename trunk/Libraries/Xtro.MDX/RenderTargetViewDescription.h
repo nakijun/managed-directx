@@ -42,10 +42,8 @@ public:
 
 	virtual bool Equals(RenderTargetViewDescription Value)
 	{
-		pin_ptr<Direct3D10::Format> PinnedThis = &Format;
 		pin_ptr<RenderTargetViewDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(RenderTargetViewDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(RenderTargetViewDescription::typeid)) == 0;
 	}
 
 	static bool Equals(RenderTargetViewDescription% Value1, RenderTargetViewDescription% Value2)

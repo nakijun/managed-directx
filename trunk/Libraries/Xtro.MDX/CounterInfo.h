@@ -34,8 +34,7 @@ public:
 
 	virtual bool Equals(CounterInfo Value)
 	{
-		pin_ptr<CounterInfo> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(CounterInfo::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(CounterInfo::typeid)) == 0;
 	}
 
 	static bool Equals(CounterInfo% Value1, CounterInfo% Value2)

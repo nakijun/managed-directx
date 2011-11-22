@@ -285,7 +285,6 @@ namespace Direct3DX10
 	#include "Font.h"
 
 	#include "FunctionsD3DX10.h"
-	#include "Quaternion_ForwardedMethods.h"
 }
 
 namespace XACT3
