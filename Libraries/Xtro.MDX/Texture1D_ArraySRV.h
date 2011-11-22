@@ -36,10 +36,8 @@ public:
 
 	virtual bool Equals(Texture1D_ArraySRV Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &MostDetailedMip;
 		pin_ptr<Texture1D_ArraySRV> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Texture1D_ArraySRV::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Texture1D_ArraySRV::typeid)) == 0;
 	}
 
 	static bool Equals(Texture1D_ArraySRV% Value1, Texture1D_ArraySRV% Value2)

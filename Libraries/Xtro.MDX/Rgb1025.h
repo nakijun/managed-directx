@@ -134,8 +134,7 @@ public:
 		if (Rgbs == nullptr || Rgbs->Length < 1025) return;
 
 		pin_ptr<Rgb> PinnedRgbs = &Rgbs[0];
-		pin_ptr<Rgb> PinnedThis = &Value0000;
-		memcpy(PinnedThis, PinnedRgbs, Marshal::SizeOf(Rgb1025::typeid));
+		memcpy(&*this, PinnedRgbs, Marshal::SizeOf(Rgb1025::typeid));
 	}
 
 	static explicit operator array<Rgb>^(Rgb1025 Value)
@@ -207,10 +206,8 @@ public:
 
 	virtual bool Equals(Rgb1025 Value)
 	{
-		pin_ptr<Rgb> PinnedThis = &Value0000;
 		pin_ptr<Rgb1025> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Rgb1025::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Rgb1025::typeid)) == 0;
 	}
 
 	static bool Equals(Rgb1025% Value1, Rgb1025% Value2)

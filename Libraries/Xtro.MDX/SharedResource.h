@@ -30,10 +30,8 @@ public:
 
 	virtual bool Equals(SharedResource Value)
 	{
-		pin_ptr<IntPtr> PinnedThis = &Handle;
 		pin_ptr<SharedResource> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SharedResource::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(SharedResource::typeid)) == 0;
 	}
 
 	static bool Equals(SharedResource% Value1, SharedResource% Value2)

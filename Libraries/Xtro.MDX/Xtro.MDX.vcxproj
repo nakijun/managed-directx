@@ -308,7 +308,6 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Predicate.h" />
     <ClInclude Include="Quaternion.h" />
-    <ClInclude Include="Quaternion_ForwardedMethods.h" />
     <ClInclude Include="Query.h" />
     <ClInclude Include="QueryDataPipelineStatistics.h" />
     <ClInclude Include="QueryDataStreamOutputStatistics.h" />

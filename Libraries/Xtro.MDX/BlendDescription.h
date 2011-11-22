@@ -46,8 +46,7 @@ public:
 
 	virtual bool Equals(BlendDescription Value)
 	{
-		pin_ptr<BlendDescription> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(BlendDescription::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(BlendDescription::typeid)) == 0;
 	}
 
 	static bool Equals(BlendDescription% Value1, BlendDescription% Value2)

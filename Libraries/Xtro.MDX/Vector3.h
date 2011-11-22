@@ -10,8 +10,7 @@ public:
 		if (Floats == nullptr || Floats->Length < 3) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedThis = &X;
-		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Vector3::typeid));
+		memcpy(&*this, PinnedFloats, Marshal::SizeOf(Vector3::typeid));
 	}
 
 	Vector3(Vector Vector)
@@ -48,14 +47,14 @@ public:
 		return Floats;
 	}
 
-	void Add(Vector3 Value)
+	void Add(Vector3% Value)
 	{
 		X += Value.X;
 		Y += Value.Y;
 		Z += Value.Z;
 	}
 
-	void Subtract(Vector3 Value)
+	void Subtract(Vector3% Value)
 	{
 		X -= Value.X;
 		Y -= Value.Y;
@@ -136,10 +135,8 @@ public:
 
 	virtual bool Equals(Vector3 Value)
 	{
-		pin_ptr<float> PinnedThis = &X;
 		pin_ptr<Vector3> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Vector3::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Vector3::typeid)) == 0;
 	}
 
 	static bool Equals(Vector3% Value1, Vector3% Value2)

@@ -11,8 +11,7 @@ public:
 		if (Floats == nullptr || Floats->Length < 4) return;
 
 		pin_ptr<float> PinnedFloats = &Floats[0];
-		pin_ptr<float> PinnedThis = &X;
-		memcpy(PinnedThis, PinnedFloats, Marshal::SizeOf(Quaternion::typeid));
+		memcpy(&*this, PinnedFloats, Marshal::SizeOf(Quaternion::typeid));
 	}
 
 	Quaternion(array<Float16bit>^ Floats)
@@ -44,7 +43,7 @@ public:
 		return Floats;
 	}
 
-	void Add(Quaternion Value)
+	void Add(Quaternion% Value)
 	{
 		X += Value.X;
 		Y += Value.Y;
@@ -52,7 +51,7 @@ public:
 		W += Value.W;
 	}
 
-	void Subtract(Quaternion Value)
+	void Subtract(Quaternion% Value)
 	{
 		X -= Value.X;
 		Y -= Value.Y;
@@ -60,7 +59,12 @@ public:
 		W -= Value.W;
 	}
 
-	void Multiply(Quaternion Value);
+	void Multiply(Quaternion% Value)
+	{
+		pin_ptr<Quaternion> PinnedValue = &Value;
+		D3DXQuaternionMultiply((D3DXQUATERNION*)&*this, (D3DXQUATERNION*)&*this, (D3DXQUATERNION*)PinnedValue);
+	}
+
 
 	void Multiply(float Value)
 	{
@@ -98,7 +102,13 @@ public:
 		return Quaternion(Value1.X - Value2.X, Value1.Y - Value2.Y, Value1.Z - Value2.Z, Value1.W - Value2.W);
 	}
 
-	static Quaternion operator * (Quaternion Value1, Quaternion Value2);
+	static Quaternion operator * (Quaternion Value1, Quaternion Value2)
+	{
+		Quaternion Result;
+		D3DXQuaternionMultiply((D3DXQUATERNION*)&Result, (D3DXQUATERNION*)&Value1, (D3DXQUATERNION*)&Value2);
+
+		return Result;
+	}
 
 	static Quaternion operator * (Quaternion Value1, float Value2)
 	{
@@ -141,10 +151,8 @@ public:
 
 	virtual bool Equals(Quaternion Value)
 	{
-		pin_ptr<float> PinnedThis = &X;
 		pin_ptr<Quaternion> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Quaternion::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Quaternion::typeid)) == 0;
 	}
 
 	static bool Equals(Quaternion% Value1, Quaternion% Value2)

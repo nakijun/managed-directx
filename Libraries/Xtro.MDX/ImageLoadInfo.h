@@ -115,10 +115,8 @@ public:
 
 	virtual bool Equals(ImageLoadInfo Value)
 	{
-		pin_ptr<D3DX10_IMAGE_INFO*> PinnedThis = &pSourceInfo;
 		pin_ptr<ImageLoadInfo> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(ImageLoadInfo::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(ImageLoadInfo::typeid)) == 0;
 	}
 
 	static bool Equals(ImageLoadInfo% Value1, ImageLoadInfo% Value2)

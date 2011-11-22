@@ -34,10 +34,8 @@ public:
 
 	virtual bool Equals(GammaControl Value)
 	{
-		pin_ptr<Rgb> PinnedThis = &Scale;
 		pin_ptr<GammaControl> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(GammaControl::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(GammaControl::typeid)) == 0;
 	}
 
 	static bool Equals(GammaControl% Value1, GammaControl% Value2)

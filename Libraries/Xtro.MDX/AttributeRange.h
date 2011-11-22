@@ -38,10 +38,8 @@ public:
 
 	virtual bool Equals(AttributeRange Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &AttributeId;
 		pin_ptr<AttributeRange> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(AttributeRange::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(AttributeRange::typeid)) == 0;
 	}
 
 	static bool Equals(AttributeRange% Value1, AttributeRange% Value2)

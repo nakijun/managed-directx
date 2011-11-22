@@ -32,10 +32,8 @@ public:
 
 	virtual bool Equals(SampleDescription Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &Count;
 		pin_ptr<SampleDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SampleDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(SampleDescription::typeid)) == 0;
 	}
 
 	static bool Equals(SampleDescription% Value1, SampleDescription% Value2)

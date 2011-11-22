@@ -2,9 +2,9 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* XACT3
+* virtual bool Equals ---> tüm parametreler pin_ptr'siz olacak
 
-* pin_ptr ara. PinnedThis = &*this; (bitince PinnedThis ara. hiç kalmasýn)
+* XACT3
 
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 

@@ -93,8 +93,7 @@ public:
 
 	virtual bool Equals(Byte16 Value)
 	{
-		pin_ptr<Byte16> PinnedValue = &Value;
-		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Byte16::typeid)) == 0;
+		return memcmp(&*this, &Value, Marshal::SizeOf(Byte16::typeid)) == 0;
 	}
 
 	static bool Equals(Byte16% Value1, Byte16% Value2)

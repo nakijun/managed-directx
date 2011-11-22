@@ -46,10 +46,8 @@ public:
 
 	virtual bool Equals(ImageInfo Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &Width;
 		pin_ptr<ImageInfo> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(ImageInfo::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(ImageInfo::typeid)) == 0;
 	}
 
 	static bool Equals(ImageInfo% Value1, ImageInfo% Value2)

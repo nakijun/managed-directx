@@ -44,10 +44,8 @@ public:
 
 	virtual bool Equals(SwapChainDescription Value)
 	{
-		pin_ptr<ModeDescription> PinnedThis = &BufferDescription;
 		pin_ptr<SwapChainDescription> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(SwapChainDescription::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(SwapChainDescription::typeid)) == 0;
 	}
 
 	static bool Equals(SwapChainDescription% Value1, SwapChainDescription% Value2)

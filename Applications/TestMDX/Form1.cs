@@ -28,6 +28,7 @@ namespace TestMDX
             //b8a[0] = true;
             //b8a[7] = true;
             var KK = b8a.Equals(new Boolean8());
+            var karray=(bool[])b8a;
 
             var at = new TextureLoadInfo { Filter = FilterFlag.Box, DestinationBox = new Box { Back=1} };
             var bt = new TextureLoadInfo { Filter = FilterFlag.Box, DestinationBox = new Box() };
@@ -45,17 +46,18 @@ namespace TestMDX
                          };
 
             var V = new Vector3(1, 2, 3);
-            V.Add(new Vector3(1, 2, 3));
+            var V2 = new Vector3(1, 2, 3);
+            V.Add(ref V2);
 
             var VV = V - new Vector3(0, 1, 2);
             VV = +V;
             VV = -V;
             VV.Multiply(3);
-            VV.Add(V);
+            VV.Add(ref V);
             Vector3 ZZ = VV + V;
 
             Matrix M = new Matrix(new float[16] { 11, 12, 13, 14, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44 });
-            M.Multiply(3);
+            M*=3f;
             float[] fs = (float[])M;
 
             SwapChainDescription SwapChainDescription = new SwapChainDescription();

@@ -43,13 +43,13 @@ public:
 		return Floats;
 	}
 
-	void Add(Vector2 Value)
+	void Add(Vector2% Value)
 	{
 		X += Value.X;
 		Y += Value.Y;
 	}
 
-	void Subtract(Vector2 Value)
+	void Subtract(Vector2% Value)
 	{
 		X -= Value.X;
 		Y -= Value.Y;
@@ -126,10 +126,8 @@ public:
 
 	virtual bool Equals(Vector2 Value)
 	{
-		pin_ptr<float> PinnedThis = &X;
 		pin_ptr<Vector2> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Vector2::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Vector2::typeid)) == 0;
 	}
 
 	static bool Equals(Vector2% Value1, Vector2% Value2)

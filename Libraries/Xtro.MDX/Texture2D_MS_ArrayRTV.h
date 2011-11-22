@@ -32,10 +32,8 @@ public:
 
 	virtual bool Equals(Texture2D_MS_ArrayRTV Value)
 	{
-		pin_ptr<unsigned int> PinnedThis = &FirstArraySlice;
 		pin_ptr<Texture2D_MS_ArrayRTV> PinnedValue = &Value;
-
-		return memcmp(PinnedThis, PinnedValue, Marshal::SizeOf(Texture2D_MS_ArrayRTV::typeid)) == 0;
+		return memcmp(&*this, PinnedValue, Marshal::SizeOf(Texture2D_MS_ArrayRTV::typeid)) == 0;
 	}
 
 	static bool Equals(Texture2D_MS_ArrayRTV% Value1, Texture2D_MS_ArrayRTV% Value2)
