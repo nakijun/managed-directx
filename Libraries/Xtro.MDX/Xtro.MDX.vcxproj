@@ -171,6 +171,8 @@
     <ClInclude Include="ConstantsD3D10.h" />
     <ClInclude Include="CounterDescription.h" />
     <ClInclude Include="CounterInfo.h" />
+    <ClInclude Include="CueInstanceProperties.h" />
+    <ClInclude Include="CueProperties.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DepthStencilDescription.h" />
     <ClInclude Include="DepthStencilOperationDescription.h" />
@@ -298,6 +300,7 @@
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Multithread.h" />
     <ClInclude Include="RefObject.h" />
+    <ClInclude Include="SoundVariationProperties.h" />
     <ClInclude Include="StateBlock_ForwardedMethods.h" />
     <ClInclude Include="ValueObject.h" />
     <ClInclude Include="Object.h" />
@@ -359,6 +362,7 @@
     <ClInclude Include="TextureCubeSRV.h" />
     <ClInclude Include="TextureLoadInfo.h" />
     <ClInclude Include="UnmanagedMemoryGeneric.h" />
+    <ClInclude Include="VariationProperties.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="Viewport.h" />
     <ClInclude Include="BufferDescription.h" />
