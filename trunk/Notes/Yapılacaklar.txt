@@ -2,19 +2,12 @@
 * Burda bitirdiklerini sýk sýk yapçaksan Hatýrlatma.txt ye koy :)
 ----------------------------------------------------------------------
 
-* RasterizerDescription, DepthStencilDescription ve Boolean8 gibi
-   içinde peþ peþe bool(yada unsigned char/short/long/...) barýndýran +
-   FromNative/ToNative/Marshal iþlemine girmeyen struclarda
-   bool'larý int yapýp üstlerine bool property koy.
-
-
-* XACT3
-
-* XACT3 örnekleri
-
 * tüm memberlarýn en sýký visibility de olmasýný saðla (private, protected private, internal, public)
 
 * çoðu kýsaltmayý küçük kabul et. Ör : Cpu, Whql, Rgb, Bmp...
+
+* XAudio2
+* XACT3
 
 * Dialog
     Ertelendi :

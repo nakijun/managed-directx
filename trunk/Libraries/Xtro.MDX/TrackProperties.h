@@ -1,7 +1,7 @@
 public value class TrackProperties : IEquatable<TrackProperties>
 {
 public:
-	long Duration;      
+	int Duration;      
 	unsigned short NumberOfVariations; 
 	unsigned char NumberOfChannels;   
 	unsigned short WaveVariation; 

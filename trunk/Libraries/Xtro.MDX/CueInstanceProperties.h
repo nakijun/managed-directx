@@ -9,7 +9,7 @@ internal:
 	}
 
 public:
-	unsigned long AllocationAttributes;
+	unsigned int AllocationAttributes;
 	CueProperties CueProperties;
 	SoundVariationProperties ActiveVariationProperties;
 

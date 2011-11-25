@@ -116,14 +116,14 @@ public:
 		return pInfoQueue->GetBreakOnSeverity((D3D10_MESSAGE_SEVERITY)Severity);
 	}
 
-	int GetMessage(long long MessageIndex, [Out] SIZE_T% MessageByteLength)
+	int GetMessage(unsigned long long MessageIndex, [Out] SIZE_T% MessageByteLength)
 	{
 		pin_ptr<SIZE_T> PinnedMessageByteLength = &MessageByteLength;
 
 		return pInfoQueue->GetMessage(MessageIndex, 0, PinnedMessageByteLength);
 	}
 
-	int GetMessage(long long MessageIndex, [Out] Message% Message, SIZE_T MessageByteLength)
+	int GetMessage(unsigned long long MessageIndex, [Out] Message% Message, SIZE_T MessageByteLength)
 	{
 		pin_ptr<SIZE_T> PinnedMessageByteLength = &MessageByteLength;
 
@@ -138,7 +138,7 @@ public:
 		finally	{ free(pMessage); }
 	}
 
-	long long GetMessageCountLimit()
+	unsigned long long GetMessageCountLimit()
 	{
 		return pInfoQueue->GetMessageCountLimit();
 	}
@@ -148,27 +148,27 @@ public:
 		return pInfoQueue->GetMuteDebugOutput();
 	}
 
-	long long GetNumberOfMessagesAllowedByStorageFilter()
+	unsigned long long GetNumberOfMessagesAllowedByStorageFilter()
 	{
 		return pInfoQueue->GetNumMessagesAllowedByStorageFilter();
 	}
 
-	long long GetNumberOfMessagesDeniedByStorageFilter()
+	unsigned long long GetNumberOfMessagesDeniedByStorageFilter()
 	{
 		return pInfoQueue->GetNumMessagesDeniedByStorageFilter();
 	}
 
-	long long GetNumberOfMessagesDiscardedByMessageCountLimit()
+	unsigned long long GetNumberOfMessagesDiscardedByMessageCountLimit()
 	{
 		return pInfoQueue->GetNumMessagesDiscardedByMessageCountLimit();
 	}
 
-	long long GetNumberOfStoredMessages()
+	unsigned long long GetNumberOfStoredMessages()
 	{
 		return pInfoQueue->GetNumStoredMessages();
 	}
 
-	long long GetNumberOfStoredMessagesAllowedByRetrievalFilter()
+	unsigned long long GetNumberOfStoredMessagesAllowedByRetrievalFilter()
 	{
 		return pInfoQueue->GetNumStoredMessagesAllowedByRetrievalFilter();
 	}
@@ -282,7 +282,7 @@ public:
 		return pInfoQueue->SetBreakOnSeverity((D3D10_MESSAGE_SEVERITY)Severity, Enable);
 	}
 
-	int SetMessageCountLimit(long long MessageCountLimit)
+	int SetMessageCountLimit(unsigned long long MessageCountLimit)
 	{
 		return pInfoQueue->SetMessageCountLimit(MessageCountLimit);
 	}

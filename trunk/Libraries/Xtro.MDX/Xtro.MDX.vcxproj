@@ -198,6 +198,7 @@
     <ClInclude Include="Enums.h" />
     <ClInclude Include="EnumsD3DCompiler.h" />
     <ClInclude Include="EnumsXACT3.h" />
+    <ClInclude Include="ConstantsXAudio2.h" />
     <ClInclude Include="Float1025.h" />
     <ClInclude Include="Float8.h" />
     <ClInclude Include="Font.h" />
@@ -300,6 +301,7 @@
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Multithread.h" />
     <ClInclude Include="RefObject.h" />
+    <ClInclude Include="SendDescriptor.h" />
     <ClInclude Include="SoundProperties.h" />
     <ClInclude Include="SoundVariationProperties.h" />
     <ClInclude Include="StateBlock_ForwardedMethods.h" />
@@ -436,6 +438,7 @@
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="Cue.h" />
+    <ClInclude Include="Voice.h" />
     <ClInclude Include="WeldEpsilons.h" />
   </ItemGroup>
   <ItemGroup>
@@ -502,6 +505,8 @@
     <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathmatrix.inl" />
     <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathmisc.inl" />
     <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathvector.inl" />
+    <None Include="ReadmeXACT3.txt" />
+    <None Include="ReadmeXAudio2.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />

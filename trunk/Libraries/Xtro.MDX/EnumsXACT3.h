@@ -1,3 +1,21 @@
+public enum class CueState
+{
+	Created = XACT_CUESTATE_CREATED,  
+	Preparing = XACT_CUESTATE_PREPARING,
+	Prepared = XACT_CUESTATE_PREPARED, 
+	Playing = XACT_CUESTATE_PLAYING,  
+	Stopping = XACT_CUESTATE_STOPPING, 
+	Stopped = XACT_CUESTATE_STOPPED,  
+	Paused = XACT_CUESTATE_PAUSED   
+};
+
+[Flags]
+public enum class CueStopFlag
+{
+	Release = XACT_FLAG_CUE_STOP_RELEASE,
+	Immediate = XACT_FLAG_CUE_STOP_IMMEDIATE
+};
+
 public enum class Error
 {
 	OutOfMemory = XACTENGINE_E_OUTOFMEMORY,               
