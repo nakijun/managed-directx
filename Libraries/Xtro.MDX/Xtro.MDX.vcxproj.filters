@@ -94,6 +94,15 @@
     <Filter Include="XACT3\Interfaces">
       <UniqueIdentifier>{080b9101-a7a3-4f16-b083-80145e614f1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XAudio2">
+      <UniqueIdentifier>{962c20ca-8aa7-40ff-88d6-de11c8fee25c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XAudio2\Structures">
+      <UniqueIdentifier>{0a57f310-fa76-4776-bb09-e2c72c17fd93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XAudio2\Interfaces">
+      <UniqueIdentifier>{cb31ca0f-7c1d-473c-ad68-afa7946ed753}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h">
@@ -946,6 +955,15 @@
     <ClInclude Include="TrackProperties.h">
       <Filter>XACT3\Structures</Filter>
     </ClInclude>
+    <ClInclude Include="SendDescriptor.h">
+      <Filter>XAudio2\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantsXAudio2.h">
+      <Filter>XAudio2</Filter>
+    </ClInclude>
+    <ClInclude Include="Voice.h">
+      <Filter>XAudio2\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">
@@ -1132,6 +1150,12 @@
     </None>
     <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathvector.inl">
       <Filter>%28DirectX SDK Includes And Libs%29</Filter>
+    </None>
+    <None Include="ReadmeXAudio2.txt">
+      <Filter>XAudio2</Filter>
+    </None>
+    <None Include="ReadmeXACT3.txt">
+      <Filter>XACT3</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

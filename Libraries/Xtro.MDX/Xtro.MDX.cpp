@@ -286,9 +286,20 @@ namespace Direct3DX10
 
 	#include "FunctionsD3DX10.h"
 }
+/* Not Implemented 
+namespace XAudio2
+{
+	#include "ConstantsXAudio2.h"
+
+	#include "Voice.h"
+
+	#include "SendDescriptor.h"
+}
 
 namespace XACT3
 {
+	using namespace XAudio2;
+
 	#include "EnumsXACT3.h"
 			   
 	#include "VariationProperties.h"
@@ -301,6 +312,6 @@ namespace XACT3
 	#include "Cue.h"
 
 	#include "CallbacksXACT3.h"
-}
+} */
 }
 }

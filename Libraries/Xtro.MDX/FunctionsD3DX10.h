@@ -2471,7 +2471,7 @@ public:
 		return D3DXBoxBoundProbe((D3DXVECTOR3*)PinnedMinimum, (D3DXVECTOR3*)PinnedMaximum, (D3DXVECTOR3*)PinnedRayPosition, (D3DXVECTOR3*)PinnedRayDirection);
 	}
 
-	static int ComputeBoundingBox(Vector3% FirstPosition, unsigned long NumberOfVertices, unsigned long Stride, [Out] Vector3% Minimum, [Out] Vector3% Maximum)
+	static int ComputeBoundingBox(Vector3% FirstPosition, unsigned int NumberOfVertices, unsigned int Stride, [Out] Vector3% Minimum, [Out] Vector3% Maximum)
 	{
 		pin_ptr<Vector3> PinnedFirstPosition = &FirstPosition;
 		pin_ptr<Vector3> PinnedMinimum = &Minimum;
@@ -2480,7 +2480,7 @@ public:
 		return D3DXComputeBoundingBox((D3DXVECTOR3*)PinnedFirstPosition, NumberOfVertices, Stride, (D3DXVECTOR3*)PinnedMinimum, (D3DXVECTOR3*)PinnedMaximum);
 	}
 
-	static int ComputeBoundingSphere(Vector3% FirstPosition, unsigned long NumberOfVertices, unsigned long Stride, [Out] Vector3% Center, [Out] float% Radius)
+	static int ComputeBoundingSphere(Vector3% FirstPosition, unsigned int NumberOfVertices, unsigned int Stride, [Out] Vector3% Center, [Out] float% Radius)
 	{
 		pin_ptr<Vector3> PinnedFirstPosition = &FirstPosition;
 		pin_ptr<Vector3> PinnedCenter = &Center;
