@@ -5,8 +5,7 @@ internal:
 	{
 		AllocationAttributes = Native->allocAttributes;
 		CueProperties.FromNative(&Native->cueProperties);
-
-		memcpy(&ActiveVariationProperties, &Native->activeVariationProperties, sizeof(Native->activeVariationProperties));
+		ActiveVariationProperties.FromNative(&Native->activeVariationProperties);
 	}
 
 public:

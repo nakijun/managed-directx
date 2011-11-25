@@ -940,6 +940,12 @@
     <ClInclude Include="VariationProperties.h">
       <Filter>XACT3\Structures</Filter>
     </ClInclude>
+    <ClInclude Include="SoundProperties.h">
+      <Filter>XACT3\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackProperties.h">
+      <Filter>XACT3\Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib">

@@ -343,13 +343,14 @@ namespace SoftParticles
             string DestinationPath;
             Result = UtilitiesFunctions.FindSDK_MediaFileCch(out DestinationPath, "SoftParticles.fx");
             if (Result < 0) return Result;
-            var ShaderFlags = ShaderFlag.EnableStrictness;
 #if DEBUG
-            // Set the D3D10_SHADER_DEBUG flag to embed debug information in the shaders.
+            // Set the ShaderFlag.Debug flag to embed debug information in the shaders.
             // Setting this flag improves the shader debugging experience, but still allows 
             // the shaders to be optimized and to run exactly the way they will run in 
             // the release configuration of this program.
-            ShaderFlags |= ShaderFlag.Debug;
+            const ShaderFlag ShaderFlags = ShaderFlag.EnableStrictness | ShaderFlag.Debug;
+#else
+            const ShaderFlag ShaderFlags = ShaderFlag.EnableStrictness;
 #endif
 
             Result = D3DX10Functions.CreateEffectFromFile(DestinationPath, null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);

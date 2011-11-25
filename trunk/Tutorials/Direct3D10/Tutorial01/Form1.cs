@@ -62,9 +62,10 @@ namespace Tutorial01
 
         bool InitDevice()
         {
-            CreateDeviceFlag CreateDeviceFlags = 0;
 #if DEBUG
-            CreateDeviceFlags |= CreateDeviceFlag.Debug;
+            const CreateDeviceFlag CreateDeviceFlags = CreateDeviceFlag.Debug;
+#else
+            const CreateDeviceFlag CreateDeviceFlags = 0;
 #endif
             DriverType[] DriverTypes = { DriverType.Hardware, DriverType.Reference };
 

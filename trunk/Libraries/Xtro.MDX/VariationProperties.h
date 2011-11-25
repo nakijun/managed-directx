@@ -1,11 +1,11 @@
 public value class VariationProperties : IEquatable<VariationProperties>
 {
 public:
-	unsigned int PresentCount;
-	unsigned int PresentRefreshCount;
-	unsigned int SyncRefreshCount;
-	long long SyncQpcTime;
-    long long SyncGpuTime;
+	unsigned short Index;
+	unsigned char Weight;
+	float VariableMinimum;
+	float VariableMaximum;
+    bool Linger;
 
 	static bool operator == (VariationProperties Left, VariationProperties Right)
 	{
@@ -20,11 +20,11 @@ public:
 	virtual int GetHashCode() override
 	{
 		return
-			PresentCount ^
-			PresentRefreshCount ^
-			SyncRefreshCount ^
-			SyncQpcTime.GetHashCode() ^
-			SyncGpuTime.GetHashCode();
+			Index ^
+			Weight ^
+			(int)VariableMinimum ^
+			(int)VariableMaximum ^
+			(int)Linger;
 	}
 
 	virtual bool Equals(System::Object^ Value) override

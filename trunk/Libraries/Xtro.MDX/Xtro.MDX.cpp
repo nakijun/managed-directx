@@ -292,6 +292,8 @@ namespace XACT3
 	#include "EnumsXACT3.h"
 			   
 	#include "VariationProperties.h"
+	#include "TrackProperties.h"
+	#include "SoundProperties.h"
 	#include "SoundVariationProperties.h"
 	#include "CueProperties.h"
 	#include "CueInstanceProperties.h"

@@ -95,9 +95,10 @@ namespace Tutorial05
 
         bool InitDevice()
         {
-            CreateDeviceFlag CreateDeviceFlags = 0;
 #if DEBUG
-            CreateDeviceFlags |= CreateDeviceFlag.Debug;
+            const CreateDeviceFlag CreateDeviceFlags = CreateDeviceFlag.Debug;
+#else
+            const CreateDeviceFlag CreateDeviceFlags = 0;
 #endif
 
             DriverType[] DriverTypes = { DriverType.Hardware, DriverType.Reference };
@@ -194,13 +195,14 @@ namespace Tutorial05
 
             // Create the effect
 
-            var ShaderFlags = ShaderFlag.EnableStrictness;
 #if DEBUG
             // Set the ShaderFlag.Debug flag to embed debug information in the shaders.
             // Setting this flag improves the shader debugging experience, but still allows 
             // the shaders to be optimized and to run exactly the way they will run in 
             // the release configuration of this program.
-            ShaderFlags |= ShaderFlag.Debug;
+            const ShaderFlag ShaderFlags = ShaderFlag.EnableStrictness | ShaderFlag.Debug;
+#else
+            const ShaderFlag ShaderFlags = ShaderFlag.EnableStrictness;
 #endif
 
             Result = D3DX10Functions.CreateEffectFromFile("Tutorial05.fx", null, null, "fx_4_0", ShaderFlags, 0, Device, null, out Effect);
