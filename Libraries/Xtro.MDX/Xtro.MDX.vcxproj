@@ -97,7 +97,7 @@
       <AdditionalIncludeDirectories>Microsoft DirectX SDK (August 2009)/Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Ole32.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>
       </EntryPointSymbol>
@@ -116,7 +116,7 @@
       </OmitFramePointers>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Ole32.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
@@ -133,7 +133,7 @@
       <AdditionalIncludeDirectories>Microsoft DirectX SDK (August 2009)/Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Ole32.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -148,7 +148,7 @@
       <AdditionalIncludeDirectories>Microsoft DirectX SDK (August 2009)/Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Ole32.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -300,8 +300,10 @@
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Multithread.h" />
     <ClInclude Include="RefObject.h" />
+    <ClInclude Include="SoundProperties.h" />
     <ClInclude Include="SoundVariationProperties.h" />
     <ClInclude Include="StateBlock_ForwardedMethods.h" />
+    <ClInclude Include="TrackProperties.h" />
     <ClInclude Include="ValueObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="AdapterDescription.h" />

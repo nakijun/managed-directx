@@ -1,5 +1,14 @@
 public value class SoundVariationProperties : IEquatable<SoundVariationProperties>
 {
+internal:
+	inline void FromNative(XACT_SOUND_VARIATION_PROPERTIES* Native)
+	{
+		pin_ptr<XACT3::VariationProperties> PinnedVariationProperties = &VariationProperties;
+		memcpy(PinnedVariationProperties, &Native->variationProperties, sizeof(XACT_VARIATION_PROPERTIES));
+
+		SoundProperties.FromNative(&Native->soundProperties);
+	}
+
 public:
 	VariationProperties VariationProperties;
 	SoundProperties SoundProperties;
@@ -32,14 +41,15 @@ public:
 
 	virtual bool Equals(SoundVariationProperties Value)
 	{
-		return memcmp(&*this, &Value, Marshal::SizeOf(SoundVariationProperties::typeid)) == 0;
+		return
+			VariationProperties == Value.VariationProperties &&
+			SoundProperties == Value.SoundProperties;
 	}
 
 	static bool Equals(SoundVariationProperties% Value1, SoundVariationProperties% Value2)
 	{
-		pin_ptr<SoundVariationProperties> PinnedValue1 = &Value1;
-		pin_ptr<SoundVariationProperties> PinnedValue2 = &Value2;
-
-		return memcmp(PinnedValue1, PinnedValue2, Marshal::SizeOf(SoundVariationProperties::typeid)) == 0;
+		return
+			Value1.VariationProperties == Value2.VariationProperties &&
+			Value1.SoundProperties == Value2.SoundProperties;
 	}
 };
