@@ -34,7 +34,7 @@ public:
 	int GetContainingOutput([Out] Output^% Output)
 	{
 		IDXGIOutput* pOutput = 0;
-		return pSwapChain->GetContainingOutput(&pOutput);
+		int Result = pSwapChain->GetContainingOutput(&pOutput);
 
 		if (pOutput)
 		{	
@@ -42,6 +42,8 @@ public:
 			catch (KeyNotFoundException^) { Output = gcnew DXGI::Output(IntPtr(pOutput)); }
 		}
 		else Output = nullptr;
+
+		return Result;
 	}
 
 	int GetDescription([Out] SwapChainDescription% Description)
@@ -53,7 +55,6 @@ public:
 	int GetFrameStatistics([Out] FrameStatistics% Stats)
 	{
 		pin_ptr<FrameStatistics> PinnedStats = &Stats;
-
 		return pSwapChain->GetFrameStatistics((DXGI_FRAME_STATISTICS*)PinnedStats);
 	}
 
@@ -62,7 +63,7 @@ public:
 		pin_ptr<bool> PinnedFullscreen = &Fullscreen;
 
 		IDXGIOutput* pTarget = 0;
-		return pSwapChain->GetFullscreenState((int*)PinnedFullscreen, &pTarget);
+		int Result = pSwapChain->GetFullscreenState((int*)PinnedFullscreen, &pTarget);
 
 		if (pTarget)
 		{	
@@ -70,19 +71,19 @@ public:
 			catch (KeyNotFoundException^) { Target = gcnew Output(IntPtr(pTarget)); }
 		}
 		else Target = nullptr;
+
+		return Result;
 	}
 
 	int GetFullscreenState([Out] bool% Fullscreen)
 	{
 		pin_ptr<bool> PinnedFullscreen = &Fullscreen;
-
 		return pSwapChain->GetFullscreenState((int*)PinnedFullscreen, 0);
 	}
 
 	int GetLastPresentCount([Out] unsigned int% LastPresentCount)
 	{
 		pin_ptr<unsigned int> PinnedLastPresentCount = &LastPresentCount;
-
 		return pSwapChain->GetLastPresentCount(PinnedLastPresentCount);
 	}
 
@@ -105,7 +106,6 @@ public:
 	int SetFullscreenState(bool Fullscreen, Output^ Target)
 	{
 		IDXGIOutput* pTarget = Target == nullptr ? 0 : Target->pOutput;
-
 		return pSwapChain->SetFullscreenState(Fullscreen, pTarget);
 	}
 };
