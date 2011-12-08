@@ -55,7 +55,7 @@ public:
 		try
 		{
 			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-			pFunctionName = Marshal::StringToHGlobalUni(FunctionName);
+			pFunctionName = Marshal::StringToHGlobalAnsi(FunctionName);
 			pProfile = Marshal::StringToHGlobalAnsi(Profile);
 
 			if (Defines != nullptr && Defines->Length > 0)
@@ -117,7 +117,7 @@ public:
 		try
 		{
 			pSourceFile = Marshal::StringToHGlobalUni(SourceFile);
-			pFunctionName = Marshal::StringToHGlobalUni(FunctionName);
+			pFunctionName = Marshal::StringToHGlobalAnsi(FunctionName);
 			pProfile = Marshal::StringToHGlobalAnsi(Profile);
 
 			if (Defines != nullptr && Defines->Length > 0)
