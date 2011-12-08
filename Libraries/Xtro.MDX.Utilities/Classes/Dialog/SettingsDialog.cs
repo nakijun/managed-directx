@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Xtro.MDX.Direct3D10;
 using Xtro.MDX.DXGI;
