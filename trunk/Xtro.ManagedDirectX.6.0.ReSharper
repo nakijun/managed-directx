@@ -86,6 +86,15 @@
     <Xaml>
       <Naming2 />
     </Xaml>
+    <GeneratedFileMasks IsNull="False">
+      <Item>*.Designer.cs</Item>
+      <Item>*.Designer.vb</Item>
+      <Item>*.Generated.cs</Item>
+      <Item>*.Generated.vb</Item>
+      <Item>*.min.js</Item>
+      <Item>*.min.css</Item>
+      <Item>AssemblyInfo.cs</Item>
+    </GeneratedFileMasks>
     <GenerateMemberBody />
     <Naming2>
       <EventHandlerPatternLong>$object$_$event$</EventHandlerPatternLong>
