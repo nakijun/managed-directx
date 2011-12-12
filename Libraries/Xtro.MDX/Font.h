@@ -21,7 +21,7 @@ public:
 		if (Count == -1 && String != nullptr) Count = String->Length;
 
 		IntPtr pString = Marshal::StringToHGlobalUni(String);
-		try	{ return pFont->DrawTextW(pSprite, (LPCTSTR)pString.ToPointer(), Count, &NativeRectangle, (unsigned int)Format, *(D3DXCOLOR*)PinnedColor); }
+		try	{ return pFont->DrawTextW(pSprite, (LPCWSTR)pString.ToPointer(), Count, &NativeRectangle, (unsigned int)Format, *(D3DXCOLOR*)PinnedColor); }
 		finally { Marshal::FreeHGlobal(pString); }
 	}
 

@@ -346,9 +346,7 @@ namespace Xtro.MDX.Utilities
             if (!ComboBox.ContainsItem(Name)) ComboBox.AddItem(Name, Output.ToString());
         }
 
-        // ReSharper disable UnusedMember.Local
         uint GetSelectedAdapterOutput()
-        // ReSharper restore UnusedMember.Local
         {
             var ComboBox = Dialog.GetComboBox(ID_D3D10_AdapterOutput);
 
@@ -385,6 +383,7 @@ namespace Xtro.MDX.Utilities
 
                 DeviceSettings.SwapChainDescription.BufferDescription.RefreshRate = Mode.RefreshRate;
             }
+            else DeviceSettings.Output = GetSelectedAdapterOutput();
 
             var RefreshRate = DeviceSettings.SwapChainDescription.BufferDescription.RefreshRate;
 
@@ -866,7 +865,12 @@ namespace Xtro.MDX.Utilities
                     else
                     {
                         // Check for fullscreen mode change
-                        FullScreenModeChange = DeviceSettings.SwapChainDescription.BufferDescription.Width != CurrentSettings.SwapChainDescription.BufferDescription.Width || DeviceSettings.SwapChainDescription.BufferDescription.Height != CurrentSettings.SwapChainDescription.BufferDescription.Height || DeviceSettings.SwapChainDescription.BufferDescription.RefreshRate.Denominator != CurrentSettings.SwapChainDescription.BufferDescription.RefreshRate.Denominator || DeviceSettings.SwapChainDescription.BufferDescription.RefreshRate.Numerator != CurrentSettings.SwapChainDescription.BufferDescription.RefreshRate.Numerator;
+                        FullScreenModeChange =
+                            DeviceSettings.Output!=CurrentSettings.Output ||
+                            DeviceSettings.SwapChainDescription.BufferDescription.Width != CurrentSettings.SwapChainDescription.BufferDescription.Width ||
+                            DeviceSettings.SwapChainDescription.BufferDescription.Height != CurrentSettings.SwapChainDescription.BufferDescription.Height ||
+                            DeviceSettings.SwapChainDescription.BufferDescription.RefreshRate.Denominator != CurrentSettings.SwapChainDescription.BufferDescription.RefreshRate.Denominator ||
+                            DeviceSettings.SwapChainDescription.BufferDescription.RefreshRate.Numerator != CurrentSettings.SwapChainDescription.BufferDescription.RefreshRate.Numerator;
                     }
 
                     if (FullScreenModeChange)

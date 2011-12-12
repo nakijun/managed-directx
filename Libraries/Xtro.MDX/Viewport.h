@@ -5,8 +5,8 @@ public:
 	unsigned int TopLeftY;
 	unsigned int Width;
 	unsigned int Height;
-	float MinDepth;
-	float MaxDepth;
+	float MinimumDepth;
+	float MaximumDepth;
 
 	static bool operator == (Viewport Left, Viewport Right)
 	{
@@ -25,8 +25,8 @@ public:
 			TopLeftY ^
 			Width ^
 			Height ^
-			(int)MinDepth ^
-			(int)MaxDepth;
+			(int)MinimumDepth ^
+			(int)MaximumDepth;
 	}
 
 	virtual bool Equals(System::Object^ Value) override
