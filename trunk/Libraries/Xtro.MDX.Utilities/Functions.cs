@@ -442,7 +442,7 @@ namespace Xtro.MDX.Utilities
                     // not to store the height and width so that we have the correct values when calling ResizeTarget.
 
                     GetState().DoNotStoreBufferSize = true;
-                    Result = SwapChain.SetFullscreenState(true, null);
+                    Result = SwapChain.SetFullscreenState(true,GetState().Outputs[(int)DeviceSettings.Output]);
                     if (Result < 0) return Result;
                     GetState().DoNotStoreBufferSize = false;
 
@@ -584,10 +584,7 @@ namespace Xtro.MDX.Utilities
             {
                 Width = BackBufferSurfaceDescription.Width,
                 Height = BackBufferSurfaceDescription.Height,
-                MinDepth = 0,
-                MaxDepth = 1,
-                TopLeftX = 0,
-                TopLeftY = 0
+                MaximumDepth = 1
             };
             Device.RS_SetViewports(1, new[] { Viewport });
 
@@ -3325,7 +3322,7 @@ namespace Xtro.MDX.Utilities
                     if (Result >= 0)
                     {
                         // Create a Direct3D device using the new device settings.  
-                        // If there is an existing device, then it will either reset or recreate the scene.
+                        // If there is an existing device, then it will either reset or recreate the scene.                        
                         Result = ChangeDevice(DeviceSettings, null, false, false);
 
                         // If hr == E_ABORT, this means the app rejected the device settings in the ModifySettingsCallback

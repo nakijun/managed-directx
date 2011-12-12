@@ -445,7 +445,7 @@ public:
 		ID3D10Blob* pCompiledEffect = 0;
 		ID3D10Blob* pErrors = 0;
 
-		IntPtr pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+		IntPtr pSourceFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
 		D3D10_SHADER_MACRO* pDefines = 0;
 		try
 		{
@@ -458,11 +458,11 @@ public:
 				}
 			}
 
-			Result = D3D10CompileEffectFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, &pCompiledEffect, &pErrors);
+			Result = D3D10CompileEffectFromMemory(pData, DataLength, (LPCSTR)pSourceFileName.ToPointer(), pDefines, pInclude, (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, &pCompiledEffect, &pErrors);
 		}
 		finally
 		{
-			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pSourceFileName); 
 
 			if (pDefines) 
 			{
@@ -500,7 +500,7 @@ public:
 		int Result = 0;
 		ID3D10Blob* pCompiledEffect = 0;
 
-		IntPtr pFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
+		IntPtr pSourceFileName = Marshal::StringToHGlobalAnsi(SourceFileName);
 		D3D10_SHADER_MACRO* pDefines = 0;
 		try
 		{
@@ -513,11 +513,11 @@ public:
 				}
 			}
 
-			Result = D3D10CompileEffectFromMemory(pData, DataLength, (LPCSTR)pFileName.ToPointer(), pDefines, pInclude, (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, &pCompiledEffect, 0);
+			Result = D3D10CompileEffectFromMemory(pData, DataLength, (LPCSTR)pSourceFileName.ToPointer(), pDefines, pInclude, (unsigned int)HLSL_Flags, (unsigned int)FX_Flags, &pCompiledEffect, 0);
 		}
 		finally
 		{
-			Marshal::FreeHGlobal(pFileName); 
+			Marshal::FreeHGlobal(pSourceFileName); 
 
 			if (pDefines) 
 			{

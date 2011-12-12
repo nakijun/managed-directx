@@ -125,8 +125,7 @@ namespace Tutorial01
                 TopLeftY = 0,
                 Width = (uint)ClientSize.Width,
                 Height = (uint)ClientSize.Height,
-                MinDepth = 0.0f,
-                MaxDepth = 1.0f
+                MaximumDepth = 1.0f
             };
             Device.RS_SetViewports(1, new[] { Viewport });
 
