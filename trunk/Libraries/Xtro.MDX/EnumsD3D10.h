@@ -290,7 +290,7 @@ public enum class IncludeType
 {
 	Local = D3D10_INCLUDE_LOCAL,
 	System = D3D10_INCLUDE_SYSTEM,
-	ForceDWORD = D3D10_INCLUDE_FORCE_DWORD
+	ForceDWORD = D3D_INCLUDE_FORCE_DWORD
 };
 
 public enum class InputClassification
@@ -964,7 +964,7 @@ public enum class StencilOperation
 public enum class ShaderConstantBufferFlag
 {
 	UserPacked = D3D10_CBF_USERPACKED,
-	ForceDWORD = D3D10_CBF_FORCE_DWORD,
+	ForceDWORD = D3D_CBF_FORCE_DWORD,
 };
 
 [Flags]
@@ -999,7 +999,7 @@ public enum class ShaderInputFlag
 	TextureCompnent0 = D3D10_SIF_TEXTURE_COMPONENT_0,
 	TextureCompnent1 = D3D10_SIF_TEXTURE_COMPONENT_1,
 	TextureCompnents = D3D10_SIF_TEXTURE_COMPONENTS,
-	ForceDWORD = D3D10_SIF_FORCE_DWORD,
+	ForceDWORD = D3D_SIF_FORCE_DWORD,
 };
 
 public enum class ShaderInputType
@@ -1041,7 +1041,7 @@ public enum class ShaderVariableClass
 	Struct = D3D10_SVC_STRUCT,
 	InterfaceClass = D3D11_SVC_INTERFACE_CLASS,
 	Pointer = D3D11_SVC_INTERFACE_POINTER,
-	ForceDWORD = D3D10_SVC_FORCE_DWORD,
+	ForceDWORD = D3D_SVC_FORCE_DWORD,
 };
 
 [Flags]
@@ -1049,7 +1049,7 @@ public enum class ShaderVariableFlag
 {
 	UserPacked = D3D10_SVF_USERPACKED,
 	Used = D3D10_SVF_USED,
-	ForceDWORD = D3D10_SVF_FORCE_DWORD,
+	ForceDWORD = D3D_SVF_FORCE_DWORD,
 };
 
 public enum class ShaderVariableType
@@ -1100,7 +1100,7 @@ public enum class ShaderVariableType
 	ReadWriteStructuredBuffer = D3D11_SVT_RWSTRUCTURED_BUFFER,
 	AppendStructuredBuffer = D3D11_SVT_APPEND_STRUCTURED_BUFFER,
 	ConsumeStructuredBuffer = D3D11_SVT_CONSUME_STRUCTURED_BUFFER,
-	ForceDWORD = D3D10_SVT_FORCE_DWORD,
+	ForceDWORD = D3D_SVT_FORCE_DWORD,
 };
 
 public enum class TextureAddressMode
