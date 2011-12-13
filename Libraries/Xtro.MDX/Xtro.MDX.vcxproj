@@ -94,7 +94,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>Microsoft DirectX SDK (August 2009)/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>User32.lib;Ole32.lib</AdditionalDependencies>
@@ -111,7 +111,7 @@
       <PreprocessorDefinitions>WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>Microsoft DirectX SDK (August 2009)/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <OmitFramePointers>
       </OmitFramePointers>
     </ClCompile>
@@ -130,7 +130,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>Microsoft DirectX SDK (August 2009)/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>User32.lib;Ole32.lib</AdditionalDependencies>
@@ -145,7 +145,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>Microsoft DirectX SDK (August 2009)/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>User32.lib;Ole32.lib</AdditionalDependencies>
@@ -220,85 +220,82 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshBuffer.h" />
     <ClInclude Include="Message.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\audiodefs.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\comdecl.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2D1.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2D1Helper.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2DBaseTypes.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D2Derr.h" />
-    <ClInclude Include="Microsoft DirectX SDK %28August 2009%29\Include\D3D10.h" />
-    <ClInclude Include="Microsoft DirectX SDK %28August 2009%29\Include\D3D10_1.h" />
-    <ClInclude Include="Microsoft DirectX SDK %28August 2009%29\Include\D3D10_1shader.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10effect.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d10misc.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d10sdklayers.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D10shader.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D11.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D11SDKLayers.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3D11Shader.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d9.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d9caps.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3d9types.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3Dcommon.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3Dcompiler.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DCSX.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx10async.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10core.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10math.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10mesh.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10tex.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX11.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX11async.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX11core.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\D3DX11tex.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9anim.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9core.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9effect.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9math.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9mesh.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9shader.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9shape.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9tex.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9xof.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\Dcommon.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\ddraw.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dinput.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dinputd.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dsconf.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dsetup.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dsound.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dvp.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DWrite.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dxdiag.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DxErr.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dxfile.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DXGI.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DXGIFormat.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\DXGIType.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\dxsdkver.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\gameux.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\multimon.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\PIXPlugin.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\rmxfguid.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\rmxftmpl.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\rpcsal.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\X3DAudio.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xact3.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xact3d3.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xact3wb.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAPO.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAPOBase.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAPOFX.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAudio2.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XAudio2fx.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XDSP.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\XInput.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xma2defs.h" />
-    <ClInclude Include="Microsoft DirectX SDK (August 2009)\Include\xnamath.h" />
     <ClInclude Include="FunctionsDXGI.h" />
     <ClInclude Include="Factory.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\audiodefs.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\comdecl.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D2D1.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D2D1Helper.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D2DBaseTypes.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D2Derr.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3D10.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3D10effect.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3d10misc.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3d10sdklayers.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3D10shader.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3D10_1.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3D10_1shader.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3D11.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3D11SDKLayers.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3D11Shader.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3d9.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3d9caps.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3d9types.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3Dcommon.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3Dcompiler.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DCSX.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DX10.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx10async.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DX10core.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DX10math.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DX10mesh.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DX10tex.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DX11.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DX11async.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DX11core.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\D3DX11tex.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9anim.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9core.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9effect.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9math.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9mesh.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9shader.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9shape.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9tex.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9xof.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\Dcommon.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\dinput.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\dinputd.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\dsconf.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\dsetup.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\dsound.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\DWrite.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\dxdiag.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\DxErr.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\dxfile.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\DXGI.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\DXGIFormat.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\DXGIType.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\dxsdkver.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\gameux.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\PIXPlugin.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\rmxfguid.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\rmxftmpl.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\rpcsal.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\X3DAudio.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\xact3.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\xact3d3.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\xact3wb.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\XAPO.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\XAPOBase.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\XAPOFX.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\XAudio2.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\XAudio2fx.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\XDSP.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\XInput.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\xma2defs.h" />
+    <ClInclude Include="Microsoft DirectX SDK (June 2010)\Include\xnamath.h" />
     <ClInclude Include="Multithread.h" />
     <ClInclude Include="RefObject.h" />
     <ClInclude Include="SendDescriptor.h" />
@@ -442,69 +439,13 @@
     <ClInclude Include="WeldEpsilons.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d2d1.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3d10.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3d10_1.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3d11.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3d9.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dcompiler.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\D3DCSX.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\D3DCSXd.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx10.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx10d.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx11.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx11d.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx9.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dx9d.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\d3dxof.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\ddraw.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dinput8.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dsound.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dwrite.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\DxErr.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dxgi.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\dxguid.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\X3DAudio.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\xapobase.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\xapobased.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\XAPOFX.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x64\XInput.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d2d1.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d10.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d10_1.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d11.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3d9.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dcompiler.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\D3DCSX.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\D3DCSXd.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx10.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx10d.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx11.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx11d.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx9.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dx9d.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\d3dxof.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\ddraw.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dinput8.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dsetup.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dsound.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dwrite.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\DxErr.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dxgi.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\dxguid.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\X3DAudio.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\xapobase.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\xapobased.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\XAPOFX.lib" />
-    <Library Include="Microsoft DirectX SDK (August 2009)\Lib\x86\XInput.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Microsoft DirectX SDK (August 2009)\Include\D3DX10math.inl" />
-    <None Include="Microsoft DirectX SDK (August 2009)\Include\d3dx9math.inl" />
-    <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathconvert.inl" />
-    <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathmatrix.inl" />
-    <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathmisc.inl" />
-    <None Include="Microsoft DirectX SDK (August 2009)\Include\xnamathvector.inl" />
+    <None Include="Microsoft DirectX SDK (June 2010)\Include\D3DX10math.inl" />
+    <None Include="Microsoft DirectX SDK (June 2010)\Include\d3dx9math.inl" />
+    <None Include="Microsoft DirectX SDK (June 2010)\Include\D3DX_DXGIFormatConvert.inl" />
+    <None Include="Microsoft DirectX SDK (June 2010)\Include\xnamathconvert.inl" />
+    <None Include="Microsoft DirectX SDK (June 2010)\Include\xnamathmatrix.inl" />
+    <None Include="Microsoft DirectX SDK (June 2010)\Include\xnamathmisc.inl" />
+    <None Include="Microsoft DirectX SDK (June 2010)\Include\xnamathvector.inl" />
     <None Include="ReadmeXACT3.txt" />
     <None Include="ReadmeXAudio2.txt" />
   </ItemGroup>
@@ -522,6 +463,61 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d2d1.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3d10.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3d10_1.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3d11.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3d9.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3dcompiler.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\D3DCSX.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\D3DCSXd.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3dx10.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3dx10d.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3dx11.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3dx11d.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3dx9.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3dx9d.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\d3dxof.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\dinput8.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\dsound.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\dwrite.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\DxErr.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\dxgi.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\dxguid.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\X3DAudio.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\xapobase.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\xapobased.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\XAPOFX.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x64\XInput.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d2d1.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3d10.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3d10_1.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3d11.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3d9.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3dcompiler.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\D3DCSX.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\D3DCSXd.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3dx10.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3dx10d.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3dx11.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3dx11d.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3dx9.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3dx9d.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\d3dxof.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\dinput8.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\dsetup.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\dsound.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\dwrite.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\DxErr.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\dxgi.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\dxguid.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\X3DAudio.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\xapobase.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\xapobased.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\XAPOFX.lib" />
+    <Library Include="Microsoft DirectX SDK (June 2010)\Lib\x86\XInput.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
