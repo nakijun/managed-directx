@@ -65,7 +65,7 @@ namespace Tutorial12
             MouseWheel += Form1_MouseWheel;
 
             ArcBall.DefaultForm = this;
-            UtilitiesFunctions.MediaSearchPath = @"C:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Samples\Media\";
+            UtilitiesFunctions.MediaSearchPath = @"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Samples\Media\";
 
             Camera = new ModelViewerCamera();
         }
