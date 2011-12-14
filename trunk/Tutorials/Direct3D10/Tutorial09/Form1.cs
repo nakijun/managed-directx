@@ -107,7 +107,7 @@ namespace Tutorial09
 
         int OnDeviceCreated(Device Device, ref SurfaceDescription BackBufferSurfaceDescription, object UserContext)
         {
-            UtilitiesFunctions.MediaSearchPath = @"C:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Samples\Media\";
+            UtilitiesFunctions.MediaSearchPath = @"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Samples\Media\";
 
             // Find the D3DX effect file
             string DestinationPath;
